@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react"; 
 import { load_places } from "../actions/place/place";
 import { load_menu }  from "../actions/menu/menu";
+import { load_review } from "../actions/review/review";
+import { load_reviews } from "../actions/review/review";
 import { load_favorite, enroll_favorite, delete_favorite } from "../actions/favorite/favorite";
 import Layout from "../hocs/Layout";
 import Map from "../components/Map";
@@ -54,6 +56,8 @@ const PlacePage = () => {
     const [scroll, setScroll] = useState('');
     const [isCardVisible, setIsCardVisible] = useState(false);
 
+    const reviews = useSelector(state => state.review.review)
+
     const cardRef = useRef(null);
     const animationDuration = '0.3s';
     const animationTimingFunction = 'ease-out';
@@ -67,6 +71,8 @@ const PlacePage = () => {
             setPlaceId(id);
             dispatch(load_favorite());
             dispatch(load_menu(id));
+            dispatch(load_reviews());
+            dispatch(load_review());
         }
     }, [dispatch, id]);
 
@@ -406,13 +412,13 @@ const PlacePage = () => {
                         </div>
 
                         { places ? places.filter(item => item.id == place_id).map(item => (
-                            <li key={item.id} data={item} style={{listStyleType:"none"}} onClick={handleReviewClick} >
+                            <div onClick={handleReviewClick} >
                                 <Link href={`reviews?id=${item.id}`} key={item.id}>
                                     <div style={{textAlign:'right'}}>
                                         후기 더보기 &gt;
                                     </div>
                                 </Link>
-                        </li>)):null}
+                        </div>)):null}
                     </Card>
                 </Container>
                 </div>
