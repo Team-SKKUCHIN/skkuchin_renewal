@@ -24,7 +24,7 @@ export const useLoadingLottie = () => {
         <Lottie
             lottieRef={lottieRef}
             animationData={lotties[lottieIndex.current ?? 0]}
-            style={{ width: "372px", height: "193px" }}
+            style={{ width: "100%", height: "193px" }}
         />;
     
     return { LottieView, getNextLottie, setSpeed, duration };
