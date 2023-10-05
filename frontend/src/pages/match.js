@@ -75,9 +75,6 @@ const MatchPage = () => {
 
     return(
         <MatchContainer>
-        <ThemeProvider theme={theme}>
-        <CssBaseline />
-            <UpperBar />
             <AiGreeting />
             <Container sx={{p: '0 15px', mt: '0', position:'relative'}}>
                 <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0px'}}>
@@ -103,11 +100,8 @@ const MatchPage = () => {
                     ))}
                 </Container>
             </Grid>
-        </ThemeProvider>
         </MatchContainer>
     )
 } 
 
-export default dynamic(() => Promise.resolve(MatchPage), {
-    ssr: false,
-});
+export default MatchPage;

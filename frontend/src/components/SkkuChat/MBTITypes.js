@@ -9,7 +9,7 @@ const MBTITypes = ({ types, matchingUser }) => {
                     <Box
                         key={type}
                         sx={{
-                            backgroundColor: matchingUser.mbti.includes(type) ? '#FFFCE4' : '#fff',
+                            backgroundColor: matchingUser.mbti?.includes(type) ? '#FFFCE4' : '#fff',
                             border: '1px solid #E2E2E2',
                             borderTopLeftRadius: index < 4 ? '8px' : '0',
                             borderTopRightRadius: index < 4 ? '8px' : '0',

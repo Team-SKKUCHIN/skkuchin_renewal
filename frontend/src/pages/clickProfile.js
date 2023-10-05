@@ -119,7 +119,7 @@ const clickProfile = () => {
                                     <Grid item sx={{flexGrow: 1, fontSize: '12px'}}>
                                         {matchingUser.major}/
                                         {matchingUser.student_id}학번/
-                                        {(matchingUser.gender).charAt(0)}
+                                        {matchingUser.gender?.charAt(0)}
                                     </Grid>
                                 </Grid>
                             </Grid>

@@ -4,9 +4,11 @@ import Image from 'next/image';
 import theme from '../theme/theme';
 import { backArrow, closeIcon, mainLogo } from '../image/recommend';
 import { useToggle } from '../components/Recommend/useToggle';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { dostacos, salady } from '../image/worldcup';
+import { useDispatch, useSelector } from 'react-redux';
+import { load_places } from '../actions/place/place';
+import { useWorldcup } from '../components/Worldcup/useWorldcup';
 
 const SubTitle = () => (
     <div style={{ margin: "52px 0 8px" }}>
@@ -67,7 +69,7 @@ const Header = () => {
 
 
 
-const StageSelect = ({ round, setRound, setStart }) => {
+const StageSelect = ({ round, setRound, startGame }) => {
     const stages = [16, 8, 4, 2];
 
     const mainText = "스꾸친과 함께 취향의 음식점을 알아봐요\n스꾸친스꾸친스꾸친";
@@ -116,13 +118,13 @@ const StageSelect = ({ round, setRound, setStart }) => {
                             onClick={() => setRound(stage)}
                             key={index}
                         >
-                            {stage}강
+                            {stage !== 2 ? `${stage}강` : '결승'}
                         </StageButton>
                     ))}
                 </div>
             </div>
             <button
-                onClick={() => setStart(true)}
+                onClick={() => startGame()}
                 style={{
                     width: "100%",
                     padding: "16px 0",
@@ -142,17 +144,39 @@ const StageSelect = ({ round, setRound, setStart }) => {
     );
 };
 
-const MainStage = ({ round, setFinish }) => {
-    const places = [
-        {
-            name: "샐러디",
-            img: salady,
-        },
-        {
-            name: "도스타코스",
-            img: dostacos,
-        },
-    ];
+const MainStage = ({ round, setRound, gameNum, setGameNum, pickPlace, getNextGame, setPhase }) => {
+    const [places, setPlaces] = useState([]);
+    const [darkenIndex, setDarkenIndex] = useState(null);
+    const isRunning = useRef(false);
+
+    useEffect(() => {
+        setDarkenIndex(null);
+
+        const tempPlaces = getNextGame(gameNum);
+        setPlaces(tempPlaces);
+    }, [gameNum]);
+
+    const selectPlace = useCallback((index) => {
+        if (isRunning.current) return;
+
+        const removeIndex = index === 0 ? 1 : 0;
+        setDarkenIndex(removeIndex);
+        pickPlace(gameNum + removeIndex);
+
+        isRunning.current = true;
+        setTimeout(() => {
+            if (round === 2) {
+                setPhase('finish');
+            } else if (gameNum + 1 === round / 2) {
+                setRound(round => round / 2);
+                setGameNum(0);
+            } else {
+                setGameNum(gameNum + 1);
+            }
+
+            isRunning.current = false;
+        }, 1000);
+    }, [isRunning, round, gameNum]);
 
     return (
         <div
@@ -176,57 +200,55 @@ const MainStage = ({ round, setFinish }) => {
                     letterSpacing: "-1px",
                 }}
             >
-                32강&nbsp;&nbsp;&nbsp;1/16
+                {round === 2 ? (
+                    '결승'
+                ) : (
+                    <span>
+                        {round}강&nbsp;&nbsp;&nbsp;{gameNum + 1}/{round / 2}
+                    </span>
+                )}
             </div>
-            <div onClick={() => setFinish(true)} style={{ position: "relative", width: "100%" , height: "200px", cursor: "pointer" }}>
-                <Image src={places[0].img} layout="fill" style={{ width: "100%", height: "100%" }} />
+            {places.map((place, index) => (
                 <div
-                    style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "34px",
-                        background: "rgba(34, 40, 48, 0.60)",
-                        color: "#FFF",
-                        textAlign: "center",
-                        lineHeight: "34px",
-                        fontSize: "16px",
-                        fontWeight: 700,
-                        letterSpacing: "-1px",
-                    }}
+                    onClick={() => selectPlace(index)}
+                    style={{ position: "relative", width: "100%" , height: "200px", cursor: "pointer" }}
+                    key={index}
                 >
-                    {places[0].name}
+                    <Image
+                        src={place.images[0]}
+                        layout="fill"
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            filter: darkenIndex === index ? "brightness(60%)" : undefined,
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "34px",
+                            background: "rgba(34, 40, 48, 0.60)",
+                            color: "#FFF",
+                            textAlign: "center",
+                            lineHeight: "34px",
+                            fontSize: "16px",
+                            fontWeight: 700,
+                            letterSpacing: "-1px",
+                        }}
+                    >
+                        {place.name}
+                    </div>
                 </div>
-            </div>
-            <div onClick={() => setFinish(true)} style={{ position: "relative", width: "100%" , height: "200px", cursor: "pointer" }}>
-                <Image src={places[1].img} layout="fill" style={{ width: "100%", height: "100%" }} />
-                <div
-                    style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "34px",
-                        background: "rgba(34, 40, 48, 0.60)",
-                        color: "#FFF",
-                        textAlign: "center",
-                        lineHeight: "34px",
-                        fontSize: "16px",
-                        fontWeight: 700,
-                        letterSpacing: "-1px",
-                    }}
-                >
-                    {places[1].name}
-                </div>
-            </div>
+            ))}
         </div>
     );
 };
 
-const Finish = () => {
-    const mainText = "스꾸친과 함께 취향의 음식점을 알아봐요\n스꾸친스꾸친스꾸친";
-
+const Finish = ({ getWinner, setPhase }) => {
+    const winner = getWinner();
 
     return (
         <>
@@ -235,38 +257,48 @@ const Finish = () => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    margin: "52px 0 16px",
-                    padding: "79px 16px 21px",
-                    borderRadius: "8px",
-                    background: "#F2F2F2",
+                    margin: "122px 0 110px",
                 }}
             >
-                <Image
-                    src={mainLogo}
-                    width={152}
-                    height={107}
-                    layout='fixed'
-                />
+                <div style={{ position: "relative", width: "100%", height: "200px" }}>
+                    <Image
+                        src={winner.images[0]}
+                        width="100%"
+                        height="100%"
+                        layout='fill'
+                    />
+                </div>
                 <p
                     style={{
-                        margin: "36px 0 76px",
-                        fontSize: "14px",
-                        lineHeight: "17px",
-                        letterSpacing: "-0.5px",
-                        whiteSpace: "pre-wrap",
-                        textAlign: "center",
+                        margin: "36px 0 0",
+                        fontSize: "18px",
+                        fontWeight: 700,
+                        letterSpacing: "-1px",
                     }}
                 >
-                    {mainText}
+                    스꾸친 님의 최애 음식점은
+                </p>
+                <p
+                    style={{
+                        margin: "0",
+                        fontSize: "18px",
+                        fontWeight: 700,
+                        letterSpacing: "-1px",
+                    }}
+                >
+                    <span style={{
+                        fontSize: "24px",
+                        fontWeight: 800,
+                    }}>{winner.name}</span> 입니다~!
                 </p>
             </div>
             <button
-                onClick={() => setStart(true)}
+                onClick={() => setPhase('ready')}
                 style={{
                     width: "100%",
                     padding: "16px 0",
                     borderRadius: "8px",
-                    background: "#FFCE00",
+                    background: "#BABABA",
                     border: "none",
                     color: "#FFF",
                     textAlign: "center",
@@ -275,18 +307,46 @@ const Finish = () => {
                     cursor: "pointer",
                 }}
             >
-                시작하기
+                다시하기
             </button>
         </>
     );
 };
 
 const WorldCup = () => {
+    const dispatch = useDispatch();
+    const { setGame, pickPlace, getNextGame, getWinner } = useWorldcup();
     const { Toggle, isOn } = useToggle();
-
+    const places = useSelector(state => state.place.allplaces);
+    const filteredPlaces = useRef(null);
     const [round, setRound] = useState(16);
-    const [start, setStart] = useState(false);
-    const [finish, setFinish] = useState(false);
+    const [gameNum, setGameNum] = useState(0);
+    const [phase, setPhase] = useState('ready');
+
+    useEffect(() => {
+        dispatch(load_places());
+    }, [])
+
+    useEffect(() => {
+        if (phase === 'ready') {
+            setRound(16);
+            setGameNum(0);
+        }
+    }, [phase]);
+
+    useEffect(() => {
+        const tempPlaces = places?.filter(place => isOn ? place.campus === "명륜" : place.campus === "율전")
+        filteredPlaces.current = tempPlaces;
+    }, [filteredPlaces, places, isOn]);
+
+    const startGame = useCallback(() => {
+        if (!filteredPlaces.current) {
+            alert("준비 중입니다. 잠시 후 클릭해주세요!");
+        } else {
+            setGame(filteredPlaces.current, round);
+            setPhase('start');
+        }
+    }, [filteredPlaces, round]);
 
     return (
         <ThemeProvider theme={theme}>
@@ -304,13 +364,29 @@ const WorldCup = () => {
                     }}
                 >
                     <MainTitle />
-                    {!start && <Toggle />}
+                    {phase === 'ready' && <Toggle />}
                 </div>
-                {start ? 
-                    (finish ? 
-                        <Finish />
-                        : <MainStage round={round} setFinish={setFinish}/>
-                    ) : <StageSelect round={round} setRound={setRound} setStart={setStart} />}
+                {phase === 'ready' && 
+                    <StageSelect
+                        round={round}
+                        setRound={setRound}
+                        startGame={startGame}
+                    />
+                }
+                {phase === 'start' && 
+                    <MainStage
+                        round={round}
+                        setRound={setRound}
+                        gameNum={gameNum}
+                        setGameNum={setGameNum}
+                        pickPlace={pickPlace}
+                        getNextGame={getNextGame}
+                        setPhase={setPhase}
+                    />
+                }
+                {phase === 'finish' && 
+                    <Finish getWinner={getWinner} setPhase={setPhase} />
+                }
             </div>
         </ThemeProvider>
     );

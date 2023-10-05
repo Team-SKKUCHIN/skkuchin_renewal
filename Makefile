@@ -24,12 +24,22 @@ stop:
 run-client:
 	@echo "Check the container with following hash is running properly:"
 	@docker-compose -f docker-compose/dev/docker-compose.yml up client --build -d
-.PHONY: restart-client
+.PHONY: run-client
 
 stop-client:
 	@echo "Stop and remove the container ..."
 	@docker-compose -f docker-compose/dev/docker-compose.yml down client
-.PHONY: restart-client
+.PHONY: stop-client
+
+run-server:
+	@echo "Check the container with following hash is running properly:"
+	@docker-compose -f docker-compose/dev/docker-compose.yml up server --build -d
+.PHONY: run-server
+
+stop-server:
+	@echo "Stop and remove the container ..."
+	@docker-compose -f docker-compose/dev/docker-compose.yml down server
+.PHONY: stop-server
 
 connect:
 	@echo "Kafka connect is running ..."

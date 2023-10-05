@@ -14,22 +14,21 @@ import { useEffect } from "react";
 import { useSelector } from 'react-redux';
 
 const UpperBar = () => {
-    const [selected, setSelected] = useState("스꾸맵");
+    const [selected, setSelected] = useState("홈");
     const chatAlarm = useSelector(state => state.chatAlarm.chatAlarm);
     const noticeAlarm = useSelector(state => state.noticeAlarm.noticeAlarm);
     const user = useSelector(state => state.auth.user);
 
-    // 0226 myPage 적용 안되는 문제 수정 완료
     useEffect(() => {
         const currentPathname = window.location.pathname;
-        if (currentPathname === "/match") {
+        if (currentPathname === "/message") {
             setSelected("스꾸챗");
         } else if (currentPathname === "/magazine" || currentPathname === "/magazineDetail" ){
             setSelected("매거진");
         } else if (currentPathname === "/myPage"){
             setSelected("마이페이지");
         } else {
-            setSelected("스꾸맵");
+            setSelected("홈");
         }
     }, []);
 
@@ -45,11 +44,11 @@ const UpperBar = () => {
                 </Link>
             <div style={{flex: 1}} />
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <div style={{marginRight:"18px"}}>
+                    {/* <div style={{marginRight:"18px"}}>
                         <Link href="/message">
                             <Image src={chatAlarm ? messageOnIcon : messageIcon} width={24} height={24}/>
                         </Link>
-                    </div>
+                    </div> */}
                     <div>
                         <Link href="/notification">
                             <Image src={noticeAlarm ? notiOnIcon : notiIcon} width={24} height={24}/>
@@ -64,13 +63,13 @@ const UpperBar = () => {
                         fontSize: "11px",
                         fontWeight: 700,
                         textDecoration: "none",
-                        color: selected === "스꾸맵" ? "#FFCE00" : "#505050",
-                        borderBottom: selected === "스꾸맵" ? "2px solid #FFCE00" : "none",
+                        color: selected === "홈" ? "#FFCE00" : "#505050",
+                        borderBottom: selected === "홈" ? "2px solid #FFCE00" : "none",
                 }}
-                onClick={() => setSelected("스꾸맵")}
+                onClick={() => setSelected("홈")}
                 >
                 <span style={{padding:"0 0 2px 0"}}>
-                    스꾸맵
+                    홈
                 </span>
                 </a>
             </Link>
@@ -90,7 +89,7 @@ const UpperBar = () => {
                 </span>
                 </a>
             </Link>
-            <Link href="/match">
+            <Link href="/message">
                 <a
                     style={{
                         fontSize: "11px",
