@@ -249,7 +249,6 @@ const MainStage = ({ round, setRound, gameNum, setGameNum, pickPlace, getNextGam
 
 const Finish = ({ getWinner, setPhase }) => {
     const winner = getWinner();
-    const mainText = "스꾸친과 함께 취향의 음식점을 알아봐요\n스꾸친스꾸친스꾸친";
 
     return (
         <>
@@ -261,12 +260,12 @@ const Finish = ({ getWinner, setPhase }) => {
                     margin: "122px 0 110px",
                 }}
             >
-                <div style={{ width: "200px", height: "200px" }}>
+                <div style={{ position: "relative", width: "100%", height: "200px" }}>
                     <Image
                         src={winner.images[0]}
                         width="100%"
                         height="100%"
-                        layout='responsive'
+                        layout='fill'
                     />
                 </div>
                 <p
@@ -319,8 +318,7 @@ const WorldCup = () => {
     const { setGame, pickPlace, getNextGame, getWinner } = useWorldcup();
     const { Toggle, isOn } = useToggle();
     const places = useSelector(state => state.place.allplaces);
-
-    const [filteredPlaces, setFilteredPlaces] = useState(null);
+    const filteredPlaces = useRef(null);
     const [round, setRound] = useState(16);
     const [gameNum, setGameNum] = useState(0);
     const [phase, setPhase] = useState('ready');
@@ -338,17 +336,17 @@ const WorldCup = () => {
 
     useEffect(() => {
         const tempPlaces = places?.filter(place => isOn ? place.campus === "명륜" : place.campus === "율전")
-        setFilteredPlaces(tempPlaces);
-    }, [places, isOn]);
+        filteredPlaces.current = tempPlaces;
+    }, [filteredPlaces, places, isOn]);
 
     const startGame = useCallback(() => {
-        if (!filteredPlaces) {
+        if (!filteredPlaces.current) {
             alert("준비 중입니다. 잠시 후 클릭해주세요!");
         } else {
-            setGame(filteredPlaces, round);
+            setGame(filteredPlaces.current, round);
             setPhase('start');
         }
-    }, [filteredPlaces]);
+    }, [filteredPlaces, round]);
 
     return (
         <ThemeProvider theme={theme}>
