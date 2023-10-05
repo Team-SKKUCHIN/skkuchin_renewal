@@ -12,7 +12,7 @@ const matchingComplete = () => {
         if(src == '회원가입'){
             router.push('/login');
         } else if(src == '스꾸챗프로필설정'){
-            router.push('/match');
+            router.push('/');
         }
     }
     const height = window.innerHeight / 2 - 100;

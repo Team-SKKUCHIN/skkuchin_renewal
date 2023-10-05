@@ -25,7 +25,7 @@ const FreeCommunity = () => {
     }, []);
 
     const handleBackClick = () => {
-        router.push('/match');
+        router.push('/');
     };
 
     const handleAddClick = () => {
