@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import Image from 'next/image';
 import theme from '../theme/theme';
-import { backArrow, closeIcon, mainLogo } from '../image/recommend';
+import { backArrow, closeIcon, food, mainLogo } from '../image/recommend';
 import { useToggle } from '../components/Recommend/useToggle';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
@@ -17,7 +17,7 @@ const SubTitle = () => (
             fontSize: "16px",
             letterSpacing: "-0.32px",
         }}>
-            #오늘은 이거다
+            #나의 최애 음식점 찾기
         </span>
     </div>
 );
@@ -29,7 +29,7 @@ const MainTitle = () => (
         fontWeight: 800,
         letterSpacing: "-1.28px",
     }}>
-        오늘 뭐 먹지?
+        음식점 월드컵
     </h1>
 );
 
@@ -215,7 +215,7 @@ const MainStage = ({ round, setRound, gameNum, setGameNum, pickPlace, getNextGam
                     key={index}
                 >
                     <Image
-                        src={place.images[0]}
+                        src={place.images[0] ?? food}
                         layout="fill"
                         style={{
                             width: "100%",
@@ -248,8 +248,9 @@ const MainStage = ({ round, setRound, gameNum, setGameNum, pickPlace, getNextGam
 };
 
 const Finish = ({ getWinner, setPhase }) => {
+    const user = useSelector(state => state.auth.user);
     const winner = getWinner();
-
+    
     return (
         <>
             <div
@@ -262,7 +263,7 @@ const Finish = ({ getWinner, setPhase }) => {
             >
                 <div style={{ position: "relative", width: "100%", height: "200px" }}>
                     <Image
-                        src={winner.images[0]}
+                        src={winner.images[0] ?? food}
                         width="100%"
                         height="100%"
                         layout='fill'
@@ -276,7 +277,7 @@ const Finish = ({ getWinner, setPhase }) => {
                         letterSpacing: "-1px",
                     }}
                 >
-                    스꾸친 님의 최애 음식점은
+                    {user?.name ? user.name + "님" : "당신"}의 최애 음식점은
                 </p>
                 <p
                     style={{

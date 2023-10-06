@@ -5,14 +5,14 @@ services:
     image: server
     build:
       context: ../../backend
-      dockerfile: ./docker/dev/Dockerfile
+      dockerfile: ./docker/prod/Dockerfile
   client:
     image: client
     build:
       context: ../../frontend
-      dockerfile: ./docker/dev/Dockerfile
+      dockerfile: ./docker/prod/Dockerfile
   nginx:
     image: nginx
     build:
-      context: "../../nginx"
+      context: ../../nginx
       dockerfile: Dockerfile

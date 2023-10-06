@@ -29,14 +29,14 @@ const matchingComplete = () => {
             <div style={{textAlign:'center', marginTop:'12px'}}>
                 <Typography style={{fontSize:'20px'}}>
                     스꾸챗 프로필 등록으로<br/>
-                    대화 참여가 가능해졌습니다. 
+                    매칭이 가능해졌습니다. 
                 </Typography>
             </div>
             <div style={ {marginTop:height2}}>
                 <div style={{textAlign:'center'}}>
                     <Typography style={{fontSize:'10px'}}>
                         *스꾸챗 프로필을 변경하고 싶은 경우<br/>
-                        [스꾸챗 &#62; 내 프로필 보기]에서 변경가능합니다. 
+                        [마이페이지 &#62; 매칭 프로필 변경]에서 변경가능합니다. 
                     </Typography>
                 </div>
             </div>

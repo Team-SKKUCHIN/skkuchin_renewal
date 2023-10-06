@@ -131,18 +131,18 @@ const myPage = () => {
         marginLeft:'auto'
       }));
     
-    const CustomSwitch4 = styled((props)=>(<Switch disableRipple {...props} onClick={handleNoticeToggle}   checked={infoAlarm}/>))(({ theme }) => ({
-    '& .MuiSwitch-thumb': {
-        backgroundColor: 'white',
-    },
-    '& .MuiSwitch-track': {
-        backgroundColor: infoAlarm ? theme.palette.primary.main : 'gray',
-        height: '12px',
-        marginTop:'2px'
-    },
-    marginTop:"-10px",
-    marginLeft:'auto'
-    }));     
+    // const CustomSwitch4 = styled((props)=>(<Switch disableRipple {...props} onClick={handleNoticeToggle}   checked={infoAlarm}/>))(({ theme }) => ({
+    // '& .MuiSwitch-thumb': {
+    //     backgroundColor: 'white',
+    // },
+    // '& .MuiSwitch-track': {
+    //     backgroundColor: infoAlarm ? theme.palette.primary.main : 'gray',
+    //     height: '12px',
+    //     marginTop:'2px'
+    // },
+    // marginTop:"-10px",
+    // marginLeft:'auto'
+    // }));     
     const IOSSwitch = styled((props) => (
         <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} checked={chatAlarm} />
         ))(({ theme }) => ({
@@ -310,12 +310,12 @@ const myPage = () => {
                         <CustomSwitch2 defaultChecked/>
                     </div>
 
-                    <div style={{display:'flex' , marginBottom:'5px'}}>
+                    {/* <div style={{display:'flex' , marginBottom:'5px'}}>
                         <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>SMS 알림</Typography>
-                        {/* 토글 스위치 */}
+                        토글 스위치
                         <CustomSwitch4 defaultChecked/>
-                    </div>
-                 
+                    </div> */}
+
                     <div style={{display:'flex' , marginBottom:'5px'}}>
                         <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>공지/이벤트 알림</Typography>
                         {/* 토글 스위치 */}

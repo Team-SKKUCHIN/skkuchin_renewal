@@ -4,11 +4,11 @@ FROM node:bullseye-slim
 # 경로 설정하기
 WORKDIR /app
 # package.json 워킹 디렉토리에 복사 (.은 설정한 워킹 디렉토리를 뜻함)
-COPY ../../package.json .
+COPY package.json .
 # 명령어 실행 (의존성 설치)
 RUN npm install
 # 현재 디렉토리의 모든 파일을 도커 컨테이너의 워킹 디렉토리에 복사한다.
-COPY ../../ .
+COPY . .
 
 # 각각의 명령어들은 한줄 한줄씩 캐싱되어 실행된다.
 # package.json의 내용은 자주 바뀌진 않을 거지만

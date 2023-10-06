@@ -45,3 +45,8 @@ connect:
 	@echo "Kafka connect is running ..."
 	@curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @register-mysql.json
 .PHONY: connect
+
+build-prod:
+	@echo "Build production images ..."
+	@docker-compose -f docker-compose/prod/docker-compose.yml build server client nginx
+.PHONY: build-prod

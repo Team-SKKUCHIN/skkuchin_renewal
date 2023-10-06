@@ -14,8 +14,13 @@ const GameContent = () => {
         },
         {
             name: "음식점 월드컵",
-            hashtag: "#오늘은 이거다",
+            hashtag: "#나의 최애 음식점 찾기",
             link: "/worldcup",
+        },
+        {
+            name: "다음 게임을 기대해주세요!",
+            hashtag: "#What's next?",
+            link: "/",
         },
     ];
 
@@ -28,20 +33,22 @@ const GameContent = () => {
                     letterSpacing: "-0.84px",
                 }}
             >
-                식당찾기
+                식당찾기 🍚
             </span>
-            <div style={{ display: "flex", flexDirection: "row", width: "100%", marginTop: "10px", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", flexDirection: "row", marginTop: "10px", overflowX: "scroll" }}>
                 {games.map((game, index) => (
                     <Link href={game.link} key={index}>
                         <div
                             style={{
-                                    width: "227px",
+                                    minWidth: "230px",
                                     height: "100px",
                                     borderRadius: "12px",
                                     border: "1px solid #E2E2E2",
+                                    // padding: "19px 113px 39px 20px",
                                     padding: "19px 20px",
                                     margin: "0 4px",
                                     cursor: "pointer",
+                                    whiteSpace: "nowrap",
                                 }}
                             >
                                 <p
