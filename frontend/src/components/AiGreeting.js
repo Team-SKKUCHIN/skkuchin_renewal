@@ -177,7 +177,7 @@ const AiGreeting = () => {
             <div style={{ position:"relative", paddingTop:"10px", width: "100%", background: "white", alignContent:"center", maxWidth:"420px"}}>
                 <div style={{ display: "flex", justifyContent: "space-between"}}>
                     <Typography style={{fontWeight:700, color: '#3C3C3C', fontSize: '21px', fontWeight: 700, padding:"10px 24px"}}>
-                        친구찾기 🍚
+                        친구찾기 🙋🏻‍♀️🙋🏻‍♂️
                     </Typography>
                 </div>
             </div>
