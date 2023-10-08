@@ -16,7 +16,8 @@ import skkuchin.service.filter.CustomAuthorizationFilter;
 import skkuchin.service.repo.UserRepo;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-@EnableWebSecurity @RequiredArgsConstructor
+@EnableWebSecurity
+@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 public class SecurityConfig {
@@ -35,6 +36,7 @@ public class SecurityConfig {
             "/api/matching/user/new/**",
             "/api/user/password/reset",
             "/api/email/**",
+            "/api/worldcup/**",
             "/ws/chat/**"
     };
     private static final String[] PERMIT_SWAGGER_URL_ARRAY = {
@@ -68,7 +70,8 @@ public class SecurityConfig {
             authenticationFilter.setFilterProcessesUrl("/api/user/login");
             builder
                     .addFilter(authenticationFilter)
-                    .addFilterBefore(new CustomAuthorizationFilter(userRepo), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(new CustomAuthorizationFilter(userRepo),
+                            UsernamePasswordAuthenticationFilter.class);
         }
     }
 }
