@@ -11,14 +11,19 @@ import skkuchin.service.domain.Map.Worldcup;
 import skkuchin.service.domain.User.AppUser;
 
 public interface WorldcupRepo extends JpaRepository<Worldcup, Long> {
-    @Query("SELECT w.place FROM Worldcup w " +
-            "ORDER BY (SELECT COUNT(w2) FROM Worldcup w2 WHERE w2.place.id = w.place.id) DESC")
+    @Query(value = "SELECT p.* " +
+            "FROM Place p " +
+            "LEFT JOIN Worldcup w ON p.id = w.place_id " +
+            "GROUP BY p.id " +
+            "ORDER BY COUNT(w.place_id) DESC", nativeQuery = true)
     List<Place> findAllOrderedByPlaceCount();
 
-    @Query("SELECT w.user FROM Worldcup w " +
-            "WHERE w.place.id = :placeId " +
-            "AND w.user.matching = true " +
+    @Query(value = "SELECT u.* " +
+            "FROM Worldcup w " +
+            "INNER JOIN AppUser u ON w.user_id = u.id " +
+            "WHERE w.place_id = :placeId " +
+            "AND w.matching = true " +
             "ORDER BY RAND() " +
-            "LIMIT 3")
+            "LIMIT 3", nativeQuery = true)
     List<AppUser> findRandomMatchingUsersByPlaceId(@Param("placeId") Long placeId);
 }
