@@ -50,9 +50,11 @@ public class WorldcupDto {
         private Campus campus;
         private Gate gate;
         private List<String> images;
-        private List<AppUser> users;
+        private Float winningRate;
+        private List<MatchingUserDto.Response> users;
 
-        public Response(Place place, List<Image> images, List<AppUser> users) {
+        public Response(Place place, List<Image> images, List<MatchingUserDto.Response> matchingUsers,
+                Float winningRate) {
             this.id = place.getId();
             this.name = place.getName();
             this.category = place.getCategory();
@@ -60,7 +62,8 @@ public class WorldcupDto {
             this.campus = place.getCampus();
             this.gate = place.getGate();
             this.images = images.stream().map(image -> image.getUrl()).collect(Collectors.toList());
-            this.users = users;
+            this.winningRate = winningRate;
+            this.users = matchingUsers;
         }
     }
 }
