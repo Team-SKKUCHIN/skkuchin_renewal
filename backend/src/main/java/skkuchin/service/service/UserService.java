@@ -33,7 +33,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ChatRoomRepo chatRoomRepo;
 
-
     private final Random random = new Random();
 
     public void checkUsername(String username) {
@@ -256,11 +255,10 @@ public class UserService {
                     "12341234",
                     random.nextInt(23 - 10 + 1) + 10,
                     Major.values()[random.nextInt(Major.values().length)],
-                    Profile.values()[random.nextInt(Profile.values().length)]
-            );
+                    Profile.values()[random.nextInt(Profile.values().length)]);
             signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
             AppUser appUser = signUpForm.toEntity();
-            appUser.setEmail("test"+i+"@example.com");
+            appUser.setEmail("test" + i + "@example.com");
             appUser.emailVerifiedSuccess();
             UserRole userRole = UserRole.builder().user(appUser).role(roleRepo.findByName("ROLE_USER")).build();
             userRepo.save(appUser);
@@ -276,10 +274,11 @@ public class UserService {
             AppUser matchingUser = userRepo.findById(existingUser.getId()).orElseThrow();
 
             List<String> keywords = new ArrayList<>();
-            String[] keywordPool = {"한식", "일식", "중식", "양식", "남미음식", "분식", "아시아음식", "카페",
-                    "축구", "야구", "농구", "골프", "테니스", "당구", "헬스", "주짓수", "보드스키", "서핑", "등산", "스포츠관람", "러닝", "볼링", "댄스", "배드민턴",
+            String[] keywordPool = { "한식", "일식", "중식", "양식", "남미음식", "분식", "아시아음식", "카페",
+                    "축구", "야구", "농구", "골프", "테니스", "당구", "헬스", "주짓수", "보드스키", "서핑", "등산", "스포츠관람", "러닝", "볼링", "댄스",
+                    "배드민턴",
                     "영화", "음악", "전시회", "연극뮤지컬", "덕질", "여행", "게임", "노래방", "방탈출", "보드게임", "반려동물", "요리", "맛집탐방", "만화",
-                    "학회", "동아리", "교환학생", "봉사", "재테크", "빅데이터", "금융", "문학", "토론", "시사", "어학", "CPA", "로스쿨", "행시", "피트"};
+                    "학회", "동아리", "교환학생", "봉사", "재테크", "빅데이터", "금융", "문학", "토론", "시사", "어학", "CPA", "로스쿨", "행시", "피트" };
 
             int keywordsCount = random.nextInt(6) + 3;
             Set<String> keywordSet = new HashSet<>();
