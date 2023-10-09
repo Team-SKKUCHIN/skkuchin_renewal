@@ -56,7 +56,7 @@ public class WorldcupService {
         List<WorldcupDto.Response> places = allPlaces.stream()
                 .map(place -> {
                     int count = placeCountMap.getOrDefault(place, 0);
-                    float winningRate = ((float) count) / sumOfCounts * 100.0f;
+                    float winningRate = ((float) count) / sumOfCounts;
 
                     List<Image> images = imageRepo.findByPlace(place);
 
