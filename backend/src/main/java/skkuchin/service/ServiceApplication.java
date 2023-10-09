@@ -70,10 +70,10 @@ public class ServiceApplication {
 				rankService.addRank();
 				userService.saveTestMatchingUsers(100);
 				worldcupService.insertData(100);
-				// chatRoomService.insertData();
-				// chatMessageService.insertData();
-				// noticeService.insertData();
-				// reportService.insertData();
+				chatRoomService.insertData();
+				chatMessageService.insertData();
+				noticeService.insertData();
+				reportService.insertData();
 			} catch (Exception e) {
 				System.out.println(e);
 			}
