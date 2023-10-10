@@ -1,5 +1,7 @@
-import food from '../food.png';
+import downArrow from './down_arrow.png';
+import upArrow from './up_arrow.png';
 
 export {
-    food,
+    downArrow,
+    upArrow,
 };
