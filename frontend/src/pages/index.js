@@ -33,7 +33,7 @@ const GameContent = () => {
                     letterSpacing: "-0.84px",
                 }}
             >
-                식당찾기 🍚
+                오늘 뭐먹지?
             </span>
             <div style={{ display: "flex", flexDirection: "row", marginTop: "10px", overflowX: "scroll" }}>
                 {games.map((game, index) => (

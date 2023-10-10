@@ -54,6 +54,7 @@ public class WorldcupService {
         int sumOfCounts = placeCountMap.values().stream().mapToInt(Integer::intValue).sum();
 
         List<WorldcupDto.Response> places = allPlaces.stream()
+                .limit(5)
                 .map(place -> {
                     int count = placeCountMap.getOrDefault(place, 0);
                     float winningRate = ((float) count) / sumOfCounts;
