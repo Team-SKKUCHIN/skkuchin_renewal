@@ -156,33 +156,53 @@ const clickProfile = () => {
                     </div>
                 { matchingUser && 
                     <>
-                        <Container sx={{position: 'fixed', backgroundColor: '#fff', width: '100%', height: '100px', bottom: '0px'}}>
-                            <Button
-                                disableElevation
-                                disableTouchRipple
-                                sx={{
-                                    position: 'fixed',
-                                    color: '#FFF',
-                                    fontSize: '16px',
-                                    fontWeight: 800,
-                                    textAlign: 'center',
-                                    backgroundColor: requestId && requestId.includes(matchingUser.id) ? '#E2E2E2' : '#FFCE00',
-                                    borderRadius: '8px',
-                                    bottom: '24px',
-                                    width: '327px',
-                                    height: '56px',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
+                        <Container
+                            sx={{
+                                position: 'fixed',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                width: '100%',
+                                height: '100px',
+                                left: 0,
+                                bottom: 0,
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    width: "100%",
+                                    height: "100%",
+                                    maxWidth: "420px",
                                 }}
-                                onClick={() => {
-                                    if (matchingUser !== null && !(requestId && requestId.includes(matchingUser.id))) {
-                                        handleOpen(matchingUser.id);
-                                    }
-                                }}
-                                disabled={requestId && requestId.includes(matchingUser.id)}
                             >
-                                {requestId && requestId.includes(matchingUser.id) ? '밥약 신청완료' : '밥약 신청하기'}
-                            </Button>
+                                <Button
+                                    disableElevation
+                                    disableTouchRipple
+                                    sx={{
+                                        position: 'fixed',
+                                        color: '#FFF',
+                                        fontSize: '16px',
+                                        fontWeight: 800,
+                                        textAlign: 'center',
+                                        backgroundColor: requestId && requestId.includes(matchingUser.id) ? '#E2E2E2' : '#FFCE00',
+                                        borderRadius: '8px',
+                                        bottom: '24px',
+                                        width: '327px',
+                                        height: '56px',
+                                    }}
+                                    onClick={() => {
+                                        if (matchingUser !== null && !(requestId && requestId.includes(matchingUser.id))) {
+                                            handleOpen(matchingUser.id);
+                                        }
+                                    }}
+                                    disabled={requestId && requestId.includes(matchingUser.id)}
+                                >
+                                    {requestId && requestId.includes(matchingUser.id) ? '밥약 신청완료' : '밥약 신청하기'}
+                                </Button>
+                            </div>
                         </Container>
                         <CustomPopup
                             open={open}

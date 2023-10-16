@@ -17,6 +17,7 @@ import skkuchin.service.repo.UserRepo;
 import skkuchin.service.repo.WorldcupRepo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,22 @@ public class WorldcupService {
                             .filter(user -> Objects.nonNull(user.getMatching()) && user.getMatching())
                             .collect(Collectors.toList());
 
+                    int shouldBeAdded = 3 - users.size();
+
+                    if (shouldBeAdded > 0) {
+                        List<Long> excludeIds = new ArrayList<>();
+                        for (AppUser user : users) {
+                            excludeIds.add(user.getId());
+                        }
+
+                        List<AppUser> availableUsers = userRepo.findAvailableUsers(excludeIds);
+                        Collections.shuffle(availableUsers);
+
+                        List<AppUser> additionalUsers = new ArrayList<>(
+                                availableUsers.subList(0, Math.min(availableUsers.size(), shouldBeAdded)));
+                        users.addAll(additionalUsers);
+                    }
+
                     List<MatchingUserDto.Response> matchingUsers = users.stream()
                             .map(user -> {
                                 List<UserKeyword> keywords = userKeywordRepo.findByUser(user);
@@ -86,7 +103,7 @@ public class WorldcupService {
     }
 
     @Transactional
-    public WorldcupDto.Response getDetail(Long placeId) {
+    public WorldcupDto.Response getDetail(Long placeId, AppUser currentUser) {
         Place winnerPlace = placeRepo.findById(placeId)
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 장소입니다"));
 
@@ -99,7 +116,29 @@ public class WorldcupService {
         List<AppUser> users = worldcups.stream()
                 .map(worldcup -> worldcup.getUser())
                 .filter(user -> Objects.nonNull(user.getMatching()) && user.getMatching())
+                .filter(user -> currentUser != null ? user.getId() != currentUser.getId() : true)
                 .collect(Collectors.toList());
+
+        int shouldBeAdded = 3 - users.size();
+
+        if (shouldBeAdded > 0) {
+            List<Long> excludeIds = new ArrayList<>();
+            excludeIds.add(-1L);
+            if (currentUser != null) {
+                excludeIds.add(currentUser.getId());
+            }
+
+            for (AppUser user : users) {
+                excludeIds.add(user.getId());
+            }
+
+            List<AppUser> availableUsers = userRepo.findAvailableUsers(excludeIds);
+            Collections.shuffle(availableUsers);
+
+            List<AppUser> additionalUsers = new ArrayList<>(
+                    availableUsers.subList(0, Math.min(availableUsers.size(), shouldBeAdded)));
+            users.addAll(additionalUsers);
+        }
 
         List<MatchingUserDto.Response> matchingUsers = users.stream()
                 .map(user -> {

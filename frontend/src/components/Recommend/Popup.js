@@ -1,26 +1,11 @@
 import styled from '@emotion/styled';
-import { useCallback, useEffect, useRef } from 'react';
 
 const Popup = ({ selectedPlace, setPopup }) => {
-    const popupRef = useRef();
-
-    // const handleClickOutside = useCallback((event) => {
-    //     if (popupRef.current && !event.composedPath().includes(popupRef.current)) {
-    //         setPopup(false);
-    //     }
-    // }, []);
-
-    // useEffect(() => {
-    //     document.addEventListener('click', handleClickOutside);
-    //     return () => {
-    //         document.removeEventListener('click', handleClickOutside);
-    //     };
-    // }, []);
 
     return (
         <PopupContainer>
             <PopupSubContainer>
-                <PopupWrapper ref={popupRef}>
+                <PopupWrapper>
                     <div
                         style={{
                             width: "100%",

@@ -4,9 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
+import skkuchin.service.config.auth.PrincipalDetails;
+import skkuchin.service.domain.User.AppUser;
 import skkuchin.service.dto.CMRespDto;
 import skkuchin.service.dto.WorldcupDto;
 import skkuchin.service.exception.CustomValidationApiException;
@@ -30,10 +35,19 @@ public class WorldcupController {
         return new ResponseEntity<>(new CMRespDto<>(1, "월드컵 순위 조회 완료", places), HttpStatus.OK);
     }
 
-    @GetMapping("/place/{placeId}")
+    @GetMapping("/nonuser/place/{placeId}")
     public ResponseEntity<?> getDetail(@PathVariable Long placeId) {
-        WorldcupDto.Response place = worldcupService.getDetail(placeId);
-        return new ResponseEntity<>(new CMRespDto<>(1, "월드컵 결승 식당 상세 조회 완료", place), HttpStatus.OK);
+        WorldcupDto.Response place = worldcupService.getDetail(placeId, null);
+        return new ResponseEntity<>(new CMRespDto<>(1, "월드컵 결승 식당 비회원 상세 조회 완료", place), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/place/{placeId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    public ResponseEntity<?> getDetail(@PathVariable Long placeId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        AppUser user = principalDetails.getUser();
+        WorldcupDto.Response place = worldcupService.getDetail(placeId, user);
+        return new ResponseEntity<>(new CMRespDto<>(1, "월드컵 결승 식당 회원 상세 조회 완료", place), HttpStatus.OK);
     }
 
     @PostMapping("")
