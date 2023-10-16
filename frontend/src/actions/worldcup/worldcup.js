@@ -1,4 +1,5 @@
 import { API_URL } from '../../config';
+import { getToken, request_refresh } from '../auth/auth';
 import {
     LOAD_WORLDCUP_FAIL,
     LOAD_WORLDCUP_SUCCESS,
@@ -36,13 +37,48 @@ export const load_worldcups = (callback) => async dispatch => {
     }
 }
 
-export const load_detail_worldcup = (placeId, callback) => async dispatch => {
+export const load_nonuser_detail_worldcup = (placeId, callback) => async dispatch => {
     
     try {
-        const res = await fetch(`${API_URL}/api/worldcup/place/${placeId}`, {
+        const res = await fetch(`${API_URL}/api/worldcup/nonuser/place/${placeId}`, {
             method: 'GET',
             headers: {
                 'Accept' : 'application/json'
+            }
+        });
+
+        const apiRes = await res.json();
+
+        if (res.status === 200) {
+            dispatch({
+                type: LOAD_WORLDCUP_SUCCESS,
+                payload: apiRes.data
+            })
+            if (callback) callback([true, apiRes.message]);
+        } else {
+            dispatch({
+                type: LOAD_WORLDCUP_FAIL
+            })
+            if (callback) callback([false, apiRes.message]);  
+        }
+    } catch (error) {
+        dispatch({
+            type: LOAD_WORLDCUP_FAIL
+        })
+        if (callback) callback([false, error]);
+    }
+}
+
+export const load_user_detail_worldcup = (placeId, callback) => async dispatch => {
+    await dispatch(request_refresh());
+    const access = dispatch(getToken('access'));
+
+    try {
+        const res = await fetch(`${API_URL}/api/worldcup/user/place/${placeId}`, {
+            method: 'GET',
+            headers: {
+                'Accept' : 'application/json',
+                'Authorization' : `Bearer ${access}`,
             }
         });
 

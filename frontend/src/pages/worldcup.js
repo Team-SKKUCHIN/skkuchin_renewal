@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import Image from 'next/image';
 import theme from '../theme/theme';
-import { backArrow, closeIcon, food, mainLogo } from '../image/recommend';
+import { closeIcon, food, mainLogo } from '../image/recommend';
 import { useToggle } from '../components/Recommend/useToggle';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
@@ -13,6 +13,7 @@ import { load_worldcups } from '../actions/worldcup/worldcup';
 import { convertName } from '../utils/wordConvertor';
 import { downArrow, upArrow } from '../image/worldcup';
 import { mbtiDict } from '../image/mbti/profile';
+import WorldcupFriend from '../components/Worldcup/WorldcupFriend';
 
 const SubTitle = () => (
     <div style={{ margin: "52px 0 8px" }}>
@@ -40,33 +41,23 @@ const MainTitle = () => (
 const Header = () => {
     const router = useRouter();
 
-    const handleBack = useCallback((e) => {
-        router.back();
-    }, [])
-
     const handleClose = useCallback((e) => {
         router.push('/');
     }, [])
 
     return (
-        <div style={{ margin: "15px 0", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-            <Image
-                src={backArrow}
-                onClick={handleBack}
-                layout="fixed"
-                width={24}
-                height={24}
-                style={{ cursor: 'pointer' }}
-            />
-            <Image
-                src={closeIcon}
-                name='back'
-                onClick={handleClose}
-                layout='fixed'
-                width={24}
-                height={24}
-                style={{ cursor: 'pointer' }}
-            />
+        <div style={{ margin: "15px 0 0", height: "24px", width: "100%", position: "relative" }}>
+            <div style={{ position: 'absolute', right: 0 }}>
+                <Image
+                    src={closeIcon}
+                    name='back'
+                    onClick={handleClose}
+                    layout='fixed'
+                    width={24}
+                    height={24}
+                    style={{ cursor: 'pointer' }}
+                />
+            </div>
         </div>
     );
 };
@@ -221,6 +212,7 @@ const MainStage = ({ round, setRound, gameNum, setGameNum, pickPlace, getNextGam
                     <Image
                         src={place.images[0] ?? food}
                         layout="fill"
+                        objectFit="cover"
                         style={{
                             width: "100%",
                             height: "100%",
@@ -251,9 +243,16 @@ const MainStage = ({ round, setRound, gameNum, setGameNum, pickPlace, getNextGam
     );
 };
 
-const Finish = ({ getWinner, setPhase }) => {
+const Finish = ({ getWinner, phase, setPhase }) => {
+    const [popup, setPopup] = useState(true);
     const user = useSelector(state => state.auth.user);
     const winner = getWinner();
+
+    useEffect(() => {
+        if (!popup) {
+            setPopup(true);
+        }
+    }, [phase])
     
     return (
         <>
@@ -333,6 +332,7 @@ const Finish = ({ getWinner, setPhase }) => {
             >
                 다시하기
             </button>
+            {popup && <WorldcupFriend winner={winner} setPopup={setPopup} />}
         </>
     );
 };
@@ -640,7 +640,7 @@ const WorldCup = () => {
                     />
                 }
                 {phase === 'finish' && 
-                    <Finish getWinner={getWinner} setPhase={setPhase} />
+                    <Finish getWinner={getWinner} phase={phase} setPhase={setPhase} />
                 }
                 {phase === 'rank' && 
                     <Rank phase={phase} setPhase={setPhase} />

@@ -37,33 +37,23 @@ const MainTitle = () => (
 const Header = () => {
     const router = useRouter();
 
-    const handleBack = useCallback((e) => {
-        router.back();
-    }, [])
-
     const handleClose = useCallback((e) => {
         router.push('/');
     }, [])
 
     return (
-        <div style={{ margin: "15px 0", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-            <Image
-                src={backArrow}
-                onClick={handleBack}
-                layout="fixed"
-                width={24}
-                height={24}
-                style={{ cursor: 'pointer' }}
-            />
-            <Image
-                src={closeIcon}
-                name='back'
-                onClick={handleClose}
-                layout='fixed'
-                width={24}
-                height={24}
-                style={{ cursor: 'pointer' }}
-            />
+        <div style={{ margin: "15px 0 0", height: "24px", width: "100%", position: "relative" }}>
+            <div style={{ position: 'absolute', right: 0 }}>
+                <Image
+                    src={closeIcon}
+                    name='back'
+                    onClick={handleClose}
+                    layout='fixed'
+                    width={24}
+                    height={24}
+                    style={{ cursor: 'pointer' }}
+                />
+            </div>
         </div>
     );
 };

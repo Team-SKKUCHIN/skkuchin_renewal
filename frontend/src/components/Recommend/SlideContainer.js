@@ -96,7 +96,7 @@ const Restaurant = ({ selectedPlace, places, setPopup }) => {
                             </div>
                         </div>
                     </div>
-                    <Image src={place.images[0] ?? food} height={80} width={80} layout='fixed' />
+                    <Image src={place.images[0] ?? food} height={80} width={80} layout='fixed' objectFit='cover' />
                 </div>
             ))}
             <div style={{ width: '100%', height: '50%' }} />
