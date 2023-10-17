@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from "@emotion/styled";
 import { load_nonuser_detail_worldcup, load_user_detail_worldcup } from '../../actions/worldcup/worldcup';
@@ -7,24 +7,38 @@ import Image from 'next/image';
 import { mbtiDict } from '../../image/mbti/profile';
 import GoLogin from '../GoLogin';
 import { useRouter } from 'next/router';
+import { load_request_id, request_chat } from '../../actions/chat/chatRoom';
+import CustomPopup from '../SkkuChat/CustomPopup';
+import CustomPopupNoBtn from '../SkkuChat/CustomPopupNoBtn';
 
-const WorldcupFriend = ({ winner, setPopup }) => {
+const WorldcupFriend = ({ place, setPopup, userFromRank=null }) => {
     const router = useRouter();
     const dispatch = useDispatch();
+    
     const [isLogin, setIsLogin] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [isPopupMessageOpen, setIsPopupMessageOpen] = useState(false);
+    const popupMessage = useRef('');
+    const selectedId = useRef(null);
+
     const user = useSelector(state => state.auth.user);
+    const requestId = useSelector(state => state.chatRoom.requestId);
     const worldcup = useSelector(state => state.worldcup.worldcup);
     
-    const matchingUser = worldcup && !Array.isArray(worldcup) && worldcup.users[0];
+    const matchingUser = userFromRank ?? (worldcup && !Array.isArray(worldcup) && worldcup.users[0]);
 
     const getKeyword = useCallback((index) => {
         if (!matchingUser) {
             return null;
         }
-        
-        return Object.values(matchingUser.keywords)[index][0];
-    }, [matchingUser]);
 
+        if (Object.values(matchingUser.keywords).length === 1) {
+            return Object.values(matchingUser.keywords)[0][index];
+        } else {
+            return Object.values(matchingUser.keywords)[index][0];
+        }
+        
+    }, [matchingUser]);
 
     const handleFriendClick = useCallback((friendId) => {
         if (user) {
@@ -34,19 +48,46 @@ const WorldcupFriend = ({ winner, setPopup }) => {
         }
     }, [user]);
 
+    const handleOpen = useCallback((id) => {
+        if (user) {
+            setOpen(true);
+            selectedId.current = id;
+        } else {
+            setIsLogin(true);
+        }
+    }, []);
+
+    const handleClose = useCallback(() => {
+        setOpen(false);
+    }, []);
+
+    const handleSubmit = useCallback((id) => {
+        setOpen(false);
+        dispatch(request_chat(id));
+
+        popupMessage.current = '신청이 완료되었습니다!';
+        setIsPopupMessageOpen(true);
+    }, []);
+
+
     useEffect(() => {
         if (user) {
-            dispatch(load_user_detail_worldcup(winner.id));
+            if (userFromRank === null) {
+                dispatch(load_user_detail_worldcup(place.id));
+            }
+            dispatch(load_request_id());
         } else {
-            dispatch(load_nonuser_detail_worldcup(winner.id));
+            if (userFromRank === null) {
+                dispatch(load_nonuser_detail_worldcup(place.id));
+            }
         }
-    }, [winner, user])
+    }, [place, user]);
 
     const text = "에서\n같이 먹을 친구를 만들어봐요!";
 
     return (
         <>
-            {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
+            {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} />}
             <PopupContainer>
                 <PopupSubContainer>
                     <PopupWrapper>
@@ -74,7 +115,7 @@ const WorldcupFriend = ({ winner, setPopup }) => {
                                 textAlign: 'center',
                             }}
                         >
-                            <span style={{ fontWeight: 800 }}>{winner.name}</span>
+                            <span style={{ fontWeight: 800 }}>{place.name}</span>
                             {text}
                         </p>
                         <Image
@@ -82,6 +123,7 @@ const WorldcupFriend = ({ winner, setPopup }) => {
                             width={140}
                             height={140}
                             layout='fixed'
+                            placeholder="blur" 
                         />
                         <div style={{ display: "flex", margin: "12px 0" }}>
                             <span
@@ -160,26 +202,62 @@ const WorldcupFriend = ({ winner, setPopup }) => {
                             >
                                 프로필 보기
                             </button>
-                            <button
-                                style={{
-                                    width: "48.5%",
-                                    padding: "16px 0",
-                                    border: 0,
-                                    borderRadius: "10px",
-                                    backgroundColor: "#FFCE00",
-                                    color: "#FFF",
-                                    fontSize: "16px",
-                                    fontWeight: 800,
-                                    letterSpacing: "-0.32px",
-                                    cursor: "pointer",
-                                }}
-                            >
-                                밥약걸기
-                            </button>
+                            {requestId && requestId.includes(matchingUser?.id) ? 
+                                <button
+                                    style={{
+                                        width: "48.5%",
+                                        padding: "16px 0",
+                                        border: 0,
+                                        borderRadius: "10px",
+                                        backgroundColor: "#FFCE00",
+                                        color: "#FFF",
+                                        fontSize: "16px",
+                                        fontWeight: 800,
+                                        letterSpacing: "-0.32px",
+                                    }}
+                                    disabled
+                                >
+                                    신청완료
+                                </button>
+                            :
+                                <button
+                                    onClick={() => handleOpen(matchingUser?.id)}
+                                    style={{
+                                        width: "48.5%",
+                                        padding: "16px 0",
+                                        border: 0,
+                                        borderRadius: "10px",
+                                        backgroundColor: "#FFCE00",
+                                        color: "#FFF",
+                                        fontSize: "16px",
+                                        fontWeight: 700,
+                                        letterSpacing: "-0.32px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    밥약걸기
+                                </button>
+                            }
                         </div>
                     </PopupWrapper>
                 </PopupSubContainer>
             </PopupContainer>
+            <CustomPopup
+                open={open}
+                onClose={handleClose}
+                content={`밥약 신청을 하시겠어요?`}
+                leftButtonLabel="아니요"
+                rightButtonLabel="신청"
+                onLeftButtonClick={handleClose}
+                onRightButtonClick={() => {
+                    handleSubmit(selectedId.current);
+                }}
+            />
+            <CustomPopupNoBtn
+                open={isPopupMessageOpen}
+                onClose={() => setIsPopupMessageOpen(false)}
+                content={popupMessage.current}
+            />
         </>
     );
 };

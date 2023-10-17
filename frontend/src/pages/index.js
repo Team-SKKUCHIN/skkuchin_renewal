@@ -44,9 +44,8 @@ const GameContent = () => {
                                     height: "100px",
                                     borderRadius: "12px",
                                     border: "1px solid #E2E2E2",
-                                    // padding: "19px 113px 39px 20px",
                                     padding: "19px 20px",
-                                    margin: "0 4px",
+                                    margin: index === 0 ? "0 4px 0 0" : (index === 1 ? "0 4px" : "0 0 0 4px"),
                                     cursor: "pointer",
                                     whiteSpace: "nowrap",
                                 }}

@@ -9,7 +9,7 @@ import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { load_places } from '../actions/place/place';
 import { useWorldcup } from '../components/Worldcup/useWorldcup';
-import { load_worldcups } from '../actions/worldcup/worldcup';
+import { enroll_worldcup, load_nonuser_worldcups, load_user_worldcups } from '../actions/worldcup/worldcup';
 import { convertName } from '../utils/wordConvertor';
 import { downArrow, upArrow } from '../image/worldcup';
 import { mbtiDict } from '../image/mbti/profile';
@@ -67,7 +67,7 @@ const Header = () => {
 const StageSelect = ({ round, setRound, startGame }) => {
     const stages = [16, 8, 4, 2];
 
-    const mainText = "스꾸친과 함께 취향의 음식점을 알아봐요\n스꾸친스꾸친스꾸친";
+    const mainText = "스꾸친과 함께 내 최애 성대 음식점을 알아봐요";
 
     return (
         <>
@@ -77,20 +77,20 @@ const StageSelect = ({ round, setRound, startGame }) => {
                     flexDirection: "column",
                     alignItems: "center",
                     margin: "52px 0 16px",
-                    padding: "79px 16px 21px",
+                    padding: screen.availHeight < 700 ? "21px 16px" : "79px 16px 21px",
                     borderRadius: "8px",
                     background: "#F2F2F2",
                 }}
             >
                 <Image
                     src={mainLogo}
-                    width={152}
-                    height={107}
+                    width={screen.availHeight < 700 ? 128 : 152}
+                    height={screen.availHeight < 700 ? 90 : 107}
                     layout='fixed'
                 />
                 <p
                     style={{
-                        margin: "36px 0 76px",
+                        margin: screen.availHeight < 700 ? "21px 0" : "36px 0 76px",
                         fontSize: "14px",
                         lineHeight: "17px",
                         letterSpacing: "-0.5px",
@@ -131,6 +131,7 @@ const StageSelect = ({ round, setRound, startGame }) => {
                     fontSize: "16px",
                     fontWeight: 800,
                     cursor: "pointer",
+                    marginBottom: "24px",
                 }}
             >
                 시작하기
@@ -155,7 +156,7 @@ const MainStage = ({ round, setRound, gameNum, setGameNum, pickPlace, getNextGam
         if (isRunning.current) return;
 
         const removeIndex = index === 0 ? 1 : 0;
-        setDarkenIndex(removeIndex);
+        setDarkenIndex(index);
         pickPlace(gameNum + removeIndex);
 
         isRunning.current = true;
@@ -214,10 +215,10 @@ const MainStage = ({ round, setRound, gameNum, setGameNum, pickPlace, getNextGam
                         layout="fill"
                         objectFit="cover"
                         style={{
-                            width: "100%",
-                            height: "100%",
                             filter: darkenIndex === index ? "brightness(60%)" : undefined,
                         }}
+                        placeholder="blur" 
+                        blurDataURL='data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mO8UA8AAiUBUcc3qzwAAAAASUVORK5CYII='
                     />
                     <div
                         style={{
@@ -244,11 +245,15 @@ const MainStage = ({ round, setRound, gameNum, setGameNum, pickPlace, getNextGam
 };
 
 const Finish = ({ getWinner, phase, setPhase }) => {
+    const dispatch = useDispatch();
     const [popup, setPopup] = useState(true);
     const user = useSelector(state => state.auth.user);
+    const userId = user ? user.id : null;
     const winner = getWinner();
 
     useEffect(() => {
+        dispatch(enroll_worldcup(winner.id, userId));
+
         if (!popup) {
             setPopup(true);
         }
@@ -261,15 +266,16 @@ const Finish = ({ getWinner, phase, setPhase }) => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    margin: "122px 0 110px",
+                    margin: screen.availHeight < 700 ? "22px 0 20px" : "122px 0 110px",
                 }}
             >
                 <div style={{ position: "relative", width: "100%", height: "200px" }}>
                     <Image
                         src={winner.images[0] ?? food}
-                        width="100%"
-                        height="100%"
                         layout='fill'
+                        objectFit='cover'
+                        placeholder="blur" 
+                        blurDataURL='data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mO8UA8AAiUBUcc3qzwAAAAASUVORK5CYII='
                     />
                 </div>
                 <p
@@ -332,88 +338,104 @@ const Finish = ({ getWinner, phase, setPhase }) => {
             >
                 다시하기
             </button>
-            {popup && <WorldcupFriend winner={winner} setPopup={setPopup} />}
+            {popup && <WorldcupFriend place={winner} setPopup={setPopup} />}
         </>
     );
 };
 
-const DropDown = ({ worldcup }) => {
+const DropDown = ({ worldcup, setPopup, selectedPlace, selectedUser }) => {
     const [open, setOpen] = useState(false);
 
+    const handleClick = (user) => {
+        selectedPlace.current = worldcup;
+        selectedUser.current = user;
+        setPopup(true);
+    };
+
     return (
-        <div
-            style={{
-                width: "100%",
-                padding: "16px 16px 16px 18px",
-                borderRadius: "8px",
-                backgroundColor: "#F2F2F2",
-            }}
-        >
+        <>
             <div
                 style={{
-                        position: 'relative',
-                        width: "100%",
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        cursor: "pointer",
-                    }}
-                    onClick={() => setOpen(open => !open)}
-                >
-                <p
-                    style={{
-                        display: "inline-flex",
-                        margin: 0,
-                        fontSize: "12px",
-                        fontWeight: 400,
-                        letterSpacing: "-0.24px",
-                    }}
-                >
-                    <span
-                        style={{
-                            display: "inline-block",
-                            maxWidth: "50%",
-                            fontWeight: 700,
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                        }}
-                    >
-                        {worldcup.name}
-                    </span>{convertName(worldcup.name)} 좋아하는 스꾸친을 찾아보세요!
-                </p>
-                <Image
-                    width={11}
-                    height={6}
-                    layout='fixed'
-                    src={open ? upArrow : downArrow}
-                />
-            </div>
-            {open &&
+                    width: "100%",
+                    padding: "16px 16px 16px 18px",
+                    borderRadius: "8px",
+                    backgroundColor: "#F2F2F2",
+                }}
+            >
                 <div
                     style={{
-                        marginTop: "14px",
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "space-between",
-                    }}
-                >
-                    {worldcup.users.map((user, index) => (
-                        <div
+                            position: 'relative',
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => setOpen(open => !open)}
+                    >
+                    <p
+                        style={{
+                            display: "inline-flex",
+                            margin: 0,
+                            fontSize: "12px",
+                            fontWeight: 400,
+                            letterSpacing: "-0.24px",
+                        }}
+                    >
+                        <span
                             style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                width: worldcup.users.length === 3 ? "31%" : (worldcup.users.length === 2 ? "48%" : "100%"),
-                                height: "120px",
-                                padding: "20px 0",
-                                borderRadius: "8px",
-                                border: "1px solid #E2E2E2",
-                                backgroundColor: "#FFF",
-                            }}>
+                                display: "inline-block",
+                                maxWidth: "50%",
+                                fontWeight: 700,
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                            }}
+                        >
+                            {worldcup.name}
+                        </span>{convertName(worldcup.name)} 좋아하는 스꾸친을 찾아보세요!
+                    </p>
+                    <Image
+                        width={11}
+                        height={6}
+                        layout='fixed'
+                        src={open ? upArrow : downArrow}
+                    />
+                </div>
+                {open &&
+                    <div
+                        style={{
+                            marginTop: "14px",
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        {worldcup.users.map((user, index) => (
+                            <div
+                                key={index}
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    width: worldcup.users.length === 3 ? "31%" : (worldcup.users.length === 2 ? "48%" : "100%"),
+                                    height: "120px",
+                                    padding: "20px 0",
+                                    borderRadius: "8px",
+                                    border: "1px solid #E2E2E2",
+                                    backgroundColor: "#FFF",
+                                    cursor: "pointer",
+                                }}
+                                onClick={() => handleClick(user)}
+                            >
                                 <div style={{ position: "relative", width: "44px", height: "44px", borderRadius: "22px", overflow: "hidden" }}>
-                                    <Image width="100%" height="100%" layout='fill' objectFit='cover' src={mbtiDict[user.image]} />
+                                    <Image
+                                        layout='fill'
+                                        objectFit='cover'
+                                        src={mbtiDict[user.image]}
+                                        placeholder="blur"
+                                    />
                                 </div>
                                 <span
                                     style={{
@@ -426,145 +448,157 @@ const DropDown = ({ worldcup }) => {
                                 >
                                     {user.nickname}
                                 </span>
-                        </div>
-                    ))}
-                </div>
-            }
-        </div>
+                            </div>
+                        ))}
+                    </div>
+                }
+            </div>
+        </>
     );
 };
 
 const Rank = ({ phase, setPhase }) => {
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const worldcups = useSelector(state => state.worldcup.worldcup);
     const dispatch = useDispatch();
+    const [popup, setPopup] = useState(false);
+    const selectedPlace = useRef(null);
+    const selectedUser = useRef(null);
     
     useEffect(() => {
-        dispatch(load_worldcups());
-    }, [phase])
+        if (isAuthenticated) {
+            dispatch(load_user_worldcups());
+        } else {
+            dispatch(load_nonuser_worldcups());
+        }
+    }, [phase, isAuthenticated])
 
     return (
-        <div
-            style={{
-                width: "100%",
-                marginTop: "52px",
-            }}
-        >
-            {worldcups && worldcups.map((worldcup, index) => (
-                <div key={index} style={{ width: "100%", marginBottom: "16px" }}>
-                    <div
-                        style={{
-                            width: "100%",
-                            display: "flex",
-                            flexDirection: "row",
-                            padding: "16px 16px 16px 14px",
-                            marginBottom: "6px",
-                            alignItems: "center",
-                            borderRadius: "8px",
-                            border: "1px solid #E2E2E2",
-                        }}
-                    >
-                        <div style={{ display: "flex", width: "55%"  }}>
-                            <span
-                                style={{
-                                    marginRight: "12px",
-                                    color: "#F47806",
-                                    fontSize: "18px",
-                                    fontWeight: 800,
-                                    letterSpacing: "-0.36px",
-                                    lineHeight: "36px",
-                                }}
-                            >
-                                {index + 1}
-                            </span>
-                            <div
-                                style={{
-                                    position: "relative",
-                                    width: "36px",
-                                    height: "36px",
-                                    borderRadius: "36px",
-                                    overflow: 'hidden',
-                                    marginRight: "8px",
-                                }}
-                            >
-                                <Image
-                                    width="100%"
-                                    height="100%"
-                                    layout="fill"
-                                    objectFit="cover"
-                                    src={worldcup.images[0] ?? food}
-                                />
-                            </div>
-                            <span
-                                style={{
-                                    maxWidth: "50%",
-                                    color: "#3C3C3C",
-                                    fontSize: "16px",
-                                    fontWeight: 800,
-                                    letterSpacing: "-0.32px",
-                                    lineHeight: "36px",
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                }}
-                            >
-                                {worldcup.name}
-                            </span>
-                        </div>
-                        <div style={{ display: "flex", width: "45%", alignItems: "center" }}>
-                            <span
-                                style={{
-                                    color: "#9E9E9E",
-                                    textAlign: "center",
-                                    fontSize: "12px",
-                                    fontWeight: 400,
-                                    letterSpacing: "-0.24px",
-                                    lineHeight: "36px",
-                                    marginRight: "10%",
-                                    whiteSpace: "nowrap",
-                                }}
-                            >
-                                승률
-                            </span>
-                            <div style={{ width: "50px", overflow: "hidden" }}>
+        <>
+            <div
+                style={{
+                    width: "100%",
+                    marginTop: "52px",
+                }}
+            >
+                {worldcups && Array.isArray(worldcups) && worldcups.map((worldcup, index) => (
+                    <div key={index} style={{ width: "100%", marginBottom: "16px" }}>
+                        <div
+                            style={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "row",
+                                padding: "16px 16px 16px 14px",
+                                marginBottom: "6px",
+                                alignItems: "center",
+                                borderRadius: "8px",
+                                border: "1px solid #E2E2E2",
+                            }}
+                        >
+                            <div style={{ display: "flex", width: "55%"  }}>
                                 <span
                                     style={{
-                                        width: "100%",
-                                        color: "#3C3C3C",
-                                        textAlign: "center",
-                                        fontSize: "12px",
-                                        fontWeight: 700,
-                                        letterSpacing: "-0.24px",
+                                        marginRight: "12px",
+                                        color: "#F47806",
+                                        fontSize: "18px",
+                                        fontWeight: 800,
+                                        letterSpacing: "-0.36px",
                                         lineHeight: "36px",
                                     }}
                                 >
-                                    {(worldcup.winning_rate * 100).toFixed(1)}%
+                                    {index + 1}
                                 </span>
-                            </div>
-                            <div
-                                style={{
-                                    position: "relative",
-                                    height: "20px",
-                                    width: "50%",
-                                    backgroundColor: "#F2F2F2",
-                                    borderRadius: "5px",
-                                    overflow: "hidden",
-                                }}
-                            >
                                 <div
                                     style={{
-                                        position: "absolute",
-                                        backgroundColor: "#FFCE00",
-                                        width: worldcup.winning_rate * 100,
-                                        height: "100%",
+                                        position: "relative",
+                                        width: "36px",
+                                        height: "36px",
+                                        borderRadius: "36px",
+                                        overflow: 'hidden',
+                                        marginRight: "8px",
                                     }}
-                                />
+                                >
+                                    <Image
+                                        layout="fill"
+                                        objectFit="cover"
+                                        src={worldcup.images[0] ?? food}
+                                        placeholder="blur"
+                                        blurDataURL='data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mO8UA8AAiUBUcc3qzwAAAAASUVORK5CYII='
+                                    />
+                                </div>
+                                <span
+                                    style={{
+                                        maxWidth: "50%",
+                                        color: "#3C3C3C",
+                                        fontSize: "16px",
+                                        fontWeight: 800,
+                                        letterSpacing: "-0.32px",
+                                        lineHeight: "36px",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap",
+                                        overflow: "hidden",
+                                    }}
+                                >
+                                    {worldcup.name}
+                                </span>
+                            </div>
+                            <div style={{ display: "flex", width: "45%", alignItems: "center" }}>
+                                <span
+                                    style={{
+                                        color: "#9E9E9E",
+                                        textAlign: "center",
+                                        fontSize: "12px",
+                                        fontWeight: 400,
+                                        letterSpacing: "-0.24px",
+                                        lineHeight: "36px",
+                                        marginRight: "10%",
+                                        whiteSpace: "nowrap",
+                                    }}
+                                >
+                                    승률
+                                </span>
+                                <div style={{ width: "50px", overflow: "hidden" }}>
+                                    <span
+                                        style={{
+                                            width: "100%",
+                                            color: "#3C3C3C",
+                                            textAlign: "center",
+                                            fontSize: "12px",
+                                            fontWeight: 700,
+                                            letterSpacing: "-0.24px",
+                                            lineHeight: "36px",
+                                        }}
+                                    >
+                                        {(worldcup.winning_rate * 100).toFixed(1)}%
+                                    </span>
+                                </div>
+                                <div
+                                    style={{
+                                        position: "relative",
+                                        height: "20px",
+                                        width: "50%",
+                                        backgroundColor: "#F2F2F2",
+                                        borderRadius: "5px",
+                                        overflow: "hidden",
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            position: "absolute",
+                                            backgroundColor: "#FFCE00",
+                                            width: worldcup.winning_rate * 100,
+                                            height: "100%",
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
+                        <DropDown worldcup={worldcup} setPopup={setPopup} selectedPlace={selectedPlace} selectedUser={selectedUser}  />
                     </div>
-                    <DropDown worldcup={worldcup} />
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
+            {popup && <WorldcupFriend place={selectedPlace.current} setPopup={setPopup} userFromRank={selectedUser.current} />}
+        </>
     );
 };
 

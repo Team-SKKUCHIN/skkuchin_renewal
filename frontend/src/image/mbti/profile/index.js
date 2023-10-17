@@ -14,6 +14,8 @@ import ESFJ from './ESFJ.png';
 import INTJ from './INTJ.png';
 import ISFJ from './ISFJ.png';
 import ESFP from './ESFP.png';
+import DEFAULT1 from './mainCharacter.png';
+import DEFAULT2 from './mealCharacter.png';
 
 export const mbtiDict = {
     ENFJ,
@@ -32,4 +34,6 @@ export const mbtiDict = {
     INTJ,
     ISFJ,
     ESFP,
+    DEFAULT1,
+    DEFAULT2,
 };

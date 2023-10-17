@@ -1,5 +1,4 @@
 import { CssBaseline, Box, ThemeProvider, Slide, Card, CardContent, Typography, Grid, Container, Stack, useScrollTrigger, Button, Divider } from '@mui/material';
-import theme from '../theme/theme';
 import dynamic from 'next/dynamic';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
@@ -7,10 +6,8 @@ import CommunityItem from '../components/SkkuChat/CommunityItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { load_all_posts } from '../actions/post/post';
 import { useEffect } from 'react';
-import { getToken } from '../actions/auth/auth';
 
 const Friends = dynamic(() => import('../components/Matching/Friends'));
-const UpperBar = dynamic(() => import("../components/UpperBar"));
 const AiGreeting = dynamic(() => import('../components/AiGreeting'));
 
 const MatchContainer = styled.div`
@@ -34,10 +31,6 @@ const MatchPage = () => {
 
     useEffect(() => {
         if(isAuthenticated) {
-            const access = dispatch(getToken('access'));
-            console.log(access);
-
-            console.log('load all posts')
             dispatch(load_all_posts());
         }
     }, []);
@@ -76,7 +69,7 @@ const MatchPage = () => {
     return(
         <MatchContainer>
             <AiGreeting />
-            <Container sx={{p: '0 15px', mt: '0', position:'relative'}}>
+            <Container sx={{p: '0 24px', mt: '0', position:'relative'}}>
                 <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0px'}}>
                     <Grid item >
                         <Friends />

@@ -5,13 +5,48 @@ import {
     LOAD_WORLDCUP_SUCCESS,
 } from './types'
 
-export const load_worldcups = (callback) => async dispatch => {
-    
+export const load_nonuser_worldcups = (callback) => async dispatch => {
+
     try {
-        const res = await fetch(`${API_URL}/api/worldcup/`, {
+        const res = await fetch(`${API_URL}/api/worldcup/nonuser`, {
             method: 'GET',
             headers: {
-                'Accept' : 'application/json'
+                'Accept' : 'application/json',
+            }
+        });
+
+        const apiRes = await res.json();
+
+        if (res.status === 200) {
+            dispatch({
+                type: LOAD_WORLDCUP_SUCCESS,
+                payload: apiRes.data
+            })
+            if (callback) callback([true, apiRes.message]);
+        } else {
+            dispatch({
+                type: LOAD_WORLDCUP_FAIL
+            })
+            if (callback) callback([false, apiRes.message]);  
+        }
+    } catch (error) {
+        dispatch({
+            type: LOAD_WORLDCUP_FAIL
+        })
+        if (callback) callback([false, error]);
+    }
+}
+
+export const load_user_worldcups = (callback) => async dispatch => {
+    await dispatch(request_refresh());
+    const access = dispatch(getToken('access'));
+
+    try {
+        const res = await fetch(`${API_URL}/api/worldcup/user`, {
+            method: 'GET',
+            headers: {
+                'Accept' : 'application/json',
+                'Authorization' : `Bearer ${access}`,
             }
         });
 
@@ -111,7 +146,7 @@ export const enroll_worldcup = (placeId, userId, callback) => async dispatch => 
     });
 
     try {
-        const res = await fetch(`${API_URL}/api/worldcup/place/${placeId}`, {
+        const res = await fetch(`${API_URL}/api/worldcup`, {
             method: 'POST',
             headers: {
                 'Accept' : 'application/json',

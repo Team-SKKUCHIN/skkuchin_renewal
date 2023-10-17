@@ -42,7 +42,7 @@ public class WorldcupService {
     private final Random random = new Random();
 
     @Transactional
-    public List<WorldcupDto.Response> getAll() {
+    public List<WorldcupDto.Response> getAll(AppUser currentUser) {
         Map<Place, Integer> placeCountMap = getPlacesOrderedByOccurrence();
 
         List<Place> allPlaces = new ArrayList<>(placeCountMap.keySet());
@@ -69,13 +69,21 @@ public class WorldcupService {
 
                     List<AppUser> users = worldcups.stream()
                             .map(worldcup -> worldcup.getUser())
-                            .filter(user -> Objects.nonNull(user.getMatching()) && user.getMatching())
+                            .filter(user -> Objects.nonNull(user) &&
+                                    Objects.nonNull(user.getMatching()) &&
+                                    user.getMatching() &&
+                                    (currentUser == null || user.getId() != currentUser.getId()))
                             .collect(Collectors.toList());
 
                     int shouldBeAdded = 3 - users.size();
 
                     if (shouldBeAdded > 0) {
                         List<Long> excludeIds = new ArrayList<>();
+                        excludeIds.add(-1L);
+                        if (currentUser != null) {
+                            excludeIds.add(currentUser.getId());
+                        }
+
                         for (AppUser user : users) {
                             excludeIds.add(user.getId());
                         }
@@ -115,8 +123,10 @@ public class WorldcupService {
 
         List<AppUser> users = worldcups.stream()
                 .map(worldcup -> worldcup.getUser())
-                .filter(user -> Objects.nonNull(user.getMatching()) && user.getMatching())
-                .filter(user -> currentUser != null ? user.getId() != currentUser.getId() : true)
+                .filter(user -> Objects.nonNull(user) &&
+                        Objects.nonNull(user.getMatching()) &&
+                        user.getMatching() &&
+                        (currentUser == null || user.getId() != currentUser.getId()))
                 .collect(Collectors.toList());
 
         int shouldBeAdded = 3 - users.size();

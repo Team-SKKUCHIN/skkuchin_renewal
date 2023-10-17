@@ -96,7 +96,15 @@ const Restaurant = ({ selectedPlace, places, setPopup }) => {
                             </div>
                         </div>
                     </div>
-                    <Image src={place.images[0] ?? food} height={80} width={80} layout='fixed' objectFit='cover' />
+                    <Image
+                        src={place.images[0] ?? food}
+                        height={80}
+                        width={80}
+                        layout='fixed'
+                        objectFit='cover'
+                        placeholder="blur"
+                        blurDataURL='data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mO8UA8AAiUBUcc3qzwAAAAASUVORK5CYII='
+                    />
                 </div>
             ))}
             <div style={{ width: '100%', height: '50%' }} />
@@ -169,7 +177,7 @@ const SlideContainer = ({ filteredPlaces }) => {
                             height: "100%",
                             maxWidth: "420px",
                             backgroundColor: "#FFF",
-                            boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.15)",
+                            boxShadow: "0px 0px 20px 4px rgba(0, 0, 0, 0.35)",
                             borderRadius: "20px 20px 0 0",
                         }}
                     >
@@ -194,7 +202,7 @@ const SlideContainer = ({ filteredPlaces }) => {
                                     margin: "10px 0 16px",
                                 }}
                             />
-                            <h3 style={{ margin: 0, fontSize: "14px", fontWeight: 700 }}>
+                            <h3 style={{ margin: 0, fontSize: "18px", fontWeight: 700 }}>
                                 다른 맛집 더 보실래요?
                             </h3>
                         </div>

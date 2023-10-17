@@ -22,7 +22,7 @@ public class Worldcup {
     private Place place;
 
     @JoinColumn(name = "user_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private AppUser user;
 
     @CreationTimestamp
