@@ -14,7 +14,7 @@ import skkuchin.service.domain.User.AppUser;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -26,7 +26,7 @@ public class WorldcupDto {
     @AllArgsConstructor
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Request {
-        @NotBlank
+        @NotNull
         private Long placeId;
         private Long userId;
 

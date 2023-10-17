@@ -29,21 +29,29 @@ import java.util.Map;
 public class WorldcupController {
     private final WorldcupService worldcupService;
 
-    @GetMapping("")
-    public ResponseEntity<?> getAll() {
-        List<WorldcupDto.Response> places = worldcupService.getAll();
-        return new ResponseEntity<>(new CMRespDto<>(1, "월드컵 순위 조회 완료", places), HttpStatus.OK);
+    @GetMapping("/nonuser")
+    public ResponseEntity<?> getAllForNonUser() {
+        List<WorldcupDto.Response> places = worldcupService.getAll(null);
+        return new ResponseEntity<>(new CMRespDto<>(1, "월드컵 순위 비회원 조회 완료", places), HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    public ResponseEntity<?> getAllForUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        AppUser user = principalDetails.getUser();
+        List<WorldcupDto.Response> places = worldcupService.getAll(user);
+        return new ResponseEntity<>(new CMRespDto<>(1, "월드컵 순위 회원 조회 완료", places), HttpStatus.OK);
     }
 
     @GetMapping("/nonuser/place/{placeId}")
-    public ResponseEntity<?> getDetail(@PathVariable Long placeId) {
+    public ResponseEntity<?> getDetailForNonUser(@PathVariable Long placeId) {
         WorldcupDto.Response place = worldcupService.getDetail(placeId, null);
         return new ResponseEntity<>(new CMRespDto<>(1, "월드컵 결승 식당 비회원 상세 조회 완료", place), HttpStatus.OK);
     }
 
     @GetMapping("/user/place/{placeId}")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    public ResponseEntity<?> getDetail(@PathVariable Long placeId,
+    public ResponseEntity<?> getDetailForUser(@PathVariable Long placeId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         AppUser user = principalDetails.getUser();
         WorldcupDto.Response place = worldcupService.getDetail(placeId, user);

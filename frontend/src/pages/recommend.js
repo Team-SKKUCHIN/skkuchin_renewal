@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import Image from 'next/image';
 import theme from '../theme/theme';
-import { backArrow, closeIcon, mainLogo } from '../image/recommend';
+import { closeIcon, mainLogo } from '../image/recommend';
 import { useToggle } from '../components/Recommend/useToggle';
 import styled from '@emotion/styled';
 import SlideContainer from '../components/Recommend/SlideContainer';
@@ -75,9 +75,9 @@ const Recommend = () => {
         ["ALL", "한식", "중식", "양식"],
         ["일식", "카페", "술집", "기타"]
     ];
-    const gateButtons = ["ALL", "정문", "쪽문", "철문", "대학로"];
+    const gateButtons = isOn ? ["ALL", "정문", "쪽문", "철문", "대학로"] : ["ALL", "정문", "쪽문", "후문", "기타"];
     
-    const mainText = "뭘 먹고 싶은 지 모르겠어쩌고\n스꾸친과 함께 스꾸친스꾸친";
+    const mainText = "원하는 카테고리와 위치를 고르고\n아래 버튼을 눌러주세요";
 
     const clickStart = useCallback(() => {
         if (filteredPlaces.length === 0) {
@@ -197,22 +197,22 @@ const Recommend = () => {
                                 flexDirection: "column",
                                 alignItems: "center",
                                 margin: "28px 0 8px",
-                                padding: "44px 0 40px",
+                                padding: screen.availHeight < 700 ? "12px 0 10px" : "44px 0 40px",
                                 borderRadius: "8px",
                                 background: "#F2F2F2",
                             }}
                         >
                             <Image
                                 src={mainLogo}
-                                width={87}
-                                height={61}
+                                width={screen.availHeight < 700 ? 71 : 87}
+                                height={screen.availHeight < 700 ? 50 : 61}
                                 layout='fixed'
                             />
                             <p
                                 style={{
                                     marginTop: "16px",
                                     marginBottom: 0,
-                                    fontSize: retry ? "32px" : "14px",
+                                    fontSize: retry ? (screen.availHeight < 700 ? "25px" : "32px") : "14px",
                                     lineHeight: retry ? "normal" : "17px",
                                     letterSpacing: retry ? "-3px" : "-0.5px",
                                     whiteSpace: "pre-wrap",

@@ -89,7 +89,7 @@ const clickProfile = () => {
                                 <Typography sx={{fontSize: '18px', fontWeight: 700, color: '#3C3C3C'}}>프로필</Typography>
                             </Grid>
                             <Grid onClick={handleBack}>
-                                <Image src={close} width={24} height={24} name='search' layout='fixed' />
+                                <Image src={close} width={24} height={24} name='search' layout='fixed' style={{ cursor: "pointer" }} />
                             </Grid>
                         </Grid>
                     </Card>
@@ -156,8 +156,8 @@ const clickProfile = () => {
                     </div>
                 { matchingUser && 
                     <>
-                        <Container
-                            sx={{
+                        <div
+                            style={{
                                 position: 'fixed',
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -203,7 +203,7 @@ const clickProfile = () => {
                                     {requestId && requestId.includes(matchingUser.id) ? '밥약 신청완료' : '밥약 신청하기'}
                                 </Button>
                             </div>
-                        </Container>
+                        </div>
                         <CustomPopup
                             open={open}
                             onClose={handleClose}
