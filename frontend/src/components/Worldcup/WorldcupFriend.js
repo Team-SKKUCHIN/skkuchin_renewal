@@ -49,8 +49,12 @@ const WorldcupFriend = ({ place, setPopup, userFromRank=null }) => {
     }, [user]);
 
     const handleOpen = useCallback((id) => {
-        setOpen(true);
-        selectedId.current = id;
+        if (user) {
+            setOpen(true);
+            selectedId.current = id;
+        } else {
+            setIsLogin(true);
+        }
     }, []);
 
     const handleClose = useCallback(() => {
