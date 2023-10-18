@@ -11,8 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { load_places } from '../actions/place/place';
 import { useLoadingLottie } from '../components/Recommend/useLoadingLottie';
 
-const SubTitle = () => (
-    <div style={{ margin: "52px 0 8px" }}>
+const SubTitle = ({ retry }) => (
+    <div style={{ margin: screen.availHeight < 815 && retry ? 0 : "52px 0 8px" }}>
         <span style={{ 
             color: "#9E9E9E",
             fontSize: "16px",
@@ -139,10 +139,10 @@ const Recommend = () => {
                 <CssBaseline/>
                 <div style={{ margin: "0 24px", position: "relative", overflow: "hidden" }}>
                     <Header />
-                    <SubTitle />
+                    <SubTitle retry={retry} />
                     <div
                         style={{ 
-                            marginBottom: "52px",
+                            marginBottom: screen.availHeight < 815 && retry ? "15px" : "52px",
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "space-between",
