@@ -39,11 +39,6 @@ const myPage = () => {
     }
     
     const [dialogOpen, setDialogOpen] = useState(false);
-    
-
-    const arrowClick = () => {
-        router.push('/editNickname')
-    }
 
     const handleLogout = () => {
         if (chatAlarmSubscription) {
@@ -75,8 +70,16 @@ const myPage = () => {
     }
 
     const handleMatching = () => {
-        dispatch(change_status_info(!MatchChecked));
-        setMatchChecked(!MatchChecked);
+        if (userMatchInfo?.gender) {
+            dispatch(change_status_info(!MatchChecked));
+            setMatchChecked(!MatchChecked);
+        } else {
+            if (MatchChecked) {
+                dispatch(change_status_info(false));
+                setMatchChecked(false);
+            }
+            router.push('/changeProfile');
+        }
     }
 
     useEffect(() => {

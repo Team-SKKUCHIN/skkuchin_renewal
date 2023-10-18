@@ -197,22 +197,22 @@ const Recommend = () => {
                                 flexDirection: "column",
                                 alignItems: "center",
                                 margin: "28px 0 8px",
-                                padding: screen.availHeight < 700 ? "12px 0 10px" : "44px 0 40px",
+                                padding: screen.availHeight < 800 ? "12px 0 10px" : "44px 0 40px",
                                 borderRadius: "8px",
                                 background: "#F2F2F2",
                             }}
                         >
                             <Image
                                 src={mainLogo}
-                                width={screen.availHeight < 700 ? 71 : 87}
-                                height={screen.availHeight < 700 ? 50 : 61}
+                                width={screen.availHeight < 800 ? 71 : 87}
+                                height={screen.availHeight < 800 ? 50 : 61}
                                 layout='fixed'
                             />
                             <p
                                 style={{
                                     marginTop: "16px",
                                     marginBottom: 0,
-                                    fontSize: retry ? (screen.availHeight < 700 ? "25px" : "32px") : "14px",
+                                    fontSize: retry ? (screen.availHeight < 800 ? "25px" : "32px") : "14px",
                                     lineHeight: retry ? "normal" : "17px",
                                     letterSpacing: retry ? "-3px" : "-0.5px",
                                     whiteSpace: "pre-wrap",

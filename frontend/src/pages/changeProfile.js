@@ -841,7 +841,13 @@ const makeProfile = () => {
 
     //확인버튼 이미지 조건 반영 위해
     useEffect(()=>{
-        if(gender && keyword.length > 0 && introduction != '' && mbtiChoose){
+        if(
+            gender
+            && keyword.length > 0
+            && introduction
+            && introduction !== ''
+            && ((!mbtiChoose.E && mbtiChoose.F) || (mbtiChoose.E && mbtiChoose.F))
+        ){
             setCondition(true);
         } else {
             setCondition(false);
@@ -1152,23 +1158,23 @@ const makeProfile = () => {
                         <Typography style={{fontSize: '12px', fontWeight: '900', marginBottom: '8px', marginLeft: '4px', color: '#3C3C3C'}}>MBTI</Typography>
                         <Grid container style={{marginBottom: '16px'}}>
                             <div style={{width: '22%'}}>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.E == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>E</Button>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.E == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderTopColor:'transparent',  borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>I</Button>
+                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.E ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>E</Button>
+                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.I ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderTopColor:'transparent',  borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>I</Button>
                             </div>
                             <div style={{width: '4%'}}></div>
                             <div style={{width: '22%'}}>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.N == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>N</Button>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.N == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>S</Button>
+                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.N ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>N</Button>
+                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.S ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>S</Button>
                             </div>
                             <div style={{width: '4%'}}></div>
                             <div style={{width: '22%'}}>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.F == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>F</Button>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.F == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2',borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>T</Button>
+                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.F ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>F</Button>
+                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.T ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2',borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>T</Button>
                             </div>
                             <div style={{width: '4%'}}></div>
                             <div style={{width: '22%'}}>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.P == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>P</Button>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.P == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2',borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>J</Button>
+                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.P ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>P</Button>
+                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.J ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2',borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>J</Button>
                             </div>
                         </Grid>
 
@@ -1184,7 +1190,7 @@ const makeProfile = () => {
                         </textarea>
                         <div style={{width: '100%', height: '25px', display: 'flex', justifyContent: 'space-between'}}>
                             <div></div>
-                            <Typography style={{padding: '0 18px 12px 0', color: '#FC9712', fontSize: '12px'}}>{introduction.length}/30자</Typography>
+                            <Typography style={{padding: '0 18px 12px 0', color: '#FC9712', fontSize: '12px'}}>{introduction && `${introduction.length}/30자`}</Typography>
                         </div>
                         </div>
 

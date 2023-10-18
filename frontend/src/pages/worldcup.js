@@ -14,6 +14,7 @@ import { convertName } from '../utils/wordConvertor';
 import { downArrow, upArrow } from '../image/worldcup';
 import { mbtiDict } from '../image/mbti/profile';
 import WorldcupFriend from '../components/Worldcup/WorldcupFriend';
+import ClickProfile from './clickProfile';
 
 const SubTitle = () => (
     <div style={{ margin: "52px 0 8px" }}>
@@ -77,20 +78,20 @@ const StageSelect = ({ round, setRound, startGame }) => {
                     flexDirection: "column",
                     alignItems: "center",
                     margin: "52px 0 16px",
-                    padding: screen.availHeight < 700 ? "21px 16px" : "79px 16px 21px",
+                    padding: screen.availHeight < 800 ? "21px 16px" : "79px 16px 21px",
                     borderRadius: "8px",
                     background: "#F2F2F2",
                 }}
             >
                 <Image
                     src={mainLogo}
-                    width={screen.availHeight < 700 ? 128 : 152}
-                    height={screen.availHeight < 700 ? 90 : 107}
+                    width={screen.availHeight < 800 ? 128 : 152}
+                    height={screen.availHeight < 800 ? 90 : 107}
                     layout='fixed'
                 />
                 <p
                     style={{
-                        margin: screen.availHeight < 700 ? "21px 0" : "36px 0 76px",
+                        margin: screen.availHeight < 800 ? "21px 0" : "36px 0 76px",
                         fontSize: "14px",
                         lineHeight: "17px",
                         letterSpacing: "-0.5px",
@@ -244,18 +245,23 @@ const MainStage = ({ round, setRound, gameNum, setGameNum, pickPlace, getNextGam
     );
 };
 
-const Finish = ({ getWinner, phase, setPhase }) => {
+const Finish = ({ clickProfile, getWinner, phase, setPhase }) => {
     const dispatch = useDispatch();
     const [popup, setPopup] = useState(true);
+    const start = useRef(false);
     const user = useSelector(state => state.auth.user);
     const userId = user ? user.id : null;
     const winner = getWinner();
 
     useEffect(() => {
-        dispatch(enroll_worldcup(winner.id, userId));
+        if (!start.current) {
+            dispatch(enroll_worldcup(winner.id, userId));
 
-        if (!popup) {
-            setPopup(true);
+            if (!popup) {
+                setPopup(true);
+            }
+
+            start.current = true;
         }
     }, [phase])
     
@@ -266,7 +272,7 @@ const Finish = ({ getWinner, phase, setPhase }) => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    margin: screen.availHeight < 700 ? "22px 0 20px" : "122px 0 110px",
+                    margin: screen.availHeight < 800 ? "22px 0 20px" : "122px 0 110px",
                 }}
             >
                 <div style={{ position: "relative", width: "100%", height: "200px" }}>
@@ -338,7 +344,7 @@ const Finish = ({ getWinner, phase, setPhase }) => {
             >
                 다시하기
             </button>
-            {popup && <WorldcupFriend place={winner} setPopup={setPopup} />}
+            {popup && <WorldcupFriend clickProfile={clickProfile} place={winner} setPopup={setPopup} />}
         </>
     );
 };
@@ -457,7 +463,7 @@ const DropDown = ({ worldcup, setPopup, selectedPlace, selectedUser }) => {
     );
 };
 
-const Rank = ({ phase, setPhase }) => {
+const Rank = ({ clickProfile, phase }) => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const worldcups = useSelector(state => state.worldcup.worldcup);
     const dispatch = useDispatch();
@@ -593,11 +599,23 @@ const Rank = ({ phase, setPhase }) => {
                                 </div>
                             </div>
                         </div>
-                        <DropDown worldcup={worldcup} setPopup={setPopup} selectedPlace={selectedPlace} selectedUser={selectedUser}  />
+                        <DropDown
+                            worldcup={worldcup}
+                            setPopup={setPopup}
+                            selectedPlace={selectedPlace}
+                            selectedUser={selectedUser}
+                        />
                     </div>
                 ))}
             </div>
-            {popup && <WorldcupFriend place={selectedPlace.current} setPopup={setPopup} userFromRank={selectedUser.current} />}
+            {popup &&
+                <WorldcupFriend
+                    clickProfile={clickProfile}
+                    place={selectedPlace.current}
+                    setPopup={setPopup}
+                    userFromRank={selectedUser.current}
+                />
+            }
         </>
     );
 };
@@ -608,9 +626,11 @@ const WorldCup = () => {
     const { Toggle, isOn } = useToggle();
     const places = useSelector(state => state.place.allplaces);
     const filteredPlaces = useRef(null);
+    const matchingUserId = useRef(null);
     const [round, setRound] = useState(16);
     const [gameNum, setGameNum] = useState(0);
     const [phase, setPhase] = useState('ready');
+    const [profileOpen, setProfileOpen] = useState(false);
 
     useEffect(() => {
         dispatch(load_places());
@@ -637,10 +657,15 @@ const WorldCup = () => {
         }
     }, [filteredPlaces, round]);
 
+    const clickProfile = useCallback((friendId) => {
+        matchingUserId.current = friendId;
+        setProfileOpen(true);
+    }, [])
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
-            <div style={{ margin: "0 24px" }}>
+            <div style={{ margin: "0 24px", display: profileOpen ? 'none' : 'block' }}>
                 <Header />
                 <SubTitle />
                 <div
@@ -674,12 +699,22 @@ const WorldCup = () => {
                     />
                 }
                 {phase === 'finish' && 
-                    <Finish getWinner={getWinner} phase={phase} setPhase={setPhase} />
+                    <Finish
+                        clickProfile={clickProfile}
+                        getWinner={getWinner}
+                        phase={phase}
+                        setPhase={setPhase}
+                    />
                 }
                 {phase === 'rank' && 
-                    <Rank phase={phase} setPhase={setPhase} />
+                    <Rank clickProfile={clickProfile} phase={phase} />
                 }
             </div>
+            <ClickProfile
+                profileOpen={profileOpen}
+                setProfileOpen={setProfileOpen}
+                matchingUserId={matchingUserId.current}
+            />
         </ThemeProvider>
     );
 };

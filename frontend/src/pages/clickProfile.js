@@ -14,12 +14,12 @@ import CustomPopup from '../components/SkkuChat/CustomPopup';
 import CustomPopupNoBtn from '../components/SkkuChat/CustomPopupNoBtn';
 import { request_chat } from '../actions/chat/chatRoom';
 
-const clickProfile = () => {
+const clickProfile = ({ profileOpen=true, setProfileOpen=null, matchingUserId=null }) => {
 
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const friendId = router.query.id; 
+    const friendId = matchingUserId ?? router.query.id; 
 
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
@@ -30,14 +30,14 @@ const clickProfile = () => {
     if (typeof window !== 'undefined' && !isAuthenticated) {
         router.push('/login');
     }
-    
+
     useEffect(() => {
-        dispatch(clear_matching());
         if (friendId) {
             dispatch(load_other_matching_info(friendId));
-        }  
-    }, []);
+        }
 
+        return () => dispatch(clear_matching());
+    }, [friendId]);
     
     useEffect(() => {
         if (matchingUser && matchingUser.keywords) {
@@ -47,7 +47,11 @@ const clickProfile = () => {
     }, [matchingUser]);
     
     const handleBack = (e) => {
-        router.back();
+        if (matchingUserId) {
+            setProfileOpen(false);
+        } else {
+            router.back();
+        }
     }
 
     const [open, setOpen] = useState(false);
@@ -74,7 +78,20 @@ const clickProfile = () => {
     return (
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
-                <Container maxWidth="md"  style={{ position:'fixed', zIndex:'4', padding:'14px 24px 5px', overflow: "hidden", height:'max-content', maxWidth:'420px', top: '0', backgroundColor: '#fff'}} >
+                <Container
+                    maxWidth="md"
+                    style={{
+                        display: profileOpen ? 'block' : 'none',
+                        position:'fixed', 
+                        zIndex:'10',
+                        padding:'14px 24px 5px',
+                        overflow: "hidden",
+                        height:'max-content',
+                        maxWidth:'420px',
+                        top: '0',
+                        backgroundColor: '#fff'
+                    }}
+                >
                     <Card style={{
                         top: '18px',
                         height: '120%',
@@ -96,9 +113,9 @@ const clickProfile = () => {
                 </Container>
 
                 <div style={{
+                    display: profileOpen ? 'flex' : 'none',
                     padding: '0',
                     margin:'48px 24px 0',
-                    display: 'flex',
                     flexDirection: 'column',
                 }}>
                 
@@ -158,8 +175,8 @@ const clickProfile = () => {
                     <>
                         <div
                             style={{
+                                display: profileOpen ? 'flex' : 'none',
                                 position: 'fixed',
-                                display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 width: '100%',
