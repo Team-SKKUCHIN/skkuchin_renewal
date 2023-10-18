@@ -11,12 +11,13 @@ import { load_request_id, request_chat } from '../../actions/chat/chatRoom';
 import CustomPopup from '../SkkuChat/CustomPopup';
 import CustomPopupNoBtn from '../SkkuChat/CustomPopupNoBtn';
 
-const WorldcupFriend = ({ place, setPopup, userFromRank=null }) => {
+const WorldcupFriend = ({ clickProfile, place, setPopup, userFromRank=null }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     
     const [isLogin, setIsLogin] = useState(false);
     const [open, setOpen] = useState(false);
+
     const [isPopupMessageOpen, setIsPopupMessageOpen] = useState(false);
     const popupMessage = useRef('');
     const selectedId = useRef(null);
@@ -40,13 +41,13 @@ const WorldcupFriend = ({ place, setPopup, userFromRank=null }) => {
         
     }, [matchingUser]);
 
-    const handleFriendClick = useCallback((friendId) => {
+    const handleFriendClick = useCallback(() => {
         if (user) {
-            router.push(`/clickProfile?id=${friendId}`);
+            clickProfile(matchingUser.id);
         } else {
             setIsLogin(true);
         }
-    }, [user]);
+    }, [user, matchingUser]);
 
     const handleOpen = useCallback((id) => {
         if (user) {
@@ -87,7 +88,6 @@ const WorldcupFriend = ({ place, setPopup, userFromRank=null }) => {
 
     return (
         <>
-            {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} />}
             <PopupContainer>
                 <PopupSubContainer>
                     <PopupWrapper>
@@ -198,11 +198,11 @@ const WorldcupFriend = ({ place, setPopup, userFromRank=null }) => {
                                     letterSpacing: "-0.32px",
                                     cursor: "pointer",
                                 }}
-                                onClick={() => matchingUser ? handleFriendClick(matchingUser.id): {}}
+                                onClick={() => matchingUser ? handleFriendClick(): {}}
                             >
                                 프로필 보기
                             </button>
-                            {requestId && requestId.includes(matchingUser?.id) ? 
+                            {(requestId && requestId.includes(matchingUser?.id)) ? 
                                 <button
                                     style={{
                                         width: "48.5%",
@@ -258,6 +258,7 @@ const WorldcupFriend = ({ place, setPopup, userFromRank=null }) => {
                 onClose={() => setIsPopupMessageOpen(false)}
                 content={popupMessage.current}
             />
+            {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} />}
         </>
     );
 };

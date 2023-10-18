@@ -69,11 +69,14 @@ public class WorldcupService {
 
                     List<AppUser> users = worldcups.stream()
                             .map(worldcup -> worldcup.getUser())
+                            .distinct()
                             .filter(user -> Objects.nonNull(user) &&
                                     Objects.nonNull(user.getMatching()) &&
                                     user.getMatching() &&
                                     (currentUser == null || user.getId() != currentUser.getId()))
                             .collect(Collectors.toList());
+
+                    Collections.shuffle(users);
 
                     int shouldBeAdded = 3 - users.size();
 
@@ -123,6 +126,7 @@ public class WorldcupService {
 
         List<AppUser> users = worldcups.stream()
                 .map(worldcup -> worldcup.getUser())
+                .distinct()
                 .filter(user -> Objects.nonNull(user) &&
                         Objects.nonNull(user.getMatching()) &&
                         user.getMatching() &&
@@ -143,12 +147,13 @@ public class WorldcupService {
             }
 
             List<AppUser> availableUsers = userRepo.findAvailableUsers(excludeIds);
-            Collections.shuffle(availableUsers);
 
             List<AppUser> additionalUsers = new ArrayList<>(
                     availableUsers.subList(0, Math.min(availableUsers.size(), shouldBeAdded)));
             users.addAll(additionalUsers);
         }
+
+        Collections.shuffle(users);
 
         List<MatchingUserDto.Response> matchingUsers = users.stream()
                 .map(user -> {
