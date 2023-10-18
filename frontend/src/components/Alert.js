@@ -2,7 +2,7 @@ import { CssBaseline, ThemeProvider, Alert } from '@mui/material';
 import theme from '../theme/theme';
 import { useState, useEffect } from 'react';
 
-export default function AlertMessage({ alertOpen, alertMessage }){
+export default function AlertMessage({ alertOpen, setAlertOpen, alertMessage }){
     const [open, setOpen] = useState(alertOpen);
     
     useEffect(() => {
@@ -13,6 +13,7 @@ export default function AlertMessage({ alertOpen, alertMessage }){
         if(alertOpen){
         const timer = setTimeout(() => {
           setOpen(false);
+          setAlertOpen(false);
         }, 1800);
     
         return () => clearTimeout(timer);

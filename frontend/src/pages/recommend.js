@@ -10,9 +10,10 @@ import SlideContainer from '../components/Recommend/SlideContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import { load_places } from '../actions/place/place';
 import { useLoadingLottie } from '../components/Recommend/useLoadingLottie';
+import AlertMessage from '../components/Alert';
 
-const SubTitle = () => (
-    <div style={{ margin: "52px 0 8px" }}>
+const SubTitle = ({ retry }) => (
+    <div style={{ margin: screen.availHeight < 815 && retry ? 0 : "52px 0 8px" }}>
         <span style={{ 
             color: "#9E9E9E",
             fontSize: "16px",
@@ -70,6 +71,7 @@ const Recommend = () => {
     const [gateButton, setGateButton] = useState("ALL");
     const [filteredPlaces, setFilteredPlaces] = useState([]);
     const [randomPlace, setRandomPlace] = useState(null);
+    const [alertOpen, setAlertOpen] = useState(false);
 
     const categoryButtons = [
         ["ALL", "한식", "중식", "양식"],
@@ -81,7 +83,7 @@ const Recommend = () => {
 
     const clickStart = useCallback(() => {
         if (filteredPlaces.length === 0) {
-            alert("존재하는 식당이 없습니다!");
+            setAlertOpen(true);
             return;
         }
         if (!retry) {
@@ -137,12 +139,13 @@ const Recommend = () => {
         <RecommendWrapper>
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
+                <AlertMessage alertOpen={alertOpen} setAlertOpen={setAlertOpen} alertMessage="존재하는 식당이 없습니다!" />
                 <div style={{ margin: "0 24px", position: "relative", overflow: "hidden" }}>
                     <Header />
-                    <SubTitle />
+                    <SubTitle retry={retry} />
                     <div
                         style={{ 
-                            marginBottom: "52px",
+                            marginBottom: screen.availHeight < 815 && retry ? "15px" : "52px",
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "space-between",
@@ -243,7 +246,7 @@ const Recommend = () => {
                         {retry ? '다시하기' : '오늘 뭐 먹지?'}
                     </button>
                 </div>
-                {retry && !isRunning &&
+                {retry && !isRunning && filteredPlaces.length > 0 &&
                     <SlideContainer filteredPlaces={filteredPlaces} />
                 }
             </ThemeProvider>

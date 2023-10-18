@@ -860,7 +860,7 @@ const makeProfile = () => {
     return(
         <ThemeProvider theme={theme}>
             <CssBaseline />
-                <AlertMessage alertOpen={alertOpen} alertMessage={alertMessage}/>
+                <AlertMessage alertOpen={alertOpen} setAlertOpen={setAlertOpen} alertMessage={alertMessage}/>
                 <Container style={{padding:'0px', margin:'41px 0px 53px 0px', overflowX:'hidden'}}>
                     <Container style={{padding:'0px', alignItems: 'center',}}>
                         <Grid container>
