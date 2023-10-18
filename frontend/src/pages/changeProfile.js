@@ -846,7 +846,10 @@ const makeProfile = () => {
             && keyword.length > 0
             && introduction
             && introduction !== ''
-            && ((!mbtiChoose.E && mbtiChoose.F) || (mbtiChoose.E && mbtiChoose.F))
+            && ((!mbtiChoose.E && mbtiChoose.I) || (mbtiChoose.E && !mbtiChoose.I))
+            && ((!mbtiChoose.N && mbtiChoose.S) || (mbtiChoose.N && !mbtiChoose.S))
+            && ((!mbtiChoose.F && mbtiChoose.T) || (mbtiChoose.F && !mbtiChoose.T))
+            && ((!mbtiChoose.P && mbtiChoose.J) || (mbtiChoose.P && !mbtiChoose.J))
         ){
             setCondition(true);
         } else {
@@ -857,9 +860,7 @@ const makeProfile = () => {
     return(
         <ThemeProvider theme={theme}>
             <CssBaseline />
-                <div style={{height:'100%',maxWidth:'420px', marginTop:'820px', zIndex:'6', position:'absolute', left:'50%'}}>
                 <AlertMessage alertOpen={alertOpen} alertMessage={alertMessage}/>
-                </div>
                 <Container style={{padding:'0px', margin:'41px 0px 53px 0px', overflowX:'hidden'}}>
                     <Container style={{padding:'0px', alignItems: 'center',}}>
                         <Grid container>

@@ -17,6 +17,7 @@ const WorldcupFriend = ({ clickProfile, place, setPopup, userFromRank=null }) =>
     
     const [isLogin, setIsLogin] = useState(false);
     const [open, setOpen] = useState(false);
+    const [profileOn, setProfileOn] = useState(false);
 
     const [isPopupMessageOpen, setIsPopupMessageOpen] = useState(false);
     const popupMessage = useRef('');
@@ -42,17 +43,21 @@ const WorldcupFriend = ({ clickProfile, place, setPopup, userFromRank=null }) =>
     }, [matchingUser]);
 
     const handleFriendClick = useCallback(() => {
-        if (user) {
+        if (user && user.gender) {
             clickProfile(matchingUser.id);
+        } else if (user) {
+            setProfileOn(true);
         } else {
             setIsLogin(true);
         }
     }, [user, matchingUser]);
 
     const handleOpen = useCallback((id) => {
-        if (user) {
+        if (user && user.gender) {
             setOpen(true);
             selectedId.current = id;
+        } else if (user) {
+            setProfileOn(true);
         } else {
             setIsLogin(true);
         }
@@ -242,6 +247,18 @@ const WorldcupFriend = ({ clickProfile, place, setPopup, userFromRank=null }) =>
                     </PopupWrapper>
                 </PopupSubContainer>
             </PopupContainer>
+            <CustomPopup
+                open={profileOn}
+                onClose={() => setProfileOn(false)}
+                content={`매칭 프로필을 설정하시겠어요?`}
+                leftButtonLabel="아니요"
+                rightButtonLabel="설정"
+                onLeftButtonClick={() => setProfileOn(false)}
+                onRightButtonClick={() => router.push({
+                    pathname: '/makeProfile',
+                    query: { src : '스꾸챗프로필설정', }
+                })}
+            />
             <CustomPopup
                 open={open}
                 onClose={handleClose}
