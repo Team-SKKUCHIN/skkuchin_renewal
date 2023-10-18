@@ -27,7 +27,7 @@ const clickProfile = ({ profileOpen=true, setProfileOpen=null, matchingUserId=nu
 
     const [keywordCategories, setKeywordCategories] = useState([]);
 
-    if (typeof window !== 'undefined' && !isAuthenticated) {
+    if (router.query.id && !isAuthenticated) {
         router.push('/login');
     }
 

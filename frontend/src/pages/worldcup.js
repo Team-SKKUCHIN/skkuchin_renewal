@@ -78,20 +78,20 @@ const StageSelect = ({ round, setRound, startGame }) => {
                     flexDirection: "column",
                     alignItems: "center",
                     margin: "52px 0 16px",
-                    padding: screen.availHeight < 800 ? "21px 16px" : "79px 16px 21px",
+                    padding: screen.availHeight < 815 ? "21px 16px" : "79px 16px 21px",
                     borderRadius: "8px",
                     background: "#F2F2F2",
                 }}
             >
                 <Image
                     src={mainLogo}
-                    width={screen.availHeight < 800 ? 128 : 152}
-                    height={screen.availHeight < 800 ? 90 : 107}
+                    width={screen.availHeight < 815 ? 128 : 152}
+                    height={screen.availHeight < 815 ? 90 : 107}
                     layout='fixed'
                 />
                 <p
                     style={{
-                        margin: screen.availHeight < 800 ? "21px 0" : "36px 0 76px",
+                        margin: screen.availHeight < 815 ? "21px 0" : "36px 0 76px",
                         fontSize: "14px",
                         lineHeight: "17px",
                         letterSpacing: "-0.5px",
@@ -272,7 +272,7 @@ const Finish = ({ clickProfile, getWinner, phase, setPhase }) => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    margin: screen.availHeight < 800 ? "22px 0 20px" : "122px 0 110px",
+                    margin: screen.availHeight < 815 ? "22px 0 20px" : "122px 0 110px",
                 }}
             >
                 <div style={{ position: "relative", width: "100%", height: "200px" }}>
