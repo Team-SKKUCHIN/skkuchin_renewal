@@ -140,111 +140,115 @@ const Recommend = () => {
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
                 <AlertMessage alertOpen={alertOpen} setAlertOpen={setAlertOpen} alertMessage="존재하는 식당이 없습니다!" />
-                <div style={{ margin: "0 24px", position: "relative", overflow: "hidden" }}>
-                    <Header />
-                    <SubTitle retry={retry} />
-                    <div
-                        style={{ 
-                            marginBottom: screen.availHeight < 815 && retry ? "15px" : "52px",
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                        }}
-                    >
-                        <MainTitle />
-                        <Toggle />
-                    </div>
-                    <OptionContainer style={{ marginBottom: "16px" }}>
-                        {categoryButtons.map((buttons, index) => (
-                            <Options key={index}>
-                                {buttons.map((button, index) => (
-                                    <Button
-                                        isActive={categoryButton === button}
-                                        onClick={() => setCategoryButton(button)}
-                                        key={index}
-                                    >
-                                        {button}
-                                    </Button>
-                                ))}
-                            </Options>
-                        ))}
-                    </OptionContainer>
-                    <OptionContainer>
-                        <Options>
-                            {gateButtons.map((button, index) => (
-                                <Button
-                                    isActive={gateButton === button}
-                                    onClick={() => setGateButton(button)}
-                                    key={index}
-                                >
-                                    {button}
-                                </Button>
-                            ))}
-                        </Options>
-                    </OptionContainer>
-                    {isRunning ?
-                        <div
-                            style={{
-                                width: '100%',
-                                height: '197px',
-                                margin: "28px 0 8px",
-                            }}
-                        >
-                            {LottieView}
-                        </div>
-                    :
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                margin: "28px 0 8px",
-                                padding: screen.eight < 815 ? "12px 0 10px" : "44px 0 40px",
-                                borderRadius: "8px",
-                                background: "#F2F2F2",
-                            }}
-                        >
-                            <Image
-                                src={mainLogo}
-                                width={screen.availHeight < 815 ? 71 : 87}
-                                height={screen.availHeight < 815 ? 50 : 61}
-                                layout='fixed'
-                            />
-                            <p
-                                style={{
-                                    marginTop: "16px",
-                                    marginBottom: 0,
-                                    fontSize: retry ? (screen.availHeight < 815 ? "25px" : "32px") : "14px",
-                                    lineHeight: retry ? "normal" : "17px",
-                                    letterSpacing: retry ? "-3px" : "-0.5px",
-                                    whiteSpace: "pre-wrap",
-                                    textAlign: "center",
-                                    fontWeight: retry ? 815 : 400,
+                <div style={{ position: "fixed", left: 0, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <div style={{ width: "100%", maxWidth: "420px" }}>
+                        <div style={{ margin: "0 24px", position: "relative", overflow: "hidden" }}>
+                            <Header />
+                            <SubTitle retry={retry} />
+                            <div
+                                style={{ 
+                                    marginBottom: screen.availHeight < 815 && retry ? "15px" : "52px",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
                                 }}
                             >
-                                {retry ? randomPlace.name : mainText}
-                            </p>
+                                <MainTitle />
+                                <Toggle />
+                            </div>
+                            <OptionContainer style={{ marginBottom: "16px" }}>
+                                {categoryButtons.map((buttons, index) => (
+                                    <Options key={index}>
+                                        {buttons.map((button, index) => (
+                                            <Button
+                                                isActive={categoryButton === button}
+                                                onClick={() => setCategoryButton(button)}
+                                                key={index}
+                                            >
+                                                {button}
+                                            </Button>
+                                        ))}
+                                    </Options>
+                                ))}
+                            </OptionContainer>
+                            <OptionContainer>
+                                <Options>
+                                    {gateButtons.map((button, index) => (
+                                        <Button
+                                            isActive={gateButton === button}
+                                            onClick={() => setGateButton(button)}
+                                            key={index}
+                                        >
+                                            {button}
+                                        </Button>
+                                    ))}
+                                </Options>
+                            </OptionContainer>
+                            {isRunning ?
+                                <div
+                                    style={{
+                                        width: '100%',
+                                        height: '197px',
+                                        margin: "28px 0 8px",
+                                    }}
+                                >
+                                    {LottieView}
+                                </div>
+                            :
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        margin: "28px 0 8px",
+                                        padding: screen.eight < 815 ? "12px 0 10px" : "44px 0 40px",
+                                        borderRadius: "8px",
+                                        background: "#F2F2F2",
+                                    }}
+                                >
+                                    <Image
+                                        src={mainLogo}
+                                        width={screen.availHeight < 815 ? 71 : 87}
+                                        height={screen.availHeight < 815 ? 50 : 61}
+                                        layout='fixed'
+                                    />
+                                    <p
+                                        style={{
+                                            marginTop: "16px",
+                                            marginBottom: 0,
+                                            fontSize: retry ? (screen.availHeight < 815 ? "25px" : "32px") : "14px",
+                                            lineHeight: retry ? "normal" : "17px",
+                                            letterSpacing: retry ? "-3px" : "-0.5px",
+                                            whiteSpace: "pre-wrap",
+                                            textAlign: "center",
+                                            fontWeight: retry ? 815 : 400,
+                                        }}
+                                    >
+                                        {retry ? randomPlace.name : mainText}
+                                    </p>
+                                </div>
+                            }
+                            <button
+                                style={{
+                                    width: "100%",
+                                    padding: "16px 0",
+                                    borderRadius: "8px",
+                                    background: isRunning ? "#E2E2E2" : "#FFCE00",
+                                    border: "none",
+                                    color: "#FFF",
+                                    textAlign: "center",
+                                    fontSize: "16px",
+                                    fontWeight: 800,
+                                    cursor: isRunning ? undefined : "pointer",
+                                }}
+                                disabled={isRunning}
+                                onClick={clickStart}
+                            >
+                                {retry ? '다시하기' : '오늘 뭐 먹지?'}
+                            </button>
                         </div>
-                    }
-                    <button
-                        style={{
-                            width: "100%",
-                            padding: "16px 0",
-                            borderRadius: "8px",
-                            background: isRunning ? "#E2E2E2" : "#FFCE00",
-                            border: "none",
-                            color: "#FFF",
-                            textAlign: "center",
-                            fontSize: "16px",
-                            fontWeight: 800,
-                            cursor: isRunning ? undefined : "pointer",
-                        }}
-                        disabled={isRunning}
-                        onClick={clickStart}
-                    >
-                        {retry ? '다시하기' : '오늘 뭐 먹지?'}
-                    </button>
+                    </div>
                 </div>
                 {retry && !isRunning && filteredPlaces.length > 0 &&
                     <SlideContainer filteredPlaces={filteredPlaces} />
