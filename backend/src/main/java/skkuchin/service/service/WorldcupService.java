@@ -18,6 +18,7 @@ import skkuchin.service.repo.WorldcupRepo;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,20 +64,21 @@ public class WorldcupService {
                     List<Image> images = imageRepo.findByPlace(place);
 
                     List<Worldcup> worldcups = worldcupRepo.findByPlace(place);
-                    if (worldcups.size() > 3) {
-                        worldcups = worldcups.subList(0, 3);
-                    }
+                    Collections.shuffle(worldcups);
+
+                    worldcups = worldcups.stream()
+                            .sorted(Comparator.comparing(worldcup -> worldcup.getUser().getId()))
+                            .distinct()
+                            .limit(3)
+                            .collect(Collectors.toList());
 
                     List<AppUser> users = worldcups.stream()
                             .map(worldcup -> worldcup.getUser())
-                            .distinct()
                             .filter(user -> Objects.nonNull(user) &&
                                     Objects.nonNull(user.getMatching()) &&
                                     user.getMatching() &&
                                     (currentUser == null || user.getId() != currentUser.getId()))
                             .collect(Collectors.toList());
-
-                    Collections.shuffle(users);
 
                     int shouldBeAdded = 3 - users.size();
 
@@ -119,14 +121,18 @@ public class WorldcupService {
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 장소입니다"));
 
         List<Image> images = imageRepo.findByPlace(winnerPlace);
+
         List<Worldcup> worldcups = worldcupRepo.findByPlace(winnerPlace);
-        if (worldcups.size() > 3) {
-            worldcups = worldcups.subList(0, 3);
-        }
+        Collections.shuffle(worldcups);
+
+        worldcups = worldcups.stream()
+                .sorted(Comparator.comparing(worldcup -> worldcup.getUser().getId()))
+                .distinct()
+                .limit(3)
+                .collect(Collectors.toList());
 
         List<AppUser> users = worldcups.stream()
                 .map(worldcup -> worldcup.getUser())
-                .distinct()
                 .filter(user -> Objects.nonNull(user) &&
                         Objects.nonNull(user.getMatching()) &&
                         user.getMatching() &&
@@ -147,12 +153,12 @@ public class WorldcupService {
             }
 
             List<AppUser> availableUsers = userRepo.findAvailableUsers(excludeIds);
+            Collections.shuffle(availableUsers);
 
             List<AppUser> additionalUsers = new ArrayList<>(
                     availableUsers.subList(0, Math.min(availableUsers.size(), shouldBeAdded)));
             users.addAll(additionalUsers);
         }
-
         Collections.shuffle(users);
 
         List<MatchingUserDto.Response> matchingUsers = users.stream()
