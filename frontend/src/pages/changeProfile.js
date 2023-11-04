@@ -17,7 +17,7 @@ const makeProfile = () => {
     const keywordNum = useRef(0);
 
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    if (!isAuthenticated) {
+    if (typeof window !== 'undefined' && !isAuthenticated) {
         router.push('/login');
     }
     

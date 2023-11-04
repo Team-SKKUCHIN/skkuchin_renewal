@@ -27,15 +27,12 @@ import dynamic from 'next/dynamic';
 import { displayProfile } from "../components/MyPage/ProfileList";
 
 const calculateRows = () => {
-    if (typeof document !== "undefined") {
-        const input = document.getElementsByName('chat')[0];
-        const inputWidth = input.clientWidth;
-        const fontSize = parseInt(getComputedStyle(input).fontSize);
-        const textLength = input.value.length;
-        const rows = Math.ceil(textLength * fontSize / inputWidth);
-        return rows;
-    }
-    return 0;
+    const input = document.getElementsByName('chat')[0];
+    const inputWidth = input.clientWidth;
+    const fontSize = parseInt(getComputedStyle(input).fontSize);
+    const textLength = input.value.length;
+    const rows = Math.ceil(textLength * fontSize / inputWidth);
+    return rows;
 }
 
 const chatPage = () => {
