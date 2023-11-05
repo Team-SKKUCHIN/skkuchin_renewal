@@ -19,8 +19,8 @@ export const useLoadingLottie = () => {
     }, [lottieIndex, lottieRef]);
 
     const duration = lottieDict[lottieIndex.current ?? 0].duration;
-    
-    const LottieView = window === undefined ? null :
+
+    const LottieView = typeof window !== 'undefined' &&
         <Lottie
             lottieRef={lottieRef}
             animationData={lotties[lottieIndex.current ?? 0]}
