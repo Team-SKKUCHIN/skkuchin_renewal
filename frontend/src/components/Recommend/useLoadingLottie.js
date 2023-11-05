@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { lottieDict, lotties } from '../../assets/lottie';
 
 export const useLoadingLottie = () => {
