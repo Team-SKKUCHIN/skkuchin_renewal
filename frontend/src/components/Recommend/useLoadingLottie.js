@@ -20,7 +20,7 @@ export const useLoadingLottie = () => {
 
     const duration = lottieDict[lottieIndex.current ?? 0].duration;
     
-    const LottieView = 
+    const LottieView = window === undefined ? null :
         <Lottie
             lottieRef={lottieRef}
             animationData={lotties[lottieIndex.current ?? 0]}
