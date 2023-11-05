@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { lottieDict, lotties } from '../../assets/lottie';
 
 export const useLoadingLottie = () => {
@@ -19,8 +19,8 @@ export const useLoadingLottie = () => {
     }, [lottieIndex, lottieRef]);
 
     const duration = lottieDict[lottieIndex.current ?? 0].duration;
-    
-    const LottieView = window === undefined ? null :
+
+    const LottieView = typeof window !== 'undefined' &&
         <Lottie
             lottieRef={lottieRef}
             animationData={lotties[lottieIndex.current ?? 0]}
