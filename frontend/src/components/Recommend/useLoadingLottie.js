@@ -1,6 +1,8 @@
-import Lottie from "lottie-react";
 import { useCallback, useRef } from 'react';
 import { lottieDict, lotties } from '../../assets/lottie';
+import dynamic from 'next/dynamic';
+
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 export const useLoadingLottie = () => {
     const lottieIndex = useRef(0);

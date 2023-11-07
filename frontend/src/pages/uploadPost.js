@@ -8,9 +8,8 @@ import { useDispatch } from 'react-redux';
 import { enroll_post, load_all_posts } from '../actions/post/post';
 
 const tagToArticleType = {
-    "뭐 먹을까요?": "WHAT_TO_EAT",
-    "같이 먹어요": "TOGETHER",
-    "기타": "ETC"
+    "맛집 추천해요": "WHAT_TO_EAT",
+    "맛집 추천 받아요": "TOGETHER",
 };
 
 const UploadPost = () => {
@@ -155,7 +154,7 @@ const UploadPost = () => {
                     <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', mb: '20px'}}>
                         <Grid item>
                             {
-                            ["뭐 먹을까요?", "같이 먹어요", "기타"].map((tag, index) => (
+                            ["맛집 추천해요", "맛집 추천 받아요"].map((tag, index) => (
                                 <Button key={index} 
                                     style={{
                                         fontSize:'14px', 

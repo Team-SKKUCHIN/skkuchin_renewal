@@ -9,9 +9,8 @@ import { search_posts_by_tag, search_posts_by_keyword, clear_search_posts } from
 import CommunityItem from "../components/SkkuChat/CommunityItem";
 
 const tagToArticleType = {
-    "뭐 먹을까요?": "WHAT_TO_EAT",
-    "같이 먹어요": "TOGETHER",
-    "기타": "ETC"
+    "맛집 추천해요": "WHAT_TO_EAT",
+    "맛집 추천 받아요": "TOGETHER",
 };
 
 const CommunitySearch = () => {
@@ -125,7 +124,7 @@ const CommunitySearch = () => {
                             <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', m: '5px 0 10px'}}>
                                 <Grid item>
                                     {
-                                    ["뭐 먹을까요?", "같이 먹어요", "기타"].map((tag, index) => (
+                                    ["맛집 추천해요", "맛집 추천 받아요"].map((tag, index) => (
                                         <Button key={index} 
                                             style={{
                                                 fontSize:'14px', 
