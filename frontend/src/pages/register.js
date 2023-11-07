@@ -3,16 +3,14 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { CssBaseline, Box, ThemeProvider, Grid,Button, Container, Typography } from '@mui/material';
 import theme from '../theme/theme';
-import dynamic from 'next/dynamic';
-
-const SignUpStep1 = dynamic(() => import('../components/Auth/SignUpStep1'));
-const SignUpStep2 = dynamic(() => import('../components/Auth/SignUpStep2'));
-const SignUpStep3 = dynamic(() => import('../components/Auth/SignUpStep3'));
-const SignUpStep4 = dynamic(() => import('../components/Auth/SignUpStep4'));
-const SignUpStep5 = dynamic(() => import('../components/Auth/SignUpStep5'));
-const SignUpStep6 = dynamic(() => import('../components/Auth/SignUpStep6'));
-const SignUpStep7 = dynamic(() => import('../components/Auth/SignUpStep7'));
-const SignUpStep8 = dynamic(() => import('../components/Auth/SignUpStep8')); 
+import SignUpStep1 from "../components/Auth/SignUpStep1";
+import SignUpStep2 from "../components/Auth/SignUpStep2";
+import SignUpStep3 from "../components/Auth/SignUpStep3";
+import SignUpStep4 from "../components/Auth/SignUpStep4";
+import SignUpStep5 from "../components/Auth/SignUpStep5";
+import SignUpStep6 from "../components/Auth/SignUpStep6";
+import SignUpStep7 from "../components/Auth/SignUpStep7";
+import SignUpStep8 from "../components/Auth/SignUpStep8";
 
 const RegisterPage = () => {
 
@@ -100,6 +98,4 @@ const RegisterPage = () => {
     )
 };
 
-export default dynamic(() => Promise.resolve(RegisterPage), {
-    ssr: false,
-});
+export default RegisterPage;

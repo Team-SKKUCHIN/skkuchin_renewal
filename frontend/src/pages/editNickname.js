@@ -7,12 +7,8 @@ import theme from '../theme/theme';
 import back from '../image/close.png';
 import check from '../image/check_circle.png';
 import { change_user, check_nickname } from '../actions/auth/auth';
-import dynamic from 'next/dynamic';
 import { Dialog } from "@mui/material";
 import { DialogContent } from "@mui/material";
-
-
-// const EditProfileImage = dynamic(() => import('../components/MyPage/EditProfileImage'));
 
 const editNickname = () => {
     const dispatch = useDispatch();
@@ -265,12 +261,8 @@ const editNickname = () => {
         </form>
         </Box>}
         <Dialog open={dialogOpen}><DialogContent><Typography style={{color:'#3C3C3C', fontWeight:'700', fontSize:'16px'}}>저장이 완료되었습니다.</Typography></DialogContent></Dialog>
-
-        {/* {editImage && <EditProfileImage image={image} setImage={setImage} setEditImage={setEditImage} />} */}
         </ThemeProvider>
     )
 }
 
-export default dynamic(() => Promise.resolve(editNickname), {
-    ssr: false,
-});
+export default editNickname;

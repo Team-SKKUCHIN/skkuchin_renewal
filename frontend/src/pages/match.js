@@ -1,14 +1,12 @@
 import { CssBaseline, Box, ThemeProvider, Slide, Card, CardContent, Typography, Grid, Container, Stack, useScrollTrigger, Button, Divider } from '@mui/material';
-import dynamic from 'next/dynamic';
 import styled from '@emotion/styled';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 // import CommunityItem from '../components/SkkuChat/CommunityItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { load_all_posts } from '../actions/post/post';
 import { useEffect } from 'react';
-
-const Friends = dynamic(() => import('../components/Matching/Friends'));
-const AiGreeting = dynamic(() => import('../components/AiGreeting'));
+import Friends from '../components/Matching/Friends';
+import AiGreeting from '../components/AiGreeting';
 
 const MatchContainer = styled.div`
   /* 데스크톱에서 스크롤 바를 숨김 */

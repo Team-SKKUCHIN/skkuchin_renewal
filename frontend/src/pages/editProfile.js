@@ -8,9 +8,7 @@ import back from '../image/arrow_back_ios.png';
 import check from '../image/check_circle.png';
 import { displayProfile } from '../components/MyPage/ProfileList';
 import { change_user, check_nickname } from '../actions/auth/auth';
-import dynamic from 'next/dynamic';
-
-const EditProfileImage = dynamic(() => import('../components/MyPage/EditProfileImage'));
+import EditProfileImage from "../components/MyPage/EditProfileImage";
 
 const editProfile = () => {
     const dispatch = useDispatch();
@@ -184,6 +182,4 @@ const editProfile = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(editProfile), {
-    ssr: false,
-});
+export default editProfile;

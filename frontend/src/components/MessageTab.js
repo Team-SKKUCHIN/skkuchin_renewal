@@ -13,10 +13,7 @@ import { get_chat_request_info, get_realtime_chat_request, get_chat_request_for_
 import { request_refresh } from '../actions/auth/auth';
 import { clear_matching } from '../actions/matchingUser/matchingUser';
 import { displayProfile } from './MyPage/ProfileList';
-
-import dynamic from 'next/dynamic';
-
-const NewPromise = dynamic(() => import('./Chat/NewPromise'));
+import NewPromise from './Chat/NewPromise';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

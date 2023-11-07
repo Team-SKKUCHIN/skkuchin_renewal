@@ -6,12 +6,10 @@ import { load_candidate } from '../../actions/candidate/candidate'
 import { load_request_id, request_chat } from '../../actions/chat/chatRoom';
 import noCharacter from '../../image/mbti/profile/noCharacter.png'
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import CustomPopup from "../SkkuChat/CustomPopup";
 import CustomPopupNoBtn from "../SkkuChat/CustomPopupNoBtn";
-
-const GoLogin = dynamic(() => import('../GoLogin'));
+import GoLogin from "../GoLogin";
 
 const dummyProfiles = [
     {

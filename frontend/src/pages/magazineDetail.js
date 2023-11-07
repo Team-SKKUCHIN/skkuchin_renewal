@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import character from '../image/login_enheng.png';
 import arrowPrev from '../image/arrow_forward.png';
 import arrowNext from '../image/arrow_forward2.png';
-import dynamic from 'next/dynamic';
 import position from '../../public/markers/기본_yellow.png';
 import filledStar from '../image/Star-1.png';
 import back from '../image/leftbtn.png';
@@ -264,6 +263,4 @@ const MagazineDetail = () => {
     )
 } 
 
-export default dynamic(() => Promise.resolve(MagazineDetail), {
-    ssr: false,
-});
+export default MagazineDetail;

@@ -4,7 +4,6 @@ import { CssBaseline, Box, ThemeProvider, Container, Grid, MenuItem, Button, Tex
 import theme from '../theme/theme';
 import back from '../image/arrow_back_ios.png';
 import next from '../image/arrow_next.png';
-import dynamic from 'next/dynamic';
 
 const agreementList = () => {
     const router = useRouter();
@@ -65,6 +64,4 @@ const agreementList = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(agreementList), {
-    ssr: false,
-});
+export default agreementList;

@@ -14,7 +14,6 @@ import {TimePicker }from 'antd';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_meet_time, delete_meet_time } from "../actions/chat/chatRoom";
-import dynamic from 'next/dynamic';
 
 const chatTime = () => {
 
@@ -219,9 +218,7 @@ const chatTime = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(chatTime), {
-    ssr: false,
-});
+export default chatTime;
 
 const CalendarContainer = style.div`
     .react-calendar { 

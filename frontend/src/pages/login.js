@@ -10,7 +10,6 @@ import theme from '../theme/theme';
 import logo from '../image/main_logo.png'
 import check from '../image/check_circle.png';
 import uncheck from '../image/uncheck.png';
-import dynamic from 'next/dynamic';
 
 const LoginPage = () => {
 
@@ -173,6 +172,4 @@ const LoginPage = () => {
     )
 };
 
-export default dynamic(() => Promise.resolve(LoginPage), {
-    ssr: false,
-});
+export default LoginPage;

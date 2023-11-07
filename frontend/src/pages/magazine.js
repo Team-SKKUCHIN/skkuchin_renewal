@@ -16,7 +16,6 @@ import arrowL from '../image/arrowLeft.png'
 import arrowR from '../image/arrowRight.png'
 import emptyStar from '../image/Star_border-1.png';
 import filledStar from '../image/Star-1.png';
-import dynamic from 'next/dynamic';
 
 import content from '../image/magazine/magazine/content1_1.png';
 import review1_mr from '../image/magazine/review1_mr.png';
@@ -32,6 +31,7 @@ import review4_yj from '../image/magazine/review4_yj.png';
 import review5_yj from '../image/magazine/review5_yj.png';
 
 import { load_all_magazine, } from '../actions/magazine/magazine';
+import UpperBar from '../components/UpperBar';
 
 const reviewM = [
     {
@@ -112,8 +112,6 @@ const MagazineContainer = styled.div`
     display: none;
   }
 `;
-
-const UpperBar = dynamic(() => import('../components/UpperBar'));
 
 const Magazine = () => {
     const dispatch = useDispatch();
@@ -238,6 +236,4 @@ const Magazine = () => {
     )
 } 
 
-export default dynamic(() => Promise.resolve(Magazine), {
-    ssr: false,
-});
+export default Magazine;

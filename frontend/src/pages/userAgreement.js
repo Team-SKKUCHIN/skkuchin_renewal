@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { CssBaseline, Box, ThemeProvider, Container, Grid, MenuItem, Button, TextField, Typography, Link, FormControl, InputLabel, Select } from '@mui/material';
 import theme from '../theme/theme';
 import back from '../image/arrow_back_ios.png';
-import dynamic from 'next/dynamic';
 
 const userAgreement = () => {
     const router = useRouter();
@@ -324,6 +323,4 @@ const userAgreement = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(userAgreement), {
-  ssr: false,
-});
+export default userAgreement;

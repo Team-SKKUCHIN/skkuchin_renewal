@@ -6,7 +6,6 @@ import Image from 'next/image';
 import theme from '../theme/theme';
 import { change_password } from '../actions/auth/auth';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import check from '../image/check.png';
@@ -304,6 +303,4 @@ const changePassword = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(changePassword), {
-    ssr: false,
-});
+export default changePassword;

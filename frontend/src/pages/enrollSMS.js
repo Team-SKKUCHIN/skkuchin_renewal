@@ -7,8 +7,6 @@ import theme from '../theme/theme';
 import back from '../image/close.png';
 import { enroll_phone } from '../actions/pushToken/pushToken';
 
-import dynamic from 'next/dynamic';
-
 const enrollSMS = () => {
     const dispatch = useDispatch();
     const router = useRouter();
@@ -260,6 +258,4 @@ const enrollSMS = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(enrollSMS), {
-    ssr: false,
-});
+export default enrollSMS;

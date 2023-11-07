@@ -7,8 +7,6 @@ import theme from '../theme/theme';
 import back from '../image/close.png';
 import { enroll_phone } from '../actions/pushToken/pushToken';
 
-import dynamic from 'next/dynamic';
-
 const editPhoneNumber = () => {
     const dispatch = useDispatch();
     const router = useRouter();
@@ -259,6 +257,4 @@ const editPhoneNumber = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(editPhoneNumber), {
-    ssr: false,
-});
+export default editPhoneNumber;

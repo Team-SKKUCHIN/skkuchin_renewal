@@ -6,9 +6,7 @@ import {ThemeProvider, CssBaseline,Dialog,DialogContent, Typography, Button, Con
 import Image from 'next/image';
 import theme from "../theme/theme";
 import back from '../image/arrow_back_ios.png';
-import dynamic from 'next/dynamic';
-
-const AlertMessage = dynamic(() => import('../components/Alert'));
+import AlertMessage from "../components/Alert";
 
 const makeProfile = () => { 
     const dispatch = useDispatch();
@@ -449,6 +447,4 @@ const makeProfile = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(makeProfile), {
-    ssr: false,
-});
+export default makeProfile;
