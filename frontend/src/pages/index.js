@@ -8,7 +8,7 @@ import Link from 'next/link';
 const GameContent = () => {
     const games = [
         {
-            name: "오늘 뭐먹지?",
+            name: "오늘 뭐 먹지?",
             hashtag: "#성대 메뉴 추천 룰렛",
             link: "/recommend",
         },
@@ -33,7 +33,7 @@ const GameContent = () => {
                     letterSpacing: "-0.84px",
                 }}
             >
-                오늘 뭐먹지?
+                오늘 뭐 먹지?
             </span>
             <div style={{ display: "flex", flexDirection: "row", marginTop: "10px", overflowX: "scroll" }}>
                 {games.map((game, index) => (

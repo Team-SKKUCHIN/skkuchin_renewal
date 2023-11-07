@@ -2,7 +2,7 @@ import { CssBaseline, Box, ThemeProvider, Slide, Card, CardContent, Typography, 
 import dynamic from 'next/dynamic';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import CommunityItem from '../components/SkkuChat/CommunityItem';
+// import CommunityItem from '../components/SkkuChat/CommunityItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { load_all_posts } from '../actions/post/post';
 import { useEffect } from 'react';
@@ -22,49 +22,18 @@ const MatchContainer = styled.div`
 `;
 
 const MatchPage = () => {
-    const router = useRouter();
+    // const router = useRouter();
 
     const dispatch = useDispatch();
 
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const allPosts = useSelector(state => state.post.allPosts);
+    // const allPosts = useSelector(state => state.post.allPosts);
 
     useEffect(() => {
         if(isAuthenticated) {
             dispatch(load_all_posts());
         }
     }, []);
-
-    const posts = [
-        {
-            id: 1,
-            article_type: "WHAT TO EAT",
-            tag_type: "뭐 먹을까요?",
-            title: "게시글 제목제목",
-            content: "안녕본문본붐놉누본ㅁ",
-            user_id: 800,
-            nickname: "진아지롱",
-            user_image: "ESFP",
-            display_time: "3분 전",
-            article_like_count: 0,
-            comment_count: 1,
-            image: 'https://picsum.photos/30',
-        },
-        {
-            id: 2,
-            article_type: "TOGETHER",
-            tag_type: "같이 먹어요",
-            title: "크크",
-            content: "안녕",
-            user_id: 102,
-            nickname: "테스트100",
-            user_image: "ENFJ",
-            display_time: "35분 전",
-            article_like_count: 0,
-            comment_count: 1,
-            image: 'https://picsum.photos/200',
-        },
-    ];
 
     return(
         <MatchContainer>
@@ -76,7 +45,7 @@ const MatchPage = () => {
                     </Grid>
                 </Grid>
             </Container>
-            <Divider orientation='horizontal' sx={{width: '100%', borderBottom: '8px solid #FBFBFB'}}/> 
+            {/* <Divider orientation='horizontal' sx={{width: '100%', borderBottom: '8px solid #FBFBFB'}}/> 
             <Grid sx={{mt: '21px'}}>
                 <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 24px 0'}}>
                     <Typography style={{fontSize:'21px', fontWeight: 700, color: '#3C3C3C'}}>
@@ -87,12 +56,11 @@ const MatchPage = () => {
                     </Button>
                 </div>
                 <Container sx={{ p: '0 24px', height: 'max-content', alignItems: 'center', mt: '10px' }}>
-                    {/* {posts && posts.map((post) => ( */}
                     {allPosts && allPosts.slice(0,2).map((post) => (
                         <CommunityItem key={post.id} {...post} />
                     ))}
                 </Container>
-            </Grid>
+            </Grid> */}
         </MatchContainer>
     )
 } 

@@ -13,27 +13,9 @@ import { load_post, clear_prev_post } from '../../actions/post/post';
 import { enroll_like, delete_like } from '../../actions/like/like';
 import Comment from './Comment';
 
-const posts = [
-  {
-      id: 1,
-      article_type: "WHAT TO EAT",
-      tag_type: "뭐 먹을까요?",
-      title: "게시글 제목제목",
-      content: "안녕본문본붐놉누본ㅁ",
-      user_id: 800,
-      nickname: "진아지롱",
-      user_image: "ESFP",
-      display_time: "3분 전",
-      article_like_count: 0,
-      comment_count: 1,
-      image: ['https://picsum.photos/200', 'https://picsum.photos/300', 'https://picsum.photos/400']
-  },
-];
-
 const articleTypeToTag = {
-  "WHAT_TO_EAT": "뭐 먹을까요?",
-  "TOGETHER": "같이 먹어요",
-  "ETC": "기타"
+  "WHAT_TO_EAT": "맛집 추천해요",
+  "TOGETHER": "맛집 추천 받아요",
 };
 
 const PostDetail = ({ postId }) => {

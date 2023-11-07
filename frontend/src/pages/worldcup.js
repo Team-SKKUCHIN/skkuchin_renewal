@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import Image from 'next/image';
 import theme from '../theme/theme';
-import { closeIcon, food, mainLogo } from '../image/recommend';
+import { backArrow, food, mainLogo } from '../image/recommend';
 import { useToggle } from '../components/Recommend/useToggle';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
@@ -47,10 +47,19 @@ const Header = () => {
     }, [])
 
     return (
-        <div style={{ margin: "15px 0 0", height: "24px", width: "100%", position: "relative" }}>
-            <div style={{ position: 'absolute', right: 0 }}>
+        <div
+            style={{
+                margin: "24px 0 5px",
+                height: "48px",
+                width: "100%",
+                position: "relative",
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+            }}>
+            <div style={{ position: 'absolute', left: 0 }}>
                 <Image
-                    src={closeIcon}
+                    src={backArrow}
                     name='back'
                     onClick={handleClose}
                     layout='fixed'
@@ -59,6 +68,16 @@ const Header = () => {
                     style={{ cursor: 'pointer' }}
                 />
             </div>
+            <span
+                style={{
+                    textAlign: 'center',
+                    fontSize: '18px',
+                    fontWeight: 700,
+                    letterSpacing: '-0.36px',
+                }}
+            >
+                음식점 월드컵
+            </span>
         </div>
     );
 };

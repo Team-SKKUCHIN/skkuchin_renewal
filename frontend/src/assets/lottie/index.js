@@ -18,31 +18,31 @@ export const lotties = [
 
 export const lottieDict = [
     {
-        duration: 1000,
+        duration: 3000,
         speed: 3,
     },
     {
-        duration: 1500,
-        speed: 3,
-    },
-    {
-        duration: 1000,
+        duration: 3000,
         speed: 2,
     },
     {
-        duration: 1000,
+        duration: 3000,
+        speed: 2,
+    },
+    {
+        duration: 3000,
         speed: 1,
     },
     {
-        duration: 1000,
+        duration: 3000,
+        speed: 2,
+    },
+    {
+        duration: 3000,
         speed: 3,
     },
     {
-        duration: 1500,
-        speed: 3,
-    },
-    {
-        duration: 1000,
+        duration: 3000,
         speed: 2,
     },
 ];

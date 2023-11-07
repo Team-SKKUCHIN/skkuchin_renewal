@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Typography, Avatar, Grid, Divider } from '@mui/material';
+import { Box, Typography, Grid, Divider } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
-import { useDispatch, useSelector } from "react-redux";
-
-const GoLogin = dynamic(() => import('../GoLogin'));
+import { useSelector } from "react-redux";
+import GoLogin from '../GoLogin';
 
 // id, article_type, title, content, user_id, nickname, user_image, display_time, article_like_count, comment_count
 const CommunityItem = ({ id, title, content, article_like_count, comment_count, display_time, image }) => {
