@@ -14,11 +14,9 @@ import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { set_chat_push, set_info_push } from '../actions/pushToken/pushToken';
-import dynamic from 'next/dynamic';
 import { change_status_info } from '../actions/matchingUser/matchingUser';
 
-
-const UpperBar = dynamic(() => import('../components/UpperBar'));
+import UpperBar from "../components/UpperBar";
 
 const myPage = () => {
     const dispatch = useDispatch();
@@ -389,6 +387,4 @@ const myPage = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(myPage), {
-    ssr: false,
-});
+export default myPage;

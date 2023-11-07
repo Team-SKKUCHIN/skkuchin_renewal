@@ -22,8 +22,6 @@ import { get_realtime_otherUser, get_realtime_setting, get_realtime_message, sen
 import { set_user_block, set_chat_room_alarm, exit_room, set_user_profile } from "../actions/chat/chatRoom";
 import { request_refresh } from '../actions/auth/auth';
 
-import dynamic from 'next/dynamic';
-
 import { displayProfile } from "../components/MyPage/ProfileList";
 
 const calculateRows = () => {
@@ -659,6 +657,4 @@ const chatPage = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(chatPage), {
-    ssr: false,
-});
+export default chatPage;

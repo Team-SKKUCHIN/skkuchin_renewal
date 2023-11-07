@@ -11,7 +11,6 @@ import check from '../image/check_3.png';
 import blank from '../image/chat/check_box_outline_blank.png';
 import checked from '../image/chat/check_box.png'
 import { enroll_report } from "../actions/report/report";
-import dynamic from 'next/dynamic';
 
 const reportChatUser = () => {
 
@@ -248,6 +247,4 @@ const reportChatUser = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(reportChatUser), {
-    ssr: false,
-});
+export default reportChatUser;

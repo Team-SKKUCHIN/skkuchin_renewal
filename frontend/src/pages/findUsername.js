@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { CssBaseline, Box, ThemeProvider, Grid,Button, Container, Typography } from '@mui/material';
 import theme from '../theme/theme';
-import dynamic from 'next/dynamic';
-
-const Step1 = dynamic(() => import('../components/Auth/Username/Step1'));
-const Step2 = dynamic(() => import('../components/Auth/Username/Step2'));
+import Step1 from "../components/Auth/Username/Step1";
+import Step2 from "../components/Auth/Username/Step2";
 
 const findUsername = () => {
 
@@ -33,6 +31,4 @@ const findUsername = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(findUsername), {
-    ssr: false,
-});
+export default findUsername;

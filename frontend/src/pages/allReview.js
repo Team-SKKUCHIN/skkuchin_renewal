@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from "react";
 import { check_admin } from '../actions/auth/auth';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 
 const AllReview = () => {
@@ -135,6 +134,4 @@ const AllReview = () => {
     );
 }
 
-export default dynamic(() => Promise.resolve(AllReview), {
-    ssr: false,
-});
+export default AllReview;

@@ -4,7 +4,6 @@ import { CssBaseline, Box, ThemeProvider, Grid,Button, Container, Typography, Di
 import Image from 'next/image';
 import theme from '../theme/theme';
 import { backArrow, closeIcon, mainLogo } from '../image/recommend';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { enroll_request } from "../actions/request/request";
 import { test } from "../actions/request/request";
@@ -151,6 +150,4 @@ const requestPlace = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(requestPlace), {
-    ssr: false,
-});
+export default requestPlace;

@@ -10,7 +10,6 @@ import check from '../image/check_3.png';
 import search from '../image/search.png';
 import { load_places } from "../actions/place/place";
 import { set_meet_place, delete_meet_place } from "../actions/chat/chatRoom";
-import dynamic from 'next/dynamic';
 
 const chatPlace = () => {
 
@@ -214,6 +213,4 @@ const chatPlace = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(chatPlace), {
-    ssr: false,
-});
+export default chatPlace;

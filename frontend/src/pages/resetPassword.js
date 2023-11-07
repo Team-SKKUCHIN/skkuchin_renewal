@@ -2,12 +2,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { CssBaseline, Box, ThemeProvider, Grid,Button, Container, Typography } from '@mui/material';
 import theme from '../theme/theme';
-import dynamic from 'next/dynamic';
-
-const Step1 = dynamic(() => import('../components/Auth/Password/Step1'));
-const Step2 = dynamic(() => import('../components/Auth/Password/Step2'));
-const Step3 = dynamic(() => import('../components/Auth/Password/Step3'));
-const Step4 = dynamic(() => import('../components/Auth/Password/Step4'));
+import Step1 from "../components/Auth/Password/Step1";
+import Step2 from "../components/Auth/Password/Step2";
+import Step3 from "../components/Auth/Password/Step3";
+import Step4 from "../components/Auth/Password/Step4";
 
 const resetPassword = () => {
 
@@ -50,6 +48,4 @@ const resetPassword = () => {
     )
 };
 
-export default dynamic(() => Promise.resolve(resetPassword), {
-    ssr: false,
-});
+export default resetPassword;

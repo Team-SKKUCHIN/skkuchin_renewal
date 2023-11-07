@@ -3,7 +3,6 @@ import { CssBaseline, Box, ThemeProvider, Container, Grid, MenuItem, Button, Tex
 import theme from '../theme/theme';
 import back from '../image/arrow_back_ios.png';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 
 const marketingConsent = () => {
     const router = useRouter();
@@ -153,6 +152,4 @@ const marketingConsent = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(marketingConsent), {
-    ssr: false,
-});
+export default marketingConsent;

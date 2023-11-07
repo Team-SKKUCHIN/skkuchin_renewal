@@ -13,7 +13,6 @@ import manCheck from '../image/gender/maleY.png';
 import textForm from '../image/mbti/profile/intro.png';
 import submitOk from '../image/checkY.png';
 import submit from '../image/checkG.png';
-import dynamic from 'next/dynamic';
 
 //mbti
 import E from '../image/mbti/E-1.png';
@@ -151,7 +150,7 @@ import stuTag13On from '../image/tags/interest_on/interest13on.png';
 import stuTag14On from '../image/tags/interest_on/interest14on.png';
 import stuTag15On from '../image/tags/interest_on/interest15on.png';
 
-const AlertMessage = dynamic(() => import('../components/Alert'));
+import AlertMessage from "../components/Alert";
 
 const makeProfile = () => { 
 
@@ -907,6 +906,4 @@ const makeProfile = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(makeProfile), {
-    ssr: false,
-});
+export default makeProfile;

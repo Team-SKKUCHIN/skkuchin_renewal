@@ -1,9 +1,7 @@
 import { CssBaseline, ThemeProvider} from '@mui/material';
 import theme from '../theme/theme';
-import dynamic from 'next/dynamic';
 import { useState} from "react";
-
-const EditProfileImage = dynamic(() => import('../components/MyPage/EditProfileImage'));
+import EditProfileImage from '../components/MyPage/EditProfileImage';
 
 const editProfileImage = () => {
     const [image, setImage] = useState("");
@@ -18,6 +16,4 @@ const editProfileImage = () => {
 
 }
 
-export default dynamic(() => Promise.resolve(editProfileImage), {
-    ssr: false,
-});
+export default editProfileImage;

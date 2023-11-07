@@ -4,7 +4,6 @@ import { check_admin } from '../actions/auth/auth';
 import { useRouter } from 'next/router';
 import { load_menu, enroll_menu, modify_menu, delete_menu } from '../actions/menu/menu';
 import { clear_search_results } from '../actions/place/place';
-import dynamic from 'next/dynamic';
 
 const PlaceMenu = () => {
     const dispatch = useDispatch();
@@ -186,6 +185,4 @@ const PlaceMenu = () => {
     );
 }
 
-export default dynamic(() => Promise.resolve(PlaceMenu), {
-    ssr: false,
-});
+export default PlaceMenu;

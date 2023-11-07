@@ -7,7 +7,6 @@ import theme from '../theme/theme';
 import Image from 'next/image';
 import { displayMBTI } from '../components/Matching/MBTIList';
 import close from '../image/close.png';
-import dynamic from 'next/dynamic';
 import MBTITypes from '../components/SkkuChat/MBTITypes';
 import { clear_matching } from '../actions/matchingUser/matchingUser';
 import CustomPopup from '../components/SkkuChat/CustomPopup';
@@ -244,6 +243,4 @@ const clickProfile = ({ profileOpen=true, setProfileOpen=null, matchingUserId=nu
     )
 }
 
-export default dynamic(() => Promise.resolve(clickProfile), {
-    ssr: false,
-});
+export default clickProfile;

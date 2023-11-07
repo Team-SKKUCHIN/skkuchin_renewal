@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import {ThemeProvider, CssBaseline, Typography, Button, Container, Grid, TextField} from '@mui/material';
 import theme from "../theme/theme";
-import dynamic from 'next/dynamic';
 
 const matchingComplete = () => {
 
@@ -61,6 +60,4 @@ const matchingComplete = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(matchingComplete), {
-    ssr: false,
-});
+export default matchingComplete;

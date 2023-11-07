@@ -9,7 +9,6 @@ import Image from 'next/image';
 import theme from '../theme/theme';
 import { delete_user, logout } from '../actions/auth/auth';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 
 const deleteUser = () => {
     const router = useRouter();
@@ -104,6 +103,4 @@ const deleteUser = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(deleteUser), {
-    ssr: false,
-});
+export default deleteUser;
