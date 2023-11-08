@@ -21,7 +21,7 @@ const dummyProfiles = [
         mbti: 'ENFP',
         keywords: ['일식', '음악'],
         description:
-            '성대 학우와 대화를 나누시려면 매칭 프로필을 등록해주세요 👀',
+            '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀',
     },
     {
         name: '김꾸친',
@@ -32,7 +32,7 @@ const dummyProfiles = [
         mbti: 'ISFJ',
         keywords: ['여행', '동아리'],
         description:
-            '성대 학우와 대화를 나누시려면 매칭 프로필을 등록해주세요 👀',
+            '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀',
     },
     {
         name: '웅이',
@@ -43,7 +43,7 @@ const dummyProfiles = [
         mbti: 'INTP',
         keywords: ['연극/뮤지컬', '카페'],
         description:
-            '성대 학우와 대화를 나누시려면 매칭 프로필을 등록해주세요 👀',
+            '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀',
     },
 
 ];
@@ -259,8 +259,8 @@ const Friends = () => {
                                 <Typography sx={{ fontSize:'13px', fontWeight: '500', whiteSpace: 'pre-wrap'}}>
                                     {
                                         user?.matching === false ?
-                                        '성대 학우와 대화를 나누시려면\n\n[마이페이지]에서\n매칭 ON/OFF 버튼을 켜주세요 👀' 
-                                        : '성대 학우와 대화를 나누시려면 매칭 프로필을 등록해주세요 👀'
+                                        '성대 학우와 채팅을 나누시려면\n\n[마이페이지]에서\n매칭 ON/OFF 버튼을 켜주세요 👀' 
+                                        : '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀'
                                     }
                                 </Typography>
                             </Grid>

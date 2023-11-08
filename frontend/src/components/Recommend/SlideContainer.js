@@ -1,7 +1,8 @@
 import { useCallback, useRef, useState } from 'react';
-import { food, starFilled } from '../../image/recommend';
+import { food } from '../../image/recommend';
 import Image from 'next/image';
 import Popup from './Popup';
+import styled from '@emotion/styled';
 
 const OpacityWrapper = ({ display, onClick }) => {
     return (
@@ -48,7 +49,7 @@ const Restaurant = ({ selectedPlace, places, setPopup }) => {
                 >
                     <div style={{ display: "flex", flexDirection: "column", alignContent: "center" }}>
                         <div style={{ margin: "auto 0" }}>
-                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "10px" }}>
                                 <h3
                                     style={{
                                         margin: "0 8px 0 0",
@@ -69,30 +70,31 @@ const Restaurant = ({ selectedPlace, places, setPopup }) => {
                                     {place.detailCategory}
                                 </h4>
                             </div>
-                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                                <div style={{ marginRight: "3px", paddingTop: "4px" }}>
-                                        <Image src={starFilled} height={16} width={16} layout='fixed' />
-                                </div>
+                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop: "10px" }}>
                                 <h4
                                     style={{
                                         margin: 0,
-                                        fontSize: "14px",
-                                        fontWeight: 700,
-                                    }}
-                                >
-                                    {place.rate === 0 ? '5.0' : place.rate.toFixed(1)}
-                                </h4>
-                                <div style={{ width: "1px", height: "12px", backgroundColor: "#E2E2E2", margin: "0 12px" }} />
-                                <h4
-                                    style={{
-                                        margin: 0,
-                                        fontSize: "14px",
+                                        fontSize: "12px",
                                         lineHeight: "17px",
                                         letterSpacing: "-0.5px",
                                     }}
                                 >
-                                    {place.gate ?? '정문'}에서 <span style={{ fontWeight: 700 }}>5분</span>
+                                    {place.detail_category ?? ''}
                                 </h4>
+                                <div style={{ width: "1px", height: "12px", backgroundColor: "#E2E2E2", margin: "0 6px" }} />
+                                <h4
+                                    style={{
+                                        margin: 0,
+                                        fontSize: "12px",
+                                        lineHeight: "17px",
+                                        letterSpacing: "-0.5px",
+                                    }}
+                                >
+                                    {place.gate ?? '정문'}
+                                </h4>
+                                <Button onClick={() => clickPlace(place)}>
+                                    더보기
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -212,9 +214,22 @@ const SlideContainer = ({ filteredPlaces }) => {
                     </div>
                 </div>
             </div>
-            {popup && <Popup selectedPlace={selectedPlace} setPopup={setPopup} />}
+            {popup && <Popup selectedPlace={selectedPlace.current} setPopup={setPopup} />}
         </>
     );
 };
 
 export default SlideContainer;
+
+const Button = styled.div`
+    margin-left: 12px;
+    font-size: 10px;
+    letter-spacing: -0.28px;
+    padding: 2px 5px;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background: #FFDF56;
+`

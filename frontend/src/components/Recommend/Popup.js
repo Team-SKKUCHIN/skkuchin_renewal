@@ -71,7 +71,7 @@ const Popup = ({ selectedPlace, setPopup }) => {
                             onClick={() => {
                                 setPopup(false);
                                 window.open("https://naver.me/535B8MZU", '_blank');
-                                // window.open(selectedPlace.current.url, '_blank');
+                                // window.open(selectedPlace.url, '_blank');
                             }}
                         >
                             <span

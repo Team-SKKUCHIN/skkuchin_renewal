@@ -145,7 +145,7 @@ public class DebeziumController {
 
         if (dto.getPayload().getOp().equals("c")) {
             String pushTitle = "스꾸친";
-            String pushMessage = "새로운 상대방이 대화를 원합니다!";
+            String pushMessage = "새로운 상대방이 채팅을 원합니다!";
 
             Subscription subscription = pushTokenService.toSubscription(user2, "chat");
 
@@ -165,7 +165,7 @@ public class DebeziumController {
                 dto.getPayload().getAfter().getResponse() == ResponseType.ACCEPT
             ) {
                 String pushTitle = "스꾸친";
-                String pushMessage = "대화가 성사되었습니다!";
+                String pushMessage = "밥약이 성사되었습니다!";
 
                 Subscription subscription = pushTokenService.toSubscription(user1, "chat");
 
