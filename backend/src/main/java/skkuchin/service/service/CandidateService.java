@@ -44,7 +44,7 @@ public class CandidateService {
         if (user.getMatching() == null) {
             throw new CustomRuntimeException("스꾸챗 프로필을 등록하여주시기 바랍니다");
         } else if (!user.getMatching()) {
-            throw new CustomRuntimeException("대화 활성화 버튼이 꺼져있습니다");
+            throw new CustomRuntimeException("매칭 활성화 버튼이 꺼져있습니다");
         }
 
         List<Candidate> candidates = candidateRepo.findByUserId(user.getId());

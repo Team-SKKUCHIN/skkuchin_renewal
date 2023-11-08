@@ -81,8 +81,7 @@ const clickProfile = ({ profileOpen=true, setProfileOpen=null, matchingUserId=nu
                     maxWidth="md"
                     style={{
                         display: profileOpen ? 'block' : 'none',
-                        position:'fixed', 
-                        zIndex:'10',
+                        position:'fixed',
                         padding:'14px 24px 5px',
                         overflow: "hidden",
                         height:'max-content',
@@ -94,12 +93,11 @@ const clickProfile = ({ profileOpen=true, setProfileOpen=null, matchingUserId=nu
                     <Card style={{
                         top: '18px',
                         height: '120%',
-                        zIndex: '4',
                         borderRadius: 0,
                         boxShadow: 'none',
                     }}>
                         <Grid container style={{justifyContent: 'space-between', alignItems: 'center'}}>
-                            <Grid sx={{width: '24px'}}>
+                            <Grid sx={{ width: '24px' }}>
                             </Grid>
                             <Grid>
                                 <Typography sx={{fontSize: '18px', fontWeight: 700, color: '#3C3C3C'}}>프로필</Typography>

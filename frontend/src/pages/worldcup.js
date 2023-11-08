@@ -663,7 +663,9 @@ const WorldCup = () => {
     }, [phase]);
 
     useEffect(() => {
-        const tempPlaces = places?.filter(place => isOn ? place.campus === "명륜" : place.campus === "율전")
+        const tempPlaces = places?.filter(place => {
+            return (isOn ? place.campus === "명륜" : place.campus === "율전") && place.category !== "카페";
+        });
         filteredPlaces.current = tempPlaces;
     }, [filteredPlaces, places, isOn]);
 

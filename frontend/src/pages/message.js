@@ -38,7 +38,7 @@ const MessagePage = () => {
                 
                         <Grid >
                             <Typography sx={{fontSize: '18px', fontWeight:'700', lineHeight: '28px', pr: '4px'}} color="#000000"  component="span">
-                                메시지
+                                스꾸챗
                             </Typography>
                         </Grid>
                     

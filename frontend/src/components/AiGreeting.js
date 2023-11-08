@@ -198,7 +198,7 @@ const AiGreeting = () => {
                 }}>
             <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth:"420px", padding:"15px 15px 0px 15px"}}>
                 <div style={{fontSize:"12px", paddingTop:"3px"}}>
-                    대화 활성화
+                    매칭 활성화
                 </div>
 
                 {/* 토글 스위치 */}
@@ -314,7 +314,7 @@ const AiGreeting = () => {
             <Dialog open={dialogOpen} onClose={handleDialogOpen}>
                 <DialogContent style={{width:'270px', height:'100px', padding:'29px 0px 0px 0px', marginBottom:'0px'}}>
                     <Typography style={{fontSize:'14px', color:'black', textAlign:'center', lineHeight:'22px'}} fontWeight={theme.typography.h1}>
-                    대화 기능을 이용하시려면<br/>
+                    매칭 기능을 이용하시려면<br/>
                     추가 프로필 등록이 필요해요!
                     </Typography>
                 </DialogContent>

@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { load_places } from '../actions/place/place';
 import { useLoadingLottie } from '../components/Recommend/useLoadingLottie';
 import AlertMessage from '../components/Alert';
+import Popup from '../components/Recommend/Popup';
 
 const SubTitle = ({ retry }) => (
     <div style={{ margin: screen.availHeight < 815 && retry ? 0 : "52px 0 8px" }}>
@@ -85,6 +86,7 @@ const Recommend = () => {
     const places = useSelector(state => state.place.allplaces);
 
     const [retry, setRetry] = useState(false);
+    const [popup, setPopup] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
     const [categoryButton, setCategoryButton] = useState("ALL");
     const [gateButton, setGateButton] = useState("ALL");
@@ -94,7 +96,7 @@ const Recommend = () => {
 
     const categoryButtons = [
         ["ALL", "한식", "중식", "양식"],
-        ["일식", "카페", "술집", "기타"]
+        ["일식", "술집", "기타"],
     ];
     const gateButtons = isOn ? ["ALL", "정문", "쪽문", "철문", "대학로"] : ["ALL", "정문", "쪽문", "후문", "기타"];
     
@@ -131,7 +133,9 @@ const Recommend = () => {
     useEffect(() => {
         if (places) {
             let tempPlaces = places;
-            tempPlaces = tempPlaces.filter(place => isOn ? place.campus === "명륜" : place.campus === "율전");
+            tempPlaces = places?.filter(place => {
+                return (isOn ? place.campus === "명륜" : place.campus === "율전") && place.category !== "카페";
+            });
 
             if (categoryButton !== "ALL") {
                 tempPlaces = tempPlaces.filter(place => place.category === categoryButton);
@@ -221,38 +225,59 @@ const Recommend = () => {
                                     {LottieView}
                                 </div>
                             :
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "center",
-                                        margin: "28px 0 8px",
-                                        padding: screen.availHeight < 815 ? "12px 0 10px" : "44px 0 40px",
-                                        borderRadius: "8px",
-                                        background: "#F2F2F2",
-                                    }}
-                                >
-                                    <Image
-                                        src={mainLogo}
-                                        width={screen.availHeight < 815 ? 71 : 87}
-                                        height={screen.availHeight < 815 ? 50 : 61}
-                                        layout='fixed'
-                                    />
-                                    <p
+                                <>
+                                    {retry && 
+                                        <p
+                                            style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                alignItems: "center",
+                                                margin: 0,
+                                                fontWeight: 700,
+                                                fontSize: "14px",
+                                                lineHeight: "28px",
+                                                textAlign: "center",
+                                            }}
+                                        >
+                                            자세히 보려면 꾸친이 클릭 ↓
+                                        </p>
+                                    }
+                                    <div
                                         style={{
-                                            marginTop: "16px",
-                                            marginBottom: 0,
-                                            fontSize: retry ? (screen.availHeight < 815 ? "25px" : "32px") : "14px",
-                                            lineHeight: retry ? "normal" : "17px",
-                                            letterSpacing: retry ? "-3px" : "-0.5px",
-                                            whiteSpace: "pre-wrap",
-                                            textAlign: "center",
-                                            fontWeight: retry ? 815 : 400,
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            marginTop: !retry && "28px",
+                                            marginBottom: "8px",
+                                            padding: screen.availHeight < 815 ? "12px 0 10px" : "44px 0 40px",
+                                            borderRadius: "8px",
+                                            background: "#F2F2F2",
+                                            cursor: randomPlace && "pointer",
                                         }}
+                                        onClick={() => randomPlace && setPopup(true)}
                                     >
-                                        {retry ? randomPlace.name : mainText}
-                                    </p>
-                                </div>
+                                        <Image
+                                            src={mainLogo}
+                                            width={screen.availHeight < 815 ? 71 : 87}
+                                            height={screen.availHeight < 815 ? 50 : 61}
+                                            layout='fixed'
+                                        />
+                                        <p
+                                            style={{
+                                                marginTop: "16px",
+                                                marginBottom: 0,
+                                                fontSize: retry ? (screen.availHeight < 815 ? "25px" : "32px") : "14px",
+                                                lineHeight: retry ? "normal" : "17px",
+                                                letterSpacing: retry ? "-3px" : "-0.5px",
+                                                whiteSpace: "pre-wrap",
+                                                textAlign: "center",
+                                                fontWeight: retry ? 815 : 400,
+                                            }}
+                                        >
+                                            {retry ? randomPlace.name : mainText}
+                                        </p>
+                                    </div>
+                                </>
                             }
                             <button
                                 style={{
@@ -278,6 +303,7 @@ const Recommend = () => {
                 {retry && !isRunning && filteredPlaces.length > 0 &&
                     <SlideContainer filteredPlaces={filteredPlaces} />
                 }
+                {popup && <Popup selectedPlace={randomPlace} setPopup={setPopup} />}
             </ThemeProvider>
         </RecommendWrapper>
     );
@@ -305,7 +331,7 @@ const OptionContainer = styled.div`
 const Options = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
 
     :nth-of-type(2) {
         margin-top: 4px;
