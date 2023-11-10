@@ -93,7 +93,7 @@ const Restaurant = ({ selectedPlace, places, setPopup }) => {
                                     {place.gate ?? '정문'}
                                 </h4>
                                 <Button onClick={() => clickPlace(place)}>
-                                    더보기
+                                    네이버 지도
                                 </Button>
                             </div>
                         </div>

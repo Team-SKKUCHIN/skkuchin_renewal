@@ -291,6 +291,7 @@ const PopupContainer = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 11;
 `;
 
 const PopupSubContainer = styled.div`

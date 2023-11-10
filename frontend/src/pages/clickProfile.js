@@ -12,6 +12,7 @@ import { clear_matching } from '../actions/matchingUser/matchingUser';
 import CustomPopup from '../components/SkkuChat/CustomPopup';
 import CustomPopupNoBtn from '../components/SkkuChat/CustomPopupNoBtn';
 import { request_chat } from '../actions/chat/chatRoom';
+import { Header } from '../components/Header';
 
 const clickProfile = ({ profileOpen=true, setProfileOpen=null, matchingUserId=null }) => {
 
@@ -77,97 +78,69 @@ const clickProfile = ({ profileOpen=true, setProfileOpen=null, matchingUserId=nu
     return (
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
-                <Container
-                    maxWidth="md"
-                    style={{
-                        display: profileOpen ? 'block' : 'none',
-                        position:'fixed',
-                        padding:'14px 24px 5px',
-                        overflow: "hidden",
-                        height:'max-content',
-                        maxWidth:'420px',
-                        top: '0',
-                        backgroundColor: '#fff'
-                    }}
-                >
-                    <Card style={{
-                        top: '18px',
-                        height: '120%',
-                        borderRadius: 0,
-                        boxShadow: 'none',
-                    }}>
-                        <Grid container style={{justifyContent: 'space-between', alignItems: 'center'}}>
-                            <Grid sx={{ width: '24px' }}>
-                            </Grid>
-                            <Grid>
-                                <Typography sx={{fontSize: '18px', fontWeight: 700, color: '#3C3C3C'}}>프로필</Typography>
-                            </Grid>
-                            <Grid onClick={handleBack}>
-                                <Image src={close} width={24} height={24} name='search' layout='fixed' style={{ cursor: "pointer" }} />
-                            </Grid>
-                        </Grid>
-                    </Card>
-                </Container>
-
+                <Header
+                    title="프로필"
+                    handleClose={handleBack}
+                    display={profileOpen ? 'flex' : 'none'}
+                />
                 <div style={{
                     display: profileOpen ? 'flex' : 'none',
                     padding: '0',
-                    margin:'48px 24px 0',
+                    margin:'63px 24px',
                     flexDirection: 'column',
                 }}>
-                
-                {matchingUser !== null ?
-                    <>
-                        <Grid container sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: '10px 0'}}>
-                            <Grid item sx={{mr: '18px'}}>{displayMBTI(matchingUser.mbti, 80, 80)}</Grid>
-                            <Grid item sx={{flexGrow: 1, height: '80px'}}>
-                                <Typography sx={{p: '10px 0px', fontSize: '16px', fontWeight: '700'}}>{ matchingUser.nickname}</Typography>
-                                <Grid item sx={{display: 'flex', fontSize: '12px', alignItems: 'center', fontWeight: 400, color: '#3C3C3C'}}>
-                                    {
-                                        matchingUser !== null && 
-                                        matchingUser.campus == '명륜' ?
-                                        <Typography sx={{width: 'max-content',color: '#FFAC0B', backgroundColor: '#FFFCE4', fontSize: '12px', fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px'}}>{matchingUser.campus}</Typography>
-                                        : 
-                                        <Typography sx={{color: '#58C85A', backgroundColor: '#DCF8DB', fontSize: '12px',fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px'}}>{matchingUser.campus}</Typography>
-                                    }
-                                    <Grid item sx={{flexGrow: 1, fontSize: '12px'}}>
-                                        {matchingUser.major}/
-                                        {matchingUser.student_id}학번/
-                                        {matchingUser.gender?.charAt(0)}
+                    {matchingUser !== null &&
+                        <>
+                            <Grid container sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: '10px 0'}}>
+                                <Grid item sx={{mr: '18px'}}>{displayMBTI(matchingUser.mbti, 80, 80)}</Grid>
+                                <Grid item sx={{flexGrow: 1, height: '80px'}}>
+                                    <Typography sx={{p: '10px 0px', fontSize: '16px', fontWeight: '700'}}>{ matchingUser.nickname}</Typography>
+                                    <Grid item sx={{display: 'flex', fontSize: '12px', alignItems: 'center', fontWeight: 400, color: '#3C3C3C'}}>
+                                        {
+                                            matchingUser !== null && 
+                                            matchingUser.campus == '명륜' ?
+                                            <Typography sx={{width: 'max-content',color: '#FFAC0B', backgroundColor: '#FFFCE4', fontSize: '12px', fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px'}}>{matchingUser.campus}</Typography>
+                                            : 
+                                            <Typography sx={{color: '#58C85A', backgroundColor: '#DCF8DB', fontSize: '12px',fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px'}}>{matchingUser.campus}</Typography>
+                                        }
+                                        <Grid item sx={{flexGrow: 1, fontSize: '12px'}}>
+                                            {matchingUser.major}/
+                                            {matchingUser.student_id}학번/
+                                            {matchingUser.gender?.charAt(0)}
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                        <Box sx={{ mt: '20px' }}>
-                            <Typography sx={{ fontSize: '12px', color: '#3C3C3C', fontWeight: 700, pl: '4px', mb: '8px' }}>MBTI</Typography>
-                            <MBTITypes types={['E', 'N', 'F', 'P', 'I', 'S', 'T', 'J']} matchingUser={matchingUser} />
-                        </Box>
+                            <Box sx={{ mt: '20px' }}>
+                                <Typography sx={{ fontSize: '12px', color: '#3C3C3C', fontWeight: 700, pl: '4px', mb: '8px' }}>MBTI</Typography>
+                                <MBTITypes types={['E', 'N', 'F', 'P', 'I', 'S', 'T', 'J']} matchingUser={matchingUser} />
+                            </Box>
 
-                        <Box>
-                            <Typography sx={{fontSize: '12px', color: '#3C3C3C', fontWeight: 700, p: '16px 4px 8px'}}>한 줄 자기소개</Typography>
-                            <Typography sx={{ fontSize:'13px', fontWeight: '500', p: '12px 18px', borderRadius: '8px', border: '1px solid #E2E2E2'}}>
-                                {matchingUser.introduction}
-                            </Typography>
-                        </Box>
+                            <Box>
+                                <Typography sx={{fontSize: '12px', color: '#3C3C3C', fontWeight: 700, p: '16px 4px 8px'}}>한 줄 자기소개</Typography>
+                                <Typography sx={{ fontSize:'13px', fontWeight: '500', p: '12px 18px', borderRadius: '8px', border: '1px solid #E2E2E2'}}>
+                                    {matchingUser.introduction}
+                                </Typography>
+                            </Box>
 
-                        <Box sx={{ mt: '30px', mb: '100px' }}>
-                            <Typography sx={{ fontSize: '16px', color: '#3C3C3C', fontWeight: 800}}>관심사 태그</Typography>
-                            {keywordCategories && keywordCategories.map((category, index) => (
-                                <div key={index}>
-                                    <Typography sx={{ fontSize: '16px', color: '#3C3C3C', fontWeight: 700, pl: '4px', mt: '20px' }}>{category}</Typography>
-                                    <Grid container sx={{ display: 'flex', columnGap: '8px' }}>
-                                        {matchingUser.keywords[category] && matchingUser.keywords[category].map((keyword, index) => (
-                                            <Grid item key={index} sx={{ backgroundColor: '#FFFCE4', color: '#3C3C3C', fontSize: '14px', fontWeight: 400, p: '4.5px 18px', m: '11px 0px 0px',borderRadius: '100px', whiteSpace: 'nowrap', border: '1px solid #FFCE00' }}>
-                                                {keyword}
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                </div>
-                            ))}
-                        </Box>
-                    </>
-                    : null}
-                    </div>
+                            <Box sx={{ mt: '30px', mb: '100px' }}>
+                                <Typography sx={{ fontSize: '16px', color: '#3C3C3C', fontWeight: 800}}>관심사 태그</Typography>
+                                {keywordCategories && keywordCategories.map((category, index) => (
+                                    <div key={index}>
+                                        <Typography sx={{ fontSize: '16px', color: '#3C3C3C', fontWeight: 700, pl: '4px', mt: '20px' }}>{category}</Typography>
+                                        <Grid container sx={{ display: 'flex', columnGap: '8px' }}>
+                                            {matchingUser.keywords[category] && matchingUser.keywords[category].map((keyword, index) => (
+                                                <Grid item key={index} sx={{ backgroundColor: '#FFFCE4', color: '#3C3C3C', fontSize: '14px', fontWeight: 400, p: '4.5px 18px', m: '11px 0px 0px',borderRadius: '100px', whiteSpace: 'nowrap', border: '1px solid #FFCE00' }}>
+                                                    {keyword}
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    </div>
+                                ))}
+                            </Box>
+                        </>
+                    }
+                </div>
                 { matchingUser && 
                     <>
                         <div

@@ -67,6 +67,7 @@ public class WorldcupService {
                     Collections.shuffle(worldcups);
 
                     worldcups = worldcups.stream()
+                            .filter(worldcup -> Objects.nonNull(worldcup.getUser()))
                             .sorted(Comparator.comparing(worldcup -> worldcup.getUser().getId()))
                             .distinct()
                             .limit(3)
@@ -126,6 +127,7 @@ public class WorldcupService {
         Collections.shuffle(worldcups);
 
         worldcups = worldcups.stream()
+                .filter(worldcup -> Objects.nonNull(worldcup.getUser()))
                 .sorted(Comparator.comparing(worldcup -> worldcup.getUser().getId()))
                 .distinct()
                 .limit(3)
