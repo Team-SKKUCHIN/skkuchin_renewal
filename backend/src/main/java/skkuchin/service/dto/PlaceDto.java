@@ -161,6 +161,7 @@ public class PlaceDto {
             this.id = place.getId();
             this.name = place.getName();
             this.category = place.getCategory();
+            this.campus = place.getCampus();
         }
     }
 }
