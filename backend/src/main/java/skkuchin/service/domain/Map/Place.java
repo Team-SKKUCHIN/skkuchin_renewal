@@ -50,6 +50,8 @@ public class Place {
 
     private String discountContent;
 
+    private String link;
+
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 

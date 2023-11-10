@@ -49,6 +49,7 @@ public class WorldcupDto {
         private String detailCategory;
         private Campus campus;
         private Gate gate;
+        private String link;
         private List<String> images;
         private Float winningRate;
         private List<MatchingUserDto.Response> users;
@@ -61,6 +62,7 @@ public class WorldcupDto {
             this.detailCategory = place.getDetailCategory();
             this.campus = place.getCampus();
             this.gate = place.getGate();
+            this.link = place.getLink();
             this.images = images.stream().map(image -> image.getUrl()).collect(Collectors.toList());
             this.winningRate = winningRate;
             this.users = matchingUsers;

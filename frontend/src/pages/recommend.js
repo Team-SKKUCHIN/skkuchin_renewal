@@ -12,9 +12,10 @@ import { load_places } from '../actions/place/place';
 import { useLoadingLottie } from '../components/Recommend/useLoadingLottie';
 import AlertMessage from '../components/Alert';
 import Popup from '../components/Recommend/Popup';
+import { Header } from '../components/Header';
 
 const SubTitle = ({ retry }) => (
-    <div style={{ margin: screen.availHeight < 815 && retry ? 0 : "52px 0 8px" }}>
+    <div style={{ margin: screen.availHeight < 815 && retry ? 0 : "42px 0 8px" }}>
         <span style={{ 
             color: "#9E9E9E",
             fontSize: "16px",
@@ -36,57 +37,16 @@ const MainTitle = () => (
     </h1>
 );
 
-const Header = () => {
-    const router = useRouter();
-
-    const handleClose = useCallback((e) => {
-        router.push('/');
-    }, [])
-
-    return (
-        <div
-            style={{
-                margin: "24px 0 5px",
-                height: "48px",
-                width: "100%",
-                position: "relative",
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-            }}>
-            <div style={{ position: 'absolute', left: 0 }}>
-                <Image
-                    src={backArrow}
-                    name='back'
-                    onClick={handleClose}
-                    layout='fixed'
-                    width={24}
-                    height={24}
-                    style={{ cursor: 'pointer' }}
-                />
-            </div>
-            <span
-                style={{
-                    textAlign: 'center',
-                    fontSize: '18px',
-                    fontWeight: 700,
-                    letterSpacing: '-0.36px',
-                }}
-            >
-                오늘 뭐 먹지?
-            </span>
-        </div>
-    );
-};
-
 const Recommend = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
     const { LottieView, getNextLottie, setSpeed, duration } = useLoadingLottie();
     const { Toggle, isOn } = useToggle();
     const places = useSelector(state => state.place.allplaces);
 
     const [retry, setRetry] = useState(false);
     const [popup, setPopup] = useState(false);
+    const [textOn, setTextOn] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
     const [categoryButton, setCategoryButton] = useState("ALL");
     const [gateButton, setGateButton] = useState("ALL");
@@ -148,19 +108,22 @@ const Recommend = () => {
     }, [isOn, categoryButton, gateButton, places])
 
     useEffect(() => {
-        let timeoutId;
-
         if (isRunning) {
             setSpeed();
-            timeoutId = setTimeout(() => {
+            const timeoutId = setTimeout(() => {
                 getRandomPlace();
                 setIsRunning(false);
                 getNextLottie();
             }, duration);
-        }
 
-        return () => {
-            clearTimeout(timeoutId);
+            return () => clearTimeout(timeoutId);
+        } else {
+            setTextOn(true);
+            const timeoutId = setTimeout(() => {
+                setTextOn(false);
+            }, 2000);
+
+            return () => clearTimeout(timeoutId);
         }
     }, [isRunning])
 
@@ -171,8 +134,8 @@ const Recommend = () => {
                 <AlertMessage alertOpen={alertOpen} setAlertOpen={setAlertOpen} alertMessage="존재하는 식당이 없습니다!" />
                 <div style={{ position: "fixed", left: 0, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
                     <div style={{ width: "100%", maxWidth: "420px" }}>
-                        <div style={{ margin: "0 24px", position: "relative", overflow: "hidden" }}>
-                            <Header />
+                        <Header title="오늘 뭐 먹지?" handleBack={() => router.push('/')} />
+                        <div style={{ margin: "63px 24px 0", position: "relative", overflow: "hidden" }}>
                             <SubTitle retry={retry} />
                             <div
                                 style={{ 
@@ -226,7 +189,7 @@ const Recommend = () => {
                                 </div>
                             :
                                 <>
-                                    {retry && 
+                                    {retry && textOn &&
                                         <p
                                             style={{
                                                 display: "flex",
@@ -237,9 +200,10 @@ const Recommend = () => {
                                                 fontSize: "14px",
                                                 lineHeight: "28px",
                                                 textAlign: "center",
+                                                color: "#9E9E9E"
                                             }}
                                         >
-                                            자세히 보려면 꾸친이 클릭 ↓
+                                            자세한 정보는 꾸친이 클릭 ↓
                                         </p>
                                     }
                                     <div
@@ -247,7 +211,7 @@ const Recommend = () => {
                                             display: "flex",
                                             flexDirection: "column",
                                             alignItems: "center",
-                                            marginTop: !retry && "28px",
+                                            marginTop: (!retry || !textOn) && "28px",
                                             marginBottom: "8px",
                                             padding: screen.availHeight < 815 ? "12px 0 10px" : "44px 0 40px",
                                             borderRadius: "8px",
@@ -274,7 +238,7 @@ const Recommend = () => {
                                                 fontWeight: retry ? 815 : 400,
                                             }}
                                         >
-                                            {retry ? randomPlace.name : mainText}
+                                            {retry ? randomPlace?.name : mainText}
                                         </p>
                                     </div>
                                 </>

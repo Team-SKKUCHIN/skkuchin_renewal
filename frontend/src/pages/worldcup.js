@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import Image from 'next/image';
 import theme from '../theme/theme';
-import { backArrow, food, mainLogo } from '../image/recommend';
+import { food, mainLogo } from '../image/recommend';
 import { useToggle } from '../components/Recommend/useToggle';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
@@ -15,9 +15,11 @@ import { downArrow, upArrow } from '../image/worldcup';
 import { mbtiDict } from '../image/mbti/profile';
 import WorldcupFriend from '../components/Worldcup/WorldcupFriend';
 import ClickProfile from './clickProfile';
+import { Header } from "../components/Header";
+import Popup from "../components/Recommend/Popup";
 
 const SubTitle = () => (
-    <div style={{ margin: "52px 0 8px" }}>
+    <div style={{ margin: "42px 0 8px" }}>
         <span style={{ 
             color: "#9E9E9E",
             fontSize: "16px",
@@ -38,51 +40,6 @@ const MainTitle = () => (
         음식점 월드컵
     </h1>
 );
-
-const Header = () => {
-    const router = useRouter();
-
-    const handleClose = useCallback((e) => {
-        router.push('/');
-    }, [])
-
-    return (
-        <div
-            style={{
-                margin: "24px 0 5px",
-                height: "48px",
-                width: "100%",
-                position: "relative",
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-            }}>
-            <div style={{ position: 'absolute', left: 0 }}>
-                <Image
-                    src={backArrow}
-                    name='back'
-                    onClick={handleClose}
-                    layout='fixed'
-                    width={24}
-                    height={24}
-                    style={{ cursor: 'pointer' }}
-                />
-            </div>
-            <span
-                style={{
-                    textAlign: 'center',
-                    fontSize: '18px',
-                    fontWeight: 700,
-                    letterSpacing: '-0.36px',
-                }}
-            >
-                음식점 월드컵
-            </span>
-        </div>
-    );
-};
-
-
 
 const StageSelect = ({ round, setRound, startGame }) => {
     const stages = [16, 8, 4, 2];
@@ -264,20 +221,36 @@ const MainStage = ({ round, setRound, gameNum, setGameNum, pickPlace, getNextGam
     );
 };
 
-const Finish = ({ clickProfile, getWinner, phase, setPhase }) => {
+const Finish = ({
+    clickProfile,
+    getWinner,
+    phase,
+    selectedPlace,
+    setPlacePopup,
+    setPhase,
+}) => {
     const dispatch = useDispatch();
-    const [popup, setPopup] = useState(true);
+    const [popup, setPopup] = useState(false);
     const start = useRef(false);
     const user = useSelector(state => state.auth.user);
     const userId = user ? user.id : null;
     const winner = getWinner();
+
+    const clickPlace = useCallback((place) => {
+        selectedPlace.current = place;
+        setPlacePopup(true);
+    }, []);
 
     useEffect(() => {
         if (!start.current) {
             dispatch(enroll_worldcup(winner.id, userId));
 
             if (!popup) {
-                setPopup(true);
+                const timeId = setTimeout(() => {
+                    setPopup(true);
+                }, 2000);
+
+                return () => clearTimeout(timeId);
             }
 
             start.current = true;
@@ -294,7 +267,15 @@ const Finish = ({ clickProfile, getWinner, phase, setPhase }) => {
                     margin: screen.availHeight < 815 ? "22px 0 20px" : "122px 0 110px",
                 }}
             >
-                <div style={{ position: "relative", width: "100%", height: "200px" }}>
+                <div
+                    style={{
+                        position: "relative",
+                        width: "100%",
+                        height: "200px",
+                        cursor: "pointer",
+                    }}
+                    onClick={() => clickPlace(winner)}
+                >
                     <Image
                         src={winner.images[0] ?? food}
                         layout='fill'
@@ -482,7 +463,12 @@ const DropDown = ({ worldcup, setPopup, selectedPlace, selectedUser }) => {
     );
 };
 
-const Rank = ({ clickProfile, phase }) => {
+const Rank = ({
+    clickProfile,
+    selectedPlacePopup,
+    setPlacePopup,
+    phase,
+}) => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const worldcups = useSelector(state => state.worldcup.worldcup);
     const dispatch = useDispatch();
@@ -490,6 +476,11 @@ const Rank = ({ clickProfile, phase }) => {
     const selectedPlace = useRef(null);
     const selectedUser = useRef(null);
     
+    const clickPlace = useCallback((place) => {
+        selectedPlacePopup.current = place;
+        setPlacePopup(true);
+    }, []);
+
     useEffect(() => {
         if (isAuthenticated) {
             dispatch(load_user_worldcups());
@@ -541,7 +532,9 @@ const Rank = ({ clickProfile, phase }) => {
                                         borderRadius: "36px",
                                         overflow: 'hidden',
                                         marginRight: "8px",
+                                        cursor: "pointer",
                                     }}
+                                    onClick={() => clickPlace(worldcup)}
                                 >
                                     <Image
                                         layout="fill"
@@ -641,11 +634,14 @@ const Rank = ({ clickProfile, phase }) => {
 
 const WorldCup = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
     const { setGame, pickPlace, getNextGame, getWinner } = useWorldcup();
     const { Toggle, isOn } = useToggle();
     const places = useSelector(state => state.place.allplaces);
     const filteredPlaces = useRef(null);
     const matchingUserId = useRef(null);
+    const selectedPlace = useRef(null);
+    const [popup, setPopup] = useState(false);
     const [round, setRound] = useState(16);
     const [gameNum, setGameNum] = useState(0);
     const [phase, setPhase] = useState('ready');
@@ -686,56 +682,64 @@ const WorldCup = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
-            <div style={{ margin: "0 24px", display: profileOpen ? 'none' : 'block' }}>
-                <Header />
-                <SubTitle />
-                <div
-                    style={{ 
-                        marginBottom: "52px",
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
-                    <MainTitle />
-                    {phase === 'ready' && <Toggle />}
+                <Header title="음식점 월드컵" handleBack={() => router.push('/')} />
+                <div style={{ margin: "63px 24px 0", overflow: "hidden", display: profileOpen ? 'none' : 'block' }}>
+                    <SubTitle />
+                    <div
+                        style={{ 
+                            marginBottom: "52px",
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                        }}
+                    >
+                        <MainTitle />
+                        {phase === 'ready' && <Toggle />}
+                    </div>
+                    {phase === 'ready' && 
+                        <StageSelect
+                            round={round}
+                            setRound={setRound}
+                            startGame={startGame}
+                        />
+                    }
+                    {phase === 'start' && 
+                        <MainStage
+                            round={round}
+                            setRound={setRound}
+                            gameNum={gameNum}
+                            setGameNum={setGameNum}
+                            pickPlace={pickPlace}
+                            getNextGame={getNextGame}
+                            setPhase={setPhase}
+                        />
+                    }
+                    {phase === 'finish' && 
+                        <Finish
+                            clickProfile={clickProfile}
+                            getWinner={getWinner}
+                            phase={phase}
+                            selectedPlace={selectedPlace}
+                            setPlacePopup={setPopup}
+                            setPhase={setPhase}
+                        />
+                    }
+                    {phase === 'rank' && 
+                        <Rank
+                            clickProfile={clickProfile}
+                            selectedPlacePopup={selectedPlace}
+                            setPlacePopup={setPopup}
+                            phase={phase}
+                        />
+                    }
                 </div>
-                {phase === 'ready' && 
-                    <StageSelect
-                        round={round}
-                        setRound={setRound}
-                        startGame={startGame}
-                    />
-                }
-                {phase === 'start' && 
-                    <MainStage
-                        round={round}
-                        setRound={setRound}
-                        gameNum={gameNum}
-                        setGameNum={setGameNum}
-                        pickPlace={pickPlace}
-                        getNextGame={getNextGame}
-                        setPhase={setPhase}
-                    />
-                }
-                {phase === 'finish' && 
-                    <Finish
-                        clickProfile={clickProfile}
-                        getWinner={getWinner}
-                        phase={phase}
-                        setPhase={setPhase}
-                    />
-                }
-                {phase === 'rank' && 
-                    <Rank clickProfile={clickProfile} phase={phase} />
-                }
-            </div>
             <ClickProfile
                 profileOpen={profileOpen}
                 setProfileOpen={setProfileOpen}
                 matchingUserId={matchingUserId.current}
             />
+            {popup && <Popup selectedPlace={selectedPlace.current} setPopup={setPopup} />}
         </ThemeProvider>
     );
 };
