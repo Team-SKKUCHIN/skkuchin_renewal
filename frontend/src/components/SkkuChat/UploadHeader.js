@@ -16,14 +16,14 @@ const UploadHeader = ({ onBackClick, onCompleteClick, isValidForm, isReport }) =
       }}
     >
       <Grid container style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-        <Grid onClick={onBackClick} sx={{mr: '8px'}}>
+        <Grid onClick={onBackClick} sx={{ mr: '8px', cursor: 'pointer' }}>
           <Image src={close} width={24} height={24} name='close' layout='fixed' />
         </Grid>
         <Grid>
           <Typography sx={{ fontSize: '18px', fontWeight: 700, color: '#3C3C3C' }}>{isReport ? '신고하기' : '글쓰기'}</Typography>
         </Grid>
-        <Grid>
-          <IconButton onClick={onCompleteClick} sx={{p: 0}} disabled={!isValidForm}>
+        <Grid sx={{ cursor: 'pointer' }}>
+          <IconButton onClick={onCompleteClick} sx={{ p: 0 }} disabled={!isValidForm}>
             <Typography sx={{ fontSize: '18px', fontWeight: 700, color: isValidForm ? '#FFCE00' : '#BABABA', p: 0 }}>완료</Typography>
           </IconButton>
         </Grid>

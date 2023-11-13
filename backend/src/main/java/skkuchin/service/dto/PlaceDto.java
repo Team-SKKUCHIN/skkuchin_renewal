@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
+
 import skkuchin.service.domain.Map.*;
 
 import javax.validation.constraints.NotBlank;
@@ -142,10 +143,11 @@ public class PlaceDto {
             this.reviewCount = reviews.stream().count();
             this.rate = Math.round(
                     reviews
-                    .stream()
-                    .mapToDouble(review -> review.getRate())
-                    .average()
-                    .orElse(0.0)*10)/10.0;
+                            .stream()
+                            .mapToDouble(review -> review.getRate())
+                            .average()
+                            .orElse(0.0) * 10)
+                    / 10.0;
             this.tags = tags.stream().map(tag -> tag.getName()).collect(Collectors.toList());
         }
     }

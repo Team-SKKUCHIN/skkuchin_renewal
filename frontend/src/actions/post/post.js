@@ -32,7 +32,6 @@ export const load_post = (postId, callback) => async dispatch => {
             method: 'GET',
             headers: {
                 'Accept' : 'application/json',
-                'Content-Type': 'application/json',
                 'Authorization' : `Bearer ${access}`
             }
         });
@@ -75,7 +74,6 @@ export const load_all_posts = (callback) => async dispatch => {
             method: 'GET',
             headers: {
                 'Accept' : 'application/json',
-                'Content-Type': 'application/json',
                 'Authorization' : `Bearer ${access}`
             }
         });
@@ -115,7 +113,6 @@ export const load_my_posts = (userId, callback) => async dispatch => {
             method: 'GET',
             headers: {
                 'Accept' : 'application/json',
-                'Content-Type': 'application/json',
                 'Authorization' : `Bearer ${access}`
             }
         });
@@ -155,7 +152,6 @@ export const load_fav_posts = (callback) => async dispatch => {
             method: 'GET',
             headers: {
                 'Accept' : 'application/json',
-                'Content-Type': 'application/json',
                 'Authorization' : `Bearer ${access}`
             }
         });
@@ -186,23 +182,32 @@ export const load_fav_posts = (callback) => async dispatch => {
     }
 }
 
-export const enroll_post = (title, content, article_type, anonymous, callback) => async dispatch => {
+export const enroll_post = (title, content, article_type, anonymous, images, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
 
-    const body = JSON.stringify({
-        title, content, article_type, anonymous
-    });
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('article_type', article_type);
+    formData.append('anonymous', anonymous);
+
+    if (images && images.length > 0) {
+        for (const image of images) {
+            formData.append('images', image);
+        }
+    } else {
+        formData.append('images', new File([""], { type: 'image/png' }));
+    }
 
     try {
         const res = await fetch(`${API_URL}/api/article`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${access}`
             },
-            body: body
+            body: formData
         });
 
         const apiRes = await res.json();
@@ -228,23 +233,40 @@ export const enroll_post = (title, content, article_type, anonymous, callback) =
     }
 }
 
-export const modify_post = (article_id, title, content, article_type, anonymous, callback) => async dispatch => {
+export const modify_post = (article_id, title, content, article_type, anonymous, urls, images, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
     
-    const body = JSON.stringify({
-        title, content, article_type, anonymous
-    });
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('article_type', article_type);
+    formData.append('anonymous', anonymous);
 
+    if (images && images.length > 0) {
+        for (const image of images) {
+            formData.append('images', image);
+        }
+    } else {
+        formData.append('images', new File([""], { type: 'image/png' }));
+    }
+
+    if (urls && urls.length > 0) {
+        for (const url of urls) {
+            formData.append('urls', url);
+        }
+    } else {
+        formData.append('urls', '');
+    }
+    
     try {
         const res = await fetch(`${API_URL}/api/article/${article_id}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${access}`,
-                'Content-Type': 'application/json'
             },
-            body: body
+            body: formData
         });
 
         const apiRes = await res.json();
@@ -274,8 +296,6 @@ export const modify_post = (article_id, title, content, article_type, anonymous,
 export const delete_post = (article_id, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
-
-    console.log("delete_post", article_id);
     
     try {
         const res = await fetch(`${API_URL}/api/article/${article_id}`, {
@@ -318,7 +338,6 @@ export const search_posts_by_tag = (tag, callback) => async dispatch => {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${access}`
             },
         });
@@ -358,7 +377,6 @@ export const search_posts_by_keyword = (keyword, callback)=> async dispatch => {
             headers: {
                 'Accept' : 'application/json',
                 'Authorization' : `Bearer ${access}`,
-                'Content-Type': 'application/json'
             }
         });
 
