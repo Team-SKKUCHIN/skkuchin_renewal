@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import GoLogin from '../GoLogin';
 
 // id, article_type, title, content, user_id, nickname, user_image, display_time, article_like_count, comment_count
-const CommunityItem = ({ id, title, content, article_like_count, comment_count, display_time, image }) => {
+const CommunityItem = ({ id, title, content, article_like_count, comment_count, display_time, images }) => {
     const router = useRouter();
 
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
@@ -24,7 +24,10 @@ const CommunityItem = ({ id, title, content, article_like_count, comment_count, 
     return (
         <>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
-            <Box onClick={handleClick} sx={{ display: 'flex', alignItems: 'center', width: '100%', p: '13px 0px', borderBottom: '1px solid #E2E2E2'}}>
+            <Box
+                onClick={handleClick}
+                sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', width: '100%', p: '13px 0px', borderBottom: '1px solid #E2E2E2'}}
+            >
                 <Box sx={{ flexGrow: 1 }}>
                     <Typography sx={{fontSize: '14px', fontWeight: 800, color: '#3C3C3C'}}>{title}</Typography>
                     <Typography sx={{p:' 8px 0px', fontSize: '14px', fontWeight: 400, color: '#3C3C3C', textOverflow: 'ellipsis'}}>
@@ -51,9 +54,9 @@ const CommunityItem = ({ id, title, content, article_like_count, comment_count, 
                     </Grid>
                     </Grid>
                 </Box>
-                {image && (
+                {images?.length > 0 && (
                     <Box sx={{pl: '15px'}}>
-                        <img src={image} alt="" width={75} height={75} style={{borderRadius: '20px'}}/>
+                        <img src={images[0]} alt="" width={75} height={75} style={{borderRadius: '20px'}}/>
                     </Box>
                 )}
             </Box>

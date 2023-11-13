@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { modify_post, load_all_posts } from '../actions/post/post';
+import removeBtn from '../image/close.png';
 
 const tagToArticleType = {
     "맛집 추천해요": "WHAT_TO_EAT",
@@ -20,7 +21,7 @@ const ModifyPost = () => {
     const [content, setContent] = useState('');
     const [selectedTag, setSelectedTag] = useState(null);
     const [isAnonymous, setIsAnonymous] = useState(null);
-
+    const [previewImages, setPreviewImages] = useState([]);
     const [images, setImages] = useState([]);
 
     const post = useSelector(state => state.post.post);
@@ -46,14 +47,17 @@ const ModifyPost = () => {
 
     const onChangeImages = (e) => {
         const fileArray = Array.from(e.target.files);
+        setPreviewImages([...previewImages, ...fileArray.map((file) => URL.createObjectURL(file))]);
         setImages(fileArray);
-    
-        const imagePreviews = fileArray.map((file) => URL.createObjectURL(file));
-        setPreviewImages(imagePreviews);
-    };
-        
-    const [previewImages, setPreviewImages] = useState([]);
 
+    };
+
+    const handleImageRemove = (index) => {
+        const newPreviewImages = [...previewImages];
+        newPreviewImages.splice(index, 1);
+        setPreviewImages(newPreviewImages);
+      };
+        
     const handleAnonymousClick = () => {
         setIsAnonymous(!isAnonymous);
     };
@@ -73,7 +77,7 @@ const ModifyPost = () => {
     const handleModifyClick = () => {
         const selectedArticleType = tagToArticleType[selectedTag];
 
-        dispatch(modify_post(post[0].id, title, content, selectedArticleType, isAnonymous, ([result, message]) => {
+        dispatch(modify_post(post[0].id, title, content, selectedArticleType, isAnonymous, previewImages, images, ([result, message]) => {
             if (result) {
                 console.log("게시글 수정 완료!!")
                 dispatch(load_all_posts());
@@ -211,9 +215,16 @@ const ModifyPost = () => {
                                             width: '100%',
                                             height: '100%', 
                                             objectFit: 'cover',
-                                        }} />
+                                        }}
+                                    />
+                                    <Button type="button" onClick={() => handleImageRemove(index)} style={{ position: 'absolute', top: '0', right: '3px', padding: '10px', justifyContent: 'right' }}>
+                                        <Image src={removeBtn} width={25} height={25} layout='fixed'
+                                            style={{
+                                                backgroundColor:'white',
+                                                borderRadius:'20px'
+                                            }}/>
+                                    </Button>
                                 </Grid>
-                                
                             ))}
                         </Grid>
                     </Grid>

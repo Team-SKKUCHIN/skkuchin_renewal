@@ -49,8 +49,7 @@ public class PlaceService {
                         place,
                         imageRepo.findByPlace(place),
                         reviewRepo.findByPlace(place),
-                        getTop3TagsByPlace(place)
-                ))
+                        getTop3TagsByPlace(place)))
                 .collect(Collectors.toList());
     }
 
@@ -128,7 +127,8 @@ public class PlaceService {
         // s3에 업로드 후 newImages 배열에 url 정보 저장
         for (MultipartFile image : dto.getImages()) {
             if (!image.isEmpty()) {
-                String url = s3Service.uploadObject(image, CATEGORY, existingPlace.getCampus().name(), existingPlace.getName());
+                String url = s3Service.uploadObject(image, CATEGORY, existingPlace.getCampus().name(),
+                        existingPlace.getName());
                 Image newImage = Image.builder().place(existingPlace).url(url).build();
                 newImages.add(newImage);
             }
@@ -260,9 +260,9 @@ public class PlaceService {
             // 검색어
         } else if (tags.size() == 0 && keywordsList.size() == 1 && !keywordsList.contains("학생 할인")) {
             for (Place place : places) {
-                if (
-                        place.getCategory().name().toLowerCase().contains(keyword1)
-                                || (place.getDetailCategory() != null && place.getDetailCategory().toLowerCase().contains(keyword1)
+                if (place.getCategory().name().toLowerCase().contains(keyword1)
+                        || (place.getDetailCategory() != null
+                                && place.getDetailCategory().toLowerCase().contains(keyword1)
                                 || (place.getGate() != null && place.getGate().name().toLowerCase().contains(keyword1))
                                 || place.getName().toLowerCase().contains(keyword1))) {
                     matchingPlaces.add(place);
@@ -271,14 +271,13 @@ public class PlaceService {
         }
 
         return matchingPlaces
-            .stream()
-            .map(place -> new PlaceDto.Response(
-                    place,
-                    imageRepo.findByPlace(place),
-                    reviewRepo.findByPlace(place),
-                    getTop3TagsByPlace(place)
-            ))
-            .collect(Collectors.toList());
+                .stream()
+                .map(place -> new PlaceDto.Response(
+                        place,
+                        imageRepo.findByPlace(place),
+                        reviewRepo.findByPlace(place),
+                        getTop3TagsByPlace(place)))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -299,8 +298,7 @@ public class PlaceService {
                         place,
                         imageRepo.findByPlace(place),
                         reviewRepo.findByPlace(place),
-                        getTop3TagsByPlace(place)
-                ))
+                        getTop3TagsByPlace(place)))
                 .collect(Collectors.toList());
     }
 
@@ -322,8 +320,7 @@ public class PlaceService {
                         place,
                         imageRepo.findByPlace(place),
                         reviewRepo.findByPlace(place),
-                        getTop3TagsByPlace(place)
-                ))
+                        getTop3TagsByPlace(place)))
                 .collect(Collectors.toList());
     }
 
@@ -349,8 +346,7 @@ public class PlaceService {
                         place,
                         imageRepo.findByPlace(place),
                         reviewRepo.findByPlace(place),
-                        getTop3TagsByPlace(place)
-                ))
+                        getTop3TagsByPlace(place)))
                 .collect(Collectors.toList());
     }
 
@@ -361,11 +357,10 @@ public class PlaceService {
         List<Place> matchingPlaces = new ArrayList<>();
 
         for (Place place : places) {
-            if (
-                place.getCategory().name().contains(keyword)
-                        || (place.getDetailCategory() != null && place.getDetailCategory().contains(keyword)
-                        || (place.getGate() != null && place.getGate().name().contains(keyword))
-                        || place.getName().toLowerCase().contains(keyword.toLowerCase()))) {
+            if (place.getCategory().name().contains(keyword)
+                    || (place.getDetailCategory() != null && place.getDetailCategory().contains(keyword)
+                            || (place.getGate() != null && place.getGate().name().contains(keyword))
+                            || place.getName().toLowerCase().contains(keyword.toLowerCase()))) {
                 matchingPlaces.add(place);
             }
         }
@@ -376,8 +371,7 @@ public class PlaceService {
                         place,
                         imageRepo.findByPlace(place),
                         reviewRepo.findByPlace(place),
-                        getTop3TagsByPlace(place)
-                ))
+                        getTop3TagsByPlace(place)))
                 .collect(Collectors.toList());
     }
 
@@ -428,15 +422,14 @@ public class PlaceService {
     }
 
     public void insertData(String path) throws IOException, ParseException {
-        if (placeRepo.count() < 1) { //db가 비어있을 때만 실행
-            String[] campusNames = {"명륜", "율전"};
+        if (placeRepo.count() < 1) { // db가 비어있을 때만 실행
+            String[] campusNames = { "명륜", "율전" };
 
             for (String campusName : campusNames) {
                 FileInputStream ins = new FileInputStream(path + "place_" + campusName + ".json");
                 JSONParser parser = new JSONParser();
-                JSONObject jsonObject = (JSONObject)parser.parse(
-                        new InputStreamReader(ins, StandardCharsets.UTF_8)
-                );
+                JSONObject jsonObject = (JSONObject) parser.parse(
+                        new InputStreamReader(ins, StandardCharsets.UTF_8));
                 JSONArray jsonArray = (JSONArray) jsonObject.get("place");
                 Gson gson = new Gson();
 

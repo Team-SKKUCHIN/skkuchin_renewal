@@ -99,13 +99,13 @@ const Header = ({ title, onBackClick, showSearchIcon, post }) => {
         boxShadow: 'none',
       }}>
         <Grid container style={{justifyContent: 'space-between', alignItems: 'center', }}>
-          <Grid onClick={onBackClick}>
+          <Grid sx={{ cursor: 'pointer' }} onClick={onBackClick}>
             <Image src={back} width={11} height={18} name='back' layout='fixed' />
           </Grid>
           <Grid>
             <Typography sx={{fontSize: '18px', fontWeight: 700, color: '#3C3C3C'}}>{title}</Typography>
           </Grid>
-          <Grid>
+          <Grid sx={{ cursor: 'pointer' }}>
               {showSearchIcon ? (
                   <Image src={searchIcon} width={24} height={24} name='search' layout='fixed' onClick={() => router.push('/communitySearch')}/>
               ) : (

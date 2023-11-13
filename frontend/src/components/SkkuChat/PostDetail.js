@@ -116,13 +116,13 @@ const PostDetail = ({ postId }) => {
               
               <Typography sx={{fontSize: '12px', fontWeight: 900, color: '#BABABA', mt: '17px'}}>{'#' + articleTypeToTag[post[0].article_type]}</Typography>
 
-              <Grid sx={{display: 'flex', overflowX: 'scroll', p: '10px 0', mt: post[0].image && post[0].image.length != 0  ? '10px' : 0, gap: '10px',
+              <Grid sx={{display: 'flex', overflowX: 'scroll', p: '10px 0', mt: post[0].images && post[0].images.length !== 0  ? '10px' : 0, gap: '10px',
                 scrollbarWidth: 'none',  // Firefox에
                 'msOverflowStyle': 'none',  // IE, Edge에
                 '&::-webkit-scrollbar': {
                   display: 'none',  // Chrome, Safari
               } }}>
-                {post[0].image && post[0].image.length != 0 && post[0].image.map((image, index) => (
+                {post[0].images && post[0].images.length !== 0 && post[0].images.map((image, index) => (
                   <Box key={index}>
                     <img src={image} width={150} height={150} style={{borderRadius: '10px', cursor: 'pointer'}}/>
                   </Box>

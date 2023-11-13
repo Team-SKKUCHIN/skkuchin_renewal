@@ -20,7 +20,7 @@ const UploadPost = () => {
     const [content, setContent] = useState('');
     const [selectedTag, setSelectedTag] = useState(null);
     const [isAnonymous, setIsAnonymous] = useState(true);
-    
+    const [previewImages, setPreviewImages] = useState([]);
     const [images, setImages] = useState([]);
 
     const isValidForm = title !== '' && content !== '' && selectedTag !== null;
@@ -40,9 +40,7 @@ const UploadPost = () => {
         const imagePreviews = fileArray.map((file) => URL.createObjectURL(file));
         setPreviewImages(imagePreviews);
     };
-        
-    const [previewImages, setPreviewImages] = useState([]);
-
+    
     const handleAnonymousClick = () => {
         setIsAnonymous(!isAnonymous);
     };
@@ -62,7 +60,7 @@ const UploadPost = () => {
     const handleCompleteClick = () => {
         const selectedArticleType = tagToArticleType[selectedTag];
 
-        dispatch(enroll_post(title, content, selectedArticleType, isAnonymous, ([result, message]) => {
+        dispatch(enroll_post(title, content, selectedArticleType, isAnonymous, images, ([result, message]) => {
             if (result) {
                 console.log("게시글 작성 완료!!")
                 dispatch(load_all_posts());
@@ -186,8 +184,8 @@ const UploadPost = () => {
                     <Grid container style={{position:'relative', width:'100%'}}>
                         <Grid item style={{overflowX: 'auto', whiteSpace: 'nowrap', flexWrap: 'nowrap'}}>
                             <div style={{ position: 'relative', overflow: 'hidden', display: 'inline-block', marginRight: '10px'}}>
-                                <input onChange={e => onChangeImages(e)} style={{position: 'absolute', fontSize: '100px', left: '0', top: '0', opacity: '0', zIndex: '5' }} type="file" name="images" accept="image/*" multiple />
-                                <label style={{width:'150px', height:'150px', textAlign:'center', display: 'inline-block', cursor: 'pointer',borderRadius:'10px', backgroundColor:'white', border: '1px solid #E2E2E2', padding:'55px 0 0 7px'}} htmlFor="images">
+                                <input onChange={e => onChangeImages(e)} style={{position: 'absolute', fontSize: '100px', left: '0', top: '0', opacity: '0', zIndex: '5'}} type="file" name="images" accept="image/*" multiple />
+                                <label style={{width:'150px', height:'150px', textAlign:'center', display: 'inline-block', borderRadius:'10px', backgroundColor:'white', border: '1px solid #E2E2E2', padding:'55px 0 0 7px'}} htmlFor="images">
                                     <AddPhotoAlternateOutlinedIcon style={{width: '20px', color:'#BABABA'}}/>
                                 </label>
                             </div>
