@@ -214,7 +214,7 @@ export const enroll_post = (title, content, article_type, anonymous, images, cal
         const apiRes = await res.json();
 
         if (res.status === 201) {
-            await dispatch({
+            dispatch({
                 type: ENROLL_POST_SUCCESS
             })
             if (callback) callback([true, apiRes.message]);
@@ -272,7 +272,7 @@ export const modify_post = (article_id, title, content, article_type, anonymous,
         const apiRes = await res.json();
 
         if (res.status === 200) {
-            await dispatch({
+            dispatch({
                 type: MODIFY_POST_SUCCESS
             })
             if (callback) callback([true, apiRes.message]);
@@ -311,6 +311,7 @@ export const delete_post = (article_id, callback) => async dispatch => {
             dispatch({
                 type: DELETE_POST_SUCCESS
             })
+            dispatch(load_all_posts());
             if (callback) callback([true, apiRes.message]);
             
         } else {
