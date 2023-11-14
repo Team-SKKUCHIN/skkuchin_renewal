@@ -28,7 +28,7 @@ const FreeCommunity = () => {
     }, []);
 
     const sortedPosts = useMemo(() => {
-        return allPosts.slice().sort((a, b) => {
+        return allPosts?.slice().sort((a, b) => {
             if (b.article_like_count !== a.article_like_count) {
                 return b.article_like_count - a. article_like_count;
             }
@@ -38,11 +38,7 @@ const FreeCommunity = () => {
     }, [allPosts]);
 
     useEffect(() => {
-        if (allPosts?.length > 0) {
-            setMostLiked(sortedPosts[0]);
-        } else {
-            setMostLiked(null);
-        }
+        setMostLiked(sortedPosts[0] ?? null);
     }, [allPosts])
 
     // const handleBackClick = () => {
