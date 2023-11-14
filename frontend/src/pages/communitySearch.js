@@ -9,8 +9,8 @@ import { search_posts_by_tag, search_posts_by_keyword, clear_search_posts } from
 import CommunityItem from "../components/SkkuChat/CommunityItem";
 
 const tagToArticleType = {
-    "맛집 추천해요": "WHAT_TO_EAT",
-    "맛집 추천 받아요": "TOGETHER",
+    "맛집 추천해요": "GIVE_RECOMMEND",
+    "맛집 추천 받아요": "GET_RECOMMEND",
 };
 
 const CommunitySearch = () => {

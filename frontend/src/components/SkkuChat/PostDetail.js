@@ -14,8 +14,9 @@ import { enroll_like, delete_like } from '../../actions/like/like';
 import Comment from './Comment';
 
 const articleTypeToTag = {
-  "WHAT_TO_EAT": "맛집 추천해요",
-  "TOGETHER": "맛집 추천 받아요",
+  "GIVE_RECOMMEND": "맛집 추천해요",
+  "GET_RECOMMEND": "맛집 추천 받아요",
+  "ETC": "맛집 추천해요",
 };
 
 const PostDetail = ({ postId }) => {
@@ -84,25 +85,25 @@ const PostDetail = ({ postId }) => {
       <ThemeProvider theme={theme}>
           <CssBaseline />
           <Container fixed style={{ position:'fixed', zIndex:'4', padding:'24px 24px 5px', overflow: "hidden", height:'max-content', maxWidth:'420px', top: '0', backgroundColor: '#fff'}} >
-            {post && <Header title="스꾸게시판" onBackClick={handleBackClick} post={post[0]}/> }
+            {post && <Header title="스꾸게시판" onBackClick={handleBackClick} post={post}/> }
           </Container>
           <Container sx={{ p: '0 24px', mt: '72.5px'}}>
             {
               /* 작성자 프로필 */
-              post && post[0].anonymous === true ?
+              post?.anonymous === true ?
                 <Grid sx={{display: 'flex', alignItems: 'center', p: '10px 0'}}>
                   {post && displayMBTI("DEFAULT2", 60, 60)}
                   <Grid sx={{ml: '10px'}}>
                       <Typography sx={{fontSize: '14px', fontWeight: 800, color: '#3C3C3C'}}>익명</Typography>
-                      <Typography sx={{fontSize: '12px', fontWeight: 700, color: '#BABABA'}}>{post[0].display_time}</Typography>
+                      <Typography sx={{fontSize: '12px', fontWeight: 700, color: '#BABABA'}}>{post?.display_time}</Typography>
                   </Grid>
                 </Grid>
                 :
                 <Grid sx={{display: 'flex', alignItems: 'center', p: '10px 0'}}>
-                  {post && displayMBTI(post[0].user_image, 60, 60)}
+                  {post && displayMBTI(post.user_image, 60, 60)}
                   <Grid sx={{ml: '10px'}}>
-                      <Typography sx={{fontSize: '14px', fontWeight: 800, color: '#3C3C3C'}}>{post && post[0].nickname}</Typography>
-                      <Typography sx={{fontSize: '12px', fontWeight: 700, color: '#BABABA'}}>{post[0].display_time}</Typography>
+                      <Typography sx={{fontSize: '14px', fontWeight: 800, color: '#3C3C3C'}}>{post?.nickname}</Typography>
+                      <Typography sx={{fontSize: '12px', fontWeight: 700, color: '#BABABA'}}>{post?.display_time}</Typography>
                   </Grid>
                 </Grid>
             }
@@ -110,19 +111,19 @@ const PostDetail = ({ postId }) => {
             {/* 게시글 */}
             <Grid sx={{display: 'flex', flexDirection: 'column', p: '10px 0', overflowX: 'hidden'}}>
               <Grid sx={{display: 'flex', flexDirection: 'column'}}>
-                <Typography sx={{fontSize: '18px', fontWeight: 800, color: '#3C3C3C'}}>{post[0].title}</Typography>
-                <Typography sx={{fontSize: '14px', fontWeight: 400, color: '#3C3C3C', mt: '17px'}}>{post[0].content}</Typography>
+                <Typography sx={{fontSize: '18px', fontWeight: 800, color: '#3C3C3C'}}>{post?.title}</Typography>
+                <Typography sx={{fontSize: '14px', fontWeight: 400, color: '#3C3C3C', mt: '17px'}}>{post?.content}</Typography>
               </Grid>
               
-              <Typography sx={{fontSize: '12px', fontWeight: 900, color: '#BABABA', mt: '17px'}}>{'#' + articleTypeToTag[post[0].article_type]}</Typography>
+              <Typography sx={{fontSize: '12px', fontWeight: 900, color: '#BABABA', mt: '17px'}}>{'#' + articleTypeToTag[post?.article_type]}</Typography>
 
-              <Grid sx={{display: 'flex', overflowX: 'scroll', p: '10px 0', mt: post[0].images && post[0].images.length !== 0  ? '10px' : 0, gap: '10px',
+              <Grid sx={{display: 'flex', overflowX: 'scroll', p: '10px 0', mt: post?.images && post?.images.length !== 0  ? '10px' : 0, gap: '10px',
                 scrollbarWidth: 'none',  // Firefox에
                 'msOverflowStyle': 'none',  // IE, Edge에
                 '&::-webkit-scrollbar': {
                   display: 'none',  // Chrome, Safari
               } }}>
-                {post[0].images && post[0].images.length !== 0 && post[0].images.map((image, index) => (
+                {post?.images && post?.images.length !== 0 && post?.images.map((image, index) => (
                   <Box key={index}>
                     <img src={image} width={150} height={150} style={{borderRadius: '10px', cursor: 'pointer'}}/>
                   </Box>
@@ -131,27 +132,27 @@ const PostDetail = ({ postId }) => {
 
               <Grid sx={{display: 'flex', mt: '10px', justifyContent: 'space-between'}}>
                   <Grid item sx={{ display: 'flex', alignItems: 'center'}}>
-                      { post[0].user_liked === true ?
+                      { post?.user_liked === true ?
                         <FavoriteIcon sx={{width: '15px', color: '#FFCE00'}} />
                         :
                         <FavoriteBorderIcon sx={{width: '15px', color: '#FFCE00'}} />
                       }
                       <Typography sx={{fontSize: '12px', ml: '3px', color: '#FFCE00', fontWeight: 600}}>
-                        {post[0].article_like_count}
+                        {post?.article_like_count}
                       </Typography>
 
                       <ChatBubbleOutlineIcon sx={{width: '13px', color: '#72D270', ml: '7px'}} />
                       <Typography sx={{fontSize: '12px', ml: '3px', color: '#72D270', fontWeight: 600, ml: 0.5}}>
-                        {post[0].comment_count}
+                        {post?.comment_count}
                       </Typography>
                   </Grid>
                 <div>
-                { post[0].user_liked === true ?
-                  <Button onClick={()=> handleDeleteBtn(post[0].id)} startIcon={<FavoriteIcon sx={{ width: '15px', color: '#BABABA' }} />} sx={{backgroundColor: '#FBFBFB', p: '7px 11px', borderRadius: '10px', color: '#9E9E9E', fontWeight: 700, fontSize: '12px'}}>
+                { post?.user_liked === true ?
+                  <Button onClick={()=> handleDeleteBtn(post?.id)} startIcon={<FavoriteIcon sx={{ width: '15px', color: '#BABABA' }} />} sx={{backgroundColor: '#FBFBFB', p: '7px 11px', borderRadius: '10px', color: '#9E9E9E', fontWeight: 700, fontSize: '12px'}}>
                     좋아요 취소
                   </Button>                
                   :
-                  <Button onClick={()=> handleLikeBtn(post[0].id)} startIcon={<FavoriteBorderIcon sx={{ width: '15px' }} />} sx={{backgroundColor: '#FBFBFB', p: '7px 11px', borderRadius: '10px', color: '#9E9E9E', fontWeight: 700, fontSize: '12px'}}>
+                  <Button onClick={()=> handleLikeBtn(post?.id)} startIcon={<FavoriteBorderIcon sx={{ width: '15px' }} />} sx={{backgroundColor: '#FBFBFB', p: '7px 11px', borderRadius: '10px', color: '#9E9E9E', fontWeight: 700, fontSize: '12px'}}>
                     좋아요
                   </Button>
                 }
@@ -166,7 +167,7 @@ const PostDetail = ({ postId }) => {
           { comments && 
             <Container sx={{p: '0 0 58px', overflow: 'hidden', height: 'max-content'}}>
               <Grid sx={{display: 'flex', flexDirection: 'column', p: '0 0 10px', overflowX: 'hidden'}}>
-                <Comment comments={comments} postId={post[0].id}/>
+                <Comment comments={comments} postId={post?.id}/>
               </Grid>
             </Container>
           }

@@ -10,6 +10,7 @@ import skkuchin.service.dto.ArticleDto;
 import skkuchin.service.dto.ArticleLikeDto;
 import skkuchin.service.exception.CustomRuntimeException;
 import skkuchin.service.exception.CustomValidationApiException;
+import skkuchin.service.repo.ArticleImageRepo;
 import skkuchin.service.repo.ArticleLikeRepo;
 import skkuchin.service.repo.ArticleRepo;
 import skkuchin.service.repo.CommentRepo;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class ArticleLikeService {
 
     private final ArticleLikeRepo articleLikeRepo;
+    private final ArticleImageRepo articleImageRepo;
     private final ArticleRepo articleRepo;
     private final CommentRepo commentRepo;
     @Transactional
@@ -43,6 +45,7 @@ public class ArticleLikeService {
                         articleLike.getArticle(),
                         commentRepo.findByArticle(articleLike.getArticle()),
                         articleLikeRepo.findByArticle(articleLike.getArticle().getId()),
+                        articleImageRepo.findByArticle(articleLike.getArticle()),
                         user
                 )).collect(Collectors.toList());
     }

@@ -8,8 +8,8 @@ import { useDispatch } from 'react-redux';
 import { enroll_post, load_all_posts } from '../actions/post/post';
 
 const tagToArticleType = {
-    "맛집 추천해요": "WHAT_TO_EAT",
-    "맛집 추천 받아요": "TOGETHER",
+    "맛집 추천해요": "GIVE_RECOMMEND",
+    "맛집 추천 받아요": "GET_RECOMMEND",
 };
 
 const UploadPost = () => {

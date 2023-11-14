@@ -189,8 +189,10 @@ export const enroll_post = (title, content, article_type, anonymous, images, cal
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('article_type', article_type);
+    formData.append('articleType', article_type);
     formData.append('anonymous', anonymous);
+
+    console.log(article_type);
 
     if (images && images.length > 0) {
         for (const image of images) {
@@ -204,7 +206,6 @@ export const enroll_post = (title, content, article_type, anonymous, images, cal
         const res = await fetch(`${API_URL}/api/article`, {
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
                 'Authorization': `Bearer ${access}`
             },
             body: formData
@@ -240,7 +241,7 @@ export const modify_post = (article_id, title, content, article_type, anonymous,
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('article_type', article_type);
+    formData.append('articleType', article_type);
     formData.append('anonymous', anonymous);
 
     if (images && images.length > 0) {
@@ -263,7 +264,6 @@ export const modify_post = (article_id, title, content, article_type, anonymous,
         const res = await fetch(`${API_URL}/api/article/${article_id}`, {
             method: 'PUT',
             headers: {
-                'Accept': 'application/json',
                 'Authorization': `Bearer ${access}`,
             },
             body: formData

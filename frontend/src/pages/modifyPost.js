@@ -7,10 +7,11 @@ import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternate
 import { useDispatch, useSelector } from 'react-redux';
 import { modify_post, load_all_posts } from '../actions/post/post';
 import removeBtn from '../image/close.png';
+import Image from 'next/image';
 
 const tagToArticleType = {
-    "맛집 추천해요": "WHAT_TO_EAT",
-    "맛집 추천 받아요": "TOGETHER",
+    "맛집 추천해요": "GIVE_RECOMMEND",
+    "맛집 추천 받아요": "GET_RECOMMEND",
 };
 
 const ModifyPost = () => {
@@ -27,13 +28,14 @@ const ModifyPost = () => {
     const post = useSelector(state => state.post.post);
 
     useEffect(() => {
-        if(post !== null) {
-            setTitle(post[0].title);
-            setContent(post[0].content);
-            setSelectedTag(post[0].tag_type);
-            setIsAnonymous(post[0].anonymous);
+        if (post) {
+            setTitle(post.title);
+            setContent(post.content);
+            setSelectedTag(post.tag_type);
+            setIsAnonymous(post.anonymous);
+            setPreviewImages(post.images);
         }
-    }, []);
+    }, [post]);
 
     const isValidForm = title !== '' && content !== '' && selectedTag !== null;
 
@@ -49,14 +51,21 @@ const ModifyPost = () => {
         const fileArray = Array.from(e.target.files);
         setPreviewImages([...previewImages, ...fileArray.map((file) => URL.createObjectURL(file))]);
         setImages(fileArray);
-
     };
 
     const handleImageRemove = (index) => {
+        const fileIndex = index - (previewImages.length - images.length);
+
+        if (fileIndex >= 0) {
+            const newImages = [...images];
+            newImages.splice(fileIndex, 1);
+            setImages(newImages);
+        }
+
         const newPreviewImages = [...previewImages];
         newPreviewImages.splice(index, 1);
         setPreviewImages(newPreviewImages);
-      };
+    };
         
     const handleAnonymousClick = () => {
         setIsAnonymous(!isAnonymous);
@@ -77,7 +86,7 @@ const ModifyPost = () => {
     const handleModifyClick = () => {
         const selectedArticleType = tagToArticleType[selectedTag];
 
-        dispatch(modify_post(post[0].id, title, content, selectedArticleType, isAnonymous, previewImages, images, ([result, message]) => {
+        dispatch(modify_post(post.id, title, content, selectedArticleType, isAnonymous, previewImages, images, ([result, message]) => {
             if (result) {
                 console.log("게시글 수정 완료!!")
                 dispatch(load_all_posts());
@@ -213,7 +222,7 @@ const ModifyPost = () => {
                                     <img key={previewImage} src={previewImage} alt="preview" 
                                         style={{
                                             width: '100%',
-                                            height: '100%', 
+                                            height: '100%',
                                             objectFit: 'cover',
                                         }}
                                     />

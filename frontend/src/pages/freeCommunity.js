@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Grid, Container, Typography, ThemeProvider, CssBaseline, IconButton } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CommunityItem from '../components/SkkuChat/CommunityItem';
@@ -17,6 +17,8 @@ const FreeCommunity = () => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const allPosts = useSelector(state => state.post.allPosts);
 
+    const [mostLiked, setMostLiked] = useState(null);
+
     useEffect(() => {
         if (typeof window !== 'undefined' && !isAuthenticated) {
             router.push('/login');
@@ -24,6 +26,19 @@ const FreeCommunity = () => {
             dispatch(load_all_posts());
         }
     }, []);
+
+    const sortedPosts = useMemo(() => {
+        return allPosts.slice().sort((a, b) => {
+            const totalCountA = a.article_like_count + a.comment_count;
+            const totalCountB = b.article_like_count + b.comment_count;
+          
+            return totalCountB - totalCountA;
+        });
+    }, [allPosts]);
+
+    useEffect(() => {
+        setMostLiked(sortedPosts[0]);
+    }, [allPosts])
 
     // const handleBackClick = () => {
     //     router.push('/');
@@ -43,16 +58,15 @@ const FreeCommunity = () => {
             <Container sx={{p: '0 24px', height: 'max-content', alignItems: 'center', mt: '20px', display: 'flex'}}>
                 <Typography sx={{fontSize: '14px', whiteSpace: 'nowrap', mr: '10px', color: '#FFAC0B', fontWeight: 700}}>인기🔥</Typography>
                 <Grid container sx={{justifyContent: 'space-between', p: '10px 15px', backgroundColor: '#FFFCE4', borderRadius: '10px'}}>
-                    <Typography sx={{fontSize: '14px', color: '#3C3C3C', fontWeight: 400}}>요즘 스꾸친 폼 미쳤다</Typography>
+                    <Typography sx={{fontSize: '14px', color: '#3C3C3C', fontWeight: 400}}>{mostLiked ? mostLiked.title : "요즘 스꾸친 폼 미쳤다"}</Typography>
                     <Grid item sx={{display: 'flex', alignItems: 'center'}}>
                         <FavoriteBorderIcon sx={{width: '15px', color: '#FFCE00'}} />
-                        <Typography sx={{fontSize: '12px', ml: '3px', color: '#FFCE00', fontWeight: 600}}>5</Typography>
+                        <Typography sx={{fontSize: '12px', ml: '3px', color: '#FFCE00', fontWeight: 600}}>{mostLiked ? mostLiked.article_like_count : 5}</Typography>
                     </Grid>
                 </Grid>
             </Container>
             <Container sx={{ p: '0 24px', height: 'max-content', alignItems: 'center', mt: '10px' }}>
                 {allPosts && allPosts.map((post) => (
-                // {posts && posts.map((post) => (
                     <CommunityItem key={post.id} {...post} />
                 ))}
             </Container>

@@ -84,17 +84,16 @@ public class ArticleService {
     }
 
     @Transactional
-    public List<ArticleDto.Response> getSpecificArticle(Long articleId, AppUser appUser) {
-        return articleRepo.findByArticleId(articleId)
-                .stream()
-                .map(article -> new ArticleDto.Response(
-                        article,
-                        commentRepo.findByArticle(article),
-                        articleLikeRepo.findByArticle(article.getId()),
-                        articleImageRepo.findByArticle(article),
-                        appUser))
-                .collect(Collectors.toList());
+    public ArticleDto.Response getSpecificArticle(Long articleId, AppUser appUser) {
+        Article article = articleRepo.findById(articleId)
+                .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 게시글입니다."));
 
+        return new ArticleDto.Response(
+            article,
+            commentRepo.findByArticle(article),
+            articleLikeRepo.findByArticle(articleId),
+            articleImageRepo.findByArticle(article),
+            appUser);
     }
 
     @Transactional
