@@ -38,7 +38,7 @@ const FreeCommunity = () => {
     }, [allPosts]);
 
     useEffect(() => {
-        setMostLiked(sortedPosts[0] ?? null);
+        setMostLiked(sortedPosts ? sortedPosts[0] : null);
     }, [allPosts])
 
     // const handleBackClick = () => {

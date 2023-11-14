@@ -16,7 +16,6 @@ import Comment from './Comment';
 const articleTypeToTag = {
   "GIVE_RECOMMEND": "맛집 추천해요",
   "GET_RECOMMEND": "맛집 추천 받아요",
-  "ETC": "맛집 추천해요",
 };
 
 const PostDetail = ({ postId }) => {
