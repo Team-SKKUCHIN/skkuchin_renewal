@@ -29,10 +29,11 @@ const FreeCommunity = () => {
 
     const sortedPosts = useMemo(() => {
         return allPosts.slice().sort((a, b) => {
-            const totalCountA = a.article_like_count + a.comment_count;
-            const totalCountB = b.article_like_count + b.comment_count;
-          
-            return totalCountB - totalCountA;
+            if (b.article_like_count !== a.article_like_count) {
+                return b.article_like_count - a. article_like_count;
+            }
+            
+            return b.comment_count - a.comment_count;
         });
     }, [allPosts]);
 
@@ -57,7 +58,17 @@ const FreeCommunity = () => {
             </Container> */}
             <Container sx={{p: '0 24px', height: 'max-content', alignItems: 'center', mt: '20px', display: 'flex'}}>
                 <Typography sx={{fontSize: '14px', whiteSpace: 'nowrap', mr: '10px', color: '#FFAC0B', fontWeight: 700}}>인기🔥</Typography>
-                <Grid container sx={{justifyContent: 'space-between', p: '10px 15px', backgroundColor: '#FFFCE4', borderRadius: '10px'}}>
+                <Grid
+                    container
+                    sx={{
+                        justifyContent: 'space-between',
+                        p: '10px 15px',
+                        backgroundColor: '#FFFCE4',
+                        borderRadius: '10px',
+                        cursor: mostLiked && 'pointer'
+                    }}
+                    onClick={() => mostLiked && router.push(`/posts/${mostLiked.id}`)}
+                >
                     <Typography sx={{fontSize: '14px', color: '#3C3C3C', fontWeight: 400}}>{mostLiked ? mostLiked.title : "요즘 스꾸친 폼 미쳤다"}</Typography>
                     <Grid item sx={{display: 'flex', alignItems: 'center'}}>
                         <FavoriteBorderIcon sx={{width: '15px', color: '#FFCE00'}} />
