@@ -50,7 +50,7 @@ const ModifyPost = () => {
     const onChangeImages = (e) => {
         const fileArray = Array.from(e.target.files);
         setPreviewImages([...previewImages, ...fileArray.map((file) => URL.createObjectURL(file))]);
-        setImages(fileArray);
+        setImages([...images, ...fileArray]);
     };
 
     const handleImageRemove = (index) => {

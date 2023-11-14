@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container, Typography, Button, ThemeProvider, CssBaseline, Grid, Checkbox } from '@mui/material';
 import UploadHeader from '../components/SkkuChat/UploadHeader';
 import theme from '../theme/theme';
@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import { useDispatch } from 'react-redux';
 import { enroll_post, load_all_posts } from '../actions/post/post';
+import removeBtn from '../image/close.png';
+import Image from 'next/image';
 
 const tagToArticleType = {
     "맛집 추천해요": "GIVE_RECOMMEND",
@@ -35,10 +37,22 @@ const UploadPost = () => {
 
     const onChangeImages = (e) => {
         const fileArray = Array.from(e.target.files);
-        setImages(fileArray);
-    
-        const imagePreviews = fileArray.map((file) => URL.createObjectURL(file));
-        setPreviewImages(imagePreviews);
+        setPreviewImages([...previewImages, ...fileArray.map((file) => URL.createObjectURL(file))]);
+        setImages([...images, ...fileArray]);
+    };
+
+    const handleImageRemove = (index) => {
+        const fileIndex = index - (previewImages.length - images.length);
+
+        if (fileIndex >= 0) {
+            const newImages = [...images];
+            newImages.splice(fileIndex, 1);
+            setImages(newImages);
+        }
+
+        const newPreviewImages = [...previewImages];
+        newPreviewImages.splice(index, 1);
+        setPreviewImages(newPreviewImages);
     };
     
     const handleAnonymousClick = () => {
@@ -196,9 +210,16 @@ const UploadPost = () => {
                                             width: '100%',
                                             height: '100%', 
                                             objectFit: 'cover',
-                                        }} />
+                                        }}
+                                    />
+                                    <Button type="button" onClick={() => handleImageRemove(index)} style={{ position: 'absolute', top: '0', right: '3px', padding: '10px', justifyContent: 'right' }}>
+                                        <Image src={removeBtn} width={25} height={25} layout='fixed'
+                                            style={{
+                                                backgroundColor:'white',
+                                                borderRadius:'20px'
+                                            }}/>
+                                    </Button>
                                 </Grid>
-                                
                             ))}
                         </Grid>
                     </Grid>
