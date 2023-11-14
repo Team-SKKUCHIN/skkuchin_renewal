@@ -31,7 +31,7 @@ public class ArticleController {
 
     @PostMapping("")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<?> addArticle(@Valid @RequestBody ArticleDto.PostRequest dto
+    public ResponseEntity<?> addArticle(@Valid @ModelAttribute ArticleDto.PostRequest dto
     , @AuthenticationPrincipal PrincipalDetails principalDetails,BindingResult bindingResult){
         Map<String, String> errorMap = new HashMap<>();
         if (bindingResult.hasErrors()) {
@@ -41,7 +41,6 @@ public class ArticleController {
             throw new CustomValidationApiException("모든 정보를 입력해주시기 바랍니다", errorMap);
         }
         AppUser appUser = principalDetails.getUser();
-        System.out.println("appUser = " + appUser.getUsername());
         articleService.addArticle(appUser,dto);
         return new ResponseEntity<>(new CMRespDto<>(1,"게시글 생성 완료",null), HttpStatus.CREATED);
     }
@@ -51,16 +50,16 @@ public class ArticleController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<?> getAllArticle(@AuthenticationPrincipal PrincipalDetails principalDetails){
         AppUser appUser = principalDetails.getUser();
-        List<ArticleDto.Response> article = articleService.searchArticle(appUser);
-        return new ResponseEntity<>(new CMRespDto<>(1,"전체 게시글 조회 완료",article), HttpStatus.OK);
+        List<ArticleDto.Response> articles = articleService.searchArticle(appUser);
+        return new ResponseEntity<>(new CMRespDto<>(1,"전체 게시글 조회 완료",articles), HttpStatus.OK);
     }
 
     @GetMapping("/{articleId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<?> getSpecificArticle(@PathVariable Long articleId,@AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> getSpecificArticle(@PathVariable Long articleId, @AuthenticationPrincipal PrincipalDetails principalDetails){
         AppUser appUser = principalDetails.getUser();
-        List<ArticleDto.Response> articles = articleService.getSpecificArticle(articleId,appUser);
-        return new ResponseEntity<>(new CMRespDto<>(1,"게시글 id별 조회 완료",articles),HttpStatus.OK);
+        ArticleDto.Response article = articleService.getSpecificArticle(articleId, appUser);
+        return new ResponseEntity<>(new CMRespDto<>(1,"게시글 id 조회 완료",article), HttpStatus.OK);
     }
 
 
@@ -75,7 +74,7 @@ public class ArticleController {
     @PutMapping("/{articleId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<?> updateMyArticle(@PathVariable Long articleId, @AuthenticationPrincipal PrincipalDetails principalDetails
-    , @Valid @RequestBody ArticleDto.PutRequest dto, BindingResult bindingResult){
+    , @Valid @ModelAttribute ArticleDto.PutRequest dto, BindingResult bindingResult){
         AppUser appUser = principalDetails.getUser();
         Map<String, String> errorMap = new HashMap<>();
         if (bindingResult.hasErrors()) {

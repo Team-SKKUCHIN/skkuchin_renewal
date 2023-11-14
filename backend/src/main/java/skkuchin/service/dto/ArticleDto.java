@@ -112,8 +112,7 @@ public class ArticleDto {
         private boolean anonymous;
         private List<String> images;
 
-        public Response(Article article, List<Comment> comments, List<ArticleLike> articleLikes,
-                List<ArticleImage> images, AppUser appUser) {
+        public Response(Article article, List<Comment> comments, List<ArticleLike> articleLikes, List<ArticleImage> images, AppUser appUser) {
             this.id = article.getId();
             this.articleType = article.getArticleType();
             this.tagType = article.getArticleType().getLabel();
@@ -129,7 +128,6 @@ public class ArticleDto {
             this.anonymous = article.isAnonymous();
             this.originalTime = originalFormatDate(article.getDate());
             this.images = images.stream().map(image -> image.getUrl()).collect(Collectors.toList());
-
         }
 
         private boolean calculateUserLiked(List<ArticleLike> articleLikes, AppUser appUser) {

@@ -20,9 +20,6 @@ public interface ArticleRepo extends JpaRepository<Article, Long> {
     @Query("SELECT a from Article a where a.articleType = :articleType ORDER BY a.date desc")
     List<Article> findByArticleType(@Param("articleType") ArticleType articleType);
 
-    @Query("SELECT a FROM Article a WHERE a.id = :articleId")
-    List<Article> findByArticleId(@Param("articleId") Long articleId);
-
     List<Article> findByTitleContainingOrContentContainingOrderByDateDesc(String title, String content);
 
 }
