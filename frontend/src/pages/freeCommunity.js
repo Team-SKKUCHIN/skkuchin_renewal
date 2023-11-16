@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 import { load_all_posts } from '../actions/post/post';
 import UpperBar from '../components/UpperBar';
+import NoticePopup from '../components/NoticePopup';
 
 const FreeCommunity = () => {
     const router = useRouter();
@@ -18,12 +19,20 @@ const FreeCommunity = () => {
     const allPosts = useSelector(state => state.post.allPosts);
 
     const [mostLiked, setMostLiked] = useState(null);
+    const [popup, setPopup] = useState(false);
 
     useEffect(() => {
         if (typeof window !== 'undefined' && !isAuthenticated) {
             router.push('/login');
         } else {
             dispatch(load_all_posts());
+            if (!localStorage.getItem('guide')) {
+                const timerId = setTimeout(() => {
+                    setPopup(true);
+                }, 1000)
+
+                return () => clearTimeout(timerId);
+            }
         }
     }, []);
 
@@ -46,7 +55,7 @@ const FreeCommunity = () => {
     // };
 
     const handleAddClick = () => {
-       router.push('/uploadPost');
+        router.push('/uploadPost');
     };
 
     return (
@@ -103,6 +112,7 @@ const FreeCommunity = () => {
                     <AddIcon sx={{color: '#fff'}} />
                 </IconButton>
             </Container>
+            {popup && <NoticePopup setPopup={setPopup} />}
         </ThemeProvider>
     );
 };
