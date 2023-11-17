@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from "next/router";
 import { useDispatch } from 'react-redux';
 import { password_email_send } from '../../../actions/email/email';
+import { Loading } from "../../Loading";
 
 const Step1 = (props) => {
     const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const Step1 = (props) => {
     const [emailId, setEmailId] = useState('');
     const [domain, setDomain] = useState('@g.skku.edu');
 
+    const [loading, setLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMsg, setDialogMsg] = useState('');
 
@@ -21,8 +23,11 @@ const Step1 = (props) => {
 
     const handleSubmit= (e) => {
         e.preventDefault();
+        setLoading(true);
 
         dispatch(password_email_send(emailId+domain, ([result, message]) => {
+            setLoading(false);
+
             if (result) {
                 props.setEmail(emailId+domain);
                 props.handleNextStep();
@@ -47,7 +52,7 @@ const Step1 = (props) => {
 
 
     return (
-    <div>
+    <>
         <Container style={{padding:'0px', alignItems: 'center', marginTop: '45px'}}>
                         <Grid container>
                             <Grid item style={{margin:'0px 0px 0px 24px', visibility:'none'}}>
@@ -152,7 +157,8 @@ const Step1 = (props) => {
 
                 </DialogActions>
           </Dialog> */}
-      </div>
+        {loading && <Loading />}
+      </>
     );
   };
 

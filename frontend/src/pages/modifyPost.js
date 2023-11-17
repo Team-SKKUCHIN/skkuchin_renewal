@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { modify_post, load_all_posts } from '../actions/post/post';
 import removeBtn from '../image/close.png';
 import Image from 'next/image';
+import { Loading } from '../components/Loading';
 
 const tagToArticleType = {
     "맛집 추천해요": "GIVE_RECOMMEND",
@@ -24,6 +25,7 @@ const ModifyPost = () => {
     const [isAnonymous, setIsAnonymous] = useState(null);
     const [previewImages, setPreviewImages] = useState([]);
     const [images, setImages] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const post = useSelector(state => state.post.post);
 
@@ -84,9 +86,12 @@ const ModifyPost = () => {
     };
 
     const handleModifyClick = () => {
+        setLoading(true);
         const selectedArticleType = tagToArticleType[selectedTag];
 
         dispatch(modify_post(post.id, title, content, selectedArticleType, isAnonymous, previewImages, images, ([result, message]) => {
+            setLoading(false);
+
             if (result) {
                 console.log("게시글 수정 완료!!")
                 dispatch(load_all_posts());
@@ -239,6 +244,7 @@ const ModifyPost = () => {
                     </Grid>
                 </form>
             </Container>
+            {loading && <Loading />}
         </ThemeProvider>
     );
 };

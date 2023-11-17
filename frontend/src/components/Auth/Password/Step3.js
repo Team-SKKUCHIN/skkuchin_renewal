@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import check from '../../../image/check.png';
 import check2 from '../../../image/checkGreen.png';
+import { Loading } from '../../Loading';
 
 const Step3 = (props) => {
     const dispatch = useDispatch();
@@ -27,13 +28,18 @@ const Step3 = (props) => {
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMsg, setDialogMsg] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handlePrevStep = () => {
         props.handlePrevStep();
     }
 
     const handleNextStep = () => {
+        setLoading(true);
+
         reset_password(props.email, password, rePassword, ([result, message]) => {
+            setLoading(false);
+
             if (result) {
                 props.handleNextStep();
             } else {
@@ -90,7 +96,7 @@ const Step3 = (props) => {
     }
 
     return (
-        <div>
+        <>
         <Container style={{padding:'0px', alignItems: 'center', marginTop: '45px'}}>
                         <Grid container>
                             <Grid item style={{margin:'0px 0px 0px 24px', visibility:'none'}}>
@@ -316,8 +322,8 @@ const Step3 = (props) => {
 
                 </DialogActions>
           </Dialog>
-
-    </div>
+          {loading && <Loading />}
+    </>
     )
 }
 export default Step3;

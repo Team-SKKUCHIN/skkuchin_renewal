@@ -17,6 +17,7 @@ import WorldcupFriend from '../components/Worldcup/WorldcupFriend';
 import ClickProfile from './clickProfile';
 import { Header } from "../components/Header";
 import Popup from "../components/Recommend/Popup";
+import { Loading } from "../components/Loading";
 
 const SubTitle = () => (
     <div style={{ margin: "42px 0 8px" }}>
@@ -468,6 +469,7 @@ const Rank = ({
     selectedPlacePopup,
     setPlacePopup,
     phase,
+    setLoading,
 }) => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const worldcups = useSelector(state => state.worldcup.worldcup);
@@ -488,6 +490,14 @@ const Rank = ({
             dispatch(load_nonuser_worldcups());
         }
     }, [phase, isAuthenticated])
+
+    useEffect(() => {
+        if (worldcups && Array.isArray(worldcups)) {
+            setLoading(false);
+        } else {
+            setLoading(true);
+        }
+    }, [worldcups])
 
     return (
         <>
@@ -646,6 +656,7 @@ const WorldCup = () => {
     const [gameNum, setGameNum] = useState(0);
     const [phase, setPhase] = useState('ready');
     const [profileOpen, setProfileOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         dispatch(load_places());
@@ -731,6 +742,7 @@ const WorldCup = () => {
                             selectedPlacePopup={selectedPlace}
                             setPlacePopup={setPopup}
                             phase={phase}
+                            setLoading={setLoading}
                         />
                     }
                 </div>
@@ -740,6 +752,7 @@ const WorldCup = () => {
                 matchingUserId={matchingUserId.current}
             />
             {popup && <Popup selectedPlace={selectedPlace.current} setPopup={setPopup} />}
+            {loading && <Loading />}
         </ThemeProvider>
     );
 };

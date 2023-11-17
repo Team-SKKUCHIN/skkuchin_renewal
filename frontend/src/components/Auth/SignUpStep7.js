@@ -6,10 +6,12 @@ import back from '../../image/arrow_back_ios.png';
 import logo from '../../image/email_enhang.png'
 import Image from 'next/image';
 import { signup_email_check, signup_email_send } from '../../actions/email/email';
+import { Loading } from "../Loading";
 
 const SignUpStep7 = (props) => {
     const dispatch = useDispatch();
 
+    const [loading, setLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMsg, setDialogMsg] = useState("");
     const [remainHeight, setRemainHeight] = useState(window.innerHeight - 456 + "px");
@@ -19,7 +21,11 @@ const SignUpStep7 = (props) => {
     }
     
     const handleResend = () => {
+        setLoading(true);
+
         dispatch(signup_email_send(props.data.username, props.data.email, true, ([result, message]) => {
+          setLoading(false);
+
           if (result) {
             setDialogMsg("이메일을 재전송했습니다.");
           } else {
@@ -135,6 +141,7 @@ const SignUpStep7 = (props) => {
 
                 </DialogActions>
         </Dialog>
+        {loading && <Loading />}
       </ThemeProvider>
     );
   };
