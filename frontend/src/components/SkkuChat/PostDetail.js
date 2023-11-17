@@ -80,7 +80,7 @@ const PostDetail = ({ postId }) => {
 
     };
 
-    if(post === null || comments === null) return (<div>loading...</div>);
+    if (post === null || comments === null) return <Loading />;
 
     return (
       <ThemeProvider theme={theme}>
