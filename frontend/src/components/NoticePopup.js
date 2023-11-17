@@ -68,13 +68,13 @@ const NoticePopup = ({ setPopup }) => {
                         >
                             <button
                                 style={{
+                                    color: "#505050",
                                     border: 0,
                                     backgroundColor: "transparent",
                                     fontSize: "15px",
                                     letterSpacing: "-0.32px",
                                     cursor: "pointer",
                                     textDecorationLine: "underline",
-                                    cursor: 'pointer',
                                 }}
                                 onClick={() => {
                                     setPopup(false);

@@ -5,6 +5,7 @@ import loadingLottie4 from './loadingLottie4.json';
 import loadingLottie5 from './loadingLottie5.json';
 import loadingLottie6 from './loadingLottie6.json';
 import loadingLottie7 from './loadingLottie7.json';
+import loadingLottie8 from './loadingLottie8.json';
 
 export const lotties = [
     loadingLottie1,
@@ -46,3 +47,5 @@ export const lottieDict = [
         speed: 2,
     },
 ];
+
+export const globalLoading = loadingLottie8;

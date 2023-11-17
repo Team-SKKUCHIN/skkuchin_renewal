@@ -9,10 +9,12 @@ import back from '../../image/arrow_back_ios.png';
 import Image from 'next/image';
 import { signup_email_send } from '../../actions/email/email';
 import { useRouter } from 'next/router';
+import { Loading } from "../Loading";
 
 const SignUpStep6 = (props) => {
     const dispatch = useDispatch();
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const [emailId, setEmailId] = useState('');
     const [domain, setDomain] = useState('@g.skku.edu');
     const src = router.query.src;
@@ -27,8 +29,11 @@ const SignUpStep6 = (props) => {
     }
     const handleSubmit= (e) => {
       e.preventDefault();
+      setLoading(true);
 
       dispatch(signup_email_send(props.data.username, emailId+domain, true, ([result, message]) => {
+        setLoading(false);
+
         if (result) {
           props.setData({...props.data, email: emailId+domain});
           props.handleNextStep();
@@ -222,6 +227,7 @@ const SignUpStep6 = (props) => {
 
                 </DialogActions>
           </Dialog>
+          {loading && <Loading />}
       </ThemeProvider>
     );
   };

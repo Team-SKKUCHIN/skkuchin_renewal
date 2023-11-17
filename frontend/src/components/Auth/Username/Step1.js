@@ -5,10 +5,13 @@ import Image from 'next/image';
 import { useRouter } from "next/router";
 import { useDispatch } from 'react-redux';
 import { find_username } from '../../../actions/auth/auth';
+import { Loading } from "../../Loading";
 
 export default function Step1(props) {
     const dispatch = useDispatch();
     const router = useRouter();
+    
+    const [loading, setLoading] = useState(false);
     const [emailId, setEmailId] = useState('');
     const [domain, setDomain] = useState('@g.skku.edu');
 
@@ -20,8 +23,12 @@ export default function Step1(props) {
     }
 
     const handleSubmit= (e) => {
+        setLoading(true);
+
         e.preventDefault();
         dispatch(find_username(emailId+domain, ([result, message]) => {
+            setLoading(false);
+
             if (result) {
                 props.handleNextStep();
             } else {
@@ -44,7 +51,7 @@ export default function Step1(props) {
     }
 
     return (
-        <div>
+        <>
         <Container style={{padding:'0px', alignItems: 'center', marginTop: '45px'}}>
                         <Grid container>
                             <Grid item style={{margin:'0px 0px 0px 24px', visibility:'none'}}>
@@ -132,7 +139,7 @@ export default function Step1(props) {
                     <Link component="button" onClick={handleLinkClick} color="#BABABA" sx={{fontSize: '12px', mb: '18px'}}>로그인 홈 가기</Link>
             </div>
         </Box>
-
-        </div>
+        {loading && <Loading />}
+        </>
     );
 }
