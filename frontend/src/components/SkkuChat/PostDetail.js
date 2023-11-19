@@ -81,8 +81,6 @@ const PostDetail = ({ postId }) => {
 
     if (post === null || comments === null) return <Loading />;
 
-    console.log(post)
-
     return (
       <ThemeProvider theme={theme}>
           <CssBaseline />
