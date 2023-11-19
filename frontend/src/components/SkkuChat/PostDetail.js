@@ -126,7 +126,7 @@ const PostDetail = ({ postId }) => {
               } }}>
                 {post?.images && post?.images.length !== 0 && post?.images.map((image, index) => (
                   <Box key={index}>
-                    <img src={image} width={150} height={150} style={{borderRadius: '10px', cursor: 'pointer'}}/>
+                    <img src={image} width={150} height={150} style={{borderRadius: '10px', cursor: 'pointer', objectFit: 'cover'}}/>
                   </Box>
                 ))}
               </Grid>
