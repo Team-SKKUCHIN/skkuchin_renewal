@@ -77,9 +77,11 @@ public class WorldcupService {
                             .map(worldcup -> worldcup.getUser())
                             .filter(user -> Objects.nonNull(user) &&
                                     Objects.nonNull(user.getMatching()) &&
-                                    user.getMatching() &&
-                                    (currentUser == null || user.getId() != currentUser.getId()))
+                                    user.getMatching())
                             .collect(Collectors.toList());
+                    
+                    users.removeIf(user -> user.getId()
+                        .equals(currentUser != null ? currentUser.getId() : null));
 
                     int shouldBeAdded = 3 - users.size();
 
@@ -137,9 +139,11 @@ public class WorldcupService {
                 .map(worldcup -> worldcup.getUser())
                 .filter(user -> Objects.nonNull(user) &&
                         Objects.nonNull(user.getMatching()) &&
-                        user.getMatching() &&
-                        (currentUser == null || user.getId() != currentUser.getId()))
+                        user.getMatching())
                 .collect(Collectors.toList());
+
+        users.removeIf(user -> user.getId()
+            .equals(currentUser != null ? currentUser.getId() : null));
 
         int shouldBeAdded = 3 - users.size();
 
