@@ -9,7 +9,7 @@ import CustomDropdownMenu from './CustomDropdownMenu';
 import { useSelector, useDispatch } from 'react-redux';
 import { delete_post } from '../../actions/post/post';
 
-const Header = ({ title, onBackClick, showSearchIcon, post }) => {
+const Header = ({ title, onBackClick, showSearchIcon, post, setLoading }) => {
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -64,17 +64,21 @@ const Header = ({ title, onBackClick, showSearchIcon, post }) => {
     }
 
     const handleDeletePost = (post) => {
-        console.log("삭제하기");
-        console.log(post.id);
+      setLoading(true);
 
-        dispatch(delete_post(post.id, ([result, message]) => {
-          if (result) {
-            console.log("게시글 삭제 성공");
-            router.back();
-          } else {
-            console.log("게시글 삭제 오류" + message);
-          }
-        }));
+      console.log("삭제하기");
+      console.log(post.id);
+
+      dispatch(delete_post(post.id, ([result, message]) => {
+        setLoading(false);
+
+        if (result) {
+          console.log("게시글 삭제 성공");
+          router.back();
+        } else {
+          console.log("게시글 삭제 오류" + message);
+        }
+      }));
     }
 
     const handleViewProfile = (post) => {

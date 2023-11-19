@@ -56,7 +56,7 @@ const CommunityItem = ({ id, title, content, article_like_count, comment_count, 
                 </Box>
                 {images?.length > 0 && (
                     <Box sx={{pl: '15px'}}>
-                        <img src={images[0]} alt="" width={75} height={75} style={{borderRadius: '20px'}}/>
+                        <img src={images[0]} alt="" width={75} height={75} style={{borderRadius: '20px', objectFit: 'cover'}}/>
                     </Box>
                 )}
             </Box>

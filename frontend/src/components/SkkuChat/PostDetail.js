@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Typography, Container, Grid, CssBaseline, ThemeProvider, Button, Divider, Box } from '@mui/material';
 import theme from '../../theme/theme';
@@ -12,6 +12,7 @@ import { load_comment, clear_prev_comment } from '../../actions/comment/comment'
 import { load_post, clear_prev_post } from '../../actions/post/post';
 import { enroll_like, delete_like } from '../../actions/like/like';
 import Comment from './Comment';
+import { Loading } from '../Loading';
 
 const articleTypeToTag = {
   "GIVE_RECOMMEND": "맛집 추천해요",
@@ -21,6 +22,7 @@ const articleTypeToTag = {
 const PostDetail = ({ postId }) => {
     const router = useRouter();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
     const post = useSelector(state => state.post.post);
     const comments = useSelector(state => state.comment.comment);
@@ -78,13 +80,13 @@ const PostDetail = ({ postId }) => {
 
     };
 
-    if(post === null || comments === null) return (<div>loading...</div>);
+    if (post === null || comments === null) return <Loading />;
 
     return (
       <ThemeProvider theme={theme}>
           <CssBaseline />
           <Container fixed style={{ position:'fixed', zIndex:'4', padding:'24px 24px 5px', overflow: "hidden", height:'max-content', maxWidth:'420px', top: '0', backgroundColor: '#fff'}} >
-            {post && <Header title="스꾸게시판" onBackClick={handleBackClick} post={post}/> }
+            {post && <Header title="스꾸게시판" onBackClick={handleBackClick} post={post} setLoading={setLoading} /> }
           </Container>
           <Container sx={{ p: '0 24px', mt: '72.5px'}}>
             {
@@ -124,7 +126,7 @@ const PostDetail = ({ postId }) => {
               } }}>
                 {post?.images && post?.images.length !== 0 && post?.images.map((image, index) => (
                   <Box key={index}>
-                    <img src={image} width={150} height={150} style={{borderRadius: '10px', cursor: 'pointer'}}/>
+                    <img src={image} width={150} height={150} style={{borderRadius: '10px', cursor: 'pointer', objectFit: 'cover'}}/>
                   </Box>
                 ))}
               </Grid>
@@ -170,7 +172,7 @@ const PostDetail = ({ postId }) => {
               </Grid>
             </Container>
           }
-
+        {loading && <Loading />}
       </ThemeProvider>
     );
 };

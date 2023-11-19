@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { enroll_post, load_all_posts } from '../actions/post/post';
 import removeBtn from '../image/close.png';
 import Image from 'next/image';
+import { Loading } from '../components/Loading';
 
 const tagToArticleType = {
     "맛집 추천해요": "GIVE_RECOMMEND",
@@ -19,6 +20,7 @@ const UploadPost = () => {
     const dispatch = useDispatch();
 
     const [title, setTitle] = useState('');
+    const [loading, setLoading] = useState(false);
     const [content, setContent] = useState('');
     const [selectedTag, setSelectedTag] = useState(null);
     const [isAnonymous, setIsAnonymous] = useState(true);
@@ -72,9 +74,12 @@ const UploadPost = () => {
     };
 
     const handleCompleteClick = () => {
+        setLoading(true);
         const selectedArticleType = tagToArticleType[selectedTag];
 
         dispatch(enroll_post(title, content, selectedArticleType, isAnonymous, images, ([result, message]) => {
+            setLoading(false);
+
             if (result) {
                 console.log("게시글 작성 완료!!")
                 dispatch(load_all_posts());
@@ -225,6 +230,7 @@ const UploadPost = () => {
                     </Grid>
                 </form>
             </Container>
+            {loading && <Loading />}
         </ThemeProvider>
     );
 };
