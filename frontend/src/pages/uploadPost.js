@@ -115,7 +115,7 @@ const UploadPost = () => {
                             제목
                         </Typography>
                         <Typography component="div" sx={{ fontSize: '14px', color: '#BABABA' }}>
-                            (최대 00자)
+                            (최대 255자)
                         </Typography>
                     </Grid>
                     <input
@@ -139,7 +139,7 @@ const UploadPost = () => {
                             게시글
                         </Typography>
                         <Typography component="div" sx={{ fontSize: '14px', color: '#BABABA' }}>
-                            (최대 00자)
+                            (최대 1000자)
                         </Typography>
                     </Grid>
                     <textarea
