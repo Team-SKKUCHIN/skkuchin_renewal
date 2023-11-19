@@ -43,13 +43,12 @@ const PostDetail = ({ postId }) => {
         dispatch(load_comment(postId, ([result, message]) => {
             if (result) {
                 console.log("댓글 불러오기 성공");
-                console.log(comments)
             } else {
                 console.log("댓글 불러오기 오류" + message);
             }
         }));
       }
-    }, []);
+    }, [postId]);
 
     const handleBackClick = () => {
       router.back();
@@ -82,6 +81,8 @@ const PostDetail = ({ postId }) => {
 
     if (post === null || comments === null) return <Loading />;
 
+    console.log(post)
+
     return (
       <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -113,7 +114,7 @@ const PostDetail = ({ postId }) => {
             <Grid sx={{display: 'flex', flexDirection: 'column', p: '10px 0', overflowX: 'hidden'}}>
               <Grid sx={{display: 'flex', flexDirection: 'column'}}>
                 <Typography sx={{fontSize: '18px', fontWeight: 800, color: '#3C3C3C'}}>{post?.title}</Typography>
-                <Typography sx={{fontSize: '14px', fontWeight: 400, color: '#3C3C3C', mt: '17px'}}>{post?.content}</Typography>
+                <Typography sx={{fontSize: '14px', fontWeight: 400, color: '#3C3C3C', mt: '17px', whiteSpace: 'pre-line'}}>{post?.content}</Typography>
               </Grid>
               
               <Typography sx={{fontSize: '12px', fontWeight: 900, color: '#BABABA', mt: '17px'}}>{'#' + articleTypeToTag[post?.article_type]}</Typography>

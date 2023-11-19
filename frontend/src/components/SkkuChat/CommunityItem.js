@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Box, Typography, Grid, Divider } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import { useSelector } from "react-redux";
 import GoLogin from '../GoLogin';
 
-// id, article_type, title, content, user_id, nickname, user_image, display_time, article_like_count, comment_count
 const CommunityItem = ({ id, title, content, article_like_count, comment_count, display_time, images }) => {
     const router = useRouter();
 
@@ -19,8 +18,18 @@ const CommunityItem = ({ id, title, content, article_like_count, comment_count, 
         } else {
             setIsLogin(true);
         }
-    };    
+    };   
 
+    const sliceContent = useCallback((content) => {
+        const length = 13;
+
+        if (content.length > length) {
+            content = content.substr(0, length - 2) + '...';
+        }
+
+        return content;
+    }, [])
+    
     return (
         <>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
@@ -30,8 +39,15 @@ const CommunityItem = ({ id, title, content, article_like_count, comment_count, 
             >
                 <Box sx={{ flexGrow: 1 }}>
                     <Typography sx={{fontSize: '14px', fontWeight: 800, color: '#3C3C3C'}}>{title}</Typography>
-                    <Typography sx={{p:' 8px 0px', fontSize: '14px', fontWeight: 400, color: '#3C3C3C', textOverflow: 'ellipsis'}}>
-                        {content}
+                    <Typography
+                        sx={{
+                            width: '100%',
+                            p:' 8px 0px',
+                            fontSize: '14px',
+                            color: '#3C3C3C',
+                        }}
+                    >
+                        {sliceContent(content)}
                     </Typography>
                     <Grid container sx={{ alignItems: 'center', p: 0, m: 0 }}>
                     <Grid item sx={{ display: 'flex', alignItems: 'center'}}>
