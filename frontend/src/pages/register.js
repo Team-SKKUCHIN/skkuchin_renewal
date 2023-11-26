@@ -33,6 +33,7 @@ const RegisterPage = () => {
         image: "",
         phone: ""
     })
+    // 유효성검사 완료했다는 object state value
 
     const handleNextStep = (stepData) => {
         setStep(step + 1);

@@ -141,7 +141,7 @@ const Friends = () => {
                             )))
                         : null}
                     </Grid >
-                    <Typography sx={{ fontSize:'14px', fontWeight: 400, color: '#3C3C3C', mb: '10px'}}>{'"'+person.introduction+'"'}</Typography>
+                    <Typography sx={{ fontSize:'14px', fontWeight: 400, color: '#3C3C3C', mb: '10px', textAlign: 'center'}}>{'"'+person.introduction+'"'}</Typography>
                     <Grid item sx={{ display: 'flex',  alignItems: 'center', width: '100%', justifyContent: 'center' }}>
                         <Button
                             disableElevation
