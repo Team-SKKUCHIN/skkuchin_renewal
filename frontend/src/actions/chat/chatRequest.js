@@ -1,59 +1,42 @@
-import Cookies from 'js-cookie';
-import { AUTHENTICATED_FAIL } from '../auth/types';
 import {
-    GET_CHAT_REQUEST_FOR_NOT_USER_FAIL,
-    GET_CHAT_REQUEST_FOR_NOT_USER_SUCCESS,
-    GET_CHAT_REQUEST_INFO_FAIL,
-    GET_CHAT_REQUEST_INFO_SUCCESS,
-    GET_REALTIME_REQUEST_SUCCESS
+    GET_REQUEST_SUCCESS,
+    GET_REQUEST_FAIL,
 }
     from './types';
-import { getToken } from '../auth/auth';
+import { getToken, request_refresh } from '../auth/auth';
+import { API_URL } from '../../config';
 
-export const get_realtime_chat_request = (username, stompClient) => dispatch => {
+export const get_chat_requests = (callback) => async dispatch => {
+    await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
-    const subscription = stompClient.subscribe(`/exchange/chat.exchange/request.${username}`,(content) => {
-        const data = JSON.parse(content.body);
-        
+
+    try {
+        const res = await fetch(`${API_URL}/api/chat/room/request_list`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization' : `Bearer ${access}`
+            }
+        });
+
+        const apiRes = await res.json();
+
+        if (res.status === 200) {
+            dispatch({
+                type: GET_REQUEST_SUCCESS,
+                payload: apiRes.data
+            })
+            if (callback) callback([true, apiRes.message]);
+        } else {
+            dispatch({
+                type: GET_REQUEST_FAIL
+            })
+            if (callback) callback([false, apiRes.message]);
+        }
+    } catch(error) {
         dispatch({
-            type: GET_REALTIME_REQUEST_SUCCESS,
-            payload: data
+            type: GET_REQUEST_FAIL
         })
-    },{
-        'auto-delete':true, 
-        'durable':false, 
-        'exclusive':false,
-        pushToken : access
-    });
-    return subscription;
-};
-
-export const get_chat_request_info = (stompClient) => dispatch => {
-    const access = dispatch(getToken('access'));
-
-    try {
-        stompClient.send('/app/chat.request', {"pushToken" : access});
-        dispatch({
-            type: GET_CHAT_REQUEST_INFO_SUCCESS
-        });
-    } catch (error) {
-        console.log(error)
-        dispatch({
-            type: GET_CHAT_REQUEST_INFO_FAIL
-        });
-    }
-
-};
-
-export const get_chat_request_for_not_user = () => dispatch => {
-    try {
-        dispatch({
-            type: GET_CHAT_REQUEST_FOR_NOT_USER_SUCCESS
-        });
-    } catch (error) {
-        console.log(error)
-        dispatch({
-            type: GET_CHAT_REQUEST_FOR_NOT_USER_FAIL
-        });
+        if (callback) callback([false, error]);
     }
 };

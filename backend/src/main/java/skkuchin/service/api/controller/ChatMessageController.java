@@ -25,6 +25,7 @@ import java.util.Map;
 public class ChatMessageController {
 
     private final ChatMessageService chatMessageService;
+    
     @PostMapping("")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<?> createMessage(@Valid @RequestBody ChatMessageDto.Request dto,

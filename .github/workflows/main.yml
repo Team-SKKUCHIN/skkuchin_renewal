@@ -34,7 +34,6 @@ jobs:
       - name: Copy prod files
         run: |
           cp backend/prod/ServiceApplication.java backend/src/main/java/skkuchin/service/
-          cp backend/prod/DebeziumController.java backend/src/main/java/skkuchin/service/webSocket/controller/
 
       - name: Build backend
         working-directory: ./backend

@@ -60,14 +60,14 @@ public class ServiceApplication {
 			// // 병준 경로
 
 			try {
-				tagService.insertData(path);
+				// tagService.insertData(path);
 				placeService.insertData(path);
 				imageService.insertData();
-				menuService.insertData(path);
+				// menuService.insertData(path);
 				keywordService.insertData(path);
-				reviewService.insertData(path);
+				// reviewService.insertData(path);
 				cacheService.caching();
-				rankService.addRank();
+				// rankService.addRank();
 				userService.saveTestMatchingUsers(100);
 				worldcupService.insertData(100);
 				chatRoomService.insertData();

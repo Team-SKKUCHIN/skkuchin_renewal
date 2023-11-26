@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, Tab, CssBaseline, Box, CircularProgress , Typography, Grid, Stack,  Avatar, } from '@mui/material';
+import { Tabs, Tab, Box, CircularProgress , Typography, Grid, Stack,  Avatar, } from '@mui/material';
 
 import notiOff from '../image/chat/notifications_off.png';
 import Image from 'next/image';
@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { clear_room_list, get_chat_room_info, get_realtime_chat_room, get_chat_room_for_not_user } from '../actions/chat/chatRoom';
-import { get_chat_request_info, get_realtime_chat_request, get_chat_request_for_not_user } from '../actions/chat/chatRequest';
+import { get_chat_requests } from '../actions/chat/chatRequest';
 import { request_refresh } from '../actions/auth/auth';
 import { clear_matching } from '../actions/matchingUser/matchingUser';
 import { displayProfile } from './MyPage/ProfileList';
@@ -66,21 +66,24 @@ export default function MessageTab() {
   const get_info = async () => {
     dispatch(request_refresh()).then(() => {
       subscriptions.chatRooms = dispatch(get_realtime_chat_room(user.username, stompClient));
-      subscriptions.chatRequests = dispatch(get_realtime_chat_request(user.username, stompClient));
     
       Promise.all(Object.values(subscriptions)).then(() => {
         dispatch(get_chat_room_info(stompClient));
-        dispatch(get_chat_request_info(stompClient));
       });
     });
   };
+
+  useEffect(() => {
+    if (value === 1 && user) {
+      dispatch(get_chat_requests());
+    }
+  }, [value, user])
 
   useEffect(() => {
     if (stompClient && user && user.username) {
       get_info();
     } else {
       dispatch(get_chat_room_for_not_user());
-      dispatch(get_chat_request_for_not_user());
     }
     return () => {
       dispatch(clear_room_list());

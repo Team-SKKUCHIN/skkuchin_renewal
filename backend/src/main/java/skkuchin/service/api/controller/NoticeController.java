@@ -95,4 +95,12 @@ public class NoticeController {
         noticeService.makePush(dto);
         return new ResponseEntity<>(new CMRespDto<>(1, "공지 푸시 알림 완료", null), HttpStatus.CREATED);
     }
+
+    @GetMapping("/alarm")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<?> getAlarm(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        AppUser user = principalDetails.getUser();
+        Boolean alarm = noticeService.checkUnreadNotice(user.getUsername());
+        return new ResponseEntity<>(new CMRespDto<>(1, "공지 알림 확인 완료", alarm), HttpStatus.OK);
+    }
 }

@@ -168,4 +168,19 @@ public class ChatRoomController {
         return new ResponseEntity<>(new CMRespDto<>(1, "채팅방 나가기 완료", null), HttpStatus.OK);
     }
 
+    @GetMapping("/alarm")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<?> getAlarm(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        AppUser user = principalDetails.getUser();
+        Boolean alarm = chatRoomService.checkUnreadMessageOrRequest(user.getUsername());
+        return new ResponseEntity<>(new CMRespDto<>(1, "채팅 알림 확인 완료", alarm), HttpStatus.OK);
+    }
+
+    @GetMapping("/request_list")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<?> getRequestlist(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        AppUser user = principalDetails.getUser();
+        List<ChatRoomDto.userResponse> requestList = chatRoomService.getRequestList(user.getUsername());
+        return new ResponseEntity<>(new CMRespDto<>(1, "채팅 요청 목록 확인 완료", requestList), HttpStatus.OK);
+    }
 }

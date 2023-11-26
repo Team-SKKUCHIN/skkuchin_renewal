@@ -11,13 +11,23 @@ import notiIcon from '../image/upperBar/notification_X.png'
 import notiOnIcon from '../image/upperBar/notification.png'
 import Image from 'next/image'
 import { useEffect } from "react";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { get_chat_alarm } from '../actions/chat/chatAlarm';
+import { get_notice_alarm } from '../actions/notice/noticeAlarm';
 
 const UpperBar = () => {
+    const dispatch = useDispatch();
     const [selected, setSelected] = useState("홈");
-    // const chatAlarm = useSelector(state => state.chatAlarm.chatAlarm);
+    const chatAlarm = useSelector(state => state.chatAlarm.chatAlarm);
     const noticeAlarm = useSelector(state => state.noticeAlarm.noticeAlarm);
     const user = useSelector(state => state.auth.user);
+
+    useEffect(() => {
+        if (user) {
+            dispatch(get_chat_alarm());
+            dispatch(get_notice_alarm());
+        }
+    });
 
     useEffect(() => {
         const currentPathname = window.location.pathname;
@@ -92,6 +102,7 @@ const UpperBar = () => {
             <Link href="/message">
                 <a
                     style={{
+                        display: "flex",
                         fontSize: "11px",
                         fontWeight: 700,
                         color: selected === "스꾸챗" ? "#FFCE00" : "#505050",
@@ -100,9 +111,18 @@ const UpperBar = () => {
                 }}
                 onClick={() => setSelected("스꾸챗")}
                 >
-                <span style={{padding:"0 0 2px 0"}}>
-                    스꾸챗
-                </span>
+                    <span style={{padding:"0 0 2px 0"}}>
+                        스꾸챗
+                    </span>
+                    {chatAlarm && <div
+                        style={{
+                            backgroundColor: "#FFCE00",
+                            width: "5px",
+                            height: "5px",
+                            borderRadius: "2.5px",
+                            margin: "0 0 auto 2.5px"
+                        }}
+                    />}
                 </a>
             </Link>
             {
