@@ -41,11 +41,6 @@ stop-server:
 	@docker-compose -f docker-compose/dev/docker-compose.yml down server
 .PHONY: stop-server
 
-connect:
-	@echo "Kafka connect is running ..."
-	@curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @register-mysql.json
-.PHONY: connect
-
 build-prod:
 	@echo "Build production images ..."
 	@docker-compose -f docker-compose/prod/docker-compose.yml build server client nginx
