@@ -2,16 +2,6 @@ import { LOGOUT_SUCCESS } from '../actions/auth/types';
 import{
     LOAD_NOTICE_FAIL,
     LOAD_NOTICE_SUCCESS,
-    LOAD_NOTICES_FAIL,
-    LOAD_NOTICES_SUCCESS,
-    DELETE_NOTICE_FAIL,
-    DELETE_NOTICE_SUCCESS,
-    MODIFY_NOTICE_FAIL,
-    MODIFY_NOTICE_SUCCESS,
-    ENROLL_NOTICE_FAIL,
-    ENROLL_NOTICE_SUCCESS,
-    READ_NOTICE_SUCCESS,
-    READ_NOTICE_FAIL
 } from '../actions/notice/types'
 
 const initialState = {
@@ -31,48 +21,6 @@ const noticeReducer = (state = initialState, action) => {
             return{
                 ...state,
                 notice: null
-            }
-        case LOAD_NOTICES_SUCCESS:
-            return{
-                ...state,
-                notice: payload
-            }
-        case LOAD_NOTICES_FAIL:
-            return{
-                ...state,
-                notice: null
-            }
-        case ENROLL_NOTICE_SUCCESS:
-            return{
-                ...state
-            }
-        case ENROLL_NOTICE_FAIL:
-            return{
-                ...state
-            }
-        case MODIFY_NOTICE_SUCCESS:
-            return{
-                ...state
-            }
-        case MODIFY_NOTICE_FAIL:
-            return{
-                ...state
-            }
-        case DELETE_NOTICE_SUCCESS:
-            return{
-                ...state
-            }
-        case DELETE_NOTICE_FAIL:
-            return{
-                ...state
-            }
-        case READ_NOTICE_SUCCESS:
-            return{
-                ...state
-            }
-        case READ_NOTICE_FAIL:
-            return{
-                ...state
             }
         case LOGOUT_SUCCESS:
             return initialState;
