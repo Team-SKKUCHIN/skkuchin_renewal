@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {  TextField, Button, InputLabel, Typography, Box, FormControl, Select, MenuItem, Container, Grid, Autocomplete, OutlinedInput} from '@mui/material';
 import back from '../../image/arrow_back_ios.png';
 import check from '../../image/check_circle.png';
@@ -13,7 +13,6 @@ const SignUpStep2 = (props) => {
     const [validNickname, setValidNickname] = useState(null);
     const [nicknameMsg, setNicknameMsg] = useState("");
     const [validSId, setValidSId] = useState(null);
-    const [studentIdMsg, setStudentIdMsg] = useState("");
     const [phone1, setPhone1] = useState("010");
     const [phone2, setPhone2] = useState("");
     const [phone3, setPhone3] = useState("");
@@ -43,18 +42,25 @@ const SignUpStep2 = (props) => {
       props.handlePrevStep();
     }
 
-    const handleNextStep = () => {
-      if (phone1 && validPhone2 && validPhone3)
-        props.setData({...props.data, phone: phone1+phone2+phone3})
+    const checkNickname = () => {
       check_nickname(props.data.nickname, ([result, message]) => {
         setValidNickname(result);
-        if (result)
-          props.handleNextStep();
+        if (result) {
+        }
         else {
           if (typeof(message) == 'string')
             setNicknameMsg(message);
         }
       })
+    }
+
+    const handleNextStep = () => {
+      if (phone1 && validPhone2 && validPhone3)
+        props.setData({...props.data, phone: phone1+phone2+phone3})
+      checkNickname();
+      if (validNickname) {
+        props.handleNextStep();
+      }
     }
 
     const handleNicknameChange = (e) => {
@@ -64,17 +70,7 @@ const SignUpStep2 = (props) => {
       props.setData({...props.data, nickname: e.target.value})
     }
 
-    const checkNickname = () => {
-      check_nickname(props.data.nickname, ([result, message]) => {
-        setValidNickname(result);
-        setNicknameMsg(message);
-      });
-    }
-
-    const handleStudentIdChange = (e) => {
-      let sId = e.target.value
-      props.setData({...props.data, student_id: sId})
-
+    const validateSId = (sId) => {
       let isNum = /^\d+$/.test(sId)
       if (sId == "") {
         setValidSId(null)
@@ -84,35 +80,60 @@ const SignUpStep2 = (props) => {
       } else {
         setValidSId(true)
       }
+    }
+
+    const handleStudentIdChange = (e) => {
+      let sId = e.target.value
+      props.setData({...props.data, student_id: sId})
+
+      validateSId(sId);
     } 
 
-    // 숫자 네 자리 넘는지, 문자 포함되어 있는지 검사
-    const handlePhone2Change = (e) => {
-      let p2 = e.target.value
+    const validatePhone2 = (p2) => {
       let isNum = /^\d+$/.test(p2)
       setPhone2(p2)
       if (p2 == "") {
         setValidPhone2(null)
       }
-      else if (!isNum || p2.length > 4) {
+      else if (!isNum || p2.length !== 4) {
         setValidPhone2(false)
       } else {
         setValidPhone2(true)
       }
     }
-    const handlePhone3Change = (e) => {
-      let p3 = e.target.value
+    const validatePhone3 = (p3) => {
       let isNum = /^\d+$/.test(p3)
       setPhone3(p3)
       if (p3 == "") {
         setValidPhone3(null)
       }
-      else if (!isNum || p3.length > 4) {
+      else if (!isNum || p3.length !== 4) {
         setValidPhone3(false)
       } else {
         setValidPhone3(true)
       }
     }
+
+    // 숫자 네 자리 넘는지, 문자 포함되어 있는지 검사
+    const handlePhone2Change = (e) => {
+      let p2 = e.target.value
+      validatePhone2(p2);
+    }
+    const handlePhone3Change = (e) => {
+      let p3 = e.target.value
+      validatePhone3(p3);
+    }
+
+    useEffect(() => {
+      if (props.data.nickname !== '') {
+        checkNickname();
+        validateSId(props.data.student_id);
+        if (props.data.phone.length === 11) {
+          validatePhone2(props.data.phone.slice(3, 7));
+          validatePhone3(props.data.phone.slice(7, 11));
+        } 
+      }
+    }, [])
 
 
     return (
@@ -177,7 +198,7 @@ const SignUpStep2 = (props) => {
               <input
                   variant="standard"
                   placeholder=""
-                  value={props.data.studentId}
+                  value={props.data.student_id}
                   //onClick={e => setDialogOpen(false)}
                   onChange={(e, value) => handleStudentIdChange(e, value)}
                   style={{

@@ -113,6 +113,16 @@ export default function SignUpStep3(props) {
         // }));
         props.handleNextStep();
     }
+    useEffect(() => {
+        if (props.data.image !== '') {
+            setProfile({
+                ...profile,
+                [props.data.image] : true
+                
+            })
+            setImage(props.data.image);
+        }
+    }, [])
 
     return (
         <div>
