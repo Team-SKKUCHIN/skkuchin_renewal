@@ -39,7 +39,7 @@ const myFavPost = () => {
         <ThemeProvider theme={theme}>
         <CssBaseline/>
             {/* 헤더 */}
-            <Container maxWidth="md"  style={{ position:'fixed', zIndex:'4', padding:'14px 24px 5px', overflow: "hidden", height:'max-content', maxWidth:'420px', top: '0', backgroundColor: '#fff'}} >
+            <Container maxWidth="md"  style={{ position:'fixed', zIndex:'4', padding:'14px 24px 5px', overflow: "hidden", maxWidth:'420px', top: '0', backgroundColor: '#fff'}} >
                 <Card style={{
                     top: '18px',
                     height: '120%',

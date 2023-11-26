@@ -202,7 +202,7 @@ const enrollSMS = () => {
                         height: '56px',
                         border: validPhone2 == false ? '1px solid #FF3B3B' : '1px solid #E2E2E2',
                         borderRadius: '8px',
-                        width: '33%',
+                        width: '31%',
                         outline: 'none',
                         margin: '0 8px'
                     }}

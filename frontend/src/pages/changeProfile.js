@@ -183,9 +183,7 @@ const makeProfile = () => {
         setGender(e.target.value)
     }
 
-    const handleMbtiClick = (e) => {
-        let chosen = e.target.innerText
-
+    const handleMbtiClick = (chosen) => {
         switch(chosen) {
             case 'E':
                 setMbtiChoose({...mbtiChoose, 'E': true, 'I': false})
@@ -217,18 +215,18 @@ const makeProfile = () => {
 
     }
 
-    const handleFoodClick = (e) => {
-        if (food[e.target.innerText]) {
+    const handleFoodClick = (chosen) => {
+        if (food[chosen]) {
             setFood({
                 ...food,
-                [e.target.innerText] : false
+                [chosen] : false
             })
             keywordNum.current -= 1;
         } else {
             if (keywordNum.current < 8) {
                 setFood({
                     ...food,
-                    [e.target.innerText] : true
+                    [chosen] : true
                 })
                 keywordNum.current += 1;
             }
@@ -236,51 +234,51 @@ const makeProfile = () => {
     }
 
     const handleSportsClick = (e) => {
-        if (sports[e.target.innerText]) {
+        if (sports[chosen]) {
             setSports({
                 ...sports,
-                [e.target.innerText] : false
+                [chosen] : false
             })
             keywordNum.current -= 1;
         } else {
             if (keywordNum.current < 8) {
                 setSports({
                     ...sports,
-                    [e.target.innerText] : true
+                    [chosen] : true
                 })
                 keywordNum.current += 1;
             }
         }
     }
     const handleArtClick = (e) => {
-        if (art[e.target.innerText]) {
+        if (art[chosen]) {
             setArt({
                 ...art,
-                [e.target.innerText] : false
+                [chosen] : false
             })
             keywordNum.current -= 1;
         } else {
             if (keywordNum.current < 8) {
                 setArt({
                     ...art,
-                    [e.target.innerText] : true
+                    [chosen] : true
                 })
                 keywordNum.current += 1;
             }
         }
     }
     const handleStudyClick = (e) => {
-        if (study[e.target.innerText]) {
+        if (study[chosen]) {
             setStudy({
                 ...study,
-                [e.target.innerText] : false
+                [chosen] : false
             })
             keywordNum.current -= 1;
         } else {
             if (keywordNum.current < 8) {
                 setStudy({
                     ...study,
-                    [e.target.innerText] : true
+                    [chosen] : true
                 })
                 keywordNum.current += 1;
             }
@@ -383,23 +381,23 @@ const makeProfile = () => {
                         <Typography style={{fontSize: '12px', fontWeight: '900', marginBottom: '8px', marginLeft: '4px', color: '#3C3C3C'}}>MBTI</Typography>
                         <Grid container style={{marginBottom: '16px'}}>
                             <div style={{width: '22%'}}>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.E ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>E</Button>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.I ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderTopColor:'transparent',  borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>I</Button>
+                                <Button onClick={() => handleMbtiClick("E")} style={{backgroundColor: mbtiChoose.E ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>E</Button>
+                                <Button onClick={() => handleMbtiClick("I")} style={{backgroundColor: mbtiChoose.I ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderTopColor:'transparent',  borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>I</Button>
                             </div>
                             <div style={{width: '4%'}}></div>
                             <div style={{width: '22%'}}>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.N ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>N</Button>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.S ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>S</Button>
+                                <Button onClick={() => handleMbtiClick("N")} style={{backgroundColor: mbtiChoose.N ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>N</Button>
+                                <Button onClick={() => handleMbtiClick("S")} style={{backgroundColor: mbtiChoose.S ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>S</Button>
                             </div>
                             <div style={{width: '4%'}}></div>
                             <div style={{width: '22%'}}>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.F ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>F</Button>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.T ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2',borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>T</Button>
+                                <Button onClick={() => handleMbtiClick("F")} style={{backgroundColor: mbtiChoose.F ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>F</Button>
+                                <Button onClick={() => handleMbtiClick("T")} style={{backgroundColor: mbtiChoose.T ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2',borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>T</Button>
                             </div>
                             <div style={{width: '4%'}}></div>
                             <div style={{width: '22%'}}>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.P ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>P</Button>
-                                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.J ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2',borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>J</Button>
+                                <Button onClick={() => handleMbtiClick("P")} style={{backgroundColor: mbtiChoose.P ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>P</Button>
+                                <Button onClick={() => handleMbtiClick("J")} style={{backgroundColor: mbtiChoose.J ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2',borderTopColor:'transparent', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>J</Button>
                             </div>
                         </Grid>
 
@@ -425,19 +423,19 @@ const makeProfile = () => {
 
                         {/* 음식 */}
                         <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '8px', color: '#3C3C3C'}}>음식</Typography>
-                        {Object.keys(food).map((a, index) => <Button key={index} onClick={handleFoodClick} style={{height: '32px', border: food[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: food[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
+                        {Object.keys(food).map((a, index) => <Button key={index} onClick={() => handleFoodClick(a)} style={{height: '32px', border: food[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: food[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
 
                         {/* 운동 */}
                         <Typography style={{fontSize: '16px', fontWeight: '700', marginTop: '24px', marginBottom: '8px', color: '#3C3C3C'}}>운동</Typography>
-                        {Object.keys(sports).map((a, index) => <Button key={index} onClick={handleSportsClick} style={{height: '32px', border: sports[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: sports[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
+                        {Object.keys(sports).map((a, index) => <Button key={index} onClick={() => handleSportsClick(a)} style={{height: '32px', border: sports[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: sports[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
 
                         {/* 문화 예술 */}
                         <Typography style={{fontSize: '16px', fontWeight: '700', marginTop: '24px', marginBottom: '8px', color: '#3C3C3C'}}>문화 예술</Typography>
-                        {Object.keys(art).map((a, index) => <Button key={index} onClick={handleArtClick} style={{height: '32px', border: art[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: art[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
+                        {Object.keys(art).map((a, index) => <Button key={index} onClick={() => handleArtClick(a)} style={{height: '32px', border: art[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: art[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
 
                         {/* 학술 */}
                         <Typography style={{fontSize: '16px', fontWeight: '700', marginTop: '24px', marginBottom: '8px', color: '#3C3C3C'}}>학술</Typography>
-                        {Object.keys(study).map((a, index) => <Button key={index} onClick={handleStudyClick} style={{height: '32px', border: study[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: study[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
+                        {Object.keys(study).map((a, index) => <Button key={index} onClick={() => handleStudyClick(a)} style={{height: '32px', border: study[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: study[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
                         </div>
                     </form>
                 <Dialog open={dialogOpen}><DialogContent><Typography style={{color:'#3C3C3C', fontWeight:'700', fontSize:'16px'}}>저장이 완료되었습니다.</Typography></DialogContent></Dialog>

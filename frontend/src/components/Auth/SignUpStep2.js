@@ -6,10 +6,11 @@ import Image from 'next/image';
 import { useRouter } from "next/router";
 import { check_nickname } from "../../actions/auth/auth";
 import { useDispatch } from 'react-redux';
+import { Loading } from '../Loading';
 
 const SignUpStep2 = (props) => {
-    const dispatch = useDispatch();
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const [validNickname, setValidNickname] = useState(null);
     const [nicknameMsg, setNicknameMsg] = useState("");
     const [validSId, setValidSId] = useState(null);
@@ -33,34 +34,35 @@ const SignUpStep2 = (props) => {
       '소프트웨어학과', '생명과학과', '수학과', '물리학과', '화학과', '전자전기공학부', '반도체시스템공학과', '소재부품융합공학과', '약학과', '스포츠과학과', '의학과', '컴퓨터공학과',
       '인문과학계열', '사회과학계열', '자연과학계열', '공학계열'
     ];
-    const studentIdList = [
-      '23학번', '22학번', '21학번', '20학번', '19학번', '18학번', '17학번', '16학번', '15학번', '14학번', '13학번', '12학번', '11학번', '10학번'
-    ]
     const phoneNumList = ['010']
 
     const handlePrevStep = () => {
       props.handlePrevStep();
     }
 
-    const checkNickname = () => {
+    const checkNickname = (next) => {
       check_nickname(props.data.nickname, ([result, message]) => {
+        setLoading(false);
         setValidNickname(result);
         if (result) {
-        }
-        else {
-          if (typeof(message) == 'string')
+          if (next) {
+            props.handleNextStep();
+          }
+        } else {
+          if (typeof(message) == 'string') {
             setNicknameMsg(message);
+          }
         }
       })
     }
 
     const handleNextStep = () => {
-      if (phone1 && validPhone2 && validPhone3)
+      setLoading(true);
+
+      if (phone1 && validPhone2 && validPhone3) {
         props.setData({...props.data, phone: phone1+phone2+phone3})
-      checkNickname();
-      if (validNickname) {
-        props.handleNextStep();
       }
+      checkNickname(true);
     }
 
     const handleNicknameChange = (e) => {
@@ -126,7 +128,7 @@ const SignUpStep2 = (props) => {
 
     useEffect(() => {
       if (props.data.nickname !== '') {
-        checkNickname();
+        checkNickname(false);
         validateSId(props.data.student_id);
         if (props.data.phone.length === 11) {
           validatePhone2(props.data.phone.slice(3, 7));
@@ -368,6 +370,7 @@ const SignUpStep2 = (props) => {
         </div>
         </div>
       </Box>
+      {loading && <Loading />}
       </div>
     );
   };
