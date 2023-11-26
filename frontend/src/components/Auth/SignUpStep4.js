@@ -95,8 +95,7 @@ const SignUpStep4 = (props) => {
     const handleGenderClick = (e) => {
         setGender(e.target.value)
     }
-    const handleMbtiClick = (e) => {
-        let chosen = e.target.innerText
+    const handleMbtiClick = (chosen) => {     
         switch(chosen) {
             case 'E':
                 setMbtiChoose({...mbtiChoose, 'E': true, 'I': false})
@@ -127,96 +126,96 @@ const SignUpStep4 = (props) => {
         }
     }
 
-    const handleFoodClick = (e) => {
+    const handleFoodClick = (chosen) => {
         if(keyword.length == 8){
             setFood({
                 ...food
             })
-            if(food[e.target.innerText]){
+            if(food[chosen]){
                 setFood({
                     ...food,
-                    [e.target.innerText] : false
+                    [chosen] : false
                 })
             }
-        } else if(food[e.target.innerText]){
+        } else if(food[chosen]){
             setFood({
                 ...food,
-                [e.target.innerText] : false
+                [chosen] : false
             })
         } else{
             setFood({
                 ...food,
-                [e.target.innerText] : true
+                [chosen] : true
             })
         }
     }
-    const handleSportsClick = (e) => {
+    const handleSportsClick = (chosen) => {
         if(keyword.length == 8){
             setSports({
                 ...sports
             })
-            if(sports[e.target.innerText]){
+            if(sports[chosen]){
                 setSports({
                     ...sports,
-                    [e.target.innerText] : false
+                    [chosen] : false
                 })
             }
-        } else if(sports[e.target.innerText]){
+        } else if(sports[chosen]){
             setSports({
                 ...sports,
-                [e.target.innerText] : false
+                [chosen] : false
             })
         } else{
             setSports({
                 ...sports,
-                [e.target.innerText] : true
+                [chosen] : true
             })
         }
     }
-    const handleArtClick = (e) => {
+    const handleArtClick = (chosen) => {
         if(keyword.length == 8){
             setArt({
                 ...art
             })
-            if(art[e.target.innerText]){
+            if(art[chosen]){
                 setArt({
                     ...art,
-                    [e.target.innerText] : false
+                    [chosen] : false
                 })
             }
-        } else if(art[e.target.innerText]){
+        } else if(art[chosen]){
             setArt({
                 ...art,
-                [e.target.innerText] : false
+                [chosen] : false
             })
         } else{
             setArt({
                 ...art,
-                [e.target.innerText] : true
+                [chosen] : true
             })
         }
     }
 
-    const handleStudyClick = (e) => {
+    const handleStudyClick = (chosen) => {
         if(keyword.length == 8){
             setStudy({
                 ...study
             })
-            if(study[e.target.innerText]){
+            if(study[chosen]){
                 setStudy({
                     ...study,
-                    [e.target.innerText] : false
+                    [chosen] : false
                 })
             }
-        } else if(study[e.target.innerText]){
+        } else if(study[chosen]){
             setStudy({
                 ...study,
-                [e.target.innerText] : false
+                [chosen] : false
             })
         } else{
             setStudy({
                 ...study,
-                [e.target.innerText] : true
+                [chosen] : true
             })
         }
     }
@@ -316,23 +315,23 @@ const SignUpStep4 = (props) => {
         <Typography style={{fontSize: '12px', fontWeight: '900', marginBottom: '8px', marginLeft: '4px', color: '#3C3C3C'}}>MBTI</Typography>
         <Grid container style={{marginBottom: '16px'}}>
             <div style={{width: '22%'}}>
-                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.E == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>E</Button>
-                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.E == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>I</Button>
+                <Button onClick={() => handleMbtiClick("E")} style={{backgroundColor: mbtiChoose.E == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>E</Button>
+                <Button onClick={() => handleMbtiClick("I")} style={{backgroundColor: mbtiChoose.E == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>I</Button>
             </div>
             <div style={{width: '4%'}}></div>
             <div style={{width: '22%'}}>
-                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.N == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>N</Button>
-                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.N == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>S</Button>
+                <Button onClick={() => handleMbtiClick("N")} style={{backgroundColor: mbtiChoose.N == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>N</Button>
+                <Button onClick={() => handleMbtiClick("S")} style={{backgroundColor: mbtiChoose.N == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>S</Button>
             </div>
             <div style={{width: '4%'}}></div>
             <div style={{width: '22%'}}>
-                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.F == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>F</Button>
-                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.F == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>T</Button>
+                <Button onClick={() => handleMbtiClick("F")} style={{backgroundColor: mbtiChoose.F == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>F</Button>
+                <Button onClick={() => handleMbtiClick("T")} style={{backgroundColor: mbtiChoose.F == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>T</Button>
             </div>
             <div style={{width: '4%'}}></div>
             <div style={{width: '22%'}}>
-                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.P == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>P</Button>
-                <Button onClick={handleMbtiClick} style={{backgroundColor: mbtiChoose.P == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>J</Button>
+                <Button onClick={() => handleMbtiClick("P")} style={{backgroundColor: mbtiChoose.P == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>P</Button>
+                <Button onClick={() => handleMbtiClick("J")} style={{backgroundColor: mbtiChoose.P == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>J</Button>
             </div>
         </Grid>
 
@@ -358,19 +357,19 @@ const SignUpStep4 = (props) => {
 
         {/* 음식 */}
         <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '8px', color: '#3C3C3C'}}>음식</Typography>
-        {Object.keys(food).map((a) => <Button onClick={handleFoodClick} style={{height: '32px', border: food[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: food[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
+        {Object.keys(food).map((a) => <Button onClick={() => handleFoodClick(a)} style={{height: '32px', border: food[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: food[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
 
         {/* 운동 */}
         <Typography style={{fontSize: '16px', fontWeight: '700', marginTop: '24px', marginBottom: '8px', color: '#3C3C3C'}}>운동</Typography>
-        {Object.keys(sports).map((a) => <Button onClick={handleSportsClick} style={{height: '32px', border: sports[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: sports[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
+        {Object.keys(sports).map((a) => <Button onClick={() => handleSportsClick(a)} style={{height: '32px', border: sports[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: sports[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
 
         {/* 문화 예술 */}
         <Typography style={{fontSize: '16px', fontWeight: '700', marginTop: '24px', marginBottom: '8px', color: '#3C3C3C'}}>문화 예술</Typography>
-        {Object.keys(art).map((a) => <Button onClick={handleArtClick} style={{height: '32px', border: art[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: art[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
+        {Object.keys(art).map((a) => <Button onClick={() => handleArtClick(a)} style={{height: '32px', border: art[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: art[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
 
         {/* 학술 */}
         <Typography style={{fontSize: '16px', fontWeight: '700', marginTop: '24px', marginBottom: '8px', color: '#3C3C3C'}}>학술</Typography>
-        {Object.keys(study).map((a) => <Button onClick={handleStudyClick} style={{height: '32px', border: study[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: study[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
+        {Object.keys(study).map((a) => <Button onClick={() => handleStudyClick(a)} style={{height: '32px', border: study[a] ? '1px solid #FFCE00' : '1px solid #E2E2E2', borderRadius: '30px', backgroundColor: study[a] ? '#FFFCE4' : '#fff', margin: '0 8px 8px 0', color: '#3C3C3C', padding: '6px 10px'}}>{a}</Button>)}
         </div>
     </form>
 

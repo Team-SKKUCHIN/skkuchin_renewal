@@ -1,16 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch } from 'react-redux';
-import { CssBaseline, Box, ThemeProvider, Grid,Button, Container, Typography, Dialog, DialogContent, DialogActions } from '@mui/material';
+import { CssBaseline, Box, ThemeProvider, Grid,Button, Typography, Dialog, DialogContent, DialogActions } from '@mui/material';
 import Image from 'next/image';
 import theme from '../theme/theme';
-import { backArrow, closeIcon, mainLogo } from '../image/recommend';
+import { closeIcon } from '../image/recommend';
 import { useRouter } from 'next/router';
 import { enroll_request } from "../actions/request/request";
-import { test } from "../actions/request/request";
+import { Loading } from '../components/Loading';
 
 const requestPlace = () => {
     const router = useRouter();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
     const [campus, setCampus] = useState('명륜');
     const [name, setName] = useState('');
     const [reason, setReason] = useState('');
@@ -20,10 +21,12 @@ const requestPlace = () => {
     const handleClose = () => {
         router.push('/myPage');
     }
-    const handleCampus = (e) => {
-        let cur = e.target.innerText;
-        if (cur == '명륜') setCampus('율전')
-        else setCampus('명륜')
+    const handleCampus = () => {
+        if (campus === '명륜') {
+            setCampus('율전');
+        } else {
+            setCampus('명륜');
+        }
     }
 
     const handleInputChange = (e) => {
@@ -31,7 +34,11 @@ const requestPlace = () => {
     }
 
     const handleSubmit = (e) => {
+        e.preventDefault();
+        setLoading(true);
+
         dispatch(enroll_request(campus, name, reason, ([result, message]) => {
+            setLoading(false);
             if (result) {
                 setDialogMsg('요청 글이 작성되었습니다.')
             } else {
@@ -119,16 +126,16 @@ const requestPlace = () => {
                 </Box>
             </Box>
             <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff'}}>
-                {name !== '' ?
-                            <Button variant="contained" onClick={handleSubmit} style={{margin: '24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                                요청하기
-                            </Button>
-                        :
-                            <Button variant="contained" disabled style={{margin: '24px', width: '88%', backgroundColor: "#E2E2E2", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                                요청하기
-                            </Button>
-                    }
-                </div>
+            {name !== '' ?
+                        <Button variant="contained" onClick={handleSubmit} style={{margin: '24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+                            요청하기
+                        </Button>
+                    :
+                        <Button variant="contained" disabled style={{margin: '24px', width: '88%', backgroundColor: "#E2E2E2", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+                            요청하기
+                        </Button>
+                }
+            </div>
 
             <Dialog open={dialogOpen} onClose={handleDialogOpen} PaperProps={{ style: { borderRadius: '10px', width: '327px' } }}>
                 <DialogContent style={{padding:'66px 16px 34px 16px', marginBottom:'0px'}}>
@@ -146,6 +153,7 @@ const requestPlace = () => {
 
                 </DialogActions>
             </Dialog>
+            {loading && <Loading />}
         </ThemeProvider>
     )
 }

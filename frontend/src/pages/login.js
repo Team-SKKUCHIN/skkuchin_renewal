@@ -10,14 +10,15 @@ import theme from '../theme/theme';
 import logo from '../image/main_logo.png'
 import check from '../image/check_circle.png';
 import uncheck from '../image/uncheck.png';
+import { Loading } from '../components/Loading';
 
 const LoginPage = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const loading = useSelector(state => state.auth.loading);
 
+    const [loading, setLoading] = useState(false);
     const [rememberUsername, setRememberUsername] = useState(false);
     const [error, setError] = useState('');
     const [remainHeight, setRemainHeight] = useState(window.innerHeight - 490 + "px");
@@ -40,8 +41,10 @@ const LoginPage = () => {
 
     const onSubmit = e => {
         e.preventDefault();
+        setLoading(true);
 
         dispatch(login(username, password, ([result, message]) => {
+            setLoading(false);
             if (result) {
                 dispatch(update_last_accessed_time(true));
                 if (rememberUsername) {
@@ -136,19 +139,11 @@ const LoginPage = () => {
                                     <Image onClick={() => setRememberUsername(true)} src={uncheck} width={15.83} height={15.83} sx={{p: '1.58px'}} layout='fixed' style={{marginTop: '5px'}} />}
                                 <span style={{marginLeft: '4px', marginRight: '18px', fontSize: '12px', color: '#777777'}} >아이디 기억하기</span>
                             </div>
-                            {
-                                loading ? (
-                                    <div className="d-flex justify-content-center align-items-center mt-5">
-                                        <Loader type = 'Oval' color = '#00bfff' width={50} height={50}></Loader>
-                                    </div>
-                                ) : (
-                                    <div style={{ margin: '5px 24px 10px' }}>
-                                        <Button variant="contained" type="submit" style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                                            스꾸친 로그인
-                                        </Button>
-                                    </div>
-                                )
-                            }
+                            <div style={{ margin: '5px 24px 10px' }}>
+                                <Button variant="contained" type="submit" style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+                                    스꾸친 로그인
+                                </Button>
+                            </div>
                             
                         </form>
                     </div>
@@ -168,6 +163,7 @@ const LoginPage = () => {
                 <div style={{marginTop: '6px', textAlign: 'center'}}>스꾸친의 회원정보 처리방식은 <span onClick={() => router.push({pathname: '/policy', query: {page: 'login'}})} style={{textDecoration: 'underline'}}>개인정보 처리방침</span> 및 쿠키 정책에서 확인해보세요.</div>
             </div>
             </div>
+            {loading && <Loading />}
         </ThemeProvider>
     )
 };
