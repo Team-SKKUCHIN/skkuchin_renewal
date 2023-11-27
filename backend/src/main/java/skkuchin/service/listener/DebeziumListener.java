@@ -34,14 +34,14 @@ public class DebeziumListener {
     private final DebeziumService debeziumService;
 
     public DebeziumListener(
-        Configuration debeziumConnectorConfiguration,
-        DebeziumService debeziumService) {
+            Configuration debeziumConnectorConfiguration,
+            DebeziumService debeziumService) {
 
         this.debeziumEngine = DebeziumEngine.create(ChangeEventFormat.of(Connect.class))
-            .using(debeziumConnectorConfiguration.asProperties())
-            .notifying(this::handleChangeEvent)
-            .build();
-        
+                .using(debeziumConnectorConfiguration.asProperties())
+                .notifying(this::handleChangeEvent)
+                .build();
+
         this.debeziumService = debeziumService;
     }
 
@@ -50,7 +50,7 @@ public class DebeziumListener {
 
         log.info("Key = '" + sourceRecord.key() + "' value = '" + sourceRecord.value() + "'");
 
-        Struct sourceRecordChangeValue= (Struct) sourceRecord.value();
+        Struct sourceRecordChangeValue = (Struct) sourceRecord.value();
 
         if (sourceRecordChangeValue != null) {
             Struct sourceStruct = (Struct) sourceRecordChangeValue.get(SOURCE);
@@ -58,13 +58,13 @@ public class DebeziumListener {
             if (sourceStruct != null) {
                 Operation operation = Operation.forCode((String) sourceRecordChangeValue.get(OPERATION));
 
-                if (operation != Operation.READ) {
+                if (operation == Operation.CREATE || operation == Operation.UPDATE) {
                     Struct struct = (Struct) sourceRecordChangeValue.get(AFTER);
                     Map<String, Object> payload = struct.schema().fields().stream()
-                        .map(Field::name)
-                        .filter(fieldName -> struct.get(fieldName) != null)
-                        .map(fieldName -> Pair.of(fieldName, struct.get(fieldName)))
-                        .collect(toMap(Pair::getKey, Pair::getValue));
+                            .map(Field::name)
+                            .filter(fieldName -> struct.get(fieldName) != null)
+                            .map(fieldName -> Pair.of(fieldName, struct.get(fieldName)))
+                            .collect(toMap(Pair::getKey, Pair::getValue));
 
                     String tableName = (String) sourceStruct.get("table");
 
