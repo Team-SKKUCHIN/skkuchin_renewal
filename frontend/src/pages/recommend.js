@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import Image from 'next/image';
 import theme from '../theme/theme';
-import { backArrow, mainLogo } from '../image/recommend';
+import { mainLogo } from '../image/recommend';
 import { useToggle } from '../components/Recommend/useToggle';
 import styled from '@emotion/styled';
 import SlideContainer from '../components/Recommend/SlideContainer';
