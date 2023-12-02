@@ -35,7 +35,7 @@ export default function AlertMessage({ alertOpen, setAlertOpen, alertMessage }){
                     textAlign:'center'
                   }}
                 >
-                  <Alert style={{width: `${alertMessage.length * 18}px`, color:'black', backgroundColor:'white', borderRadius:'10px', boxShadow: '0px 3px 5px rgba(0,0,0,0.3)' }} icon={false}>
+                  <Alert style={{width: `${alertMessage.length * 20}px`, color:'black', backgroundColor:'white', borderRadius:'10px', boxShadow: '0px 3px 5px rgba(0,0,0,0.3)' }} icon={false}>
                       <div style={{
                           display: "flex",
                           justifyContent: "center",

@@ -1,8 +1,8 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from '../theme/theme';
 import Image from "next/image";
-import { copy, figure1, figure2, mbti } from '../image/event'
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { copy, mbti } from '../image/event'
+import { useCallback, useEffect, useRef, useState } from "react";
 import { eventAnswers, eventPercentage, eventQuestions, eventResult, useResults } from "../utils/eventHelper";
 import { useRouter } from "next/router";
 import { Loading } from "../components/Loading";
@@ -25,12 +25,12 @@ const Result = ({ getResults }) => {
         const url = window.document.location.href;
 
         navigator.clipboard.writeText(url)
-          .then(() => {
+            .then(() => {
             setAlertOpen(true);
-          })
-          .catch((err) => {
-            console.error('Unable to copy to clipboard', err);
-          });
+            })
+            .catch((err) => {
+                console.error('Unable to copy to clipboard', err);
+            });
     }, []);
 
     const checkAnswer = useCallback(() => {
@@ -110,17 +110,13 @@ const Result = ({ getResults }) => {
                         >
                             <Image src={mbti} width={293} height={168} layout='fixed' placeholder='blur' />
                         </div>
-                        <div
-                            style={{
-                                marginTop: '35px',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                            }}
-                        >
+                        <div style={{ marginTop: '35px', display: 'flex', justifyContent: 'center' }}>
                             {tags.map((tag, index) => (
                                 <div
                                     key={index}
                                     style={{
+                                        whiteSpace: 'nowrap',
+                                        margin: '0 5%',
                                         padding: '10px',
                                         borderRadius: '10px',
                                         backgroundColor: '#FFFCE4',
@@ -153,23 +149,12 @@ const Result = ({ getResults }) => {
                                 </li>
                             ))}
                         </div>
-                        <div
-                            style={{
-                                marginTop: '50px',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                            }}
-                        >​
+                        <div style={{ marginTop: '50px', display: 'flex', justifyContent: 'center' }}>​
                             {Object.entries(statistics).map(([key, value]) => (
-                                <div
-                                    key={key}
-                                    style={{
-                                        marginLeft: key !== '점수' && 'auto',
-                                        marginRight: key === '점수' && 'auto',
-                                    }}
-                                >
+                                <div key={key} style={{ margin: '0 20%' }}>
                                     <div
                                         style={{
+                                            textAlign: 'center',
                                             color: '#9E9E9E',
                                             fontSize: '16px',
                                             fontWeight: 800,
@@ -186,6 +171,7 @@ const Result = ({ getResults }) => {
                                             fontSize: '24px',
                                             fontWeight: 800,
                                             letterSpacing: '-0.96px',
+                                            whiteSpace: 'nowrap',
                                         }}
                                     >
                                         {key === '점수' ? `${value} / 10점` : `${value}%`}
@@ -218,6 +204,7 @@ const Result = ({ getResults }) => {
                                                 width: '135px',
                                                 height: '135px',
                                                 borderRadius: '10px',
+                                                overflow: 'hidden',
                                             }}
                                         >
                                             <Image
@@ -243,12 +230,7 @@ const Result = ({ getResults }) => {
                                 ))}
                             </div>
                         </div>
-                        <div
-                            style={{
-                                margin: '50px 0',
-                                display: 'flex',
-                            }}
-                        >
+                        <div style={{ margin: '50px 0', display: 'flex', justifyContent: 'space-between' }}>
                             <div
                                 style={{
                                     width: '54px',
@@ -267,8 +249,8 @@ const Result = ({ getResults }) => {
                             <button
                                 style={{
                                     height: '56px',
-                                    width: '265px',
-                                    marginLeft: 'auto',
+                                    width: '80%',
+                                    // marginLeft: 'auto',
                                     border: 0,
                                     borderRadius: '8px',
                                     backgroundColor: '#FFCE00',
@@ -295,6 +277,7 @@ const Main = ({ setPhase, onResponse }) => {
     const [step, setStep] = useState(0);
     const [pressedButton, setPressedButton] = useState(null);
     const { questionId, question, choices } = eventQuestions[step];
+    console.log(screen.availWidth)
 
     const press = useCallback((index) => {
         setPressedButton(null);
@@ -319,7 +302,7 @@ const Main = ({ setPhase, onResponse }) => {
         >
             <h1
                 style={{
-                    margin: '20% 0 0',
+                    margin: screen.availWidth < 380 ? '10% 0 0' : '20% 0 0',
                     color: '#FFCE00',
                     textAlign: 'center',
                     fontSize: '24px',
@@ -337,7 +320,13 @@ const Main = ({ setPhase, onResponse }) => {
                     justifyContent: 'center',
                 }}
             >
-                <Image src={mbti} width={288} height={165} layout='fixed' placeholder='blur' />
+                <Image
+                    src={mbti}
+                    width={screen.availWidth < 380 ? 175 : 288}
+                    height={screen.availWidth < 380 ? 100 : 165}
+                    layout='fixed'
+                    placeholder='blur'
+                />
             </div>
             <div
                 style={{
@@ -520,7 +509,7 @@ const Intro = ({ setPhase }) => {
     );
 }
 
-const Event = () => {
+const Quiz = () => {
     const { onResponse, getResults } = useResults();
     const [phase, setPhase] = useState('intro');
 
@@ -534,4 +523,4 @@ const Event = () => {
     )
 }
 
-export default Event;
+export default Quiz;
