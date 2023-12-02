@@ -1,5 +1,14 @@
 import { useRef } from "react";
-import { figure1, figure2 } from "../image/event";
+import {
+    figure1,
+    figure2,
+    figure3,
+    figure4,
+    figure5,
+    figure6,
+    figure7,
+    figure8,
+} from "../image/event";
 
 export const eventQuestions = [
     {
@@ -182,8 +191,8 @@ export const eventResult = [
             '눈 감고도 혜화 지도를 술술 그릴 수 있는 수준이에요',
         ],
         figures: {
-            '송중기': figure1,
-            '명륜이 율전이': figure2,
+            '송중기': figure3,
+            '명륜이 율전이': figure4,
         },
     },
     {
@@ -194,8 +203,8 @@ export const eventResult = [
             '혜화 맛집은 제가 다 꿰고 있어요!',
         ],
         figures: {
-            '차은우': figure1,
-            '신예은': figure2,
+            '신예은': figure5,
+            '차은우': figure6,
         }
     },
     {
@@ -206,14 +215,14 @@ export const eventResult = [
             '선배님들 밥약 해주세요!',
         ],
         figures: {
-            '박스꾸': figure1,
-            '김꾸친': figure2,
+            '박스꾸': figure7,
+            '김꾸친': figure8,
         }
     },
 ];
 
 export const eventPercentage = [
-    100, 85, 77, 65, 33, 20, 18, 13, 9, 5, 3, 
+    97, 93, 77, 65, 55, 38, 33, 28, 24, 18, 10,
 ];
 
 export const eventAnswers = [
