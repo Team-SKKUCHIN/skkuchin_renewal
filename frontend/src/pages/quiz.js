@@ -86,7 +86,7 @@ const Result = ({ getResults }) => {
                                 letterSpacing: '-0.32px',
                             }}
                         >
-                            나의 입맛 레벨은?
+                            나의 먹짱 레벨은?
                         </h3>
                         <h1
                             style={{
@@ -188,7 +188,7 @@ const Result = ({ getResults }) => {
                                     letterSpacing: '-0.32px',
                                 }}
                             >
-                                나와 입맛이 비슷한 동문
+                                나와 레벨이 비슷한 동문
                             </p>
                             <div
                                 style={{
@@ -302,7 +302,7 @@ const Main = ({ setPhase, onResponse }) => {
         >
             <h1
                 style={{
-                    margin: screen.availWidth < 380 ? '10% 0 0' : '20% 0 0',
+                    margin: screen.availWidth < 380 ? '10% 0 0' : '10% 0 0',
                     color: '#FFCE00',
                     textAlign: 'center',
                     fontSize: '24px',
@@ -406,7 +406,7 @@ const Main = ({ setPhase, onResponse }) => {
 
 const Intro = ({ setPhase }) => {
     const count = 1398;
-    const content = '새내기, 헌내기, 성균관 유생, 스꾸라테스 중\n나의 입맛 타입을 알려주는 테스트';
+    const content = '새내기, 헌내기, 성균관 유생, 스꾸라테스 중\n나의 먹짱 레벨을 알려주는 테스트';
 
     return (
         <>
@@ -428,7 +428,7 @@ const Intro = ({ setPhase }) => {
                         letterSpacing: '-1.4px',
                     }}
                 >
-                    나의 입맛 레벨은?
+                    나의 먹짱 레벨은?
                 </h1>
                 <p
                     style={{
@@ -501,7 +501,7 @@ const Intro = ({ setPhase }) => {
                         }}
                         onClick={() => setPhase('main')}
                     >
-                        스꾸테스트 시작하기
+                        성대먹짱 테스트 시작하기
                     </button>
                 </div>
             </div>
