@@ -1,3 +1,4 @@
+import { useDispatch} from 'react-redux';
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from '../theme/theme';
 import Image from "next/image";
@@ -7,8 +8,10 @@ import { eventAnswers, eventPercentage, eventQuestions, eventResult, useResults 
 import { useRouter } from "next/router";
 import { Loading } from "../components/Loading";
 import AlertMessage from "../components/Alert";
+import { makeTraffic } from '../actions/traffic/traffic';
 
 const Result = ({ getResults }) => {
+    const dispatch = useDispatch();
     const router = useRouter();
     const resultCount = useRef(0);
     const [alertOpen, setAlertOpen] = useState(false);
@@ -22,6 +25,7 @@ const Result = ({ getResults }) => {
     };
 
     const clip = useCallback(() => {
+        dispatch(makeTraffic('결과페이지_하단_공유_클릭수'));
         const url = window.document.location.href;
 
         navigator.clipboard.writeText(url)
@@ -32,6 +36,11 @@ const Result = ({ getResults }) => {
                 console.error('Unable to copy to clipboard', err);
             });
     }, []);
+
+    const goToHome = useCallback(() => {
+        dispatch(makeTraffic('결과페이지_하단_스꾸친_바로가기_클릭수'));
+        router.replace('/');
+    }, [])
 
     const checkAnswer = useCallback(() => {
         const results = getResults();
@@ -54,6 +63,7 @@ const Result = ({ getResults }) => {
     }, [eventAnswers])
 
     useEffect(() => {
+        dispatch(makeTraffic('최종_결과페이지_도달수'));
         checkAnswer();
         const timeId = setTimeout(() => {
             setLoading(false);
@@ -238,7 +248,7 @@ const Result = ({ getResults }) => {
                                     borderRadius: '10px',
                                     cursor: 'pointer',
                                 }}
-                                onClick={clip}
+                                onClick={() => clip()}
                             >
                                 <Image
                                     src={copy}
@@ -260,7 +270,7 @@ const Result = ({ getResults }) => {
                                     fontWeight: 800,
                                     cursor: 'pointer',
                                 }}
-                                onClick={() => router.replace('/')}
+                                onClick={() => goToHome()}
                             >
                                 스꾸친 바로가기
                             </button>
@@ -302,7 +312,7 @@ const Main = ({ setPhase, onResponse }) => {
         >
             <h1
                 style={{
-                    margin: screen.availWidth < 380 ? '10% 0 0' : '10% 0 0',
+                    margin: screen.availWidth < 380 ? '5% 0 0' : '10% 0 0',
                     color: '#FFCE00',
                     textAlign: 'center',
                     fontSize: '24px',
@@ -405,8 +415,12 @@ const Main = ({ setPhase, onResponse }) => {
 }
 
 const Intro = ({ setPhase }) => {
-    const count = 1398;
+    const dispatch = useDispatch();
     const content = '새내기, 헌내기, 성균관 유생, 스꾸라테스 중\n나의 먹짱 레벨을 알려주는 테스트';
+
+    useEffect(() => {
+        dispatch(makeTraffic('퀴즈_페이지_진입수'));
+    }, [])
 
     return (
         <>
