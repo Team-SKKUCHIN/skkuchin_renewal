@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { load_all_posts } from '../actions/post/post';
 import UpperBar from '../components/UpperBar';
 import NoticePopup from '../components/NoticePopup';
+import { makeTraffic } from '../actions/traffic/traffic';
 
 const FreeCommunity = () => {
     const router = useRouter();
@@ -25,6 +26,7 @@ const FreeCommunity = () => {
         if (typeof window !== 'undefined' && !isAuthenticated) {
             router.push('/login');
         } else {
+            dispatch(makeTraffic('스꾸게시판_진입수'));
             dispatch(load_all_posts());
             if (!localStorage.getItem('guide')) {
                 const timerId = setTimeout(() => {

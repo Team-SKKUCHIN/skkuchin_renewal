@@ -37,6 +37,7 @@ public class SecurityConfig {
             "/api/user/password/reset",
             "/api/email/**",
             "/api/worldcup/**",
+            "/api/traffic/**",
             "/ws/chat/**"
     };
     private static final String[] PERMIT_SWAGGER_URL_ARRAY = {

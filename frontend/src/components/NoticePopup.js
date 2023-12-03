@@ -24,7 +24,6 @@ const NoticePopup = ({ setPopup }) => {
                         height: "100%",
                         width: "100%",
                         overflowY: "scroll",
-                        paddingRight: "32px",
                     }}>
                         <p
                             style={{

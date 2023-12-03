@@ -13,6 +13,7 @@ import { useLoadingLottie } from '../components/Recommend/useLoadingLottie';
 import AlertMessage from '../components/Alert';
 import Popup from '../components/Recommend/Popup';
 import { Header } from '../components/Header';
+import { makeTraffic } from '../actions/traffic/traffic';
 
 const SubTitle = ({ retry }) => (
     <div style={{ margin: screen.availHeight < 815 && retry ? 0 : "42px 0 8px" }}>
@@ -63,6 +64,7 @@ const Recommend = () => {
     const mainText = "원하는 카테고리와 위치를 고르고\n아래 버튼을 눌러주세요";
 
     const clickStart = useCallback(() => {
+        dispatch(makeTraffic('오늘_뭐_먹지_버튼_클릭수'));
         if (filteredPlaces.length === 0) {
             setAlertOpen(true);
             return;
@@ -81,6 +83,7 @@ const Recommend = () => {
     }, [filteredPlaces]);
 
     useEffect(() => {
+        dispatch(makeTraffic('오늘_뭐_먹지_진입수'));
         dispatch(load_places());
         setIsRunning(true);
         const timeId = setTimeout(() => {
