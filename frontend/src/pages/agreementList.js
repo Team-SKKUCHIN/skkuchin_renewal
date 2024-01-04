@@ -4,12 +4,11 @@ import { CssBaseline, Box, ThemeProvider, Container, Grid, MenuItem, Button, Tex
 import theme from '../theme/theme';
 import back from '../image/arrow_back_ios.png';
 import next from '../image/arrow_next.png';
-import dynamic from 'next/dynamic';
 
 const agreementList = () => {
     const router = useRouter();
 
-    const list = ["이용약관", "개인정보 처리방침"]
+    const list = ["이용약관", "개인정보 처리방침", "광고성 정보 수신 동의"]
 
     const backClick = e => {
         router.push('/myPage');
@@ -22,6 +21,9 @@ const agreementList = () => {
                 break;
             case "개인정보 처리방침":
                 router.push({pathname: '/policy', query: {page: 'agreementList'}});
+                break;
+            case "광고성 정보 수신 동의":
+                router.push({pathname: '/marketingConsent', query: {page: 'agreementList'}});
                 break;
 
         }
@@ -62,6 +64,4 @@ const agreementList = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(agreementList), {
-    ssr: false,
-});
+export default agreementList;

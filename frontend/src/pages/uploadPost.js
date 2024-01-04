@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container, Typography, Button, ThemeProvider, CssBaseline, Grid, Checkbox } from '@mui/material';
 import UploadHeader from '../components/SkkuChat/UploadHeader';
 import theme from '../theme/theme';
@@ -6,11 +6,13 @@ import { useRouter } from 'next/router';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import { useDispatch } from 'react-redux';
 import { enroll_post, load_all_posts } from '../actions/post/post';
+import removeBtn from '../image/close.png';
+import Image from 'next/image';
+import { Loading } from '../components/Loading';
 
 const tagToArticleType = {
-    "뭐 먹을까요?": "WHAT_TO_EAT",
-    "같이 먹어요": "TOGETHER",
-    "기타": "ETC"
+    "맛집 추천해요": "GIVE_RECOMMEND",
+    "맛집 추천 받아요": "GET_RECOMMEND",
 };
 
 const UploadPost = () => {
@@ -18,10 +20,11 @@ const UploadPost = () => {
     const dispatch = useDispatch();
 
     const [title, setTitle] = useState('');
+    const [loading, setLoading] = useState(false);
     const [content, setContent] = useState('');
     const [selectedTag, setSelectedTag] = useState(null);
     const [isAnonymous, setIsAnonymous] = useState(true);
-    
+    const [previewImages, setPreviewImages] = useState([]);
     const [images, setImages] = useState([]);
 
     const isValidForm = title !== '' && content !== '' && selectedTag !== null;
@@ -36,14 +39,24 @@ const UploadPost = () => {
 
     const onChangeImages = (e) => {
         const fileArray = Array.from(e.target.files);
-        setImages(fileArray);
-    
-        const imagePreviews = fileArray.map((file) => URL.createObjectURL(file));
-        setPreviewImages(imagePreviews);
+        setPreviewImages([...previewImages, ...fileArray.map((file) => URL.createObjectURL(file))]);
+        setImages([...images, ...fileArray]);
     };
-        
-    const [previewImages, setPreviewImages] = useState([]);
 
+    const handleImageRemove = (index) => {
+        const fileIndex = index - (previewImages.length - images.length);
+
+        if (fileIndex >= 0) {
+            const newImages = [...images];
+            newImages.splice(fileIndex, 1);
+            setImages(newImages);
+        }
+
+        const newPreviewImages = [...previewImages];
+        newPreviewImages.splice(index, 1);
+        setPreviewImages(newPreviewImages);
+    };
+    
     const handleAnonymousClick = () => {
         setIsAnonymous(!isAnonymous);
     };
@@ -61,9 +74,12 @@ const UploadPost = () => {
     };
 
     const handleCompleteClick = () => {
+        setLoading(true);
         const selectedArticleType = tagToArticleType[selectedTag];
 
-        dispatch(enroll_post(title, content, selectedArticleType, isAnonymous, ([result, message]) => {
+        dispatch(enroll_post(title, content, selectedArticleType, isAnonymous, images, ([result, message]) => {
+            setLoading(false);
+
             if (result) {
                 console.log("게시글 작성 완료!!")
                 dispatch(load_all_posts());
@@ -99,7 +115,7 @@ const UploadPost = () => {
                             제목
                         </Typography>
                         <Typography component="div" sx={{ fontSize: '14px', color: '#BABABA' }}>
-                            (최대 00자)
+                            (최대 255자)
                         </Typography>
                     </Grid>
                     <input
@@ -123,7 +139,7 @@ const UploadPost = () => {
                             게시글
                         </Typography>
                         <Typography component="div" sx={{ fontSize: '14px', color: '#BABABA' }}>
-                            (최대 00자)
+                            (최대 1000자)
                         </Typography>
                     </Grid>
                     <textarea
@@ -155,7 +171,7 @@ const UploadPost = () => {
                     <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', mb: '20px'}}>
                         <Grid item>
                             {
-                            ["뭐 먹을까요?", "같이 먹어요", "기타"].map((tag, index) => (
+                            ["맛집 추천해요", "맛집 추천 받아요"].map((tag, index) => (
                                 <Button key={index} 
                                     style={{
                                         fontSize:'14px', 
@@ -187,8 +203,8 @@ const UploadPost = () => {
                     <Grid container style={{position:'relative', width:'100%'}}>
                         <Grid item style={{overflowX: 'auto', whiteSpace: 'nowrap', flexWrap: 'nowrap'}}>
                             <div style={{ position: 'relative', overflow: 'hidden', display: 'inline-block', marginRight: '10px'}}>
-                                <input onChange={e => onChangeImages(e)} style={{position: 'absolute', fontSize: '100px', left: '0', top: '0', opacity: '0', zIndex: '5' }} type="file" name="images" accept="image/*" multiple />
-                                <label style={{width:'150px', height:'150px', textAlign:'center', display: 'inline-block', cursor: 'pointer',borderRadius:'10px', backgroundColor:'white', border: '1px solid #E2E2E2', padding:'55px 0 0 7px'}} htmlFor="images">
+                                <input onChange={e => onChangeImages(e)} style={{position: 'absolute', fontSize: '100px', left: '0', top: '0', opacity: '0', zIndex: '5'}} type="file" name="images" accept="image/*" multiple />
+                                <label style={{width:'150px', height:'150px', textAlign:'center', display: 'inline-block', borderRadius:'10px', backgroundColor:'white', border: '1px solid #E2E2E2', padding:'55px 0 0 7px'}} htmlFor="images">
                                     <AddPhotoAlternateOutlinedIcon style={{width: '20px', color:'#BABABA'}}/>
                                 </label>
                             </div>
@@ -199,14 +215,22 @@ const UploadPost = () => {
                                             width: '100%',
                                             height: '100%', 
                                             objectFit: 'cover',
-                                        }} />
+                                        }}
+                                    />
+                                    <Button type="button" onClick={() => handleImageRemove(index)} style={{ position: 'absolute', top: '0', right: '3px', padding: '10px', justifyContent: 'right' }}>
+                                        <Image src={removeBtn} width={25} height={25} layout='fixed'
+                                            style={{
+                                                backgroundColor:'white',
+                                                borderRadius:'20px'
+                                            }}/>
+                                    </Button>
                                 </Grid>
-                                
                             ))}
                         </Grid>
                     </Grid>
                 </form>
             </Container>
+            {loading && <Loading />}
         </ThemeProvider>
     );
 };

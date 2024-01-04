@@ -23,7 +23,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ImageService {
-    private static final List<String> IMAGE_FORMATS = Arrays.asList(".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".tiff");
+    private static final List<String> IMAGE_FORMATS = Arrays.asList(".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif",
+            ".tiff");
     private static final String CATEGORY = "place";
     private final ImageRepo imageRepo;
     private final PlaceRepo placeRepo;
@@ -31,7 +32,6 @@ public class ImageService {
     private final S3Service s3Service;
     @Value("${aws.s3.start-url}")
     private String startUrl;
-
 
     @Transactional
     public List<ImageDto.Response> getAll() {
@@ -81,7 +81,6 @@ public class ImageService {
         cacheService.renewCache();
     }
 
-
     @Transactional
     public void update(Long imageId, ImageDto.PutRequest dto) {
         checkFile(dto.getImage());
@@ -124,7 +123,7 @@ public class ImageService {
     @Transactional
     public void deletePlaceImages(Long placeId) {
         Place place = placeRepo.findById(placeId).orElseThrow();
-        List<Image> images =  imageRepo.findByPlace(place);
+        List<Image> images = imageRepo.findByPlace(place);
 
         for (Image image : images) {
             String url = image.getUrl();
@@ -152,9 +151,9 @@ public class ImageService {
                 String objectUrl = this.startUrl + object.key();
 
                 Image image = Image.builder()
-                    .place(place)
-                    .url(objectUrl)
-                    .build();
+                        .place(place)
+                        .url(objectUrl)
+                        .build();
 
                 imageRepo.save(image);
             }

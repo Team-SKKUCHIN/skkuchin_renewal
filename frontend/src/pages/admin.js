@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from 'next/link';
 import { check_admin } from '../actions/auth/auth';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 
 const AdminPage = () => {
     const dispatch = useDispatch();
@@ -169,6 +168,4 @@ const AdminPage = () => {
     );
 }
 
-export default dynamic(() => Promise.resolve(AdminPage), {
-    ssr: false,
-});
+export default AdminPage;

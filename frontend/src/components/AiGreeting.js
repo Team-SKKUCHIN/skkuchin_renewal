@@ -159,22 +159,8 @@ const AiGreeting = () => {
 
     const [open, setOpen] = useState(false);
 
-    const handleOpen = () => {
-        if(load){
-            setOpen(true);
-            setDialogOpen(false);
-        }else{
-            setOpen(false);
-            setDialogOpen(true);
-        }
-    };
-
     const handleClose = () => {
         setOpen(false);
-    };
-
-    const goLogin = () => {
-        router.push('/register');
     };
 
     const handleMoveProfile = () => {
@@ -184,45 +170,17 @@ const AiGreeting = () => {
         })
     }
 
-    const authLinks = (
-        <div style={{ position:"relative", paddingTop:"10px", width: "100%", background: "white", alignContent:"center", maxWidth:"420px"}}>
-            <div style={{ display: "flex", justifyContent: "space-between"}}>
-                <Typography style={{fontWeight:700, color: '#3C3C3C', fontSize: '21px', fontWeight: 700, padding:"10px 24px"}}>
-                    같이 한끼 해요🍚
-                </Typography>
-            </div>
-        </div>
-    );
-
-    const guestLinks = (
-        <div style={{ position:"relative", paddingTop:"10px", width: "100%", background: "white", alignContent:"center", maxWidth:"420px"}}>
-            <div style={{ display: "flex", justifyContent: "space-between", padding:"10px 15px 0px 15px"}}>
-                <Typography style={{fontWeight:700}}>
-                    <span style={{color:"#FFCE00"}}>
-                        회원가입 &nbsp;
-                    </span>
-                    후 이용하시면
-                    <br />
-                    더 많은 서비스를 즐길 수 있어요 😍😍
-                </Typography>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", padding:"10px 15px 0px 15px", margin:"0 0 30px 0"}}>
-                <Button sx={{padding:0}} onClick={goLogin}>
-                        <Typography style={{fontSize:"12px", color:"black", borderBottom:"1px solid black"}}>
-                            회원가입하기
-                        </Typography>
-                </Button>
-            </div>
-        </div>
-    );
-
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Container disableGutters={true} maxWidth="xs" style={{height:"max-content", margin:"0", padding:"0"}} overflow="hidden">
-                    {
-                        isAuthenticated ? authLinks: guestLinks
-                    }
+            <div style={{ position:"relative", paddingTop:"10px", width: "100%", background: "white", alignContent:"center", maxWidth:"420px"}}>
+                <div style={{ display: "flex", justifyContent: "space-between"}}>
+                    <Typography style={{fontWeight:700, color: '#3C3C3C', fontSize: '21px', fontWeight: 700, padding:"10px 24px"}}>
+                        같이 한끼 해요 🍚
+                    </Typography>
+                </div>
+            </div>
             {user && userInfo !== null ?
             <Modal
                 open={open}
@@ -240,7 +198,7 @@ const AiGreeting = () => {
                 }}>
             <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth:"420px", padding:"15px 15px 0px 15px"}}>
                 <div style={{fontSize:"12px", paddingTop:"3px"}}>
-                    대화 활성화
+                    매칭 활성화
                 </div>
 
                 {/* 토글 스위치 */}
@@ -295,7 +253,7 @@ const AiGreeting = () => {
                         </Typography>
                         {user.major} /&nbsp;
                         {user.student_id}학번 /&nbsp;
-                        {userInfo.gender.slice(0,1)}
+                        {userInfo.gender?.slice(0,1)}
                     </Grid>
                 </div>
 
@@ -356,7 +314,7 @@ const AiGreeting = () => {
             <Dialog open={dialogOpen} onClose={handleDialogOpen}>
                 <DialogContent style={{width:'270px', height:'100px', padding:'29px 0px 0px 0px', marginBottom:'0px'}}>
                     <Typography style={{fontSize:'14px', color:'black', textAlign:'center', lineHeight:'22px'}} fontWeight={theme.typography.h1}>
-                    대화 기능을 이용하시려면<br/>
+                    매칭 기능을 이용하시려면<br/>
                     추가 프로필 등록이 필요해요!
                     </Typography>
                 </DialogContent>

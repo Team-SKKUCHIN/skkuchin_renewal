@@ -1,14 +1,9 @@
 import styled from '@emotion/styled';
-import { useCallback } from 'react';
 
 const Popup = ({ selectedPlace, setPopup }) => {
 
-    const goToUrl = useCallback(() => {
-        window.location.href = selectedPlace.current.url;
-    }, []);
-
     return (
-        <PopupContainer onClick={() => setPopup(false)}>
+        <PopupContainer>
             <PopupSubContainer>
                 <PopupWrapper>
                     <div
@@ -49,7 +44,9 @@ const Popup = ({ selectedPlace, setPopup }) => {
                                 borderRadius: "10px",
                                 backgroundColor: "#F2F2F2",
                                 border: "none",
+                                cursor: 'pointer',
                             }}
+                            onClick={() => setPopup(false)}
                         >
                             <span
                                 style={{
@@ -69,8 +66,12 @@ const Popup = ({ selectedPlace, setPopup }) => {
                                 borderRadius: "10px",
                                 backgroundColor: "#FFCE00",
                                 border: "none",
+                                cursor: 'pointer',
                             }}
-                            onClick={() => setPopup(false)}
+                            onClick={() => {
+                                setPopup(false);
+                                window.open(selectedPlace.link, '_blank');
+                            }}
                         >
                             <span
                                 style={{
@@ -79,7 +80,6 @@ const Popup = ({ selectedPlace, setPopup }) => {
                                     fontWeight: 800,
                                     letterSpacing: "-0.32px",
                                 }}
-                                onClick={goToUrl}
                             >
                                 바로가기
                             </span>
@@ -93,18 +93,19 @@ const Popup = ({ selectedPlace, setPopup }) => {
 
 export default Popup;
 
-const PopupContainer = styled`
+const PopupContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 10;
 `;
 
-const PopupSubContainer = styled`
+const PopupSubContainer = styled.div`
     display: flex;
     height: 100%;
     width: 100%;
@@ -113,7 +114,7 @@ const PopupSubContainer = styled`
     padding: 0 24px;
 `;
 
-const PopupWrapper = styled`
+const PopupWrapper = styled.div`
     margin: auto 0;
     height: 210px;
     width: 100%;

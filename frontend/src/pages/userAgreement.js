@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { CssBaseline, Box, ThemeProvider, Container, Grid, MenuItem, Button, TextField, Typography, Link, FormControl, InputLabel, Select } from '@mui/material';
 import theme from '../theme/theme';
 import back from '../image/arrow_back_ios.png';
-import dynamic from 'next/dynamic';
 
 const userAgreement = () => {
     const router = useRouter();
@@ -122,7 +121,7 @@ const userAgreement = () => {
 
 “스꾸친”이 회원에게 제공하는 서비스의 내용은 다음과 같습니다.
 
-1. 성균관대학교 맛집 정보 제공 및 성대생과의 대화 서비스
+1. 성균관대학교 맛집 정보 제공 및 성대생과의 채팅 서비스
 
 2. 기타 “스꾸친”이 자체 개발하거나 타 회사와의 제휴 등을 통해 회원들에게 제공하는 일체의 서비스
 
@@ -324,6 +323,4 @@ const userAgreement = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(userAgreement), {
-  ssr: false,
-});
+export default userAgreement;

@@ -6,12 +6,13 @@ import { useRouter } from 'next/router';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { modify_post, load_all_posts } from '../actions/post/post';
+import removeBtn from '../image/close.png';
+import Image from 'next/image';
+import { Loading } from '../components/Loading';
 
 const tagToArticleType = {
-    "뭐 먹을까요?": "WHAT_TO_EAT",
-    "뭐 먹을까요": "WHAT_TO_EAT",
-    "같이 먹어요": "TOGETHER",
-    "기타": "ETC"
+    "맛집 추천해요": "GIVE_RECOMMEND",
+    "맛집 추천 받아요": "GET_RECOMMEND",
 };
 
 const ModifyPost = () => {
@@ -22,19 +23,21 @@ const ModifyPost = () => {
     const [content, setContent] = useState('');
     const [selectedTag, setSelectedTag] = useState(null);
     const [isAnonymous, setIsAnonymous] = useState(null);
-
+    const [previewImages, setPreviewImages] = useState([]);
     const [images, setImages] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const post = useSelector(state => state.post.post);
 
     useEffect(() => {
-        if(post !== null) {
-            setTitle(post[0].title);
-            setContent(post[0].content);
-            setSelectedTag(post[0].tag_type);
-            setIsAnonymous(post[0].anonymous);
+        if (post) {
+            setTitle(post.title);
+            setContent(post.content);
+            setSelectedTag(post.tag_type);
+            setIsAnonymous(post.anonymous);
+            setPreviewImages(post.images);
         }
-    }, []);
+    }, [post]);
 
     const isValidForm = title !== '' && content !== '' && selectedTag !== null;
 
@@ -48,14 +51,24 @@ const ModifyPost = () => {
 
     const onChangeImages = (e) => {
         const fileArray = Array.from(e.target.files);
-        setImages(fileArray);
-    
-        const imagePreviews = fileArray.map((file) => URL.createObjectURL(file));
-        setPreviewImages(imagePreviews);
+        setPreviewImages([...previewImages, ...fileArray.map((file) => URL.createObjectURL(file))]);
+        setImages([...images, ...fileArray]);
+    };
+
+    const handleImageRemove = (index) => {
+        const fileIndex = index - (previewImages.length - images.length);
+
+        if (fileIndex >= 0) {
+            const newImages = [...images];
+            newImages.splice(fileIndex, 1);
+            setImages(newImages);
+        }
+
+        const newPreviewImages = [...previewImages];
+        newPreviewImages.splice(index, 1);
+        setPreviewImages(newPreviewImages);
     };
         
-    const [previewImages, setPreviewImages] = useState([]);
-
     const handleAnonymousClick = () => {
         setIsAnonymous(!isAnonymous);
     };
@@ -73,9 +86,12 @@ const ModifyPost = () => {
     };
 
     const handleModifyClick = () => {
+        setLoading(true);
         const selectedArticleType = tagToArticleType[selectedTag];
 
-        dispatch(modify_post(post[0].id, title, content, selectedArticleType, isAnonymous, ([result, message]) => {
+        dispatch(modify_post(post.id, title, content, selectedArticleType, isAnonymous, previewImages, images, ([result, message]) => {
+            setLoading(false);
+
             if (result) {
                 console.log("게시글 수정 완료!!")
                 dispatch(load_all_posts());
@@ -111,7 +127,7 @@ const ModifyPost = () => {
                             제목
                         </Typography>
                         <Typography component="div" sx={{ fontSize: '14px', color: '#BABABA' }}>
-                            (최대 00자)
+                            (최대 255자)
                         </Typography>
                     </Grid>
                     <input
@@ -136,7 +152,7 @@ const ModifyPost = () => {
                             게시글
                         </Typography>
                         <Typography component="div" sx={{ fontSize: '14px', color: '#BABABA' }}>
-                            (최대 00자)
+                            (최대 1000자)
                         </Typography>
                     </Grid>
                     <textarea
@@ -169,7 +185,7 @@ const ModifyPost = () => {
                     <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', mb: '20px'}}>
                         <Grid item>
                             {
-                            ["뭐 먹을까요?", "같이 먹어요", "기타"].map((tag, index) => (
+                            ["맛집 추천해요", "맛집 추천 받아요"].map((tag, index) => (
                                 <Button key={index} 
                                     style={{
                                         fontSize:'14px', 
@@ -211,16 +227,24 @@ const ModifyPost = () => {
                                     <img key={previewImage} src={previewImage} alt="preview" 
                                         style={{
                                             width: '100%',
-                                            height: '100%', 
+                                            height: '100%',
                                             objectFit: 'cover',
-                                        }} />
+                                        }}
+                                    />
+                                    <Button type="button" onClick={() => handleImageRemove(index)} style={{ position: 'absolute', top: '0', right: '3px', padding: '10px', justifyContent: 'right' }}>
+                                        <Image src={removeBtn} width={25} height={25} layout='fixed'
+                                            style={{
+                                                backgroundColor:'white',
+                                                borderRadius:'20px'
+                                            }}/>
+                                    </Button>
                                 </Grid>
-                                
                             ))}
                         </Grid>
                     </Grid>
                 </form>
             </Container>
+            {loading && <Loading />}
         </ThemeProvider>
     );
 };

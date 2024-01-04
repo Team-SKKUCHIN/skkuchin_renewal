@@ -52,9 +52,9 @@ public class ChatRoomController {
             }
             AppUser user = principalDetails.getUser();
             chatRoomService.makeRoom(user,dto);
-            return new ResponseEntity<>(new CMRespDto<>(1, "대화 요청 완료", null), HttpStatus.CREATED);
+            return new ResponseEntity<>(new CMRespDto<>(1, "밥약 신청 완료", null), HttpStatus.CREATED);
         } catch (DataIntegrityViolationException e) {
-            throw new CustomValidationApiException("이미 요청하셨습니다");
+            throw new CustomValidationApiException("이미 신청하셨습니다");
         }
      }
 
@@ -82,7 +82,7 @@ public class ChatRoomController {
         }
         AppUser user = principalDetails.getUser();
         chatRoomService.user2Accept(roomId, user,dto.getReaction());
-        return new ResponseEntity<>(new CMRespDto<>(1, "상대방이 대화 요청에 응답했습니다", null), HttpStatus.OK);
+        return new ResponseEntity<>(new CMRespDto<>(1, "상대방이 밥약 요청에 응답했습니다", null), HttpStatus.OK);
     }
 
     @PutMapping("/block/{roomId}")
@@ -168,4 +168,19 @@ public class ChatRoomController {
         return new ResponseEntity<>(new CMRespDto<>(1, "채팅방 나가기 완료", null), HttpStatus.OK);
     }
 
+    @GetMapping("/alarm")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<?> getAlarm(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        AppUser user = principalDetails.getUser();
+        Boolean alarm = chatRoomService.checkUnreadMessageOrRequest(user.getUsername());
+        return new ResponseEntity<>(new CMRespDto<>(1, "채팅 알림 확인 완료", alarm), HttpStatus.OK);
+    }
+
+    @GetMapping("/request_list")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<?> getRequestlist(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        AppUser user = principalDetails.getUser();
+        List<ChatRoomDto.userResponse> requestList = chatRoomService.getRequestList(user.getUsername());
+        return new ResponseEntity<>(new CMRespDto<>(1, "채팅 요청 목록 확인 완료", requestList), HttpStatus.OK);
+    }
 }

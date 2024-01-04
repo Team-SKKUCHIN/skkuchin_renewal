@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { clear_search_results } from '../actions/place/place';
 import { check_admin } from '../actions/auth/auth';
-import dynamic from 'next/dynamic';
 
 const EnrollPlace = () => {
     const dispatch = useDispatch();
@@ -206,6 +205,4 @@ const EnrollPlace = () => {
     );
 };
     
-export default dynamic(() => Promise.resolve(EnrollPlace), {
-    ssr: false,
-});
+export default EnrollPlace;

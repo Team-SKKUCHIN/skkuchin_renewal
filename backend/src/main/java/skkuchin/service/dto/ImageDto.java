@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
+
 import skkuchin.service.domain.Map.Image;
 import skkuchin.service.domain.Map.Place;
 

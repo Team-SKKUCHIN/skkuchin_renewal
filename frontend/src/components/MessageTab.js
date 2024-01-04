@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, Tab, CssBaseline, Box, CircularProgress , Typography, Grid, Stack,  Avatar, } from '@mui/material';
+import { Tabs, Tab, Box, CircularProgress , Typography, Grid, Stack,  Avatar, } from '@mui/material';
 
 import notiOff from '../image/chat/notifications_off.png';
 import Image from 'next/image';
@@ -9,14 +9,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { clear_room_list, get_chat_room_info, get_realtime_chat_room, get_chat_room_for_not_user } from '../actions/chat/chatRoom';
-import { get_chat_request_info, get_realtime_chat_request, get_chat_request_for_not_user } from '../actions/chat/chatRequest';
+import { get_chat_requests } from '../actions/chat/chatRequest';
 import { request_refresh } from '../actions/auth/auth';
 import { clear_matching } from '../actions/matchingUser/matchingUser';
 import { displayProfile } from './MyPage/ProfileList';
-
-import dynamic from 'next/dynamic';
-
-const NewPromise = dynamic(() => import('./Chat/NewPromise'));
+import NewPromise from './Chat/NewPromise';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -69,21 +66,24 @@ export default function MessageTab() {
   const get_info = async () => {
     dispatch(request_refresh()).then(() => {
       subscriptions.chatRooms = dispatch(get_realtime_chat_room(user.username, stompClient));
-      subscriptions.chatRequests = dispatch(get_realtime_chat_request(user.username, stompClient));
     
       Promise.all(Object.values(subscriptions)).then(() => {
         dispatch(get_chat_room_info(stompClient));
-        dispatch(get_chat_request_info(stompClient));
       });
     });
   };
+
+  useEffect(() => {
+    if (value === 1 && user) {
+      dispatch(get_chat_requests());
+    }
+  }, [value, user])
 
   useEffect(() => {
     if (stompClient && user && user.username) {
       get_info();
     } else {
       dispatch(get_chat_room_for_not_user());
-      dispatch(get_chat_request_for_not_user());
     }
     return () => {
       dispatch(clear_room_list());
@@ -114,7 +114,7 @@ export default function MessageTab() {
       <Box sx={{ borderBottom: 1, borderColor: 'transparent',  backgroundColor:'white'}}>
         <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="basic tabs example" sx={{position: 'fixed',width:'100%', mt: '15px', backgroundColor:'white', maxWidth: '420px', zIndex: '10'}}>
           <Tab style={{color:value===0? '#565656':'#BABABA', fontWeight:value===0? '700':'500', fontSize:"15px"}} label="채팅방" {...a11yProps(0)} />
-          <Tab style={{color:value===1? '#565656':'#BABABA', fontWeight:value===1? '700':'500', fontSize:"15px"}} label="대화 요청" {...a11yProps(1)} />
+          <Tab style={{color:value===1? '#565656':'#BABABA', fontWeight:value===1? '700':'500', fontSize:"15px"}} label="받은 신청" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -222,10 +222,10 @@ export default function MessageTab() {
               </Grid>
               <Grid item>
                 <Typography style={{ color: '#A1A1A1', fontSize: '14px', textAlign: 'center' }}>
-                참여 중인 대화가 아직 없네요!
+                  진행 중인 밥약이 아직 없네요!
                 </Typography>
                 <Typography style={{ color: '#A1A1A1', fontSize: '14px', textAlign: 'center' }}>
-                '스꾸챗' 탭에서 새로운 대화에 참여해보세요.
+                  '홈' 탭에서 밥약을 신청해보세요.
                 </Typography>
               </Grid>
             </Grid> 
@@ -257,7 +257,7 @@ export default function MessageTab() {
                             <Stack direction="column" spacing={1} sx={{margin:"4px 0 0 8px"}}>
                                 <div style={{display:'flex'}}>
                                   <Typography sx={{fontSize: '14px', fontWeight:'700', lineHeight: '200%', verticalAlign: 'top',}} align="left">
-                                      새로운 대화 요청이 있습니다!
+                                      새로운 밥약 신청이 있습니다!
                                   </Typography>
                                 </div>
                                 <Typography sx={{paddingTop:"3px",fontSize: '12px', fontWeight:'500', lineHeight: '0%', verticalAlign: 'top',}} align="left">
@@ -286,10 +286,10 @@ export default function MessageTab() {
                 </Grid>
                 <Grid item>
                     <Typography style={{ color: '#A1A1A1', fontSize: '14px', textAlign: 'center' }}>
-                    요청받은 대화가 아직 없네요!
+                    요청받은 밥약이 아직 없네요!
                     </Typography>
                     <Typography style={{ color: '#A1A1A1', fontSize: '14px', textAlign: 'center' }}>
-                    '스꾸챗' 탭에서 새로운 대화에 참여해보세요.
+                    '홈' 탭에서 밥약을 신청해보세요.
                     </Typography>
                 </Grid>
               </Grid>

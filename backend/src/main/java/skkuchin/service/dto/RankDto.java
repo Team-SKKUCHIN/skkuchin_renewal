@@ -29,7 +29,7 @@ public class RankDto {
             if (images != null && !images.isEmpty()) {
                 this.image = images.get(0).getUrl();
             }
-            this.rate = Math.round(rate*10)/10.0;
+            this.rate = Math.round(rate * 10) / 10.0;
         }
     }
 }

@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import { load_menu } from '../actions/menu/menu';
 import Image from 'next/image';
 import { check_admin } from '../actions/auth/auth';
-import dynamic from 'next/dynamic';
 
 const EnrollPlace = () => {
     const dispatch = useDispatch();
@@ -280,6 +279,4 @@ const EnrollPlace = () => {
     );
 };
     
-export default dynamic(() => Promise.resolve(EnrollPlace), {
-    ssr: false,
-});
+export default EnrollPlace;

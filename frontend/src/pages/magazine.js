@@ -1,6 +1,7 @@
-import { Avatar, CssBaseline, Box, ThemeProvider, Rating, Slide, Card, Badge, Typography, Grid, Container, Stack, useScrollTrigger, Button,} from '@mui/material';
+import { Avatar, CssBaseline, Box, ThemeProvider, Typography, Grid, Container, Stack, useScrollTrigger, Button,} from '@mui/material';
 import theme from '../theme/theme';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
@@ -9,15 +10,12 @@ import { clear_search_results } from "../actions/place/place";
 import { load_rank } from '../actions/rank/rank';
 import styled from '@emotion/styled';
 
-import food from '../image/food.png';
-// import circles from '../image/frames.png';
 import arrow from '../image/arrow.png';
 import arrowY from '../image/arrowY.png';
 import arrowL from '../image/arrowLeft.png'
 import arrowR from '../image/arrowRight.png'
 import emptyStar from '../image/Star_border-1.png';
 import filledStar from '../image/Star-1.png';
-import dynamic from 'next/dynamic';
 
 import content from '../image/magazine/magazine/content1_1.png';
 import review1_mr from '../image/magazine/review1_mr.png';
@@ -31,6 +29,9 @@ import review2_yj from '../image/magazine/review2_yj.png';
 import review3_yj from '../image/magazine/review3_yj.png';
 import review4_yj from '../image/magazine/review4_yj.png';
 import review5_yj from '../image/magazine/review5_yj.png';
+
+import { load_all_magazine, } from '../actions/magazine/magazine';
+import UpperBar from '../components/UpperBar';
 
 const reviewM = [
     {
@@ -112,11 +113,10 @@ const MagazineContainer = styled.div`
   }
 `;
 
-const UpperBar = dynamic(() => import('../components/UpperBar'));
-
 const Magazine = () => {
     const dispatch = useDispatch();
     const router = useRouter();
+    const allMagazine = useSelector(state => state.magazine.allMagazine);
 
     const [reviewNum, setReviewNum] = useState(0);
     const [toggleInfo, setToggleInfo] = useState(null);
@@ -129,6 +129,7 @@ const Magazine = () => {
 
     useEffect(()=>{
         dispatch(clear_search_results());
+        dispatch(load_all_magazine());
     },[])
 
     useEffect(() => {
@@ -153,145 +154,86 @@ const Magazine = () => {
         );
     };
 
+    const [title, setTitle] = useState('');
+    const [gate, setGate] = useState('');
+    const [contents, setContent] = useState('');
+    const [link, setLink] = useState('');
+
+    // const handleSubmit = () =>{
+    //     dispatch(add_magazine(title, gate, contents, link, [] ,([result, message]) => {
+    //         if (result) {
+    //             console.log("매거진 추가 완료")
+    //             dispatch(load_all_magazine());
+    //         } else {
+    //             alert("매거진 작성 오류" + message);
+    //         }
+    //     }));
+    //     setTitle('');
+    //     setGate('');
+    //     setContent('');
+    //     setLink('');
+
+    // }
+    // console.log(allMagazine);
+
+
+
     return(
         <ThemeProvider theme={theme}>
         <CssBaseline />
             <UpperBar />
-            <Grid style={{overflowX:'hidden', position:'fixed', height:height, overflowY:'scroll'}}>
-
-                {/* 식당TOP5 */}
-                <div className='top' style={{height:'270px'}}>
-                    <div style={{ display: "flex", margin:'21px 0px 0px 15px' }}>
-                        <Typography style={{ marginRight: "8px", fontSize:'16px',  fontWeight:'700' }} color="#2E2E2E">5월 4주차 식당</Typography>
-                        <Typography style={{ marginRight: "8px", fontSize:'16px',  fontWeight:'700' }} color={theme.palette.primary.main}>TOP 5</Typography>
-                        <Typography>🔥</Typography>
-                    </div>
-                    <div style={{margin:'5px 0px 21px 15px'}}>
-                        <Typography color={theme.palette.fontColor.light} style={{fontSize:'11px'}}>일주일마다 업데이트 돼요!</Typography>
-                    </div>
-                    <MagazineContainer>
-                        <div style={{margin:'0px 0px 0px 15px'}}>
-                            <Grid container style={{  position: 'absolute', zIndex: '3', overflowX: 'auto', whiteSpace: 'nowrap', flexWrap: 'nowrap', width: window.innerWidth <= 375 ? 360 : window.innerWidth <= 400  ? 375 :  400, }}>
-                                {rank && rank.map((item, index) => (
-                                    <Grid item style={{display:'inline-block', flexShrink: 0, paddingRight: '9px'}} onClick={()=>{router.push(`/place?id=${item.place_id}`)}} >
-                                        <div >
-                                            {/* 식당이미지 */}
-                                            <div style={{display: 'flex', margin:'9px 0px 0px 9px', paddingTop:'2px',position:'absolute',zIndex:'3', alignItems: 'center', justifyContent: 'center', width: '23px', height: '21.41px', borderRadius: '50%', backgroundColor: index === 3 || index === 4 ? 'rgba(186, 186, 186, 0.7)' : 'rgba(255, 206, 0, 0.7)', color:'#fff', fontSize: '13px', fontWeight: 'bold'}}>
-                                                {index+1}
-                                            </div>
-                                            <Image 
-                                                src={item.image ? item.image : food}
-                                                width={155} 
-                                                height={155} 
-                                                layout='fixed' 
-                                                placeholder='blur' 
-                                                blurDataURL='data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mO8UA8AAiUBUcc3qzwAAAAASUVORK5CYII='
-                                                style={{borderRadius:'20px', position:'relative'}}>
-                                            </Image>
-                                            {/* 식당이름 */}
-                                            <Typography style={{fontSize:'15px', fontWeight:'700'}} color="#2E2E2E">{item.place_name}</Typography>
-                                            {/* 식당평점 */}
-                                            <div style={{ display: "flex"}}>
-                                                <Typography style={{fontSize:'10px', fontWeight:'400'}} color="#2E2E2E">스꾸친 평점: &nbsp;</Typography>
-                                                <Image src={filledStar} width={15} height={15} style={{margin:''}}/>
-                                                <Typography style={{fontSize:'10px', fontWeight:'700'}} color="#2E2E2E">&nbsp; {item.rate}</Typography>
-                                                <Typography style={{fontSize:'10px', fontWeight:'400'}} color="#2E2E2E">&nbsp;/ 5</Typography>
-                                            </div>
-                                        </div>
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        </div>
-                    </MagazineContainer>
+            <Grid style={{overflowX:'hidden', overflowY:'scroll', height:height, maxWidth:'420px',}}>
+                <div style={{margin:'30px 0 20px 20px',}}>
+                    <Typography style={{fontSize:'32px', fontWeight:'800'}}>제목제목제목제목</Typography>
                 </div>
+                
+                { allMagazine && allMagazine.map((item)=>
+                {
+                    const gateWidth = `${item.gate.length * 20}px`;
+                    let color = '#FFFCE4';
+                    let fontColor = '#FFAC0B';
 
-                {/* 맛집 콘텐츠 */}
-                <div style={{margin:'45px 0px 0px 0px', position:'relative',width:width}}>
-                    <div style={{position:'absolute',zIndex:'3'}}>
-                        {/* 안에 자유롭게 수정가능 */}
-                        <Typography fontSize='12px' fontWeight='700' style={{margin:'23px 0px 0px 15px'}} color="white">스꾸친 마케터의 특별한 맛집 가이드</Typography>
-                        <Typography fontSize='25px' fontWeight='700' style={{margin:'0px 0px 0px 15px'}} color={theme.palette.primary.main}>스꾸친 마케터 pick</Typography>
-                        <Typography fontSize='25px' fontWeight='700' style={{margin:'0px 0px 0px 15px'}} color="white">성대 돈가스 맛집 리스트</Typography>
-                    </div>
-                    <div>
-                        <div style={{position:'absolute',zIndex:'3', bottom:'8%', right: '3%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',}}>
-                            <Button style={{margin:'', fontSize:'12px', color:'white'}} onClick={()=>{router.push('/magazineDetail')}}>콘텐츠 보러가기&nbsp;&nbsp; <Image src={arrow} width={15.57} height={15} layout='fixed'/></Button>
-                        </div>
-                        {/* <div style={{position:'absolute',zIndex:'3', bottom:'6%', left: '50%', transform: 'translateX(-50%)', display: 'flex', justifyContent: 'space-between', alignItems: 'center',}}>
-                            <Image src={circles} width={50} height={6} layout='fixed' />
-                        </div> */}
-                    </div>
-                    <div style={{position:'relative', width:'100%', height:'100%'}}>
-                        <Image 
-                            src={content} 
-                            height={400}
-                            width={431}
-                            layout='fixed'
-                            objectFit='cover'
-                            style={{ filter: 'brightness(0.6)' }}
-                        />
-                    </div>
-                </div>
+                    if (item.gate === '후문' || item.gate === '대운동장' || item.gate === "기타") {
+                        color = '#DCF8DB';
+                        fontColor = '#58C85A'; 
+                    }                  
 
-                {/* 리뷰 */}
-                <div style={{position:'relative', margin:'35px 0px 0px 0px' ,width:width,}}>
-                    <div style={{ display: "flex",  margin:'0px 0px 0px 15px' }}>
-                        <Typography style={{ marginRight: "8px", fontSize:'16px',  fontWeight:'700' }} color="#2E2E2E">성대생의</Typography>
-                        <Typography style={{ marginRight: "8px", fontSize:'16px',  fontWeight:'700' }} color={theme.palette.primary.main}>리얼 리뷰</Typography>
-                        <Typography>👀</Typography>
-                    </div>
-                    <div style={{margin:'16px 0px 0px 0px'}}>
-                        <div style={{position:'absolute',zIndex:'3', display: 'flex', alignItems: 'center', justifyContent: 'center', top: 0, left: 0, right: 0, bottom: 0}}>
-                            <div style={{textAlign: 'center'}}>
-                                <div style={{margin:'23px 0px 0px 0px'}}>
-                                {[1, 2, 3, 4, 5].map((item, index) => {
-                                    let starImage = emptyStar;
-                                    if (index + 1 <= reviewM[reviewNum].rating) {
-                                        starImage = filledStar;
-                                    }
-                                    return (
-                                        <Image key={index} width={21.72} height={22.43} src={starImage} alt='star' layout='fixed' />
-                                    );
-                                })}
-                                </div>
-                                <Typography fontSize='16px' fontWeight='700' style={{margin:'15px 0px 0px 0px', whiteSpace: 'pre-wrap'}} color="white" maxWidth={237}>"{toggleInfo && toggleInfo === '명륜' ? reviewM[reviewNum].text: reviewY[reviewNum].text}"</Typography>
-                                <Typography fontSize='12px' fontWeight='400' style={{margin:'15px 0px 0px 0px'}} color="white" maxWidth={237}>{toggleInfo && toggleInfo === '명륜'? reviewM[reviewNum].user :  reviewY[reviewNum].user}</Typography>
+                    return(
+                        <Link 
+                            href={{
+                                pathname: '/magazineDetail',
+                                query: {
+                                    id: item.id
+                                }
+                            }}
+                            key={item.id}
+                        >
+                        <div style={{padding:'0 20px', position: 'relative', marginBottom:'10px'}}>
+                            <div style={{ width: '100%', height: '230px', overflow: 'hidden', border: '1px solid transparent', borderRadius: '10px' }}>
+                                <Image src={content} style={{ objectFit: 'cover', width: '100%', height: '100%'}} />
+                            </div>
+                            <div style={{ zIndex:'3', position: 'absolute', bottom: '20px', left: '40px', right: '0'}}>
+                                <Typography sx={{
+                                width: gateWidth, height: '24px', border: "1px solid", borderColor: color, borderRadius:'10px', textAlign:'center', fontSize: '12px',  fontWeight:'800',p: '2px 4px 0px 4px', color:fontColor, backgroundColor: color, margin:'-2px 0px 0px 5px'
+                                }}>{item.gate}</Typography>
+                                <Typography sx={{fontSize:'24px', margin:"10px 0 0 5px", color:'white', fontWeight:'700'}}>{item.title}</Typography>
                             </div>
                         </div>
+                        </Link>
+                )})}
 
-                        <div>
-                            <div style={{position:'absolute',zIndex:'3', bottom: '6%', right: '3%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',}}>
-                                <Button style={{margin:'', fontSize:'12px'}} onClick={()=>{toggleInfo && toggleInfo === '명륜'? router.push(`/place?id=${reviewM[reviewNum].id}`) : router.push(`/place?id=${reviewY[reviewNum].id}`)}}>이 식당 어디일까?&nbsp;&nbsp; <Image src={arrowY} width={15.57} height={15}/></Button>
-                            </div>
-                        </div>
-                        <div>
-                            <div style={{position:'absolute',zIndex:'3', display: 'flex', alignItems: 'center', justifyContent: 'center', left: "0%", top: '50%', transform: 'translateY(-50%)'}}>
-                                <Button onClick={handlePrev}><Image src={arrowL} width={10.29} height={18.48} layout='fixed' /></Button>
-                            </div>
-                        </div>
-                        <div>
-                            <div style={{position:'absolute',zIndex:'3', display: 'flex', justifyContent: 'center', alignItems: 'center', right: "0%",top: '50%', transform: 'translateY(-50%)'}}>
-                                <Button onClick={handleNext}><Image src={arrowR} width={10.29} height={18.48} layout='fixed' /></Button>
-                            </div>
-                        </div>
-                        <div style={{position:'relative', width:'100%', height:'100%', marginBottom:'140px'}}>
-                            <Image 
-                                src={toggleInfo && toggleInfo === '명륜'? reviewM[reviewNum].src : reviewY[reviewNum].src}
-                                height={250}
-                                width={431}
-                                layout='fixed'
-                                objectFit='cover'
-                                placeholder='blur'
-                                style={{ filter: 'brightness(0.6)' }}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </Grid>
+                {/* <div>
+                    <input value={title} onChange={(e) => setTitle(e.target.value)}></input>
+                    <input value={gate} onChange={(e) => setGate(e.target.value)}></input>
+                    <input value={contents} onChange={(e) => setContent(e.target.value)}></input>
+                    <input value={link} onChange={(e) => setLink(e.target.value)}></input>
+                    <Button onClick={handleSubmit}>등록</Button>
+
+                </div> */}
+
+            </Grid> 
         </ThemeProvider>
     )
 } 
 
-export default dynamic(() => Promise.resolve(Magazine), {
-    ssr: false,
-});
+export default Magazine;

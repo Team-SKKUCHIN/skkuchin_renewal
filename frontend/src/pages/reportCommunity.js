@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import 'moment/locale/ko';
 import {Box, TextField, CssBaseline, Checkbox, ThemeProvider, Typography, Grid, Container } from '@mui/material';
 import theme from '../theme/theme';
-import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import UploadHeader from "../components/SkkuChat/UploadHeader";
 import { enroll_report_community } from "../actions/community/reportInCommunity";
@@ -141,6 +140,4 @@ const reportCommunity = () => {
   };
   
 
-export default dynamic(() => Promise.resolve(reportCommunity), {
-    ssr: false,
-});
+export default reportCommunity;

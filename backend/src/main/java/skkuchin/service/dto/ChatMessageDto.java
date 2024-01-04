@@ -1,19 +1,16 @@
 package skkuchin.service.dto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import skkuchin.service.domain.Chat.ChatMessage;
 import skkuchin.service.domain.Chat.ChatRoom;
 import skkuchin.service.domain.User.AppUser;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -86,24 +83,4 @@ public class ChatMessageDto {
             return date.format(formatter);
         }
     }
-
-    @Getter
-    @Setter
-    @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static class DebeziumDto {
-        private Long id;
-
-        private String sender;
-
-        private String message;
-
-        @JsonProperty
-        private Long chatRoomId;
-
-        private Timestamp date;
-
-        @JsonProperty
-        private boolean readStatus;
-    }
-
 }

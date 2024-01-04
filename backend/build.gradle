@@ -28,7 +28,7 @@ dependencies {
 	implementation 'com.auth0:java-jwt:4.0.0'
 
 	//db
-	implementation 'mysql:mysql-connector-java'
+	implementation 'mysql:mysql-connector-java:8.0.21'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	//spring-boot
@@ -79,13 +79,14 @@ dependencies {
 	implementation "io.springfox:springfox-swagger-ui:3.0.0"
 
 	//kafka
-	implementation 'org.springframework.kafka:spring-kafka:2.8.1'
-	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.1'
+	// implementation 'org.springframework.kafka:spring-kafka:2.8.1'
+	// implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.1'
 
-	//Debezium Connector for MySQL
-	implementation 'io.debezium:debezium-connector-mysql:1.6.1.Final'
-	implementation 'com.zaxxer:HikariCP:4.0.3'
-	implementation 'io.debezium:debezium-embedded:1.5.0.Final'
+	//Debezium Engine
+	implementation 'io.debezium:debezium-connector-mysql:1.4.2.Final'
+	implementation 'io.debezium:debezium-api:1.4.2.Final'
+	implementation 'io.debezium:debezium-embedded:1.4.2.Final'
+	implementation 'org.apache.commons:commons-lang3:3.13.0'
 
 	//web push
 	implementation 'nl.martijndwars:web-push:5.1.1'

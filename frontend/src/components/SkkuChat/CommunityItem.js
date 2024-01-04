@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
-import { Box, Typography, Avatar, Grid, Divider } from '@mui/material';
+import React, { useCallback, useState } from 'react';
+import { Box, Typography, Grid, Divider } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import GoLogin from '../GoLogin';
 
-const GoLogin = dynamic(() => import('../GoLogin'));
-
-// id, article_type, title, content, user_id, nickname, user_image, display_time, article_like_count, comment_count
-const CommunityItem = ({ id, title, content, article_like_count, comment_count, display_time, image }) => {
+const CommunityItem = ({ id, title, content, article_like_count, comment_count, display_time, images }) => {
     const router = useRouter();
 
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
@@ -21,16 +18,36 @@ const CommunityItem = ({ id, title, content, article_like_count, comment_count, 
         } else {
             setIsLogin(true);
         }
-    };    
+    };   
 
+    const sliceContent = useCallback((content) => {
+        const length = 13;
+
+        if (content.length > length) {
+            content = content.substr(0, length - 2) + '...';
+        }
+
+        return content;
+    }, [])
+    
     return (
         <>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
-            <Box onClick={handleClick} sx={{ display: 'flex', alignItems: 'center', width: '100%', p: '13px 0px', borderBottom: '1px solid #E2E2E2'}}>
+            <Box
+                onClick={handleClick}
+                sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', width: '100%', p: '13px 0px', borderBottom: '1px solid #E2E2E2'}}
+            >
                 <Box sx={{ flexGrow: 1 }}>
                     <Typography sx={{fontSize: '14px', fontWeight: 800, color: '#3C3C3C'}}>{title}</Typography>
-                    <Typography sx={{p:' 8px 0px', fontSize: '14px', fontWeight: 400, color: '#3C3C3C', textOverflow: 'ellipsis'}}>
-                        {content}
+                    <Typography
+                        sx={{
+                            width: '100%',
+                            p:' 8px 0px',
+                            fontSize: '14px',
+                            color: '#3C3C3C',
+                        }}
+                    >
+                        {sliceContent(content)}
                     </Typography>
                     <Grid container sx={{ alignItems: 'center', p: 0, m: 0 }}>
                     <Grid item sx={{ display: 'flex', alignItems: 'center'}}>
@@ -53,9 +70,9 @@ const CommunityItem = ({ id, title, content, article_like_count, comment_count, 
                     </Grid>
                     </Grid>
                 </Box>
-                {image && (
+                {images?.length > 0 && (
                     <Box sx={{pl: '15px'}}>
-                        <img src={image} alt="" width={75} height={75} style={{borderRadius: '20px'}}/>
+                        <img src={images[0]} alt="" width={75} height={75} style={{borderRadius: '20px', objectFit: 'cover'}}/>
                     </Box>
                 )}
             </Box>

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
+
 import skkuchin.service.domain.Map.*;
 
 import javax.validation.constraints.NotBlank;
@@ -40,6 +41,7 @@ public class PlaceDto {
         private String breakTime;
         private Boolean discountAvailability;
         private String discountContent;
+        private String link;
         private List<MultipartFile> images;
 
         public Place toEntity() {
@@ -54,6 +56,7 @@ public class PlaceDto {
                     .breakTime(this.breakTime)
                     .discountAvailability(this.discountAvailability)
                     .discountContent(this.discountContent)
+                    .link(this.link)
                     .category(this.category)
                     .campus(this.campus)
                     .build();
@@ -84,6 +87,7 @@ public class PlaceDto {
         private String breakTime;
         private Boolean discountAvailability;
         private String discountContent;
+        private String link;
         private List<String> urls;
         private List<MultipartFile> images;
     }
@@ -112,6 +116,7 @@ public class PlaceDto {
         private Boolean discountAvailability;
         @JsonProperty
         private String discountContent;
+        private String link;
         private List<String> images;
         @JsonProperty
         private Long reviewCount;
@@ -133,14 +138,16 @@ public class PlaceDto {
             this.breakTime = place.getBreakTime();
             this.discountAvailability = place.getDiscountAvailability();
             this.discountContent = place.getDiscountContent();
+            this.link = place.getLink();
             this.images = images.stream().map(image -> image.getUrl()).collect(Collectors.toList());
             this.reviewCount = reviews.stream().count();
             this.rate = Math.round(
                     reviews
-                    .stream()
-                    .mapToDouble(review -> review.getRate())
-                    .average()
-                    .orElse(0.0)*10)/10.0;
+                            .stream()
+                            .mapToDouble(review -> review.getRate())
+                            .average()
+                            .orElse(0.0) * 10)
+                    / 10.0;
             this.tags = tags.stream().map(tag -> tag.getName()).collect(Collectors.toList());
         }
     }

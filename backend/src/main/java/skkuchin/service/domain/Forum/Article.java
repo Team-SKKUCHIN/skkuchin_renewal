@@ -2,7 +2,7 @@ package skkuchin.service.domain.Forum;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import skkuchin.service.domain.Map.Image;
+
 import skkuchin.service.domain.User.AppUser;
 
 import javax.persistence.*;
@@ -22,13 +22,13 @@ public class Article {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private  ArticleType articleType;
+    private ArticleType articleType;
 
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private  String content;
+    @Column(nullable = false, length = 1000)
+    private String content;
 
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -49,7 +49,9 @@ public class Article {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentLike> commentLikes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArticleReport> articleReports = new ArrayList<>();
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArticleImage> images = new ArrayList<>();
 }

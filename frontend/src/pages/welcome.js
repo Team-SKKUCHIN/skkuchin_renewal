@@ -4,7 +4,6 @@ import theme from '../theme/theme';
 import Image from 'next/image';
 import logo from '../image/login_enheng.png'
 import { CssBaseline, Box, ThemeProvider, Grid,Button, Container, Typography } from '@mui/material';
-import dynamic from 'next/dynamic';
 
 const welcome = () => {
     const router = useRouter();
@@ -40,6 +39,4 @@ const welcome = () => {
     )
 }
 
-export default dynamic(() => Promise.resolve(welcome), {
-    ssr: false,
-});
+export default welcome;

@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 public class FavoriteDto {
 
     @Getter
@@ -64,13 +63,13 @@ public class FavoriteDto {
         private Double rate;
         private List<String> tags;
 
-        public Response(Favorite favorite,List<Image> images,List<Review> reviews,List<Tag> tags) {
+        public Response(Favorite favorite, List<Image> images, List<Review> reviews, List<Tag> tags) {
             this.id = favorite.getId();
-            this.name = favorite.getPlace().getName() ;
+            this.name = favorite.getPlace().getName();
             this.placeId = favorite.getPlace().getId();
-            this.category =  favorite.getPlace().getCategory();
+            this.category = favorite.getPlace().getCategory();
             this.detailCategory = favorite.getPlace().getDetailCategory();
-            this.campus =  favorite.getPlace().getCampus();
+            this.campus = favorite.getPlace().getCampus();
             this.gate = favorite.getPlace().getGate();
             this.address = favorite.getPlace().getAddress();
             this.xcoordinate = favorite.getPlace().getXcoordinate();
@@ -86,7 +85,8 @@ public class FavoriteDto {
                             .stream()
                             .mapToDouble(review -> review.getRate())
                             .average()
-                            .orElse(0.0)*10)/10.0;
+                            .orElse(0.0) * 10)
+                    / 10.0;
 
             this.tags = tags.stream().map(tag -> tag.getName()).collect(Collectors.toList());
         }

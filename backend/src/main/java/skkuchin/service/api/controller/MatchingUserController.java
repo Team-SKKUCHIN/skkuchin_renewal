@@ -19,6 +19,7 @@ import skkuchin.service.service.MatchingUserService;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -120,7 +121,11 @@ public class MatchingUserController {
                 throw new CustomValidationApiException("모든 정보를 입력해주시기 바랍니다", errorMap);
             }
             AppUser user = principalDetails.getUser();
-            matchingUserService.updateInfo(user.getId(), dto);
+            if (Objects.nonNull(user.getGender())) {
+                matchingUserService.updateInfo(user.getId(), dto);
+            } else {
+                matchingUserService.addInfo(user.getId(), dto);
+            }
             return new ResponseEntity<>(new CMRespDto<>(1, "수정이 완료되었습니다", null), HttpStatus.OK);
         } catch (DataIntegrityViolationException e) {
             throw new CustomValidationApiException("적합하지 않은 정보가 포함되었습니다");

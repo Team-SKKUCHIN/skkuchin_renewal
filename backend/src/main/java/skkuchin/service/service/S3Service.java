@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import skkuchin.service.exception.CustomRuntimeException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
@@ -49,7 +48,7 @@ public class S3Service {
     }
 
     @Transactional
-    public String uploadObject(MultipartFile file, String category , String campus, String placeName) {
+    public String uploadObject(MultipartFile file, String category, String campus, String placeName) {
         try {
             String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
             String objectKey = this.prefix
@@ -88,7 +87,6 @@ public class S3Service {
 
         s3Client.deleteObject(deleteObjectRequest);
     }
-
 
     private String getUrl(String key) {
         return this.startUrl + key;

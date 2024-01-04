@@ -32,7 +32,7 @@ public class ChatMessageService {
     private final UserRepo userRepo;
 
     @Transactional
-    public void write(AppUser user, ChatMessageDto.Request dto){
+    public void write(AppUser user, ChatMessageDto.Request dto) {
         ChatRoom chatRoom = chatRoomRepo.findByRoomId(dto.getRoomId());
         if (chatRoom == null) {
             throw new CustomRuntimeException("올바르지 않은 접근입니다");
@@ -48,11 +48,13 @@ public class ChatMessageService {
 
     @Transactional
     public void readMessage(Long messageId, AppUser user, ChatMessageDto.BooleanRequest dto) {
-        ChatMessage chatMessage = chatMessageRepo.findById(messageId).orElseThrow(() -> new CustomValidationApiException("존재하지 않는 메시지입니다"));
+        ChatMessage chatMessage = chatMessageRepo.findById(messageId)
+                .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 메시지입니다"));
 
-//        if (!Objects.equals(user, chatMessage.getChatRoom().getUser1()) && !Objects.equals(user, chatMessage.getChatRoom().getUser2())) {
-//            throw new CustomRuntimeException("올바르지 않은 접근입니다");
-//        }
+        // if (!Objects.equals(user, chatMessage.getChatRoom().getUser1()) &&
+        // !Objects.equals(user, chatMessage.getChatRoom().getUser2())) {
+        // throw new CustomRuntimeException("올바르지 않은 접근입니다");
+        // }
 
         chatMessage.setReadStatus(dto.getRead());
         chatMessageRepo.save(chatMessage);
@@ -85,10 +87,10 @@ public class ChatMessageService {
     }
 
     @Transactional
-    public List<ChatMessageDto.Response> getAllMessage(ChatRoom chatRoom){
+    public List<ChatMessageDto.Response> getAllMessage(ChatRoom chatRoom) {
         List<ChatMessageDto.Response> messages = chatMessageRepo.findByChatRoom(chatRoom)
                 .stream()
-                .map(message -> new ChatMessageDto.Response(message,chatRoom))
+                .map(message -> new ChatMessageDto.Response(message, chatRoom))
                 .collect(Collectors.toList());
         Collections.sort(messages, new MessageDateComparator().reversed());
         return messages;
@@ -97,9 +99,9 @@ public class ChatMessageService {
     private class MessageDateComparator implements Comparator<ChatMessageDto.Response> {
         @Override
         public int compare(ChatMessageDto.Response f1, ChatMessageDto.Response f2) {
-            if (f1.getLocalDateTime().isAfter(f2.getLocalDateTime()) ) {
+            if (f1.getLocalDateTime().isAfter(f2.getLocalDateTime())) {
                 return 1;
-            } else  {
+            } else {
                 return -1;
             }
         }

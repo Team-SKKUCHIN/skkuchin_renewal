@@ -50,6 +50,8 @@ public class Place {
 
     private String discountContent;
 
+    private String link;
+
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
@@ -64,4 +66,7 @@ public class Place {
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RelatePlace> relatePlaces = new ArrayList<>();
+
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Worldcup> worldcups = new ArrayList<>();
 }

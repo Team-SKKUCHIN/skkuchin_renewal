@@ -6,12 +6,10 @@ import { load_candidate } from '../../actions/candidate/candidate'
 import { load_request_id, request_chat } from '../../actions/chat/chatRoom';
 import noCharacter from '../../image/mbti/profile/noCharacter.png'
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import CustomPopup from "../SkkuChat/CustomPopup";
 import CustomPopupNoBtn from "../SkkuChat/CustomPopupNoBtn";
-
-const GoLogin = dynamic(() => import('../GoLogin'));
+import GoLogin from "../GoLogin";
 
 const dummyProfiles = [
     {
@@ -23,7 +21,7 @@ const dummyProfiles = [
         mbti: 'ENFP',
         keywords: ['일식', '음악'],
         description:
-            '성대 학우와 대화를 나누시려면 추가 프로필을 등록해주세요 👀',
+            '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀',
     },
     {
         name: '김꾸친',
@@ -34,7 +32,7 @@ const dummyProfiles = [
         mbti: 'ISFJ',
         keywords: ['여행', '동아리'],
         description:
-            '성대 학우와 대화를 나누시려면 추가 프로필을 등록해주세요 👀',
+            '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀',
     },
     {
         name: '웅이',
@@ -45,7 +43,7 @@ const dummyProfiles = [
         mbti: 'INTP',
         keywords: ['연극/뮤지컬', '카페'],
         description:
-            '성대 학우와 대화를 나누시려면 추가 프로필을 등록해주세요 👀',
+            '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀',
     },
 
 ];
@@ -143,7 +141,7 @@ const Friends = () => {
                             )))
                         : null}
                     </Grid >
-                    <Typography sx={{ fontSize:'14px', fontWeight: 400, color: '#3C3C3C', mb: '10px'}}>{'"'+person.introduction+'"'}</Typography>
+                    <Typography sx={{ fontSize:'14px', fontWeight: 400, color: '#3C3C3C', mb: '10px', textAlign: 'center'}}>{'"'+person.introduction+'"'}</Typography>
                     <Grid item sx={{ display: 'flex',  alignItems: 'center', width: '100%', justifyContent: 'center' }}>
                         <Button
                             disableElevation
@@ -257,12 +255,12 @@ const Friends = () => {
                                     )))
                                 : null}
                             </Grid >
-                            <Grid item sx={{width: '169px', height: '48px',textAlign: 'center', pb: '8px'}}>
+                            <Grid item sx={{width: '169px', textAlign: 'center', pb: '8px'}}>
                                 <Typography sx={{ fontSize:'13px', fontWeight: '500', whiteSpace: 'pre-wrap'}}>
                                     {
                                         user?.matching === false ?
-                                        '성대 학우와 대화를 나누시려면\n\n[내 프로필 보기]에서\n대화 활성화 버튼을 켜주세요 👀' 
-                                        : '성대 학우와 대화를 나누시려면 추가 프로필을 등록해주세요 👀'
+                                        '성대 학우와 채팅을 나누시려면\n\n[마이페이지]에서\n매칭 ON/OFF 버튼을 켜주세요 👀' 
+                                        : '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀'
                                     }
                                 </Typography>
                             </Grid>

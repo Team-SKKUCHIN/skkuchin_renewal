@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 
 
 public class UserDto {
@@ -207,16 +206,5 @@ public class UserDto {
             this.major = user.getMajor();
             this.image = user.getImage();
         }
-    }
-
-    @Getter
-    @Setter
-    @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static class DebeziumDto {
-        private Long id;
-        private String nickname;
-        private String username;
-        private Major major;
-        private Profile image;
     }
 }

@@ -9,7 +9,7 @@ import CustomDropdownMenu from './CustomDropdownMenu';
 import { useSelector, useDispatch } from 'react-redux';
 import { delete_post } from '../../actions/post/post';
 
-const Header = ({ title, onBackClick, showSearchIcon, post }) => {
+const Header = ({ title, onBackClick, showSearchIcon, post, setLoading }) => {
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -64,17 +64,21 @@ const Header = ({ title, onBackClick, showSearchIcon, post }) => {
     }
 
     const handleDeletePost = (post) => {
-        console.log("삭제하기");
-        console.log(post.id);
+      setLoading(true);
 
-        dispatch(delete_post(post.id, ([result, message]) => {
-          if (result) {
-            console.log("게시글 삭제 성공");
-            router.back();
-          } else {
-            console.log("게시글 삭제 오류" + message);
-          }
-        }));
+      console.log("삭제하기");
+      console.log(post.id);
+
+      dispatch(delete_post(post.id, ([result, message]) => {
+        setLoading(false);
+
+        if (result) {
+          console.log("게시글 삭제 성공");
+          router.back();
+        } else {
+          console.log("게시글 삭제 오류" + message);
+        }
+      }));
     }
 
     const handleViewProfile = (post) => {
@@ -99,13 +103,13 @@ const Header = ({ title, onBackClick, showSearchIcon, post }) => {
         boxShadow: 'none',
       }}>
         <Grid container style={{justifyContent: 'space-between', alignItems: 'center', }}>
-          <Grid onClick={onBackClick}>
+          <Grid sx={{ cursor: 'pointer' }} onClick={onBackClick}>
             <Image src={back} width={11} height={18} name='back' layout='fixed' />
           </Grid>
           <Grid>
             <Typography sx={{fontSize: '18px', fontWeight: 700, color: '#3C3C3C'}}>{title}</Typography>
           </Grid>
-          <Grid>
+          <Grid sx={{ cursor: 'pointer' }}>
               {showSearchIcon ? (
                   <Image src={searchIcon} width={24} height={24} name='search' layout='fixed' onClick={() => router.push('/communitySearch')}/>
               ) : (

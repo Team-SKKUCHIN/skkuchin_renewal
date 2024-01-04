@@ -36,39 +36,39 @@ import {
     from './types';
 
 export const load_request_id = (callback) => async dispatch => {
-        await dispatch(request_refresh());
-        const access = dispatch(getToken('access'));
-    
-        try {
-            const res = await fetch(`${API_URL}/api/chat/room/request`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization' : `Bearer ${access}`
-                }
-            });
-    
-            const apiRes = await res.json();
-    
-            if (res.status === 200) {
-                dispatch({
-                    type: GET_REQUEST_ID_SUCCESS,
-                    payload: apiRes.data
-                })
-                if (callback) callback([true, apiRes.message]);
-            } else {
-                dispatch({
-                    type: GET_REQUEST_ID_FAIL
-                })
-                if (callback) callback([false, apiRes.message]);
+    await dispatch(request_refresh());
+    const access = dispatch(getToken('access'));
+
+    try {
+        const res = await fetch(`${API_URL}/api/chat/room/request`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization' : `Bearer ${access}`
             }
-        } catch(error) {
+        });
+
+        const apiRes = await res.json();
+
+        if (res.status === 200) {
+            dispatch({
+                type: GET_REQUEST_ID_SUCCESS,
+                payload: apiRes.data
+            })
+            if (callback) callback([true, apiRes.message]);
+        } else {
             dispatch({
                 type: GET_REQUEST_ID_FAIL
             })
-            if (callback) callback([false, error]);
+            if (callback) callback([false, apiRes.message]);
         }
-    };
+    } catch(error) {
+        dispatch({
+            type: GET_REQUEST_ID_FAIL
+        })
+        if (callback) callback([false, error]);
+    }
+};
 
 export const request_chat = (id, callback) => async dispatch => {
     await dispatch(request_refresh());

@@ -8,7 +8,6 @@
 ## 실행 순서
 1. make build-mac (윈도우는 build-win)
 2. make run
-3. make connect (백엔드 초기 데이터 주입 시작됐을 때)
 
 <br>
 
@@ -28,6 +27,3 @@ make run-client
 
 ## client 컨테이너만 종료
 make stop-client
-
-## 실시간 감지 켜기
-make connect

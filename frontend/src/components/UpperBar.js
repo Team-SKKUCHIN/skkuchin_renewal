@@ -5,31 +5,40 @@ import theme from '../theme/theme';
 import { useState } from 'react';
 import {Container} from '@mui/material';
 import mainLogo from '../image/upperBar/mainLogo.png'
-import messageIcon from '../image/upperBar/message_X.png'
+// import messageIcon from '../image/upperBar/message_X.png'
 import notiIcon from '../image/upperBar/notification_X.png'
-import messageOnIcon from '../image/upperBar/message.png'
+// import messageOnIcon from '../image/upperBar/message.png'
 import notiOnIcon from '../image/upperBar/notification.png'
 import Image from 'next/image'
 import { useEffect } from "react";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { get_chat_alarm } from '../actions/chat/chatAlarm';
+import { get_notice_alarm } from '../actions/notice/noticeAlarm';
 
 const UpperBar = () => {
-    const [selected, setSelected] = useState("스꾸맵");
+    const dispatch = useDispatch();
+    const [selected, setSelected] = useState("홈");
     const chatAlarm = useSelector(state => state.chatAlarm.chatAlarm);
     const noticeAlarm = useSelector(state => state.noticeAlarm.noticeAlarm);
     const user = useSelector(state => state.auth.user);
 
-    // 0226 myPage 적용 안되는 문제 수정 완료
+    useEffect(() => {
+        if (user) {
+            dispatch(get_chat_alarm());
+            dispatch(get_notice_alarm());
+        }
+    });
+
     useEffect(() => {
         const currentPathname = window.location.pathname;
-        if (currentPathname === "/match") {
+        if (currentPathname === "/message") {
             setSelected("스꾸챗");
-        } else if (currentPathname === "/magazine" || currentPathname === "/magazineDetail" ){
-            setSelected("매거진");
+        } else if (currentPathname === "/freeCommunity") {
+            setSelected("스꾸게시판");
         } else if (currentPathname === "/myPage"){
             setSelected("마이페이지");
         } else {
-            setSelected("스꾸맵");
+            setSelected("홈");
         }
     }, []);
 
@@ -45,11 +54,11 @@ const UpperBar = () => {
                 </Link>
             <div style={{flex: 1}} />
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <div style={{marginRight:"18px"}}>
+                    {/* <div style={{marginRight:"18px"}}>
                         <Link href="/message">
                             <Image src={chatAlarm ? messageOnIcon : messageIcon} width={24} height={24}/>
                         </Link>
-                    </div>
+                    </div> */}
                     <div>
                         <Link href="/notification">
                             <Image src={noticeAlarm ? notiOnIcon : notiIcon} width={24} height={24}/>
@@ -64,35 +73,36 @@ const UpperBar = () => {
                         fontSize: "11px",
                         fontWeight: 700,
                         textDecoration: "none",
-                        color: selected === "스꾸맵" ? "#FFCE00" : "#505050",
-                        borderBottom: selected === "스꾸맵" ? "2px solid #FFCE00" : "none",
+                        color: selected === "홈" ? "#FFCE00" : "#505050",
+                        borderBottom: selected === "홈" ? "2px solid #FFCE00" : "none",
                 }}
-                onClick={() => setSelected("스꾸맵")}
+                onClick={() => setSelected("홈")}
                 >
                 <span style={{padding:"0 0 2px 0"}}>
-                    스꾸맵
+                    홈
                 </span>
                 </a>
             </Link>
-            <Link href="/magazine">
+            <Link href="/freeCommunity">
                 <a
                     style={{
                         fontSize: "11px",
                         fontWeight: 700,
-                        color: selected === "매거진" ? "#FFCE00" : "#505050",
+                        color: selected === "스꾸게시판" ? "#FFCE00" : "#505050",
                         textDecoration: "none",
-                        borderBottom: selected === "매거진" ? "2px solid #FFCE00" : "none"
+                        borderBottom: selected === "스꾸게시판" ? "2px solid #FFCE00" : "none"
                 }}
-                onClick={() => setSelected("매거진")}
+                onClick={() => setSelected("스꾸게시판")}
                 >
                 <span style={{padding:"0 0 2px 0"}}>
-                    매거진
+                    스꾸게시판
                 </span>
                 </a>
             </Link>
-            <Link href="/match">
+            <Link href="/message">
                 <a
                     style={{
+                        display: "flex",
                         fontSize: "11px",
                         fontWeight: 700,
                         color: selected === "스꾸챗" ? "#FFCE00" : "#505050",
@@ -101,9 +111,18 @@ const UpperBar = () => {
                 }}
                 onClick={() => setSelected("스꾸챗")}
                 >
-                <span style={{padding:"0 0 2px 0"}}>
-                    스꾸챗
-                </span>
+                    <span style={{padding:"0 0 2px 0"}}>
+                        스꾸챗
+                    </span>
+                    {chatAlarm && <div
+                        style={{
+                            backgroundColor: "#FFCE00",
+                            width: "5px",
+                            height: "5px",
+                            borderRadius: "2.5px",
+                            margin: "0 0 auto 2.5px"
+                        }}
+                    />}
                 </a>
             </Link>
             {

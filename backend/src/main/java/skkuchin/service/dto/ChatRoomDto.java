@@ -1,6 +1,5 @@
 package skkuchin.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -13,7 +12,6 @@ import skkuchin.service.domain.User.Major;
 import skkuchin.service.domain.User.Profile;
 
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -25,7 +23,7 @@ public class ChatRoomDto {
     @Getter
     @RequiredArgsConstructor
     @AllArgsConstructor
-    public static  class RoomRequest {
+    public static class RoomRequest {
         @NotNull
         private Long id;
 
@@ -38,7 +36,7 @@ public class ChatRoomDto {
 
     @Getter
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static  class AdminRoomRequest {
+    public static class AdminRoomRequest {
         @NotNull
         @JsonProperty
         private Long user1Id;
@@ -57,7 +55,7 @@ public class ChatRoomDto {
     @Getter
     @RequiredArgsConstructor
     @AllArgsConstructor
-    public static  class ReactionRequest{
+    public static class ReactionRequest{
         @NotNull
         private ResponseType reaction;
     }
@@ -65,7 +63,7 @@ public class ChatRoomDto {
     @Getter
     @RequiredArgsConstructor
     @AllArgsConstructor
-    public static  class BooleanRequest{
+    public static class BooleanRequest{
         @NotNull
         private Boolean reaction;
     }
@@ -219,44 +217,5 @@ public class ChatRoomDto {
                 return date.format(DateTimeFormatter.ofPattern("yyyy. M. d.", Locale.KOREAN));
             }
         }
-    }
-
-    @Getter
-    @Setter
-    @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static class DebeziumDto{
-        private Long id;
-
-        @JsonProperty
-        private String roomId;
-
-        @JsonProperty
-        private Long user1Id;
-
-        @JsonProperty
-        private Long user2Id;
-
-        private ResponseType response;
-
-        @JsonProperty
-        private Timestamp expireDate;
-
-        @JsonProperty
-        private Boolean user1Block;
-
-        @JsonProperty
-        private Boolean user2Block;
-
-        @JsonProperty
-        private Boolean user1Alarm;
-
-        @JsonProperty
-        private Boolean user2Alarm;
-
-        @JsonProperty
-        private String meetPlace;
-
-        @JsonProperty
-        private Timestamp meetTime;
     }
 }
