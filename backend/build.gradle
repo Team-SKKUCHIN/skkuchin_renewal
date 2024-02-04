@@ -78,10 +78,6 @@ dependencies {
 	implementation "io.springfox:springfox-boot-starter:3.0.0"
 	implementation "io.springfox:springfox-swagger-ui:3.0.0"
 
-	//kafka
-	// implementation 'org.springframework.kafka:spring-kafka:2.8.1'
-	// implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.1'
-
 	//Debezium Engine
 	implementation 'io.debezium:debezium-connector-mysql:1.4.2.Final'
 	implementation 'io.debezium:debezium-api:1.4.2.Final'
@@ -91,9 +87,6 @@ dependencies {
 	//web push
 	implementation 'nl.martijndwars:web-push:5.1.1'
 	implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
-
-	//redis
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {

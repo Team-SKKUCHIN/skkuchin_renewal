@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import skkuchin.service.domain.Forum.ArticleType;
 import skkuchin.service.domain.Magazine.Magazine;
 import skkuchin.service.domain.Magazine.RelatePlace;
 import skkuchin.service.domain.Map.Gate;
@@ -25,7 +24,7 @@ public class MagazineDto {
     @AllArgsConstructor
     @RequiredArgsConstructor
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static class PostRequest{
+    public static class PostRequest {
         @NotBlank
         private String title;
 
@@ -41,7 +40,7 @@ public class MagazineDto {
         @NotBlank
         private String link;
 
-        public Magazine toEntity(AppUser user){
+        public Magazine toEntity(AppUser user) {
             return Magazine.builder()
                     .user(user)
                     .content(content)
@@ -52,13 +51,11 @@ public class MagazineDto {
                     .build();
         }
 
-
     }
-
 
     @Getter
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static  class Response {
+    public static class Response {
 
         private Long id;
         @NotBlank
@@ -77,25 +74,23 @@ public class MagazineDto {
         @NotBlank
         private String link;
 
-
         public Response(Magazine magazine, List<RelatePlace> relatePlaces) {
             this.id = magazine.getId();
             this.gate = magazine.getGate();
             this.title = magazine.getTitle();
             this.content = magazine.getContent();
             this.link = magazine.getLink();
-            this.placeId = relatePlaces.stream().map(relatePlace -> relatePlace.getPlace().getId()).collect(Collectors.toList());
+            this.placeId = relatePlaces.stream().map(relatePlace -> relatePlace.getPlace().getId())
+                    .collect(Collectors.toList());
         }
     }
-
-
 
     @Getter
     @Setter
     @AllArgsConstructor
     @RequiredArgsConstructor
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static  class PutRequest {
+    public static class PutRequest {
 
         @NotBlank
         private String title;
@@ -112,7 +107,6 @@ public class MagazineDto {
 
         @NotBlank
         private String link;
-
 
     }
 }

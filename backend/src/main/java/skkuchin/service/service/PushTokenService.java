@@ -11,7 +11,6 @@ import org.jose4j.lang.JoseException;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import skkuchin.service.dto.PushTokenDto;
@@ -70,7 +69,7 @@ public class PushTokenService {
             String messageJson = objectMapper.writeValueAsString(Map.of("title", title, "message", message));
             pushService.send(new Notification(subscription, messageJson));
         } catch (GeneralSecurityException | IOException | JoseException | ExecutionException
-                 | InterruptedException e) {
+                | InterruptedException e) {
             throw new CustomRuntimeException("푸시 알림 중 오류가 발생했습니다", e.getMessage());
         }
     }
@@ -198,7 +197,6 @@ public class PushTokenService {
                 recipient.put("recipientNo", phone);
                 recipientList.add(recipient);
             }
-
 
             requestBody.put("recipientList", recipientList);
 
