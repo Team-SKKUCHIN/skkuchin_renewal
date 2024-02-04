@@ -8,14 +8,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import skkuchin.service.dto.PlaceDto;
 import skkuchin.service.domain.Map.*;
-import skkuchin.service.exception.CustomRuntimeException;
 import skkuchin.service.exception.CustomValidationApiException;
 import skkuchin.service.repo.*;
 
@@ -34,47 +30,27 @@ public class PlaceService {
     private static final String CATEGORY = "place";
     private final PlaceRepo placeRepo;
     private final ImageRepo imageRepo;
-    private final ReviewRepo reviewRepo;
-    private final ReviewTagRepo reviewTagRepo;
-    private final TagRepo tagRepo;
     private final S3Service s3Service;
 
     @Transactional
-    @Cacheable(value = "placeAll")
     public List<PlaceDto.Response> getAll() {
 
         return placeRepo.findAll()
                 .stream()
                 .map(place -> new PlaceDto.Response(
                         place,
-                        imageRepo.findByPlace(place),
-                        reviewRepo.findByPlace(place),
-                        getTop3TagsByPlace(place)))
+                        imageRepo.findByPlace(place)))
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    @Cacheable(value = "placeDetail", key = "#placeId")
     public PlaceDto.Response getDetail(Long placeId) {
         Place place = placeRepo.findById(placeId).orElseThrow(() -> new CustomValidationApiException("존재하지 않는 장소입니다"));
-
         List<Image> images = imageRepo.findByPlace(place);
-
-        List<Review> reviews = reviewRepo.findByPlace(place);
-
-        List<Tag> tags = getTop3TagsByPlace(place);
-
-        return new PlaceDto.Response(place, images, reviews, tags);
+        return new PlaceDto.Response(place, images);
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "placeSearchDiscount", allEntries = true),
-            @CacheEvict(value = "placeSearchCategory", allEntries = true),
-            @CacheEvict(value = "placeSearchTag", allEntries = true),
-            @CacheEvict(value = "placeSearchKeyword", allEntries = true),
-            @CacheEvict(value = "placeAll", allEntries = true)
-    })
     public void add(PlaceDto.PostRequest dto) {
         List<Image> placeImages = new ArrayList<>();
 
@@ -94,27 +70,12 @@ public class PlaceService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "placeSearchDiscount", allEntries = true),
-            @CacheEvict(value = "placeSearchCategory", allEntries = true),
-            @CacheEvict(value = "placeSearchTag", allEntries = true),
-            @CacheEvict(value = "placeSearchKeyword", allEntries = true),
-            @CacheEvict(value = "placeAll", allEntries = true)
-    })
     public void addAll(List<PlaceDto.PostRequest> dto) {
         List<Place> places = dto.stream().map(placeDto -> placeDto.toEntity()).collect(Collectors.toList());
         placeRepo.saveAll(places);
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "placeDetail", key = "#placeId"),
-            @CacheEvict(value = "placeSearchDiscount", allEntries = true),
-            @CacheEvict(value = "placeSearchCategory", allEntries = true),
-            @CacheEvict(value = "placeSearchTag", allEntries = true),
-            @CacheEvict(value = "placeSearchKeyword", allEntries = true),
-            @CacheEvict(value = "placeAll", allEntries = true)
-    })
     public void update(Long placeId, PlaceDto.PutRequest dto) {
         List<Image> newImages = new ArrayList<>();
 
@@ -148,14 +109,6 @@ public class PlaceService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "placeDetail", key = "#placeId"),
-            @CacheEvict(value = "placeSearchDiscount", allEntries = true),
-            @CacheEvict(value = "placeSearchCategory", allEntries = true),
-            @CacheEvict(value = "placeSearchTag", allEntries = true),
-            @CacheEvict(value = "placeSearchKeyword", allEntries = true),
-            @CacheEvict(value = "placeAll", allEntries = true)
-    })
     public void delete(Long placeId) {
         Place place = placeRepo.findById(placeId).orElseThrow();
 
@@ -166,213 +119,6 @@ public class PlaceService {
         for (Image existingImage : existingImages) {
             s3Service.deleteObject(existingImage.getUrl());
         }
-    }
-
-    @Transactional
-    @Cacheable(value = "placeSearch", key = "#keywords.toString()")
-    public List<PlaceDto.Response> search(List<String> keywords) {
-        if (keywords.stream().anyMatch(String::isBlank)) {
-            throw new CustomRuntimeException("검색어를 입력해주시기 바랍니다", "장소 검색 실패");
-        }
-        if (keywords.size() > 2) {
-            throw new CustomRuntimeException("검색어는 최대 두 개까지 검색 가능합니다", "장소 검색 실패");
-        }
-        List<Place> places = placeRepo.findAll();
-        List<Place> matchingPlaces = new ArrayList<>();
-        List<String> keywordsList = new ArrayList<>();
-
-        String keyword1 = keywords.get(0).toLowerCase();
-        keywordsList.add(keyword1);
-
-        String keyword2 = "";
-        if (keywords.size() > 1) {
-            keyword2 = keywords.get(1).toLowerCase();
-            keywordsList.add(keyword2);
-        }
-
-        List<Tag> tags = new ArrayList<>();
-        Tag tag1 = tagRepo.findByName(keyword1);
-        if (tag1 != null) {
-            tags.add(tag1);
-            keywordsList.remove(keyword1);
-        }
-
-        Tag tag2 = null;
-        if (!keyword2.isBlank()) {
-            tag2 = tagRepo.findByName(keyword2);
-            if (tag2 != null) {
-                tags.add(tag2);
-                keywordsList.remove(keyword2);
-            }
-        }
-
-        // 태그 두 개
-        if (tags.size() == 2) {
-            for (Place place : places) {
-                List<Tag> placeTags = getTop3TagsByPlace(place);
-                Set<Tag> placeTagSet = new HashSet<>(placeTags);
-                if (placeTagSet.contains(tag1) && placeTagSet.contains(tag2)) {
-                    matchingPlaces.add(place);
-                }
-            }
-            // 태그 한 개
-        } else if (tags.size() == 1 && keywordsList.size() == 0) {
-            for (Place place : places) {
-                List<Tag> placeTags = getTop3TagsByPlace(place);
-                Set<Tag> placeTagSet = new HashSet<>(placeTags);
-                if (placeTagSet.contains(tags.get(0))) {
-                    matchingPlaces.add(place);
-                }
-            }
-            // 학생할인 + 카테고리
-        } else if (tags.size() == 0 && keywordsList.size() == 2 && keywordsList.contains("학생 할인")) {
-            keywordsList.remove("학생 할인");
-            for (Place place : places) {
-                if (place.getCategory().name().equals(keywordsList.get(0)) && place.getDiscountAvailability()) {
-                    matchingPlaces.add(place);
-                }
-            }
-            // 태그 + 학생할인
-        } else if (tags.size() == 1 && keywordsList.size() == 1 && keywordsList.contains("학생 할인")) {
-            for (Place place : places) {
-                List<Tag> placeTags = getTop3TagsByPlace(place);
-                Set<Tag> placeTagSet = new HashSet<>(placeTags);
-                if (placeTagSet.contains(tags.get(0)) && place.getDiscountAvailability()) {
-                    matchingPlaces.add(place);
-                }
-            }
-            // 태그 + 카테고리
-        } else if (tags.size() == 1 && keywordsList.size() == 1 && !keywordsList.contains("학생 할인")) {
-            for (Place place : places) {
-                List<Tag> placeTags = getTop3TagsByPlace(place);
-                Set<Tag> placeTagSet = new HashSet<>(placeTags);
-                if (placeTagSet.contains(tags.get(0)) && place.getCategory().name().equals(keywordsList.get(0))) {
-                    matchingPlaces.add(place);
-                }
-            }
-            // 학생할인
-        } else if (tags.size() == 0 && keywordsList.size() == 1 && keywordsList.contains("학생 할인")) {
-            for (Place place : places) {
-                if (place.getDiscountAvailability()) {
-                    matchingPlaces.add(place);
-                }
-            }
-            // 검색어
-        } else if (tags.size() == 0 && keywordsList.size() == 1 && !keywordsList.contains("학생 할인")) {
-            for (Place place : places) {
-                if (place.getCategory().name().toLowerCase().contains(keyword1)
-                        || (place.getDetailCategory() != null
-                                && place.getDetailCategory().toLowerCase().contains(keyword1)
-                                || (place.getGate() != null && place.getGate().name().toLowerCase().contains(keyword1))
-                                || place.getName().toLowerCase().contains(keyword1))) {
-                    matchingPlaces.add(place);
-                }
-            }
-        }
-
-        return matchingPlaces
-                .stream()
-                .map(place -> new PlaceDto.Response(
-                        place,
-                        imageRepo.findByPlace(place),
-                        reviewRepo.findByPlace(place),
-                        getTop3TagsByPlace(place)))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    @Cacheable(value = "placeSearchDiscount")
-    public List<PlaceDto.Response> searchDiscount() {
-        List<Place> places = placeRepo.findAll();
-        List<Place> matchingPlaces = new ArrayList<>();
-
-        for (Place place : places) {
-            if (place.getDiscountAvailability()) {
-                matchingPlaces.add(place);
-            }
-        }
-
-        return matchingPlaces
-                .stream()
-                .map(place -> new PlaceDto.Response(
-                        place,
-                        imageRepo.findByPlace(place),
-                        reviewRepo.findByPlace(place),
-                        getTop3TagsByPlace(place)))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    @Cacheable(value = "placeSearchCategory", key = "#category")
-    public List<PlaceDto.Response> searchCategory(String category) {
-        List<Place> places = placeRepo.findAll();
-        List<Place> matchingPlaces = new ArrayList<>();
-
-        for (Place place : places) {
-            if (place.getCategory().name().equals(category)) {
-                matchingPlaces.add(place);
-            }
-        }
-
-        return matchingPlaces
-                .stream()
-                .map(place -> new PlaceDto.Response(
-                        place,
-                        imageRepo.findByPlace(place),
-                        reviewRepo.findByPlace(place),
-                        getTop3TagsByPlace(place)))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    @Cacheable(value = "placeSearchTag", key = "#tag")
-    public List<PlaceDto.Response> searchTag(String tag) {
-        List<Place> places = placeRepo.findAll();
-        List<Place> matchingPlaces = new ArrayList<>();
-        Tag realTag = tagRepo.findByName(tag);
-
-        for (Place place : places) {
-            List<Tag> placeTags = getTop3TagsByPlace(place);
-            Set<Tag> placeTagSet = new HashSet<>(placeTags);
-
-            if (placeTagSet.contains(realTag)) {
-                matchingPlaces.add(place);
-            }
-        }
-
-        return matchingPlaces
-                .stream()
-                .map(place -> new PlaceDto.Response(
-                        place,
-                        imageRepo.findByPlace(place),
-                        reviewRepo.findByPlace(place),
-                        getTop3TagsByPlace(place)))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    @Cacheable(value = "placeSearchKeyword", key = "#keyword")
-    public List<PlaceDto.Response> searchKeyword(String keyword) {
-        List<Place> places = placeRepo.findAll();
-        List<Place> matchingPlaces = new ArrayList<>();
-
-        for (Place place : places) {
-            if (place.getCategory().name().contains(keyword)
-                    || (place.getDetailCategory() != null && place.getDetailCategory().contains(keyword)
-                            || (place.getGate() != null && place.getGate().name().contains(keyword))
-                            || place.getName().toLowerCase().contains(keyword.toLowerCase()))) {
-                matchingPlaces.add(place);
-            }
-        }
-
-        return matchingPlaces
-                .stream()
-                .map(place -> new PlaceDto.Response(
-                        place,
-                        imageRepo.findByPlace(place),
-                        reviewRepo.findByPlace(place),
-                        getTop3TagsByPlace(place)))
-                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -399,25 +145,6 @@ public class PlaceService {
         return places
                 .stream()
                 .map(PlaceDto.AdminResponse::new)
-                .collect(Collectors.toList());
-    }
-
-    private List<Tag> getTop3TagsByPlace(Place place) {
-        List<Review> reviews = reviewRepo.findByPlace(place);
-        Map<Tag, Long> tagsCount = new HashMap<>();
-
-        for (Review review : reviews) {
-            List<ReviewTag> reviewTags = reviewTagRepo.findByReview(review);
-            for (ReviewTag reviewTag : reviewTags) {
-                Tag tag = reviewTag.getTag();
-                tagsCount.put(tag, tagsCount.getOrDefault(tag, 0L) + 1);
-            }
-        }
-
-        return tagsCount.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .limit(3)
-                .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
 

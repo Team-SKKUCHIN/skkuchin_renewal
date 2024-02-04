@@ -40,7 +40,6 @@ public class ServiceApplication {
 			ChatMessageService chatMessageService,
 			NoticeService noticeService,
 			ReportService reportService,
-			CacheService cacheService,
 			WorldcupService worldcupService) {
 		return args -> {
 			userService.saveRole(Role.builder().name("ROLE_USER").build());
@@ -66,7 +65,6 @@ public class ServiceApplication {
 				// menuService.insertData(path);
 				keywordService.insertData(path);
 				// reviewService.insertData(path);
-				cacheService.caching();
 				// rankService.addRank();
 				userService.saveTestMatchingUsers(100);
 				worldcupService.insertData(100);

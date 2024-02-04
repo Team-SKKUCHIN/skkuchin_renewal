@@ -28,7 +28,6 @@ public class ImageService {
     private static final String CATEGORY = "place";
     private final ImageRepo imageRepo;
     private final PlaceRepo placeRepo;
-    private final CacheService cacheService;
     private final S3Service s3Service;
     @Value("${aws.s3.start-url}")
     private String startUrl;
@@ -57,8 +56,6 @@ public class ImageService {
 
         Image image = dto.toEntity(place, url);
         imageRepo.save(image);
-
-        cacheService.renewCache();
     }
 
     @Transactional
@@ -77,8 +74,6 @@ public class ImageService {
         }
 
         imageRepo.saveAll(images);
-
-        cacheService.renewCache();
     }
 
     @Transactional
@@ -95,8 +90,6 @@ public class ImageService {
         imageRepo.save(existingImage);
 
         s3Service.deleteObject(originalUrl);
-
-        cacheService.renewCache();
     }
 
     @Transactional
@@ -106,8 +99,6 @@ public class ImageService {
 
         imageRepo.deleteById(imageId);
         s3Service.deleteObject(url);
-
-        cacheService.renewCache();
     }
 
     @Transactional
@@ -130,8 +121,6 @@ public class ImageService {
             imageRepo.delete(image);
             s3Service.deleteObject(url);
         }
-
-        cacheService.renewCache();
     }
 
     public void insertData() {

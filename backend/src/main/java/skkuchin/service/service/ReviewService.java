@@ -8,8 +8,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import skkuchin.service.dto.ReviewDto;
@@ -51,32 +49,25 @@ public class ReviewService {
                 .map(review -> new ReviewDto.AdminResponse(
                         review,
                         reviewTagRepo.findByReview(review),
-                        reviewImageRepo.findByReview(review)
-                ))
+                        reviewImageRepo.findByReview(review)))
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public ReviewDto.Response getDetail(Long reviewId) {
-        Review review = reviewRepo.findById(reviewId).orElseThrow(() -> new CustomValidationApiException("존재하지 않는 리뷰입니다"));
+        Review review = reviewRepo.findById(reviewId)
+                .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 리뷰입니다"));
         List<ReviewTag> reviewTags = reviewTagRepo.findByReview(review);
         List<ReviewImage> reviewImages = reviewImageRepo.findByReview(review);
         return new ReviewDto.Response(review, reviewTags, reviewImages);
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "placeDetail", key = "#dto.placeId"),
-            @CacheEvict(value = "placeSearchDiscount", allEntries = true),
-            @CacheEvict(value = "placeSearchCategory", allEntries = true),
-            @CacheEvict(value = "placeSearchTag", allEntries = true),
-            @CacheEvict(value = "placeSearchKeyword", allEntries = true),
-            @CacheEvict(value = "placeAll", allEntries = true)
-    })
     public void write(AppUser user, ReviewDto.PostRequest dto) {
         List<ReviewImage> reviewImages = new ArrayList<>();
 
-        Place place = placeRepo.findById(dto.getPlaceId()).orElseThrow(() -> new CustomValidationApiException("존재하지 않는 장소입니다"));
+        Place place = placeRepo.findById(dto.getPlaceId())
+                .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 장소입니다"));
         Review review = dto.toEntity(user, place);
         reviewRepo.save(review);
 
@@ -102,16 +93,9 @@ public class ReviewService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "placeDetail", allEntries = true),
-            @CacheEvict(value = "placeSearchDiscount", allEntries = true),
-            @CacheEvict(value = "placeSearchCategory", allEntries = true),
-            @CacheEvict(value = "placeSearchTag", allEntries = true),
-            @CacheEvict(value = "placeSearchKeyword", allEntries = true),
-            @CacheEvict(value = "placeAll", allEntries = true)
-    })
     public void update(Long reviewId, ReviewDto.PutRequest dto, AppUser user) {
-        Review existingReview = reviewRepo.findById(reviewId).orElseThrow(() -> new CustomValidationApiException("존재하지 않는 리뷰입니다"));
+        Review existingReview = reviewRepo.findById(reviewId)
+                .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 리뷰입니다"));
         Place place = existingReview.getPlace();
         // s3 저장후 받은 url로 저장할 새로운 이미지 배열
         List<ReviewImage> newImages = new ArrayList<>();
@@ -131,7 +115,8 @@ public class ReviewService {
         }
         // 기존의 키워드 리스트에 없는 새로운 키워드는 추가
         for (int i = 0; i < dto.getTags().size(); i++) {
-            if (!existingTags.stream().map(object -> object.getTag().getName()).collect(Collectors.toList()).contains(dto.getTags().get(i))) {
+            if (!existingTags.stream().map(object -> object.getTag().getName()).collect(Collectors.toList())
+                    .contains(dto.getTags().get(i))) {
                 Tag tag = tagRepo.findByName(dto.getTags().get(i));
                 reviewTagRepo.save(dto.toReviewTagEntity(existingReview, tag));
             }
@@ -162,16 +147,9 @@ public class ReviewService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "placeDetail", allEntries = true),
-            @CacheEvict(value = "placeSearchDiscount", allEntries = true),
-            @CacheEvict(value = "placeSearchCategory", allEntries = true),
-            @CacheEvict(value = "placeSearchTag", allEntries = true),
-            @CacheEvict(value = "placeSearchKeyword", allEntries = true),
-            @CacheEvict(value = "placeAll", allEntries = true)
-    })
     public void delete(Long reviewId, AppUser user) {
-        Review review = reviewRepo.findById(reviewId).orElseThrow(() -> new CustomValidationApiException("존재하지 않는 리뷰입니다"));
+        Review review = reviewRepo.findById(reviewId)
+                .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 리뷰입니다"));
         canHandleReview(review.getUser(), user);
         List<ReviewImage> reviewImages = reviewImageRepo.findByReview(review);
 
@@ -191,8 +169,8 @@ public class ReviewService {
                 .map(review -> new ReviewDto.Response(
                         review,
                         reviewTagRepo.findByReview(review),
-                        reviewImageRepo.findByReview(review))
-                ).collect(Collectors.toList());
+                        reviewImageRepo.findByReview(review)))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -201,8 +179,8 @@ public class ReviewService {
                 .stream().map(review -> new ReviewDto.Response(
                         review,
                         reviewTagRepo.findByReview(review),
-                        reviewImageRepo.findByReview(review))
-                ).collect(Collectors.toList());
+                        reviewImageRepo.findByReview(review)))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -213,34 +191,34 @@ public class ReviewService {
                 .map(review -> new ReviewDto.Response(
                         review,
                         reviewTagRepo.findByReview(review),
-                        reviewImageRepo.findByReview(review)
-                ))
+                        reviewImageRepo.findByReview(review)))
                 .collect(Collectors.toList());
     }
 
     public void insertData(String path) throws IOException, ParseException {
-        if (reviewRepo.count() < 1) { //db가 비어있을 때만 실행
+        if (reviewRepo.count() < 1) { // db가 비어있을 때만 실행
 
             FileInputStream ins = new FileInputStream(path + "review.json");
             JSONParser parser = new JSONParser();
-            JSONObject jsonObject = (JSONObject)parser.parse(
-                    new InputStreamReader(ins, "UTF-8")
-            );
+            JSONObject jsonObject = (JSONObject) parser.parse(
+                    new InputStreamReader(ins, "UTF-8"));
             JSONArray jsonArray = (JSONArray) jsonObject.get("review");
             Gson gson = new Gson();
 
             List<AppUser> users = userRepo.findAll();
 
-//            String imageUrl = this.startUrl + this.prefix + CATEGORY + "/p4v9hOJorE9sAR9clE068RRB.jpeg";
+            // String imageUrl = this.startUrl + this.prefix + CATEGORY +
+            // "/p4v9hOJorE9sAR9clE068RRB.jpeg";
 
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject temp = (JSONObject) jsonArray.get(i);
                 ReviewDto.PostRequest dto = gson.fromJson(temp.toString(), ReviewDto.PostRequest.class);
                 Place place = placeRepo.findById(dto.getPlaceId()).orElseThrow();
-                Review review = dto.toEntity(users.get(i%2), place);
+                Review review = dto.toEntity(users.get(i % 2), place);
                 reviewRepo.save(review);
-//                ReviewImage reviewImage = ReviewImage.builder().review(review).url(imageUrl).build();
-//                reviewImageRepo.save(reviewImage);
+                // ReviewImage reviewImage =
+                // ReviewImage.builder().review(review).url(imageUrl).build();
+                // reviewImageRepo.save(reviewImage);
 
                 List<ReviewTag> reviewTags = dto.getTags().stream()
                         .map(k -> {
@@ -254,7 +232,8 @@ public class ReviewService {
     }
 
     private void canHandleReview(AppUser reviewUser, AppUser user) {
-        if (!(reviewUser.getId().equals(user.getId()) || user.getUserRoles().stream().findFirst().get().getRole().getName().equals("ROLE_ADMIN")))
+        if (!(reviewUser.getId().equals(user.getId())
+                || user.getUserRoles().stream().findFirst().get().getRole().getName().equals("ROLE_ADMIN")))
             throw new CustomRuntimeException("리뷰 작성자 또는 관리자가 아닙니다.");
     }
 }
