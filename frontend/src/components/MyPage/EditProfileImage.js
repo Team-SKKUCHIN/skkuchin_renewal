@@ -109,6 +109,14 @@ export default function EditProfileImage(props) {
         setImage(props.image);
     }, [])
 
+    // Issue: 프로필 이미지 변경 부분 api 연결 필요 
+    const handleSaveBtnClick = () => {
+        if(image){
+            console.log('저장 new Image: ', image);
+        }
+        router.push('../myPage');
+    };
+
     return (
         <Box
             sx={{
@@ -122,7 +130,7 @@ export default function EditProfileImage(props) {
                     <Image width={25} height={25} src={back} onClick={()=> router.push('../myPage')} layout='fixed' />
                     <Typography align='center' style={{marginLeft:'30px', fontSize: '18px', fontWeight: '700'}}>프로필 이미지</Typography>
                     { image ?
-                    <Button onClick={()=>router.push('../myPage')} style={{padding:'0', right:'0'}}>
+                    <Button onClick={handleSaveBtnClick} style={{padding:'0', right:'0'}}>
                         <Typography style={{margin:'0px 0px 0px 10px',color:'#FFCE00', textAlign:'center',fontSize:'18px', fontWeight: '500'}}>저장</Typography>
                     </Button>
                     :
