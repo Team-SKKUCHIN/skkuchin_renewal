@@ -14,7 +14,6 @@ import skkuchin.service.exception.CustomValidationApiException;
 import skkuchin.service.service.PlaceService;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +61,8 @@ public class PlaceController {
 
     @PutMapping("/{placeId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<?> update(@PathVariable Long placeId, @Valid @ModelAttribute PlaceDto.PutRequest dto, BindingResult bindingResult) {
+    public ResponseEntity<?> update(@PathVariable Long placeId, @Valid @ModelAttribute PlaceDto.PutRequest dto,
+            BindingResult bindingResult) {
         Map<String, String> errorMap = new HashMap<>();
         if (bindingResult.hasErrors()) {
             for (FieldError error : bindingResult.getFieldErrors()) {
@@ -79,41 +79,6 @@ public class PlaceController {
     public ResponseEntity<?> delete(@PathVariable Long placeId) {
         placeService.delete(placeId);
         return new ResponseEntity<>(new CMRespDto<>(1, "장소 삭제 완료", null), HttpStatus.OK);
-    }
-
-    @GetMapping("/search")
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    public ResponseEntity<?> search(@RequestParam("q") List<String> keywords) {
-        List<PlaceDto.Response> places = placeService.search(keywords);
-        return new ResponseEntity<>(new CMRespDto<>(1, "장소 검색 완료", places), HttpStatus.OK);
-    }
-
-    @GetMapping("/search/discount")
-    public ResponseEntity<?> searchDiscount() {
-        System.out.println(placeService.searchDiscount());
-        List<PlaceDto.Response> places = placeService.searchDiscount();
-        Collections.shuffle(places);
-        return new ResponseEntity<>(new CMRespDto<>(1, "장소 학생 할인 검색 완료", places), HttpStatus.OK);
-    }
-
-    @GetMapping("/search/category/{category}")
-    public ResponseEntity<?> searchCategory(@PathVariable String category) {
-        List<PlaceDto.Response> places = placeService.searchCategory(category);
-        Collections.shuffle(places);
-        return new ResponseEntity<>(new CMRespDto<>(1, "장소 카태고리 검색 완료", places), HttpStatus.OK);
-    }
-
-    @GetMapping("/search/tag/{tag}")
-    public ResponseEntity<?> searchTag(@PathVariable String tag) {
-        List<PlaceDto.Response> places = placeService.searchTag(tag);
-        Collections.shuffle(places);
-        return new ResponseEntity<>(new CMRespDto<>(1, "장소 태그 검색 완료", places), HttpStatus.OK);
-    }
-
-    @GetMapping("/search/keyword")
-    public ResponseEntity<?> searchKeyword(@RequestParam("q") String keyword) {
-        List<PlaceDto.Response> places = placeService.searchKeyword(keyword);
-        return new ResponseEntity<>(new CMRespDto<>(1, "장소 검색 완료", places), HttpStatus.OK);
     }
 
     @GetMapping("/noreview")

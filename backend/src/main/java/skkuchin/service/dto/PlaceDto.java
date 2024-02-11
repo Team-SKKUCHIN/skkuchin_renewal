@@ -118,12 +118,8 @@ public class PlaceDto {
         private String discountContent;
         private String link;
         private List<String> images;
-        @JsonProperty
-        private Long reviewCount;
-        private Double rate;
-        private List<String> tags;
 
-        public Response(Place place, List<Image> images, List<Review> reviews, List<Tag> tags) {
+        public Response(Place place, List<Image> images) {
             this.id = place.getId();
             this.name = place.getName();
             this.marker = place.getCategory().getTitle();
@@ -140,15 +136,6 @@ public class PlaceDto {
             this.discountContent = place.getDiscountContent();
             this.link = place.getLink();
             this.images = images.stream().map(image -> image.getUrl()).collect(Collectors.toList());
-            this.reviewCount = reviews.stream().count();
-            this.rate = Math.round(
-                    reviews
-                            .stream()
-                            .mapToDouble(review -> review.getRate())
-                            .average()
-                            .orElse(0.0) * 10)
-                    / 10.0;
-            this.tags = tags.stream().map(tag -> tag.getName()).collect(Collectors.toList());
         }
     }
 

@@ -1,10 +1,10 @@
 aws:
   credentials:
-    access-key: AKIAZTEOD3CVDU4TKCBL
-    secret-access-key: 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
+    access-key: AKIA2UC3C7E5GVNU2RNC
+    secret-access-key: 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
   region:
     static: ap-northeast-2
   s3:
-    bucket: skkuchin2023-bucket
+    bucket: skkuchin-bucket
     prefix: dev/media/
-    start-url: https://skkuchin2023-bucket.s3.ap-northeast-2.amazonaws.com/
+    start-url: https://skkuchin-bucket.s3.ap-northeast-2.amazonaws.com/
