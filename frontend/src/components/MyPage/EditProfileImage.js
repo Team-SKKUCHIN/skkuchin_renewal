@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {  Container, Typography, Box, Grid, Button } from '@mui/material';
 import back from '../../image/close.png';
 import theme from '../../theme/theme';
 import Image from 'next/image';
 import { useRouter } from "next/router";
+import { load_matching_info, change_matching_info } from "../../actions/matchingUser/matchingUser";
 
 import profile1 from '../../image/mbti/profile/mbti_non_select/mainCharacter.png';
 import profile2 from '../../image/mbti/profile/mbti_non_select/mealCharacter.png';
@@ -44,6 +46,7 @@ import profile17On from '../../image/mbti/profile/mbti_select/ISFJ.png';
 import profile18On from '../../image/mbti/profile/mbti_select/ESFP.png';
 
 export default function EditProfileImage(props) {
+    const dispatch = useDispatch();
     const router = useRouter();
     const [image, setImage] = useState('');
     const [profile, setProfile] = useState({
@@ -67,9 +70,22 @@ export default function EditProfileImage(props) {
         'ESFP': false,
     })
 
-    // const handlePrevStep = () => {
-    //     props.setEditImage(false);
-    // }
+    const userInfo = useSelector(state => state.matchingUser.matchingUser);
+    const [userData, setUserData] = useState({
+        gender: userInfo?.gender || '',
+        keywords: userInfo?.keywords || [],
+        introduction: userInfo?.introduction || '',
+        mbti: userInfo?.image || ''
+    });
+    
+
+    useEffect(() => {
+        if(userInfo === null){
+            dispatch(load_matching_info());
+        }
+        console.log(userInfo);
+        console.log(userData);
+    },[]);
 
     const handleProfileClick = (event) => {
         if(profile[event.target.name]){
@@ -97,10 +113,6 @@ export default function EditProfileImage(props) {
         }
     }
 
-    // const handleNextStep = () => {
-    //     props.setEditImage(false);
-    // }
-
     useEffect(() => {
         setProfile({
             ...profile,
@@ -108,6 +120,23 @@ export default function EditProfileImage(props) {
         })
         setImage(props.image);
     }, [])
+
+
+    const handleSaveBtnClick = async () => {
+        if (image) {
+            console.log('저장 new Image: ', image);
+            console.log('저장 new userData: ', {...userData, mbti: image });
+            // await dispatch(change_matching_info({...userData, mbti: image },([result, message])=> { 
+            //     if(result){
+            //         console.log('저장 성공');
+            //     } else {
+            //         console.log('저장 실패');
+            //     }
+            // }));
+
+            router.push('../myPage');
+        }
+    };
 
     return (
         <Box
@@ -122,7 +151,7 @@ export default function EditProfileImage(props) {
                     <Image width={25} height={25} src={back} onClick={()=> router.push('../myPage')} layout='fixed' />
                     <Typography align='center' style={{marginLeft:'30px', fontSize: '18px', fontWeight: '700'}}>프로필 이미지</Typography>
                     { image ?
-                    <Button onClick={()=>router.push('../myPage')} style={{padding:'0', right:'0'}}>
+                    <Button onClick={handleSaveBtnClick} style={{padding:'0', right:'0'}}>
                         <Typography style={{margin:'0px 0px 0px 10px',color:'#FFCE00', textAlign:'center',fontSize:'18px', fontWeight: '500'}}>저장</Typography>
                     </Button>
                     :
