@@ -7,4 +7,5 @@ aws:
   s3:
     bucket: skkuchin-bucket
     prefix: dev/media/
+    mail-prefix: dev/mail/
     start-url: https://skkuchin-bucket.s3.ap-northeast-2.amazonaws.com/
