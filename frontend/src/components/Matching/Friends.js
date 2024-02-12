@@ -109,9 +109,9 @@ const Friends = () => {
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
             { candidate ? 
             candidate.map((person, index) => (
-            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '15px', flexShrink: 0, mr: '19px', mb: '21px'}}>
+            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '20px', flexShrink: 0, mr: '19px', mb: '21px'}}>
                 <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
-                    {displayMBTI(person.mbti, 80, 80)}
+                    {displayMBTI(person.mbti, 90, 90)}
                     <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
                         <Typography sx={{fontSize: '16px', fontWeight: '700', mr: '5px'}}>{person !== null && person.nickname}</Typography>
                         {
@@ -141,7 +141,9 @@ const Friends = () => {
                             )))
                         : null}
                     </Grid >
-                    <Typography sx={{ fontSize:'14px', fontWeight: 400, color: '#3C3C3C', mb: '10px', textAlign: 'center'}}>{'"'+person.introduction+'"'}</Typography>
+                    <Typography sx={{ fontSize: '14px', height: '40px', lineHeight: '20px', fontWeight: 400, color: '#3C3C3C', textAlign: 'center', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
+                        {'"'+person.introduction+'"'}
+                    </Typography>
                     <Grid item sx={{ display: 'flex',  alignItems: 'center', width: '100%', justifyContent: 'center' }}>
                         <Button
                             disableElevation
