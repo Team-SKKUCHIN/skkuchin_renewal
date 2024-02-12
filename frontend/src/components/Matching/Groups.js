@@ -17,21 +17,21 @@ const dummyProfiles = [
         gender: '여',
         mbti: 'ENFJ',
         introduction:
-            '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀',
+            '그룹 한줄 소개입니다',
     },
     {
         groupName: '그룹명2',
         gender: '남',
         mbti: 'ISFP',
         introduction:
-            '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀',
+            '긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 👀',
     },
     {
         groupName: '그룹명3',
         gender: '남',
         mbti: 'ENFP',
         introduction:
-            '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀',
+            '그룹 한줄 소개입니다 👀',
     },
 
 ];
@@ -44,6 +44,8 @@ const Groups = () => {
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [isLogin, setIsLogin] = useState(false);
+    // 그룹 프로필 등록 여부
+    const [isGroupProfileEnrolled, setIsGroupProfileEnrolled] = useState(true);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -56,14 +58,14 @@ const Groups = () => {
     }, [isAuthenticated]);
 
     const [open, setOpen] = useState(false);
-    const [selectedgroupId, setSelectedgroupId] = useState(null);
+    const [selectedGroupId, setSelectedGroupId] = useState(null);
 
     const [isPopupMessageOpen, setIsPopupMessageOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
 
     const handleOpen = (id) => {
         setOpen(true);
-        setSelectedgroupId(id);
+        setSelectedGroupId(id);
     }
     const handleClose = () => {
         setOpen(false);
@@ -94,9 +96,9 @@ const Groups = () => {
     return (
         <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0'}}>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
-            { dummyProfiles ? 
+            { isGroupProfileEnrolled ? 
             dummyProfiles.map((group, index) => (
-            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '20px 15px', flexShrink: 0, mr: '19px', mb: '21px'}}>
+            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '20px', flexShrink: 0, mr: '19px', mb: '21px'}}>
                 <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                     {displayMBTI(group.mbti, 90, 90)}
                     <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
@@ -105,8 +107,9 @@ const Groups = () => {
                             {(group.gender).charAt(0)}
                         </Typography>
                     </Grid>
-                    
-                    <Typography sx={{ fontSize:'14px', fontWeight: 400, color: '#3C3C3C', m: '20px 0 30px', textAlign: 'center'}}>{'"'+group.introduction+'"'}</Typography>
+                    <Typography sx={{ fontSize: '14px', height: '40px', lineHeight: '20px', fontWeight: 400, color: '#3C3C3C', m: '20px 0 30px', textAlign: 'center', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
+                        {'"'+ group.introduction +'"'}
+                    </Typography>
                     <Grid item sx={{ display: 'flex',  alignItems: 'center', width: '100%', justifyContent: 'center' }}>
                         <Button
                             disableElevation
@@ -172,7 +175,7 @@ const Groups = () => {
                         rightButtonLabel="신청"
                         onLeftButtonClick={handleClose}
                         onRightButtonClick={() => {
-                            handleSubmit(selectedgroupId);
+                            handleSubmit(selectedGroupId);
                         }}
                     />
 
@@ -192,34 +195,11 @@ const Groups = () => {
                         <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                             <Image src={noCharacter} width={80} height={80} placeholder="blur" layout='fixed' />
                             <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
-                                <Typography sx={{fontSize: '16px', fontWeight: '700', mr: '5px'}}>{group.name}</Typography>
-                                {
-                                        group !== null && 
-                                        group.campus == '명륜' ?
-                                        <Typography sx={{width: 'max-content',color: '#FFAC0B', backgroundColor: '#FFFCE4', fontSize: '12px', fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px'}}>{group.campus}</Typography>
-                                        : 
-                                        <Typography sx={{color: '#58C85A', backgroundColor: '#DCF8DB', fontSize: '12px',fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px'}}>{group.campus}</Typography>
-                                }
-                            </Grid>
-                            <Grid item sx={{display: 'flex', fontSize: '12px', alignItems: 'center', fontWeight: 400, color: '#3C3C3C'}}>
-                                <Grid item sx={{flexGrow: 1, fontSize: '12px'}}>
-                                    {group.major}&nbsp;/&nbsp; 
-                                    {group.student_id}학번&nbsp;/&nbsp; 
+                                <Typography sx={{fontSize: '20px', fontWeight: '700', mr: '5px'}}>{group !== null && group.groupName}</Typography>
+                                <Typography sx={{p: '3px 7px', borderRadius: '10px', fontWeight: 'bold', fontSize: '12px', backgroundColor: (group.gender).charAt(0) === '여' ? '#FFF4F9' : '#E8F9FF', color: (group.gender).charAt(0) === '여' ? '#FAA4C3' : '#83B6F2'}}>
                                     {(group.gender).charAt(0)}
-                                </Grid>
+                                </Typography>
                             </Grid>
-                            <Grid item sx={{display: 'flex', p: '10px 0', m: '10px 0'}}>
-                                <Grid item sx={{color: '#9E9E9E', p: '0px 2.5px', fontSize: '12px', fontWeight: 700}}>
-                                    {'#'+group.mbti}
-                                </Grid>
-                                {(group.keywords) != null ?
-                                    ((group.keywords).slice(0, 2).map((interest, index)=> (
-                                        <Grid item key={index} sx={{ color: '#9E9E9E', p: '0px 1.5px', fontSize: '12px', fontWeight: 700}}>
-                                            {'#'+interest}
-                                        </Grid>
-                                    )))
-                                : null}
-                            </Grid >
                             <Grid item sx={{width: '169px', textAlign: 'center', pb: '8px'}}>
                                 <Typography sx={{ fontSize:'13px', fontWeight: '500', whiteSpace: 'pre-wrap'}}>
                                     {
