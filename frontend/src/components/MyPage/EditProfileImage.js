@@ -42,9 +42,14 @@ import profile15On from '../../image/mbti/profile/mbti_select/ESFJ.png';
 import profile16On from '../../image/mbti/profile/mbti_select/INTJ.png';
 import profile17On from '../../image/mbti/profile/mbti_select/ISFJ.png';
 import profile18On from '../../image/mbti/profile/mbti_select/ESFP.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { change_user } from '../../actions/auth/auth';
 
 export default function EditProfileImage(props) {
+    const dispatch = useDispatch();
     const router = useRouter();
+    const user = useSelector(state => state.auth.user);
+    const { nickname, major, student_id } = user;
     const [image, setImage] = useState('');
     const [profile, setProfile] = useState({
         'DEFAULT1': false,
@@ -109,6 +114,16 @@ export default function EditProfileImage(props) {
         setImage(props.image);
     }, [])
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        dispatch(change_user(nickname, major, image, student_id, ([result, message]) => {
+            if (result) {
+                router.push('/myPage');
+            }
+        }))
+    }
+
     return (
         <Box
             sx={{
@@ -122,7 +137,7 @@ export default function EditProfileImage(props) {
                     <Image width={25} height={25} src={back} onClick={()=> router.push('../myPage')} layout='fixed' />
                     <Typography align='center' style={{marginLeft:'30px', fontSize: '18px', fontWeight: '700'}}>프로필 이미지</Typography>
                     { image ?
-                    <Button onClick={()=>router.push('../myPage')} style={{padding:'0', right:'0'}}>
+                    <Button onClick={(e)=>handleSubmit(e)} style={{padding:'0', right:'0'}}>
                         <Typography style={{margin:'0px 0px 0px 10px',color:'#FFCE00', textAlign:'center',fontSize:'18px', fontWeight: '500'}}>저장</Typography>
                     </Button>
                     :
