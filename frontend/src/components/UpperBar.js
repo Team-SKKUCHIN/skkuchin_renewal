@@ -33,8 +33,8 @@ const UpperBar = () => {
         const currentPathname = window.location.pathname;
         if (currentPathname === "/message") {
             setSelected("스꾸챗");
-        } else if (currentPathname === "/freeCommunity") {
-            setSelected("스꾸게시판");
+        } else if ( currentPathname === "/mealPromise") {
+            setSelected("밥약");
         } else if (currentPathname === "/myPage"){
             setSelected("마이페이지");
         } else {
@@ -83,19 +83,19 @@ const UpperBar = () => {
                 </span>
                 </a>
             </Link>
-            <Link href="/freeCommunity">
+            <Link href="/mealPromise">
                 <a
                     style={{
                         fontSize: "11px",
                         fontWeight: 700,
-                        color: selected === "스꾸게시판" ? "#FFCE00" : "#505050",
+                        color: selected === "밥약" ? "#FFCE00" : "#505050",
                         textDecoration: "none",
-                        borderBottom: selected === "스꾸게시판" ? "2px solid #FFCE00" : "none"
+                        borderBottom: selected === "밥약" ? "2px solid #FFCE00" : "none"
                 }}
-                onClick={() => setSelected("스꾸게시판")}
+                onClick={() => setSelected("밥약")}
                 >
                 <span style={{padding:"0 0 2px 0"}}>
-                    스꾸게시판
+                    밥약
                 </span>
                 </a>
             </Link>

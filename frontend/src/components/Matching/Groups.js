@@ -98,7 +98,7 @@ const Groups = () => {
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
             { isGroupProfileEnrolled ? 
             dummyProfiles.map((group, index) => (
-            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '20px', flexShrink: 0, mr: '19px', mb: '21px'}}>
+            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '20px', flexShrink: 0, mr: '19px', mb: '10px'}}>
                 <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                     {displayMBTI(group.mbti, 90, 90)}
                     <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
