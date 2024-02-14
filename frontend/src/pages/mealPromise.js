@@ -9,7 +9,6 @@ import BannerCarousel from "../components/MealPromise/BannerCarousel";
 import Groups from "../components/Matching/Groups";
 import Friends from "../components/Matching/Friends";
 
-
 const LayoutContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
@@ -87,7 +86,7 @@ const MealPromisePage = () => {
             </Grid>
           </div>
 
-          <Divider orientation="horizontal" sx={{ border: '10px solid #F2F2F2', margin: '0 -24px' }} />
+          <Divider orientation="horizontal" sx={{ border: '5px solid #F2F2F2', margin: '0 -24px' }} />
 
           {/* 밥약 */}
           <div style={{ margin: '24px 0' }}>
@@ -118,6 +117,7 @@ const MealPromisePage = () => {
                 height: '52px',
                 width: '52px'
               }}
+              onClick={() => router.push('/makeGroupProfile')}
             >
               <AddIcon fontSize="medium" />
             </IconButton>
@@ -134,6 +134,7 @@ const MealPromisePage = () => {
                 height: '52px',
                 boxShadow: 'none',
               }}
+              onClick={() => router.push('/makeGroupProfile')}
             >
               + 그룹 프로필 작성
             </Button>
