@@ -27,7 +27,7 @@ const UpperBar = () => {
             dispatch(get_chat_alarm());
             dispatch(get_notice_alarm());
         }
-    });
+    }, [user]);
 
     useEffect(() => {
         const currentPathname = window.location.pathname;

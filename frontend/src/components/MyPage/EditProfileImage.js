@@ -44,10 +44,14 @@ import profile15On from '../../image/mbti/profile/mbti_select/ESFJ.png';
 import profile16On from '../../image/mbti/profile/mbti_select/INTJ.png';
 import profile17On from '../../image/mbti/profile/mbti_select/ISFJ.png';
 import profile18On from '../../image/mbti/profile/mbti_select/ESFP.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { change_user } from '../../actions/auth/auth';
 
 export default function EditProfileImage(props) {
     const dispatch = useDispatch();
     const router = useRouter();
+    const user = useSelector(state => state.auth.user);
+    const { nickname, major, student_id } = user;
     const [image, setImage] = useState('');
     const [profile, setProfile] = useState({
         'DEFAULT1': false,
@@ -120,7 +124,6 @@ export default function EditProfileImage(props) {
         })
         setImage(props.image);
     }, [])
-
 
     const handleSaveBtnClick = async () => {
         if (image) {
