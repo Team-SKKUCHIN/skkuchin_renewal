@@ -252,9 +252,11 @@ export const check_nickname = async (nickname, callback) => {
     }
 }
 
-export const change_user = (nickname, major, image, student_id, callback) => async dispatch => {
+export const change_user = ({nickname, major, image, student_id}, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
+
+    console.log(nickname, major, image, student_id);
 
     const body = JSON.stringify({ nickname, major, image, student_id });
 

@@ -5,7 +5,7 @@ import back from '../../image/close.png';
 import theme from '../../theme/theme';
 import Image from 'next/image';
 import { useRouter } from "next/router";
-import { load_matching_info, change_matching_info } from "../../actions/matchingUser/matchingUser";
+import { load_user, change_user } from "../../actions/auth/auth";
 
 import profile1 from '../../image/mbti/profile/mbti_non_select/mainCharacter.png';
 import profile2 from '../../image/mbti/profile/mbti_non_select/mealCharacter.png';
@@ -44,14 +44,19 @@ import profile15On from '../../image/mbti/profile/mbti_select/ESFJ.png';
 import profile16On from '../../image/mbti/profile/mbti_select/INTJ.png';
 import profile17On from '../../image/mbti/profile/mbti_select/ISFJ.png';
 import profile18On from '../../image/mbti/profile/mbti_select/ESFP.png';
-import { useDispatch, useSelector } from 'react-redux';
-import { change_user } from '../../actions/auth/auth';
 
 export default function EditProfileImage(props) {
     const dispatch = useDispatch();
+
     const router = useRouter();
     const user = useSelector(state => state.auth.user);
-    const { nickname, major, student_id } = user;
+    const [userData, setUserData] = useState({
+        image: user?.image || '',
+        major: user?.major || '',
+        nickname: user?.nickname || '',
+        student_id: user?.student_id || '',
+    });
+    
     const [image, setImage] = useState('');
     const [profile, setProfile] = useState({
         'DEFAULT1': false,
@@ -74,23 +79,14 @@ export default function EditProfileImage(props) {
         'ESFP': false,
     })
 
-    const userInfo = useSelector(state => state.matchingUser.matchingUser);
-    const [userData, setUserData] = useState({
-        gender: userInfo?.gender || '',
-        keywords: userInfo?.keywords || [],
-        introduction: userInfo?.introduction || '',
-        mbti: userInfo?.image || ''
-    });
-    
-
     useEffect(() => {
-        if(userInfo === null){
-            dispatch(load_matching_info());
+        if(user == null){
+            dispatch(load_user());
         }
-        console.log(userInfo);
-        console.log(userData);
-    },[]);
-
+        console.log('currnet user info: ', user);
+        console.log('extracted user info: ', userData);
+    }, []);
+    
     const handleProfileClick = (event) => {
         if(profile[event.target.name]){
             setProfile({
@@ -112,7 +108,6 @@ export default function EditProfileImage(props) {
                 }, {}),
             })
             setImage(event.target.name);
-            //props.setData({...props.data, image: event.target.name});
             props.setImage(event.target.name);
         }
     }
@@ -128,14 +123,7 @@ export default function EditProfileImage(props) {
     const handleSaveBtnClick = async () => {
         if (image) {
             console.log('저장 new Image: ', image);
-            console.log('저장 new userData: ', {...userData, mbti: image });
-            // await dispatch(change_matching_info({...userData, mbti: image },([result, message])=> { 
-            //     if(result){
-            //         console.log('저장 성공');
-            //     } else {
-            //         console.log('저장 실패');
-            //     }
-            // }));
+            await dispatch(change_user({...userData, image: image}));
 
             router.push('../myPage');
         }
