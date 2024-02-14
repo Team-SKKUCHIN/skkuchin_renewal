@@ -45,7 +45,6 @@ const Filter = ({ filterOptions, selectedFilter, onFilterSelect }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        getContentAnchorEl={null}
         sx={{
           boxShadow: 'none',
           '& .MuiList-root': {
