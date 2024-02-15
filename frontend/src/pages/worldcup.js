@@ -26,7 +26,7 @@ const SubTitle = () => (
             fontSize: "16px",
             letterSpacing: "-0.32px",
         }}>
-            #나의 최애 음식점 찾기
+            #음식점판 이상형 월드컵
         </span>
     </div>
 );

@@ -154,8 +154,6 @@ export const load_matching_info = (callback) => async dispatch => {
         })
         
         if (callback) callback([false, error]);
-        
-        
     }
 }
 
@@ -253,13 +251,19 @@ export const change_status_info = (status, callback) => async dispatch => {
     }
 }
 
-export const change_matching_info = (gender, keywords, introduction, mbti, callback) => async dispatch => {
+export const change_matching_info = (userData, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
-
+    console.log('전달 받은 USER DATA', userData);
+    
     const body = JSON.stringify({
-        gender, keywords, introduction, mbti
+        gender: userData.gender,
+        keywords: userData.keywords,
+        introduction: userData.introduction,
+        mbti: userData.mbti
     });
+
+    console.log('BODY VALUE', body);
 
     try {
         const res = await fetch(`${API_URL}/api/matching/user`,{
