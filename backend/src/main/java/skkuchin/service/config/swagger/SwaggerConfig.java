@@ -280,6 +280,66 @@ public class SwaggerConfig {
                                 .paths(PathSelectors.ant("/api/worldcup/**")).build();
         }
 
+        @Bean
+        public Docket apiV17() {
+                return new Docket(DocumentationType.OAS_30)
+                                .useDefaultResponseMessages(false)
+                                .ignoredParameterTypes(AuthenticationPrincipal.class)
+                                .securityContexts(Arrays.asList(securityContext()))
+                                .securitySchemes(Arrays.asList(apiKey()))
+                                .consumes(getConsumeContentTypes())
+                                .produces(getProduceContentTypes())
+                                .groupName("traffic")
+                                .select()
+                                .apis(RequestHandlerSelectors.basePackage("skkuchin.service.api.controller"))
+                                .paths(PathSelectors.ant("/api/traffic/**")).build();
+        }
+
+        @Bean
+        public Docket apiV18() {
+                return new Docket(DocumentationType.OAS_30)
+                                .useDefaultResponseMessages(false)
+                                .ignoredParameterTypes(AuthenticationPrincipal.class)
+                                .securityContexts(Arrays.asList(securityContext()))
+                                .securitySchemes(Arrays.asList(apiKey()))
+                                .consumes(getConsumeContentTypes())
+                                .produces(getProduceContentTypes())
+                                .groupName("group-profile")
+                                .select()
+                                .apis(RequestHandlerSelectors.basePackage("skkuchin.service.api.controller"))
+                                .paths(PathSelectors.ant("/api/group-profile/**")).build();
+        }
+
+        @Bean
+        public Docket apiV19() {
+                return new Docket(DocumentationType.OAS_30)
+                                .useDefaultResponseMessages(false)
+                                .ignoredParameterTypes(AuthenticationPrincipal.class)
+                                .securityContexts(Arrays.asList(securityContext()))
+                                .securitySchemes(Arrays.asList(apiKey()))
+                                .consumes(getConsumeContentTypes())
+                                .produces(getProduceContentTypes())
+                                .groupName("group-chat-request")
+                                .select()
+                                .apis(RequestHandlerSelectors.basePackage("skkuchin.service.api.controller"))
+                                .paths(PathSelectors.ant("/api/group-chat-request/**")).build();
+        }
+
+        @Bean
+        public Docket apiV20() {
+                return new Docket(DocumentationType.OAS_30)
+                                .useDefaultResponseMessages(false)
+                                .ignoredParameterTypes(AuthenticationPrincipal.class)
+                                .securityContexts(Arrays.asList(securityContext()))
+                                .securitySchemes(Arrays.asList(apiKey()))
+                                .consumes(getConsumeContentTypes())
+                                .produces(getProduceContentTypes())
+                                .groupName("personal-chat-request")
+                                .select()
+                                .apis(RequestHandlerSelectors.basePackage("skkuchin.service.api.controller"))
+                                .paths(PathSelectors.ant("/api/personal-chat-request/**")).build();
+        }
+
         // swagger에서 jwt 토큰값 넣기위한 설정
         private ApiKey apiKey() {
                 return new ApiKey("Authorization", "Authorization", "header");
