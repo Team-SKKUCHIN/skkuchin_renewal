@@ -42,7 +42,6 @@ public class GroupProfile {
     @Column(name = "friend1_introduction", nullable = false)
     private String friend1Introduction;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "friend2_student_id", nullable = false)
     private int friend2StudentId;
 
@@ -53,7 +52,6 @@ public class GroupProfile {
     @Column(name = "friend2_introduction", nullable = false)
     private String friend2Introduction;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "friend3_student_id", nullable = false)
     private int friend3StudentId;
 
