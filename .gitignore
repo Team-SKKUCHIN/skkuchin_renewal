@@ -2,7 +2,7 @@
 .DS_Store
 
 # github action
-# .github/workflows/
+.github/workflows/
 
 # db
 /db/
