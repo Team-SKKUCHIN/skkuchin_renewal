@@ -40,7 +40,6 @@ const MatchPage = () => {
 
     const handleButtonClick = (option) => {
       setSelectedOption(option);
-      console.log(option);
     };
 
     return(

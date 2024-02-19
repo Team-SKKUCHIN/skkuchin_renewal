@@ -17,7 +17,7 @@ const MemberInfoInput = ({ friendName, studentId, major, introduction, onUpdate 
   };
 
   return (
-    <Grid container sx={{ margin: '25px 0 35px' }}>
+    <Grid container>
       <div style={{ gap: 8, display: 'flex', alignItems: 'center' }}>
         {
             friendName == '친구1' &&
@@ -73,7 +73,7 @@ const MemberInfoInput = ({ friendName, studentId, major, introduction, onUpdate 
 
       <Typography sx={{ fontSize: 14, color: '#3C3C3C', mb: '8px' }}>한줄 소개</Typography>
       <TextField
-        sx={{ mb: '18px' }}
+        sx={{ mb: friendName === '친구3' ? '0px' : '18px' }}
         variant="outlined"
         fullWidth
         placeholder="한줄 소개를 입력해주세요 (필수)"
