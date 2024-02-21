@@ -109,7 +109,7 @@ const Friends = () => {
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
             { candidate ? 
             candidate.map((person, index) => (
-            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '20px', flexShrink: 0, mr: '19px', mb: '21px'}}>
+            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '21px'}}>
                 <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                     {displayMBTI(person.mbti, 90, 90)}
                     <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
@@ -225,7 +225,7 @@ const Friends = () => {
             <>
                 { dummyProfiles.length !== 0 &&
                     dummyProfiles.map((person, index) => (
-                    <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '15px', flexShrink: 0, mr: '19px', mb: '21px'}}>
+                    <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '21px'}}>
                         <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                             <Image src={noCharacter} width={80} height={80} placeholder="blur" layout='fixed' />
                             <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>

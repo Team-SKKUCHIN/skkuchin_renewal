@@ -78,7 +78,7 @@ const MakeGroupProfile = () => {
                 <CalendarContainer />
 
                 {/* 등록하기 버튼 */}
-                <Button onClick={()=>console.log('등록하기')} fullWidth disabled={!isValid} sx={{backgroundColor: isValid ? '#FFCE00' : '#E2E2E2', color: '#fff', fontSize: 16, fontWeight: 700, borderRadius: '8px', height: 56, m: '44px 0 16px'}}>
+                <Button onClick={()=>console.log('등록하기')} fullWidth disabled={!isValid} sx={{backgroundColor: isValid ? '#FFCE00' : '#E2E2E2', color: '#fff', fontSize: 16, fontWeight: 700, borderRadius: '8px', height: 56, m: '60px 0 10px'}}>
                     등록하기
                 </Button>
             </div>

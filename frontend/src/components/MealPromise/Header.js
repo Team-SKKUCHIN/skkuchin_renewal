@@ -11,7 +11,9 @@ const Header = ({title}) => {
     const router = useRouter();
 
     const onBackClick = () => {
-        router.back();
+        if(title === '여럿이서 먹어요' || title === '둘이 먹어요') {
+            router.push('/mealPromise');
+        } else router.back();
     }
 
     return (

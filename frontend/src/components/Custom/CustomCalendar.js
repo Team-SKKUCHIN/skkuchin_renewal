@@ -10,7 +10,10 @@ const CustomCalendar = () => {
   const [dates, setDates] = useState([null, null]); 
 
   const formatDate = (date) => {
-    return dayjs(date).format('YYYY.MM.DD');
+    const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+    const koreanDay = dayOfWeek[date.getDay()];
+    const formmatedKoreanDay = '(' + koreanDay + ')';
+    return dayjs(date).format(`YYYY.MM.DD ${formmatedKoreanDay}`);
   };
 
   const handleDateChange = (newDate) => {
@@ -112,6 +115,9 @@ const CalendarDesign = style.div`
        .react-calendar__tile--rangeStart {
         border-radius: 25px 0 0 25px;
        } 
+       .react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd {
+        border-radius: 25px;
+      }
     `
 
 export default CustomCalendar;
