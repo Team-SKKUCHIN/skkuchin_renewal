@@ -60,7 +60,7 @@ const ShowAllGroupLists = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             {/* header */}
-            <Header title="여럿이서 먹어요" />
+            <Header title="여럿이서 먹어요" onBackClick={()=> router.push('/mealPromise')} />
 
             {/* 필터 */}
             <Filter
