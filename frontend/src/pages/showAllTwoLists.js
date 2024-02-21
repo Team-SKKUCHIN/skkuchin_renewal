@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
-import { CssBaseline, ThemeProvider, Grid, Button, Typography, Menu, MenuItem } from '@mui/material';
+import { ThemeProvider, CssBaseline, IconButton } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import { load_candidate } from '../actions/candidate/candidate';
-import Image from 'next/image';
 import theme from '../theme/theme';
 import Header from "../components/MealPromise/Header";
 import Filter from '../components/MealPromise/Filter';
 import FriendItem from '../components/MealPromise/FriendItem';
+import AddIcon from '@mui/icons-material/Add';
 
 const showAllTwoLists = () => {
     const dispatch = useDispatch();
-
+    const router = useRouter();
+    
     const user = useSelector(state => state.auth.user);
     const candidate = useSelector(state => state.candidate.candidate);
 
@@ -55,6 +57,21 @@ const showAllTwoLists = () => {
                 )}
             </div>
 
+            <div style={{ position: 'fixed', right: '24px', bottom: '24px'}}>
+                <IconButton
+                style={{
+                    backgroundColor: "#FFCE00",
+                    color: '#fff',
+                    borderRadius: '25px',
+                    boxShadow: 'none',
+                    height: '52px',
+                    width: '52px'
+                }}
+                onClick={() => router.push('/makeGroupProfile')}
+                >
+                <AddIcon fontSize="medium" />
+                </IconButton>
+            </div>
         </ThemeProvider>
     )
 }
