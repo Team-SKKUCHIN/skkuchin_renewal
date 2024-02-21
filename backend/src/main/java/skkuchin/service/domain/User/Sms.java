@@ -28,7 +28,7 @@ public class Sms {
     @CreationTimestamp
     private LocalDateTime modifiedAt;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "phone_number", unique = true, nullable = false)
     private String phoneNumber;
 
     private String verificationCode;
