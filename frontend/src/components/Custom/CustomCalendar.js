@@ -7,7 +7,8 @@ import dayjs from 'dayjs';
 import style from 'styled-components';
 
 const CustomCalendar = () => {
-  const [dates, setDates] = useState([null, null]); 
+  const defaultDate = [new Date(), new Date()]
+  const [dates, setDates] = useState(defaultDate); 
 
   const formatDate = (date) => {
     const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
@@ -20,10 +21,9 @@ const CustomCalendar = () => {
     setDates(newDate);
   };
 
-  const isDatesSelected = dates[0] && dates[1];
-  const selectedDatesText = isDatesSelected
-    ? `${formatDate(dates[0])} - ${formatDate(dates[1])}`
-    : '날짜를 선택해주세요';
+  const selectedDatesText = dates === defaultDate 
+    ? '날짜를 선택해주세요'
+    : `${formatDate(dates[0])} - ${formatDate(dates[1])}`;
 
   return (
     <ThemeProvider theme={theme}>

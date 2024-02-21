@@ -4,6 +4,7 @@ import theme from '../theme/theme';
 import Header from '../components/MealPromise/Header';
 import MemberInfoInput from '../components/MealPromise/MemberInfoInput';
 import CalendarContainer from '../components/MealPromise/CalendarContainer';
+import Popup from '../components/Custom/Popup';
 
 const MakeGroupProfile = () => {
     const [groupName, setGroupName] = useState('');
@@ -16,20 +17,43 @@ const MakeGroupProfile = () => {
         { name: '친구3', studentId: '', major: '', introduction: '' },
       ]);
     
-      const updateFriendData = (index, data) => {
+    const updateFriendData = (index, data) => {
         setFriends((prevFriends) => {
           const newFriends = [...prevFriends];
           newFriends[index] = { ...newFriends[index], ...data };
           return newFriends;
         });
-      };
+    };
 
     const handleGenderClick = (e) => {
         setGender(e.target.value)
     }
         
-
     const isValid = groupName !== '' && gender !== '' && groupIntro !== '' && friends && friends.every((friend) => friend.studentId !== '' && friend.major !== '' && friend.introduction !== '');
+
+    // 팝업
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupType, setPopupType] = useState('info');
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupDescription, setPopupDescription] = useState('');
+    
+    const handleSubmit = () => {
+        if(isValid) {
+            setPopupMessage(`프로필은 한줄 소개만 수정할 수 있어요.` + '\n' + `최종 등록하시겠어요?`);
+            setPopupType('question');
+        } else {
+            setPopupMessage('필수 항목을 모두 입력해주세요.');
+            setPopupType('error');
+        }
+        setPopupOpen(true);
+    };
+
+    const handleQuestionConfirm = () => {
+        setPopupMessage('프로필 등록이 완료되었어요!');
+        setPopupDescription('한줄 소개 수정은 마이페이지에서 할 수 있어요.');
+        setPopupOpen(true);
+        setPopupType('info');
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -78,9 +102,18 @@ const MakeGroupProfile = () => {
                 <CalendarContainer />
 
                 {/* 등록하기 버튼 */}
-                <Button onClick={()=>console.log('등록하기')} fullWidth disabled={!isValid} sx={{backgroundColor: isValid ? '#FFCE00' : '#E2E2E2', color: '#fff', fontSize: 16, fontWeight: 700, borderRadius: '8px', height: 56, m: '60px 0 10px'}}>
+                <Button onClick={handleSubmit} fullWidth sx={{backgroundColor: isValid ? '#FFCE00' : '#E2E2E2', color: '#fff', fontSize: 16, fontWeight: 700, borderRadius: '8px', height: 56, m: '60px 0 10px', '&:hover': { backgroundColor: isValid ? '#FFCE00' : '#E2E2E2'}, '&:active': { backgroundColor: isValid ? '#FFCE00' : '#E2E2E2' }}}>
                     등록하기
                 </Button>
+
+                <Popup
+                    open={popupOpen}
+                    handleClose={() => setPopupOpen(false)}
+                    type={popupType}
+                    message={popupMessage}
+                    description={popupDescription}
+                    onConfirm={handleQuestionConfirm}
+                />
             </div>
         </ThemeProvider>
     );
