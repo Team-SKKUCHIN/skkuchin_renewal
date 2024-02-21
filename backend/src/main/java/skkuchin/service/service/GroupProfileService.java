@@ -1,5 +1,6 @@
 package skkuchin.service.service;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,12 +69,9 @@ public class GroupProfileService {
         if (groupProfileRepo.findMyGroupProfiles(user.getId()).size() >= 5) {
             throw new CustomRuntimeException("그룹 프로필은 5개 이하로만 생성 가능합니다");
         }
-
-        // TODO: 휴대폰 본인인증 체크
-        // if (pushTokenRepo.findByUser(user).getPhone() == null) {
-        // throw new CustomRuntimeException("휴대폰 본인 인증이 필요합니다");
-        // }
-
+        if (user.getSmsLists().size() == 0 || !user.getSmsLists().get(0).getIsVerified()) {
+            throw new CustomRuntimeException("전화번호가 등록되지 않았습니다");
+        }
         if (dto.getGroupIntroduction().length() > 30 || dto.getFriend1Introduction().length() > 30
                 || dto.getFriend2Introduction().length() > 30
                 || dto.getFriend3Introduction().length() > 30) {
@@ -95,6 +93,7 @@ public class GroupProfileService {
                 || dto.getFriend3Introduction().length() > 30) {
             throw new CustomRuntimeException("소개 문구는 30자 이내로 작성해주시기 바랍니다");
         }
+        existingGroupProfile.setModifiedAt(LocalDateTime.now());
         existingGroupProfile.setGroupIntroduction(dto.getGroupIntroduction());
         existingGroupProfile.setFriend1Introduction(dto.getFriend1Introduction());
         existingGroupProfile.setFriend2Introduction(dto.getFriend2Introduction());
@@ -131,6 +130,7 @@ public class GroupProfileService {
                     groupChatRequestRepo.delete(request);
                 });
 
+        existingGroupProfile.setModifiedAt(LocalDateTime.now());
         existingGroupProfile.setStatus(ProfileStatus.INACTIVE);
         groupProfileRepo.delete(existingGroupProfile);
     }

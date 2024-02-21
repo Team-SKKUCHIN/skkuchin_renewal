@@ -147,4 +147,7 @@ public class AppUser {
 
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PersonalChatRequest> personalChatRequestsReceiver = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Sms> smsLists = new ArrayList<>();
 }
