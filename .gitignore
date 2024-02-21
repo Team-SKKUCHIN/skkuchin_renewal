@@ -6,3 +6,7 @@
 
 # db
 /db/
+
+
+# vscode
+.vscode/

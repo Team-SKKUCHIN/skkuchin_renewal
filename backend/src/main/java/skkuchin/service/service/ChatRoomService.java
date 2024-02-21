@@ -39,14 +39,15 @@ public class ChatRoomService {
     private final PushTokenService pushTokenService;
 
     @Transactional
-    public void makeRoom(AppUser user, ChatRoomDto.RoomRequest dto){
+    public void makeRoom(AppUser user, ChatRoomDto.RoomRequest dto) {
         if (user.getId().equals(dto.getId())) {
             throw new CustomRuntimeException("올바르지 않은 접근입니다");
         }
 
         ChatRoom chatRoom = dto.toEntity(user);
         String roomId = UUID.randomUUID().toString();
-        AppUser user2 = userRepo.findById(dto.getId()).orElseThrow(() -> new CustomValidationApiException("존재하지 않는 유저입니다"));
+        AppUser user2 = userRepo.findById(dto.getId())
+                .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 유저입니다"));
         chatRoom.setRoomId(roomId);
         chatRoom.setUser2(user2);
         chatRoom.setResponse(ResponseType.HOLD);
@@ -56,7 +57,7 @@ public class ChatRoomService {
     }
 
     @Transactional
-    public void makeAdminRoom(ChatRoomDto.AdminRoomRequest dto){
+    public void makeAdminRoom(ChatRoomDto.AdminRoomRequest dto) {
         AppUser user1 = userRepo.findById(dto.getUser1Id()).orElseThrow();
         AppUser user2 = userRepo.findById(dto.getUser2Id()).orElseThrow();
 
@@ -71,7 +72,7 @@ public class ChatRoomService {
     }
 
     @Transactional
-    public void user2Accept(String roomId, AppUser user, ResponseType responseType){
+    public void user2Accept(String roomId, AppUser user, ResponseType responseType) {
         ChatRoom chatRoom = chatRoomRepo.findByRoomId(roomId);
 
         if (!chatRoom.getResponse().equals(ResponseType.HOLD)) {
@@ -93,7 +94,7 @@ public class ChatRoomService {
     }
 
     @Transactional
-    public List<ChatRoomDto.Response> getChatRoomList(String username){
+    public List<ChatRoomDto.Response> getChatRoomList(String username) {
         AppUser user = userRepo.findByUsername(username);
         List<ChatRoom> chatRooms = chatRoomRepo.findMyRoomList(user.getId());
 
@@ -104,10 +105,9 @@ public class ChatRoomService {
                             chatRoom,
                             getLatestMessage(chatRoom),
                             unReadMessage(chatRoom.getRoomId(), username),
-                            getOtherUser(chatRoom, username)
-                    ))
+                            getOtherUser(chatRoom, username)))
                     .collect(Collectors.toList());
-            Collections.sort(chatRoomDtos,new DateComparator().reversed());
+            Collections.sort(chatRoomDtos, new DateComparator().reversed());
 
             return chatRoomDtos;
         }
@@ -116,7 +116,7 @@ public class ChatRoomService {
     }
 
     @Transactional
-    public List<ChatRoomDto.userResponse> getRequestList(String username){
+    public List<ChatRoomDto.userResponse> getRequestList(String username) {
         AppUser user = userRepo.findByUsername(username);
         List<ChatRoom> chatRooms = chatRoomRepo.findRequestByUserId(user.getId());
         List<ChatRoomDto.userResponse> chatRoomDto = chatRooms
@@ -128,7 +128,7 @@ public class ChatRoomService {
     }
 
     @Transactional
-    public Boolean checkUnreadMessageOrRequest(String username){
+    public Boolean checkUnreadMessageOrRequest(String username) {
         AppUser user = userRepo.findByUsername(username);
         List<ChatRoom> chatRooms = chatRoomRepo.findMyRoomList(user.getId());
 
@@ -147,7 +147,7 @@ public class ChatRoomService {
         return false;
     }
 
-    private AppUser getOtherUser(ChatRoom chatRoom, String username){
+    private AppUser getOtherUser(ChatRoom chatRoom, String username) {
         AppUser user = userRepo.findByUsername(username);
         if (chatRoom.getUser1() != null && chatRoom.getUser1().getId().equals(user.getId())) {
             return chatRoom.getUser2();
@@ -156,11 +156,11 @@ public class ChatRoomService {
         }
     }
 
-    private int unReadMessage(String roomId, String username){
+    private int unReadMessage(String roomId, String username) {
         return chatMessageRepo.countByReadStatus(roomId, username);
     }
 
-    private ChatMessage getLatestMessage(ChatRoom chatRoom){
+    private ChatMessage getLatestMessage(ChatRoom chatRoom) {
         List<ChatMessage> chatMessages = chatMessageRepo.findByLatestTime(chatRoom.getRoomId());
         ChatMessage latestChatMessage = new ChatMessage();
         if (chatMessages.size() == 0) {
@@ -177,57 +177,58 @@ public class ChatRoomService {
         return latestChatMessage;
     }
 
-
     @Transactional
-    public ChatRoom findChatRoom(String roomId){
+    public ChatRoom findChatRoom(String roomId) {
         return chatRoomRepo.findByRoomId(roomId);
     }
 
     @Transactional
-    public ChatRoom findChatById(Long id){
+    public ChatRoom findChatById(Long id) {
         return chatRoomRepo.findById(id).orElseThrow();
     }
 
     @Transactional
-    public void blockUser(String roomId, AppUser appUser, Boolean status){
+    public void blockUser(String roomId, AppUser appUser, Boolean status) {
 
         ChatRoom chatRoom = chatRoomRepo.findByRoomId(roomId);
 
-        if (!appUser.getId().equals(chatRoom.getUser1().getId()) && !appUser.getId().equals(chatRoom.getUser2().getId())) {
+        if (!appUser.getId().equals(chatRoom.getUser1().getId())
+                && !appUser.getId().equals(chatRoom.getUser2().getId())) {
             throw new CustomRuntimeException("올바르지 않은 접근입니다");
         }
 
-        if(appUser.getId().equals(chatRoom.getUser1().getId())){
+        if (appUser.getId().equals(chatRoom.getUser1().getId())) {
             chatRoom.setUser2Blocked(status);
             chatRoomRepo.save(chatRoom);
-        }
-        else {
+        } else {
             chatRoom.setUser1Blocked(status);
             chatRoomRepo.save(chatRoom);
         }
     }
 
     @Transactional
-    public void setAlarm(String roomId, AppUser appUser, Boolean status){
+    public void setAlarm(String roomId, AppUser appUser, Boolean status) {
         ChatRoom chatRoom = chatRoomRepo.findByRoomId(roomId);
 
-        if (!appUser.getId().equals(chatRoom.getUser1().getId()) && !appUser.getId().equals(chatRoom.getUser2().getId())) {
+        if (!appUser.getId().equals(chatRoom.getUser1().getId())
+                && !appUser.getId().equals(chatRoom.getUser2().getId())) {
             throw new CustomRuntimeException("올바르지 않은 접근입니다");
         }
 
         if (appUser.getId().equals(chatRoom.getUser1().getId())) {
             chatRoom.setUser1Alarm(status);
             chatRoomRepo.save(chatRoom);
-        } else  {
+        } else {
             chatRoom.setUser2Alarm(status);
             chatRoomRepo.save(chatRoom);
         }
     }
 
     @Transactional
-    public void setMeetTime(String roomId, AppUser appUser, LocalDateTime time){
+    public void setMeetTime(String roomId, AppUser appUser, LocalDateTime time) {
         ChatRoom chatRoom = chatRoomRepo.findByRoomId(roomId);
-        if (!appUser.getId().equals(chatRoom.getUser1().getId()) && !appUser.getId().equals(chatRoom.getUser2().getId())) {
+        if (!appUser.getId().equals(chatRoom.getUser1().getId())
+                && !appUser.getId().equals(chatRoom.getUser2().getId())) {
             throw new CustomRuntimeException("올바르지 않은 접근입니다");
         }
         chatRoom.setMeetTime(time);
@@ -246,9 +247,10 @@ public class ChatRoomService {
     }
 
     @Transactional
-    public void setMeetPlace(String roomId, AppUser appUser, String place){
+    public void setMeetPlace(String roomId, AppUser appUser, String place) {
         ChatRoom chatRoom = chatRoomRepo.findByRoomId(roomId);
-        if (!appUser.getId().equals(chatRoom.getUser1().getId()) && !appUser.getId().equals(chatRoom.getUser2().getId())) {
+        if (!appUser.getId().equals(chatRoom.getUser1().getId())
+                && !appUser.getId().equals(chatRoom.getUser2().getId())) {
             throw new CustomRuntimeException("올바르지 않은 접근입니다");
         }
         chatRoom.setMeetPlace(place);
@@ -263,7 +265,8 @@ public class ChatRoomService {
     @Transactional
     public void deleteMeetTime(String roomId, AppUser appUser) {
         ChatRoom chatRoom = chatRoomRepo.findByRoomId(roomId);
-        if (!appUser.getId().equals(chatRoom.getUser1().getId()) && !appUser.getId().equals(chatRoom.getUser2().getId())) {
+        if (!appUser.getId().equals(chatRoom.getUser1().getId())
+                && !appUser.getId().equals(chatRoom.getUser2().getId())) {
             throw new CustomRuntimeException("올바르지 않은 접근입니다");
         }
         LocalDateTime time = chatRoom.getMeetTime();
@@ -284,7 +287,8 @@ public class ChatRoomService {
     @Transactional
     public void deleteMeetPlace(String roomId, AppUser appUser) {
         ChatRoom chatRoom = chatRoomRepo.findByRoomId(roomId);
-        if (!appUser.getId().equals(chatRoom.getUser1().getId()) && !appUser.getId().equals(chatRoom.getUser2().getId())) {
+        if (!appUser.getId().equals(chatRoom.getUser1().getId())
+                && !appUser.getId().equals(chatRoom.getUser2().getId())) {
             throw new CustomRuntimeException("올바르지 않은 접근입니다");
         }
         String place = chatRoom.getMeetPlace();
@@ -300,99 +304,101 @@ public class ChatRoomService {
     }
 
     @Transactional
-    public void exitRoom(String roomId, AppUser appUser){
+    public void exitRoom(String roomId, AppUser appUser) {
         ChatRoom chatRoom = chatRoomRepo.findByRoomId(roomId);
 
-        if (
-                (chatRoom.getUser1() != null && !appUser.getId().equals(chatRoom.getUser1().getId()))
+        if ((chatRoom.getUser1() != null && !appUser.getId().equals(chatRoom.getUser1().getId()))
                 &&
-                (chatRoom.getUser2() != null && !appUser.getId().equals(chatRoom.getUser2().getId()))
-        ) {
+                (chatRoom.getUser2() != null && !appUser.getId().equals(chatRoom.getUser2().getId()))) {
             throw new CustomRuntimeException("올바르지 않은 접근입니다");
         }
 
-        if(chatRoom.getUser1() != null && appUser.getId().equals(chatRoom.getUser1().getId())){
+        if (chatRoom.getUser1() != null && appUser.getId().equals(chatRoom.getUser1().getId())) {
             chatRoom.setUser1(null);
             chatRoomRepo.save(chatRoom);
         }
 
-        else if(chatRoom.getUser2() != null && appUser.getId().equals(chatRoom.getUser2().getId())){
+        else if (chatRoom.getUser2() != null && appUser.getId().equals(chatRoom.getUser2().getId())) {
             chatRoom.setUser2(null);
             chatRoomRepo.save(chatRoom);
         }
     }
 
-//    @Transactional
-//    @Scheduled(cron = "* 0 * * * ?")
-//    public void makeExpired() {
-//        List<ChatRoom> chatRooms = chatRoomRepo.findByExpireDateBefore(LocalDateTime.now());
-//        for (ChatRoom chatRoom : chatRooms) {
-//            if (chatRoom.getResponse().equals(ResponseType.HOLD)) {
-//                chatRoom.setResponse(ResponseType.EXPIRED);
-//            }
-//        }
-//    }
+    // @Transactional
+    // @Scheduled(cron = "* 0 * * * ?")
+    // public void makeExpired() {
+    // List<ChatRoom> chatRooms =
+    // chatRoomRepo.findByExpireDateBefore(LocalDateTime.now());
+    // for (ChatRoom chatRoom : chatRooms) {
+    // if (chatRoom.getResponse().equals(ResponseType.HOLD)) {
+    // chatRoom.setResponse(ResponseType.EXPIRED);
+    // }
+    // }
+    // }
 
     @Transactional
-    public ChatRoomDto.settingResponse getSettingResponse(ChatRoom chatRoom){
+    public ChatRoomDto.settingResponse getSettingResponse(ChatRoom chatRoom) {
         return new ChatRoomDto.settingResponse(chatRoom);
     }
 
-    @Scheduled(cron = "* 0 * * * ?")
-    public void sendChatMessageSMS() {
-        List<ChatRoom> chatRooms = chatRoomRepo.findAllAcceptRoom();
-        List<String> sentUsers = new ArrayList<>();
-        List<String> phones = new ArrayList<>();
+    // @Scheduled(cron = "* 0 * * * ?")
+    // public void sendChatMessageSMS() {
+    // List<ChatRoom> chatRooms = chatRoomRepo.findAllAcceptRoom();
+    // List<String> sentUsers = new ArrayList<>();
+    // List<String> phones = new ArrayList<>();
 
-        for (ChatRoom chatRoom : chatRooms) {
-            System.out.println("Room Id IN: " + chatRoom.getId());
-            System.out.println("SentUsers: " + sentUsers);
+    // for (ChatRoom chatRoom : chatRooms) {
+    // System.out.println("Room Id IN: " + chatRoom.getId());
+    // System.out.println("SentUsers: " + sentUsers);
 
-            ChatMessage chatMessage = getLatestMessage(chatRoom);
+    // ChatMessage chatMessage = getLatestMessage(chatRoom);
 
-            LocalDateTime now = LocalDateTime.now();
-            Duration duration = Duration.between(chatMessage.getDate(), now);
+    // LocalDateTime now = LocalDateTime.now();
+    // Duration duration = Duration.between(chatMessage.getDate(), now);
 
-            if (duration.toHours() < 1 && !chatMessage.isReadStatus()) {
-                Subscription subscription = null;
-                if (
-                        chatRoom.getUser1() != null
-                        && !sentUsers.contains(chatRoom.getUser1().getUsername())
-                        && !Objects.equals(chatRoom.getUser1().getUsername(), chatMessage.getSender())
-                ) {
-                    sentUsers.add(chatRoom.getUser1().getUsername());
-                    subscription = pushTokenService.toSubscription(chatRoom.getUser1(), "chat");
-                } else if (
-                        chatRoom.getUser2() != null
-                        && !sentUsers.contains(chatRoom.getUser2().getUsername())
-                        && !Objects.equals(chatRoom.getUser2().getUsername(), chatMessage.getSender())
-                ) {
-                    sentUsers.add(chatRoom.getUser2().getUsername());
-                    subscription = pushTokenService.toSubscription(chatRoom.getUser2(), "chat");
-                }
+    // if (duration.toHours() < 1 && !chatMessage.isReadStatus()) {
+    // Subscription subscription = null;
+    // if (
+    // chatRoom.getUser1() != null
+    // && !sentUsers.contains(chatRoom.getUser1().getUsername())
+    // && !Objects.equals(chatRoom.getUser1().getUsername(),
+    // chatMessage.getSender())
+    // ) {
+    // sentUsers.add(chatRoom.getUser1().getUsername());
+    // subscription = pushTokenService.toSubscription(chatRoom.getUser1(), "chat");
+    // } else if (
+    // chatRoom.getUser2() != null
+    // && !sentUsers.contains(chatRoom.getUser2().getUsername())
+    // && !Objects.equals(chatRoom.getUser2().getUsername(),
+    // chatMessage.getSender())
+    // ) {
+    // sentUsers.add(chatRoom.getUser2().getUsername());
+    // subscription = pushTokenService.toSubscription(chatRoom.getUser2(), "chat");
+    // }
 
-                if (subscription != null && subscription.keys.auth == null) {
-                    phones.add(subscription.endpoint);
-                    System.out.println("Room Id OUT1: " + chatRoom.getId());
-                }
-            } else {
-                System.out.println("Room Id OUT2: " + chatRoom.getId());
-            }
-        }
+    // if (subscription != null && subscription.keys.auth == null) {
+    // phones.add(subscription.endpoint);
+    // System.out.println("Room Id OUT1: " + chatRoom.getId());
+    // }
+    // } else {
+    // System.out.println("Room Id OUT2: " + chatRoom.getId());
+    // }
+    // }
 
-        System.out.println("Phones: " + phones);
-        if (phones.size() > 0) {
-            Boolean returnCode = pushTokenService.sendSMS(phones, "[스꾸친] 읽지 않은 채팅이 도착해있습니다!");
-            System.out.println("Response2: " + returnCode);
-        }
-    }
+    // System.out.println("Phones: " + phones);
+    // if (phones.size() > 0) {
+    // Boolean returnCode = pushTokenService.sendSMS(phones, "[스꾸친] 읽지 않은 채팅이
+    // 도착해있습니다!");
+    // System.out.println("Response2: " + returnCode);
+    // }
+    // }
 
     private class DateComparator implements Comparator<ChatRoomDto.Response> {
         @Override
         public int compare(ChatRoomDto.Response f1, ChatRoomDto.Response f2) {
-            if (f1.getMessageTime().isAfter(f2.getMessageTime()) ) {
+            if (f1.getMessageTime().isAfter(f2.getMessageTime())) {
                 return 1;
-            } else  {
+            } else {
                 return -1;
             }
         }
@@ -401,9 +407,9 @@ public class ChatRoomService {
     private class AlarmListDateComparator implements Comparator<ChatRoomDto.userResponse> {
         @Override
         public int compare(ChatRoomDto.userResponse f1, ChatRoomDto.userResponse f2) {
-            if (f1.getCreatedDate().isAfter(f2.getCreatedDate()) ) {
+            if (f1.getCreatedDate().isAfter(f2.getCreatedDate())) {
                 return 1;
-            } else  {
+            } else {
                 return -1;
             }
         }
@@ -426,9 +432,8 @@ public class ChatRoomService {
         List<ChatRoom> chatRooms = chatRoomRepo.findRequestByUserId(2L);
 
         for (int i = 0; i < 3; i++) {
-            user2Accept(chatRooms.get(i).getRoomId() ,testUser, ResponseType.ACCEPT);
+            user2Accept(chatRooms.get(i).getRoomId(), testUser, ResponseType.ACCEPT);
         }
     }
 
 }
-

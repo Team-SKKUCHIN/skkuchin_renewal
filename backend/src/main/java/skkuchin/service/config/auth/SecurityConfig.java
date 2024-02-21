@@ -41,6 +41,7 @@ public class SecurityConfig {
                         "/api/group-profile/**",
                         "/api/group-chat-request/**",
                         "/api/personal-chat-request/**",
+                        "/api/sms/**",
                         "/ws/chat/**"
         };
         private static final String[] PERMIT_SWAGGER_URL_ARRAY = {

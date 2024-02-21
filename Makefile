@@ -45,3 +45,8 @@ build-prod:
 	@echo "Build production images ..."
 	@docker-compose -f docker-compose/prod/docker-compose.yml build server client nginx
 .PHONY: build-prod
+
+gradle-sync:
+	@echo "Gradle sync"
+	@./gradlew --refresh-dependencies
+.PHONY: gradle-sync
