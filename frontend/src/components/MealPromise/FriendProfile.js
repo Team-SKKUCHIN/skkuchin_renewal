@@ -1,9 +1,14 @@
 import React from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 import { displayMBTI } from '../Matching/MBTIList';
+import { useRouter } from 'next/router';
 
 const FriendProfile = ({ candidate }) => {
-
+    const router = useRouter();
+    const handleSubmit = () => {
+        console.log("밥약 신청하기 버튼 클릭");
+        router.push('/enrollOpenChat');
+    }
     return (
         <div>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', paddingTop: '50%'}}>
@@ -46,9 +51,7 @@ const FriendProfile = ({ candidate }) => {
             </div>
 
             <Button
-                onClick={() => {
-                    console.log('밥약 신청하기 버튼 클릭', candidate);
-                }}
+                onClick={handleSubmit}
                 color="primary"
                 variant="contained"
                 disableElevation
