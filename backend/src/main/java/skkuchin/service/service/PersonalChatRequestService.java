@@ -17,10 +17,12 @@ import lombok.RequiredArgsConstructor;
 import skkuchin.service.domain.Chat.PersonalChatRequest;
 import skkuchin.service.domain.Chat.ResponseType;
 import skkuchin.service.domain.User.AppUser;
+import skkuchin.service.domain.User.Sms;
 import skkuchin.service.dto.PersonalChatRequestDto;
 import skkuchin.service.exception.CustomRuntimeException;
 import skkuchin.service.exception.CustomValidationApiException;
 import skkuchin.service.repo.PersonalChatRequestRepo;
+import skkuchin.service.repo.SmsRepo;
 import skkuchin.service.repo.UserRepo;
 import skkuchin.service.util.StringUtils;
 
@@ -30,6 +32,7 @@ public class PersonalChatRequestService {
     private static final Pattern LINK_PATTERN = Pattern.compile("https://open\\.kakao\\.com/o/[a-zA-Z0-9]+");
     private final PersonalChatRequestRepo personalChatRequestRepo;
     private final UserRepo userRepo;
+    private final SmsRepo smsRepo;
     private final SmsService smsService;
 
     @Transactional
@@ -87,7 +90,10 @@ public class PersonalChatRequestService {
         AppUser sender = userRepo.findById(dto.getSenderId())
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 유저입니다"));
 
-        if (sender.getSmsLists().size() == 0) {
+        List<Sms> senderSmsList = smsRepo.findByUser(sender);
+        List<Sms> receiverSmsList = smsRepo.findByUser(receiver);
+
+        if (senderSmsList.size() == 0) {
             throw new CustomRuntimeException("요청자의 전화번호가 등록되지 않았습니다");
         }
         if (receiver.getMatching() == null || sender.getMatching() == null) {
@@ -104,9 +110,9 @@ public class PersonalChatRequestService {
         }
         personalChatRequestRepo.save(dto.toEntity(sender, receiver));
 
-        if (receiver.getSmsLists().size() > 0) {
+        if (receiverSmsList.size() > 0) {
             smsService.sendSms(
-                    receiver.getSmsLists().get(0).getPhoneNumber(),
+                    receiverSmsList.get(0).getPhoneNumber(),
                     String.format("[스꾸친] %s 밥약을 신청했습니다", StringUtils.getPostWord(sender.getNickname(), "이", "가")));
         }
     }
@@ -124,7 +130,8 @@ public class PersonalChatRequestService {
         request.setStatus(dto.getStatus());
         personalChatRequestRepo.save(request);
 
-        if (request.getSender().getSmsLists().size() > 0) {
+        List<Sms> senderSmsList = smsRepo.findByUser(request.getSender());
+        if (senderSmsList.size() > 0) {
             String message;
             if (status == ResponseType.ACCEPT) {
                 message = "[스꾸친] %s 밥약을 수락했습니다";
@@ -134,7 +141,7 @@ public class PersonalChatRequestService {
                 throw new CustomRuntimeException("비정상적인 접근입니다");
             }
             smsService.sendSms(
-                    request.getSender().getSmsLists().get(0).getPhoneNumber(),
+                    senderSmsList.get(0).getPhoneNumber(),
                     String.format(message, StringUtils.getPostWord(request.getReceiver().getNickname(), "이", "가")));
         }
     }

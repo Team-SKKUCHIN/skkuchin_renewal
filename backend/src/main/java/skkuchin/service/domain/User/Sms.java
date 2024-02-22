@@ -33,11 +33,11 @@ public class Sms {
 
     private String verificationCode;
 
-    @Column(columnDefinition = "BIT DEFAULT TRUE", nullable = false)
-    private Boolean isVerified;
+    @Column(columnDefinition = "BIT DEFAULT FALSE", nullable = false)
+    private boolean isVerified;
 
-    @Column(columnDefinition = "BIT DEFAULT TRUE", nullable = false)
-    private Boolean isAlarmOn;
+    @Column(columnDefinition = "BIT DEFAULT FALSE", nullable = false)
+    private boolean isAlarmOn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

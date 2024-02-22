@@ -34,10 +34,6 @@ public class GroupProfileDto {
         @Size(max = 30)
         private String groupIntroduction;
 
-        @NotNull
-        @JsonProperty
-        private Long friend1Id;
-
         @NotBlank
         @JsonProperty
         @Size(max = 30)

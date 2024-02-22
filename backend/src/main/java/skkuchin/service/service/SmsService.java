@@ -17,6 +17,7 @@ import skkuchin.service.repo.SmsRepo;
 import skkuchin.service.repo.UserRepo;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 
@@ -49,12 +50,13 @@ public class SmsService {
             throw new CustomRuntimeException("먼저 회원가입을 진행해주시기 바랍니다");
         }
 
-        if (user.getSmsLists().size() > 0) {
+        List<Sms> smsList = smsRepo.findByUser(user);
+        if (smsList.size() > 0) {
             throw new CustomRuntimeException("이미 전화번호를 등록하였습니다");
         }
 
         Sms existingSms = smsRepo.findByPhoneNumber(phoneNumber);
-        if (existingSms != null && existingSms.getIsVerified()) {
+        if (existingSms != null && existingSms.isVerified()) {
             throw new CustomRuntimeException("사용 중인 번호입니다");
         }
         smsRepo.save(dto.toEntity(user, verificationCode));
@@ -71,23 +73,24 @@ public class SmsService {
             throw new CustomRuntimeException("전화번호가 올바르지 않습니다");
         }
 
-        if (user.getSmsLists().size() == 0) {
+        List<Sms> smsList = smsRepo.findByUser(user);
+        if (smsList.size() == 0) {
             throw new CustomRuntimeException("전화번호가 등록되지 않았습니다");
         }
 
-        if (user.getSmsLists().get(0).getPhoneNumber().equals(phoneNumber)) {
+        if (smsList.get(0).getPhoneNumber().equals(phoneNumber)) {
             throw new CustomRuntimeException("동일한 전화번호입니다");
         }
 
-        if (existingSms != null && existingSms.getIsVerified()) {
+        if (existingSms != null && existingSms.isVerified()) {
             throw new CustomRuntimeException("사용 중인 전화번호입니다");
         }
 
-        Sms mySms = user.getSmsLists().get(0);
+        Sms mySms = smsList.get(0);
         mySms.setPhoneNumber(dto.getPhoneNumber());
         mySms.setVerificationCode(verificationCode);
-        mySms.setIsVerified(false);
-        mySms.setIsAlarmOn(false);
+        mySms.setVerified(false);
+        mySms.setAlarmOn(false);
         mySms.setModifiedAt(LocalDateTime.now());
         smsRepo.save(mySms);
         sendSms(phoneNumber, String.format("스꾸친 본인확인 인증번호는 [%s]입니다.", verificationCode));
@@ -106,27 +109,28 @@ public class SmsService {
             throw new CustomRuntimeException("전화번호가 등록되지 않았습니다");
         }
 
-        if (existingSms.getIsVerified()) {
+        if (existingSms.isVerified()) {
             throw new CustomRuntimeException("이미 인증된 전화번호입니다");
         }
 
-        if (existingSms.getVerificationCode() != dto.getVerificationCode()) {
+        if (!existingSms.getVerificationCode().equals(dto.getVerificationCode())) {
             throw new CustomRuntimeException("잘못된 인증번호입니다");
         }
 
         existingSms.setVerificationCode(null);
-        existingSms.setIsVerified(true);
-        existingSms.setIsAlarmOn(true);
+        existingSms.setVerified(true);
+        existingSms.setAlarmOn(true);
         existingSms.setModifiedAt(LocalDateTime.now());
         smsRepo.save(existingSms);
     }
 
     @Transactional
     public void deletePhoneNumber(AppUser user) {
-        if (user.getSmsLists().size() == 0) {
+        List<Sms> smsList = smsRepo.findByUser(user);
+        if (smsList.size() == 0) {
             throw new CustomRuntimeException("전화번호가 등록되지 않았습니다");
         }
-        smsRepo.delete(user.getSmsLists().get(0));
+        smsRepo.delete(smsList.get(0));
     }
 
     @Transactional
