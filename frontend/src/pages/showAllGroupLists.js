@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import { ThemeProvider, CssBaseline, IconButton } from '@mui/material';
 import theme from '../theme/theme';
 import GroupItem from '../components/MealPromise/GroupItem';
 import Header from '../components/MealPromise/Header';
 import Filter from '../components/MealPromise/Filter';
+import { useRouter } from 'next/router';
+import AddIcon from '@mui/icons-material/Add';
 
 const dummyProfiles = [
     {
@@ -45,6 +47,7 @@ const dummyProfiles = [
 ];
 
 const ShowAllGroupLists = () => {
+    const router = useRouter();
     const [selectedFilter, setSelectedFilter] = useState('전체');
     const filterOptions = ['전체', '여자', '남자'];
 
@@ -57,7 +60,7 @@ const ShowAllGroupLists = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             {/* header */}
-            <Header title="여럿이서 먹어요" />
+            <Header title="여럿이서 먹어요" onBackClick={()=> router.push('/mealPromise')} />
 
             {/* 필터 */}
             <Filter
@@ -77,6 +80,22 @@ const ShowAllGroupLists = () => {
                 ) : (
                 <p>필터링 조건에 부합하는 그룹이 없습니다.</p>
                 )}
+            </div>
+
+            <div style={{ position: 'fixed', right: '24px', bottom: '24px'}}>
+                <IconButton
+                style={{
+                    backgroundColor: "#FFCE00",
+                    color: '#fff',
+                    borderRadius: '25px',
+                    boxShadow: 'none',
+                    height: '52px',
+                    width: '52px'
+                }}
+                onClick={() => router.push('/makeGroupProfile')}
+                >
+                <AddIcon fontSize="medium" />
+                </IconButton>
             </div>
         </ThemeProvider>
     );

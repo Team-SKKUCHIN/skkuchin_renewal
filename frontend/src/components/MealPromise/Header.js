@@ -7,11 +7,15 @@ import iconSearch from '../../image/icon_header_search.png';
 import iconClose from '../../image/close.png';
 import { useRouter } from 'next/router';
 
-const Header = ({title}) => {
+const Header = ({title, onBackClick, icon}) => {
     const router = useRouter();
 
-    const onBackClick = () => {
-        router.back();
+    const onBackBtnClick = () => {
+        if(onBackClick !== undefined) {
+            onBackClick();
+        } else {
+            router.back();
+        }
     }
 
     return (
@@ -20,7 +24,7 @@ const Header = ({title}) => {
                 title === '그룹 프로필 등록' ? (
                     <div style={{ width: 30, display: 'flex', alignItems: 'center' }} />
                 ) :
-                <div onClick={onBackClick} style={{ width: 30, display: 'flex', alignItems: 'center' }}>
+                <div onClick={onBackBtnClick} style={{ width: 30, display: 'flex', alignItems: 'center' }}>
                     <Image src={iconBack} layout="fixed" width={10.82} height={18.98} />
                 </div>
             }
@@ -32,7 +36,9 @@ const Header = ({title}) => {
                     title === '그룹 프로필 등록' ? (
                         <Image src={iconClose} onClick={()=> router.back()} layout="fixed" width={24} height={24} />
                     ) : 
+                    icon ?
                     <Image src={iconSearch} layout="fixed" width={24} height={24} />
+                    : null
                 }
             </div>
         </div>

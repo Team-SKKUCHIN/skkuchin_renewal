@@ -36,6 +36,30 @@ const dummyProfiles = [
 
 ];
   
+const realProfiles = [
+    {
+        groupName: '진짜그룹명1',
+        gender: '남',
+        mbti: 'INFJ',
+        introduction:
+            '긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 👀',
+    },
+    {
+        groupName: '진짜그룹명2',
+        gender: '여',
+        mbti: 'ENFP',
+        introduction:
+            '그룹 한줄 소개입니다 👀',
+    },
+    {
+        groupName: '진짜그룹명3',
+        gender: '여',
+        mbti: 'ENFP',
+        introduction:
+            '그룹 한줄 소개입니다 👀',
+    },
+];
+
 const Groups = () => {
     const router = useRouter();
     const dispatch = useDispatch();
@@ -44,7 +68,7 @@ const Groups = () => {
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [isLogin, setIsLogin] = useState(false);
-    // 그룹 프로필 등록 여부
+    // 그룹 프로필 등록 여부, 추후 변경 필요
     const [isGroupProfileEnrolled, setIsGroupProfileEnrolled] = useState(true);
 
     useEffect(() => {
@@ -97,8 +121,8 @@ const Groups = () => {
         <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0'}}>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
             { isGroupProfileEnrolled ? 
-            dummyProfiles.map((group, index) => (
-            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '20px', flexShrink: 0, mr: '19px', mb: '10px'}}>
+            realProfiles.map((group, index) => (
+            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '10px'}}>
                 <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                     {displayMBTI(group.mbti, 90, 90)}
                     <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
@@ -189,9 +213,9 @@ const Groups = () => {
             )) 
             :
             <>
-                { dummyProfiles.length !== 0 &&
+                { realProfiles.length === 0 &&
                     dummyProfiles.map((group, index) => (
-                    <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '15px', flexShrink: 0, mr: '19px', mb: '21px'}}>
+                    <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '21px'}}>
                         <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                             <Image src={noCharacter} width={80} height={80} placeholder="blur" layout='fixed' />
                             <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
@@ -210,7 +234,7 @@ const Groups = () => {
                                 </Typography>
                             </Grid>
                             {
-                                user?.matching === false ? null
+                                (isAuthenticated === false || user === null || user?.matching ) === false ? null
                                 :
                                 <Button onClick={()=>handleSettingOpen()}  sx={{backgroundColor: '#FFCE00', borderRadius: '30px', color: '#fff', fontSize: '12px', fontWeight: '700', textAlign: 'center', p: '8.5px 11.5px', m : '5px 0px'}}>
                                     프로필 등록하기

@@ -8,6 +8,7 @@ import Friends from '../components/Matching/Friends';
 import AiGreeting from '../components/AiGreeting';
 import OptionButton from '../components/Custom/OptionButton';
 import Groups from '../components/Matching/Groups';
+import { useRouter } from 'next/router';
 
 const MatchContainer = styled.div`
   /* 데스크톱에서 스크롤 바를 숨김 */
@@ -22,6 +23,7 @@ const MatchContainer = styled.div`
 
 const MatchPage = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
 
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 
@@ -40,12 +42,11 @@ const MatchPage = () => {
 
     const handleButtonClick = (option) => {
       setSelectedOption(option);
-      console.log(option);
     };
 
     return(
         <MatchContainer>
-            <AiGreeting />
+            <AiGreeting option={selectedOption} />
 
             <OptionButton options={options} selectedOption={selectedOption} handleButtonClick={handleButtonClick} />
 
