@@ -352,7 +352,7 @@ public class SwaggerConfig {
                                 .groupName("sms")
                                 .select()
                                 .apis(RequestHandlerSelectors.basePackage("skkuchin.service.api.controller"))
-                                .paths(PathSelectors.ant("/api/smst/**")).build();
+                                .paths(PathSelectors.ant("/api/sms/**")).build();
         }
 
         // swagger에서 jwt 토큰값 넣기위한 설정

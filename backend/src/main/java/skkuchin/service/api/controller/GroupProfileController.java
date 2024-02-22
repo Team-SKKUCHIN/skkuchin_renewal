@@ -46,6 +46,7 @@ public class GroupProfileController {
     }
 
     @GetMapping("/mine")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<?> getMyGroupProfileList(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         List<GroupProfileDto.SummaryResponse> groupProfiles = groupProfileService
                 .getMyGroupProfileList(principalDetails.getUser().getId());
