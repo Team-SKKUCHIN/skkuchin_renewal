@@ -3,6 +3,7 @@ import { Grid, Typography, Button } from '@mui/material';
 import { displayMBTI } from '../Matching/MBTIList';
 
 const FriendProfile = ({ candidate }) => {
+
     return (
         <div>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', paddingTop: '50%'}}>

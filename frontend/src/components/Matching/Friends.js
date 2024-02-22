@@ -101,7 +101,7 @@ const Friends = () => {
     }
 
     const handleFriendClick = (friendId) => {
-        router.push(`/clickProfile?id=${friendId}`);
+        router.push(`/showFriendProfile?id=${friendId}`);
     };
 
     return (
