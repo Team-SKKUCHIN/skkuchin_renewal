@@ -15,21 +15,21 @@ const dummyProfiles = [
     {
         groupName: '그룹명1',
         gender: '여',
-        mbti: 'ENFJ',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다',
     },
     {
         groupName: '그룹명2',
         gender: '남',
-        mbti: 'ISFP',
+        mbti: 'GROUP',
         introduction:
             '긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 👀',
     },
     {
         groupName: '그룹명3',
         gender: '남',
-        mbti: 'ENFP',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다 👀',
     },
@@ -40,21 +40,21 @@ const realProfiles = [
     {
         groupName: '진짜그룹명1',
         gender: '남',
-        mbti: 'INFJ',
+        mbti: 'GROUP',
         introduction:
             '긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 👀',
     },
     {
         groupName: '진짜그룹명2',
         gender: '여',
-        mbti: 'ENFP',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다 👀',
     },
     {
         groupName: '진짜그룹명3',
         gender: '여',
-        mbti: 'ENFP',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다 👀',
     },
@@ -113,8 +113,10 @@ const Groups = () => {
         }
     }
 
-    const handleFriendClick = (friendId) => {
-        router.push(`/clickProfile?id=${friendId}`);
+    const handleGroupClick = (groupId) => {
+        // 추후 수정해야 함
+        // router.push(`/clickProfile?id=${groupId}`);
+        router.push(`/showGroupProfile`);
     };
 
     return (
@@ -139,7 +141,7 @@ const Groups = () => {
                             disableElevation
                             disableTouchRipple
                             key="profile-button"
-                            onClick={() => handleFriendClick(group.id)}
+                            onClick={() => handleGroupClick(group.id)}
                             sx={{
                                 color: '#777777',
                                 fontSize: '14px',

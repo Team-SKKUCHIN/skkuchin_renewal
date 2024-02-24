@@ -72,7 +72,7 @@ const showAllTwoLists = () => {
                             </div>
                         ))
                     ) : (
-                        <Typography>필터링 조건에 부합하는 그룹이 없습니다.</Typography>
+                        <Typography>필터링 조건에 부합하는 학우가 없습니다.</Typography>
                     )
                 }
                 </div>

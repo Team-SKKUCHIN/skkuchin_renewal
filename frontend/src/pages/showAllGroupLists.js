@@ -11,35 +11,35 @@ const dummyProfiles = [
     {
         groupName: '그룹명1',
         gender: '여자',
-        mbti: 'ENFJ',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다',
     },
     {
         groupName: '그룹명2',
         gender: '남자',
-        mbti: 'ISFP',
+        mbti: 'GROUP',
         introduction:
             '긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 👀',
     },
     {
         groupName: '그룹명3',
         gender: '남자',
-        mbti: 'ENFP',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다 👀',
     },
     {
         groupName: '그룹명4',
         gender: '여자',
-        mbti: 'ISFP',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다 👀',
     },
     {
         groupName: '그룹명5',
         gender: '남자',
-        mbti: 'INTJ',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다 👀',
     },
@@ -55,6 +55,12 @@ const ShowAllGroupLists = () => {
         selectedFilter === '전체'
         ? dummyProfiles
         : dummyProfiles.filter((group) => group.gender === selectedFilter);
+
+    const [selectedGroup, setSelectedGroup] = useState(null);
+    const handleGroupClick = (id) => {
+        setSelectedGroup(id);
+        router.push(`/showGroupProfile?id=${id}`);
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -72,13 +78,13 @@ const ShowAllGroupLists = () => {
             {/* 목록 */}
             <div style={{ overflow: 'scroll', padding: '12px 24px' }}>
                 {filteredProfiles.length !== 0 ? (
-                filteredProfiles.map((group, index) => (
-                    <div style={{ marginBottom: '15px' }} key={index}>
-                    <GroupItem group={group} />
-                    </div>
-                ))
+                    filteredProfiles.map((group, index) => (
+                        <div style={{ marginBottom: '15px' }} key={index} onClick={() => handleGroupClick(group.id)}>
+                            <GroupItem group={group} />
+                        </div>
+                    ))
                 ) : (
-                <p>필터링 조건에 부합하는 그룹이 없습니다.</p>
+                    <Typography>필터링 조건에 부합하는 그룹이 없습니다.</Typography>
                 )}
             </div>
 

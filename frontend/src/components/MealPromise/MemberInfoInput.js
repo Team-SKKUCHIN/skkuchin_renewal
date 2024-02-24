@@ -73,7 +73,7 @@ const MemberInfoInput = ({ friendName, studentId, major, introduction, onUpdate 
 
       <Typography sx={{ fontSize: 14, color: '#3C3C3C', mb: '8px' }}>한줄 소개</Typography>
       <TextField
-        sx={{ mb: friendName === '친구3' ? '0px' : '18px' }}
+        sx={{ mb: friendName === '친구3' ? '0px' : '50px' }}
         variant="outlined"
         fullWidth
         placeholder="한줄 소개를 입력해주세요 (필수)"
