@@ -17,12 +17,13 @@ import skkuchin.service.domain.Chat.GroupChatRequest;
 import skkuchin.service.domain.Chat.GroupProfile;
 import skkuchin.service.domain.Chat.ProfileStatus;
 import skkuchin.service.domain.Chat.ResponseType;
-import skkuchin.service.domain.User.AppUser;
+import skkuchin.service.domain.User.Sms;
 import skkuchin.service.dto.GroupChatRequestDto;
 import skkuchin.service.exception.CustomRuntimeException;
 import skkuchin.service.exception.CustomValidationApiException;
 import skkuchin.service.repo.GroupChatRequestRepo;
 import skkuchin.service.repo.GroupProfileRepo;
+import skkuchin.service.repo.SmsRepo;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class GroupChatRequestService {
     private static final Pattern LINK_PATTERN = Pattern.compile("https://open\\.kakao\\.com/o/[a-zA-Z0-9]+");
     private final GroupChatRequestRepo groupChatRequestRepo;
     private final GroupProfileRepo groupProfileRepo;
+    private final SmsRepo smsRepo;
     private final SmsService smsService;
 
     @Transactional
@@ -66,7 +68,10 @@ public class GroupChatRequestService {
         GroupProfile sender = groupProfileRepo.findById(dto.getSenderId())
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 그룹 프로필입니다"));
 
-        if (sender.getFriend1().getSmsLists().size() == 0) {
+        List<Sms> senderSmsList = smsRepo.findByUser(sender.getFriend1());
+        List<Sms> receiverSmsList = smsRepo.findByUser(sender.getFriend1());
+
+        if (senderSmsList.size() == 0) {
             throw new CustomRuntimeException("요청자의 전화번호가 등록되지 않았습니다");
         }
         if (receiver.getStatus() == ProfileStatus.INACTIVE || sender.getStatus() == ProfileStatus.INACTIVE) {
@@ -80,9 +85,9 @@ public class GroupChatRequestService {
         }
         groupChatRequestRepo.save(dto.toEntity(sender, receiver));
 
-        if (receiver.getFriend1().getSmsLists().size() > 0) {
+        if (receiverSmsList.size() > 0) {
             smsService.sendSms(
-                    receiver.getFriend1().getSmsLists().get(0).getPhoneNumber(),
+                    receiverSmsList.get(0).getPhoneNumber(),
                     String.format("[스꾸친] %s 팀이 밥약을 신청했습니다", sender.getGroupName()));
         }
     }
@@ -100,8 +105,8 @@ public class GroupChatRequestService {
         request.setStatus(dto.getStatus());
         groupChatRequestRepo.save(request);
 
-        AppUser sendUser = request.getSender().getFriend1();
-        if (sendUser.getSmsLists().size() > 0) {
+        List<Sms> senderSmsList = smsRepo.findByUser(request.getSender().getFriend1());
+        if (senderSmsList.size() > 0) {
             String message;
             if (status == ResponseType.ACCEPT) {
                 message = "[스꾸친] %s 팀이 밥약을 수락했습니다";
@@ -111,7 +116,7 @@ public class GroupChatRequestService {
                 throw new CustomRuntimeException("비정상적인 접근입니다");
             }
             smsService.sendSms(
-                    sendUser.getSmsLists().get(0).getPhoneNumber(),
+                    senderSmsList.get(0).getPhoneNumber(),
                     String.format(message, request.getReceiver().getGroupName()));
         }
     }

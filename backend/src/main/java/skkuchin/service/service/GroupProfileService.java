@@ -15,17 +15,20 @@ import skkuchin.service.domain.Chat.GroupProfile;
 import skkuchin.service.domain.Chat.ProfileStatus;
 import skkuchin.service.domain.Chat.ResponseType;
 import skkuchin.service.domain.User.AppUser;
+import skkuchin.service.domain.User.Sms;
 import skkuchin.service.dto.GroupProfileDto;
 import skkuchin.service.exception.CustomRuntimeException;
 import skkuchin.service.exception.CustomValidationApiException;
 import skkuchin.service.repo.GroupChatRequestRepo;
 import skkuchin.service.repo.GroupProfileRepo;
+import skkuchin.service.repo.SmsRepo;
 
 @Service
 @RequiredArgsConstructor
 public class GroupProfileService {
     private final GroupProfileRepo groupProfileRepo;
     private final GroupChatRequestRepo groupChatRequestRepo;
+    private final SmsRepo smsRepo;
 
     @Transactional
     public List<GroupProfileDto.SummaryResponse> getGroupProfileListAsNonUser() {
@@ -66,16 +69,13 @@ public class GroupProfileService {
 
     @Transactional
     public void createGroupProfile(GroupProfileDto.PostRequest dto, AppUser user) {
+        List<Sms> smsList = smsRepo.findByUser(user);
+
         if (groupProfileRepo.findMyGroupProfiles(user.getId()).size() >= 5) {
             throw new CustomRuntimeException("그룹 프로필은 5개 이하로만 생성 가능합니다");
         }
-        if (user.getSmsLists().size() == 0 || !user.getSmsLists().get(0).getIsVerified()) {
+        if (smsList.size() == 0 || !smsList.get(0).isVerified()) {
             throw new CustomRuntimeException("전화번호가 등록되지 않았습니다");
-        }
-        if (dto.getGroupIntroduction().length() > 30 || dto.getFriend1Introduction().length() > 30
-                || dto.getFriend2Introduction().length() > 30
-                || dto.getFriend3Introduction().length() > 30) {
-            throw new CustomRuntimeException("소개 문구는 30자 이내로 작성해주시기 바랍니다");
         }
         groupProfileRepo.save(dto.toEntity(user));
     }
@@ -87,11 +87,6 @@ public class GroupProfileService {
 
         if (existingGroupProfile.getFriend1().getId() != userId) {
             throw new CustomRuntimeException("비정상적인 접근입니다");
-        }
-        if (dto.getGroupIntroduction().length() > 30 || dto.getFriend1Introduction().length() > 30
-                || dto.getFriend2Introduction().length() > 30
-                || dto.getFriend3Introduction().length() > 30) {
-            throw new CustomRuntimeException("소개 문구는 30자 이내로 작성해주시기 바랍니다");
         }
         existingGroupProfile.setModifiedAt(LocalDateTime.now());
         existingGroupProfile.setGroupIntroduction(dto.getGroupIntroduction());
