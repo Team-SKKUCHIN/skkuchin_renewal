@@ -7,7 +7,7 @@ const FriendProfile = ({ candidate }) => {
     const router = useRouter();
     const handleSubmit = () => {
         console.log("밥약 신청하기 버튼 클릭");
-        router.push('/enrollOpenChat');
+        router.push('/enrollOpenChat', { type: 'friend' });
     }
     return (
         <div>

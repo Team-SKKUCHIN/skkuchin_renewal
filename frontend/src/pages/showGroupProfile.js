@@ -15,21 +15,21 @@ const showGroupProfile = () => {
         date: '23.02.13~23.03.13',
         members: [
             {
-                name: '김스옹',
+                name: '친구1',
                 studentId: '20학번',
                 major: '컴퓨터공학과',
                 introduction: '안녕하시오로로로~',
                 gender: '여'
             },
             {
-                name: '친구1',
+                name: '친구2',
                 studentId: '20학번',
                 major: '컬처앤테크놀로지융합전공',
                 introduction: '안녕하세요 친해져요',
                 gender: '여'
             },
             {
-                name: '친구2',
+                name: '친구3',
                 studentId: '21학번',
                 major: '경제학과',
                 introduction: '안녕하세요 안녕하세용~!',
