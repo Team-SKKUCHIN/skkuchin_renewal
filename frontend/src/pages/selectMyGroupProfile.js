@@ -48,7 +48,10 @@ const selectMyGroupProfile = () => {
 
     const handleSubmit = () => {
         console.log("확인 버튼 클릭");
-        router.push('/enrollOpenChat', { type: 'group'})
+        router.push({
+            pathname: '/enrollOpenChat',
+            query: { type: 'group' },
+        });
     }
 
     useEffect(() => {
