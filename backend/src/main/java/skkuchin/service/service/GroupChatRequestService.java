@@ -71,7 +71,7 @@ public class GroupChatRequestService {
         List<Sms> senderSmsList = smsRepo.findByUser(sender.getFriend1());
         List<Sms> receiverSmsList = smsRepo.findByUser(sender.getFriend1());
 
-        if (senderSmsList.size() == 0) {
+        if (senderSmsList.isEmpty()) {
             throw new CustomRuntimeException("요청자의 전화번호가 등록되지 않았습니다");
         }
         if (receiver.getStatus() == ProfileStatus.INACTIVE || sender.getStatus() == ProfileStatus.INACTIVE) {
@@ -85,7 +85,7 @@ public class GroupChatRequestService {
         }
         groupChatRequestRepo.save(dto.toEntity(sender, receiver));
 
-        if (receiverSmsList.size() > 0) {
+        if (!receiverSmsList.isEmpty()) {
             smsService.sendSms(
                     receiverSmsList.get(0).getPhoneNumber(),
                     String.format("[스꾸친] %s 팀이 밥약을 신청했습니다", sender.getGroupName()));
@@ -106,7 +106,7 @@ public class GroupChatRequestService {
         groupChatRequestRepo.save(request);
 
         List<Sms> senderSmsList = smsRepo.findByUser(request.getSender().getFriend1());
-        if (senderSmsList.size() > 0) {
+        if (!senderSmsList.isEmpty()) {
             String message;
             if (status == ResponseType.ACCEPT) {
                 message = "[스꾸친] %s 팀이 밥약을 수락했습니다";

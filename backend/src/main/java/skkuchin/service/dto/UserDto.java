@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-
 public class UserDto {
     @Getter
     @Setter
@@ -151,8 +150,10 @@ public class UserDto {
         private Campus campus;
         private Campus toggle;
         private Gender gender;
+        private String phoneNumber;
+        private boolean isAlarmOn;
 
-        public Response(AppUser user) {
+        public Response(AppUser user, Sms sms) {
             if (user != null) {
                 this.id = user.getId();
                 this.nickname = user.getNickname();
@@ -174,6 +175,14 @@ public class UserDto {
                 this.toggle = null;
                 this.gender = null;
             }
+
+            if (sms != null) {
+                this.phoneNumber = sms.getPhoneNumber();
+                this.isAlarmOn = sms.isAlarmOn();
+            } else {
+                this.phoneNumber = null;
+                this.isAlarmOn = false;
+            }
         }
 
         public Campus findCampus(Major major) {
@@ -188,7 +197,6 @@ public class UserDto {
             }
         }
     }
-
 
     @Getter
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)

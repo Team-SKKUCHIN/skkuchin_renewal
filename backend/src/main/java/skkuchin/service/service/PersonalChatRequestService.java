@@ -93,7 +93,7 @@ public class PersonalChatRequestService {
         List<Sms> senderSmsList = smsRepo.findByUser(sender);
         List<Sms> receiverSmsList = smsRepo.findByUser(receiver);
 
-        if (senderSmsList.size() == 0) {
+        if (senderSmsList.isEmpty()) {
             throw new CustomRuntimeException("요청자의 전화번호가 등록되지 않았습니다");
         }
         if (receiver.getMatching() == null || sender.getMatching() == null) {
@@ -110,7 +110,7 @@ public class PersonalChatRequestService {
         }
         personalChatRequestRepo.save(dto.toEntity(sender, receiver));
 
-        if (receiverSmsList.size() > 0) {
+        if (!receiverSmsList.isEmpty()) {
             smsService.sendSms(
                     receiverSmsList.get(0).getPhoneNumber(),
                     String.format("[스꾸친] %s 밥약을 신청했습니다", StringUtils.getPostWord(sender.getNickname(), "이", "가")));
@@ -131,7 +131,7 @@ public class PersonalChatRequestService {
         personalChatRequestRepo.save(request);
 
         List<Sms> senderSmsList = smsRepo.findByUser(request.getSender());
-        if (senderSmsList.size() > 0) {
+        if (!senderSmsList.isEmpty()) {
             String message;
             if (status == ResponseType.ACCEPT) {
                 message = "[스꾸친] %s 밥약을 수락했습니다";
