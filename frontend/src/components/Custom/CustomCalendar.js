@@ -10,6 +10,18 @@ const CustomCalendar = () => {
   const defaultDate = [new Date(), new Date()]
   const [dates, setDates] = useState(defaultDate); 
 
+  const isToday = (date) => {
+    const today = new Date();
+    return date.getFullYear() === today.getFullYear() &&
+      date.getMonth() === today.getMonth() &&
+      date.getDate() === today.getDate();
+  };
+
+  const isPastDate = (date) => {
+    const today = new Date();
+    return date < today;
+  };
+
   const formatDate = (date) => {
     const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
     const koreanDay = dayOfWeek[date.getDay()];
@@ -19,6 +31,10 @@ const CustomCalendar = () => {
 
   const handleDateChange = (newDate) => {
     setDates(newDate);
+  };
+
+  const tileDisabled = ({ date }) => {
+    return isPastDate(date) && !isToday(date);
   };
 
   const selectedDatesText = dates === defaultDate 
@@ -32,7 +48,7 @@ const CustomCalendar = () => {
           <div style={{ padding: '10px 17px', textAlign: 'center', borderRadius: '8px', border: "1px solid #E2E2E2", margin: '10px 0'}}>
             <Typography style={{ fontSize: '16px' }}>{selectedDatesText}</Typography>
           </div>
-          <Grid style={{ border: '1px solid #E2E2E2', borderRadius: '20px', width: '100%', height: "380px",  paddingTop: '10px' }}>
+          <Grid style={{ border: '1px solid #E2E2E2', borderRadius: '20px', width: '100%',  padding: '18px 12px' }}>
             <CalendarDesign>
                 <Calendar
                     onChange={handleDateChange}
@@ -44,6 +60,8 @@ const CustomCalendar = () => {
                     formatDay={(locale, date) =>
                         date.toLocaleString('en', { day: 'numeric' })
                     }
+                    calendarType="US"
+                    tileDisabled={tileDisabled}
                 />
             </CalendarDesign>
           </Grid>
@@ -56,11 +74,10 @@ const CalendarDesign = style.div`
     .react-calendar { 
         width: 100%;
         background-color: #fff;
-        color: #222;
+        color: #3C3C3C;
         border-radius: 8px;
-        font-family: Arial, Helvetica, sans-serif;
-        line-height: 1.125em;
-        padding: 0px 12px;
+        font-family: 'NanumSquareRound, sans-serif',
+        margin: 0;
         border-color: transparent;
        }
        .react-calendar__navigation button {
@@ -68,7 +85,6 @@ const CalendarDesign = style.div`
         min-width: 30px;
         background: none;
         font-size: 16px;
-        margin-top: 8px;
         font-weight: 500px;
        }
        .react-calendar__navigation button:enabled:hover,
@@ -81,16 +97,22 @@ const CalendarDesign = style.div`
        .react-calendar__month-view__weekdays {
         background: white;
         abbr { /*월,화,수... 글자 부분*/
-          color: gray;
+          color: #BABABA;
           font-weight: 500;
           text-decoration : none;
         }
       }
+      .react-calendar__tile react-calendar__month-view__days__day react-calendar__month-view__days__day--weekend,
+       .react-calendar__month-view__weekdays > div:nth-child(7),
+        .react-calendar__month-view__weekdays > div:nth-child(1) {
+          abbr {
+            color: #FC9712;
+          }
+        }
       .react-calendar__tile {
         text-align: center;
-        padding: 10px;
-        height:43px;
-        margin: 3.5px 0;
+        height: 40px;
+        margin: 4px 0;
       }
        .react-calendar__tile:enabled:hover,
        .react-calendar__tile:enabled:focus {
@@ -99,10 +121,13 @@ const CalendarDesign = style.div`
         font-weight: bold;
        }
        .react-calendar__tile--now:not(.react-calendar__tile--active) {
-        background: #ffe885;
+        background: #ffe4b8;
         border-radius: 50%;
         font-weight: bold;
         color: white;
+       }
+       .react-calendar__month-view__days__day--weekend {
+        color: #FC9712;
        }
        .react-calendar__tile--active {
         background: #FC9712;
@@ -117,6 +142,11 @@ const CalendarDesign = style.div`
        } 
        .react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd {
         border-radius: 25px;
+      },
+      .react-calendar__tile:disabled {
+        background-color: #fff;
+        color: #ccc;
+        cursor: not-allowed;
       }
     `
 

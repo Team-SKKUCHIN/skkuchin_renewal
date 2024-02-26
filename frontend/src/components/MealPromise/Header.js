@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 import Image from 'next/image';
 import iconBack from '../../image/icon_header_back.png';
 import iconSearch from '../../image/icon_header_search.png';
-import iconClose from '../../image/close.png';
+import iconClose from '../../image/icon_header_close.png';
 import { useRouter } from 'next/router';
 
 const Header = ({title, onBackClick, icon}) => {
@@ -36,7 +36,9 @@ const Header = ({title, onBackClick, icon}) => {
                     title === '그룹 프로필 등록' ? (
                         <Image src={iconClose} onClick={()=> router.back()} layout="fixed" width={24} height={24} />
                     ) : 
-                    icon ?
+                    icon === 'close' ?
+                    <Image src={iconClose} onClick={()=> router.back()} layout="fixed" width={18} height={18} />
+                    : icon ?
                     <Image src={iconSearch} layout="fixed" width={24} height={24} />
                     : null
                 }

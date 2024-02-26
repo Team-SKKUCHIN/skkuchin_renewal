@@ -72,7 +72,7 @@ const MealPromisePage = () => {
 
           {/* 그룹 밥약 */}
           <div style={{ margin: '24px 0' }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center'}}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center', marginBottom: '10px'}}>
                 <Typography style={{fontWeight:700, color: '#3C3C3C', fontSize: '21px', fontWeight: 700}}>
                     여럿이서 먹어요
                 </Typography>
@@ -90,7 +90,7 @@ const MealPromisePage = () => {
 
           {/* 밥약 */}
           <div style={{ margin: '24px 0' }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center'}}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center', marginBottom: '10px'}}>
                 <Typography style={{fontWeight:700, color: '#3C3C3C', fontSize: '21px', fontWeight: 700}}>
                     둘이 먹어요
                 </Typography>

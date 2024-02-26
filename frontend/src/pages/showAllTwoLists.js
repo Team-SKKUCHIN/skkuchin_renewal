@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ThemeProvider, CssBaseline, Button, IconButton, Typography } from '@mui/material';
+import { ThemeProvider, CssBaseline, Button, IconButton, Typography, Divider } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { load_candidate } from '../actions/candidate/candidate';
@@ -67,12 +67,13 @@ const showAllTwoLists = () => {
                     {
                     filteredProfiles && filteredProfiles.length !== 0 ? (
                         filteredProfiles.map((candidate, index) => (
-                            <div style={{ marginBottom: '15px' }} key={index} onClick={() => setSelectedCandidate(candidate)}>
+                            <div key={index} onClick={() => setSelectedCandidate(candidate)}>
                                 <FriendItem candidate={candidate} />
+                                <Divider sx={{margin: '0 24px'}} />
                             </div>
                         ))
                     ) : (
-                        <Typography>필터링 조건에 부합하는 그룹이 없습니다.</Typography>
+                        <Typography>필터링 조건에 부합하는 학우가 없습니다.</Typography>
                     )
                 }
                 </div>

@@ -1,8 +1,17 @@
 import React from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 import { displayMBTI } from '../Matching/MBTIList';
+import { useRouter } from 'next/router';
 
 const FriendProfile = ({ candidate }) => {
+    const router = useRouter();
+    const handleSubmit = () => {
+        console.log("밥약 신청하기 버튼 클릭");
+        router.push({
+            pathname: '/enrollOpenChat',
+            query: { type: 'friend' },
+        });
+    }
     return (
         <div>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', paddingTop: '50%'}}>
@@ -27,12 +36,12 @@ const FriendProfile = ({ candidate }) => {
                         </Grid>
                     </Grid>
                     <Grid item sx={{ display: 'flex', p: '3px 0 8px', gap: '4px' , m: '10px 0 22px'}}>
-                        <Grid item sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '4px 12px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
+                        <Grid item sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
                             {candidate.mbti}
                         </Grid>
                         {(candidate.keywords) != null ?
                             ((candidate.keywords).slice(0, 2).map((interest, index) => (
-                                <Grid item key={index} sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '4px 12px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
+                                <Grid item key={index} sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
                                     {interest}
                                 </Grid>
                             )))
@@ -45,9 +54,7 @@ const FriendProfile = ({ candidate }) => {
             </div>
 
             <Button
-                onClick={() => {
-                    console.log('밥약 신청하기 버튼 클릭', candidate);
-                }}
+                onClick={handleSubmit}
                 color="primary"
                 variant="contained"
                 disableElevation

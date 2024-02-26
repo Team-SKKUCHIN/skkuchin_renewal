@@ -15,21 +15,21 @@ const dummyProfiles = [
     {
         groupName: '그룹명1',
         gender: '여',
-        mbti: 'ENFJ',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다',
     },
     {
         groupName: '그룹명2',
         gender: '남',
-        mbti: 'ISFP',
+        mbti: 'GROUP',
         introduction:
             '긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 👀',
     },
     {
         groupName: '그룹명3',
         gender: '남',
-        mbti: 'ENFP',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다 👀',
     },
@@ -40,21 +40,21 @@ const realProfiles = [
     {
         groupName: '진짜그룹명1',
         gender: '남',
-        mbti: 'INFJ',
+        mbti: 'GROUP',
         introduction:
             '긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 👀',
     },
     {
         groupName: '진짜그룹명2',
         gender: '여',
-        mbti: 'ENFP',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다 👀',
     },
     {
         groupName: '진짜그룹명3',
         gender: '여',
-        mbti: 'ENFP',
+        mbti: 'GROUP',
         introduction:
             '그룹 한줄 소개입니다 👀',
     },
@@ -68,7 +68,9 @@ const Groups = () => {
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [isLogin, setIsLogin] = useState(false);
+
     // 그룹 프로필 등록 여부, 추후 변경 필요
+    const [selectedGroupId, setSelectedGroupId] = useState(null);
     const [isGroupProfileEnrolled, setIsGroupProfileEnrolled] = useState(true);
 
     useEffect(() => {
@@ -81,26 +83,26 @@ const Groups = () => {
         }
     }, [isAuthenticated]);
 
-    const [open, setOpen] = useState(false);
-    const [selectedGroupId, setSelectedGroupId] = useState(null);
+    // const [open, setOpen] = useState(false);
 
-    const [isPopupMessageOpen, setIsPopupMessageOpen] = useState(false);
-    const [popupMessage, setPopupMessage] = useState('');
+    // const [isPopupMessageOpen, setIsPopupMessageOpen] = useState(false);
+    // const [popupMessage, setPopupMessage] = useState('');
 
-    const handleOpen = (id) => {
-        setOpen(true);
-        setSelectedGroupId(id);
-    }
-    const handleClose = () => {
-        setOpen(false);
-    }
-    const handleSubmit = (id) => {
-        setOpen(false);
-        dispatch(request_chat(id));
+    // const handleOpen = (id) => {
+    //     setOpen(true);
+    //     setSelectedGroupId(id);
+    // }
+    // const handleClose = () => {
+    //     setOpen(false);
+    // }
 
-        setPopupMessage('신청이 완료되었습니다!');
-        setIsPopupMessageOpen(true);
-    }
+    // const handleSubmit = (id) => {
+    //     setOpen(false);
+    //     dispatch(request_chat(id));
+
+    //     setPopupMessage('신청이 완료되었습니다!');
+    //     setIsPopupMessageOpen(true);
+    // }
     
     const handleSettingOpen = () => {
         if (isAuthenticated) {
@@ -113,8 +115,10 @@ const Groups = () => {
         }
     }
 
-    const handleFriendClick = (friendId) => {
-        router.push(`/clickProfile?id=${friendId}`);
+    const handleGroupClick = (groupId) => {
+        // 추후 수정해야 함
+        // router.push(`/clickProfile?id=${groupId}`);
+        router.push(`/showGroupProfile`);
     };
 
     return (
@@ -139,7 +143,7 @@ const Groups = () => {
                             disableElevation
                             disableTouchRipple
                             key="profile-button"
-                            onClick={() => handleFriendClick(group.id)}
+                            onClick={() => handleGroupClick(group.id)}
                             sx={{
                                 color: '#777777',
                                 fontSize: '14px',
@@ -178,7 +182,7 @@ const Groups = () => {
                                 disableElevation
                                 disableTouchRipple
                                 key="apply-button"
-                                onClick={() => handleOpen(group.id)}
+                                onClick={() => router.push('/selectMyGroupProfile')}
                                 sx={{
                                     color: '#FFAC0B',
                                     fontSize: '14px',
@@ -191,7 +195,9 @@ const Groups = () => {
                             </Button>
                         )}
                     </Grid>
-                    <CustomPopup
+
+                    {/* 팝업 없이 바로 이동 */}
+                    {/* <CustomPopup
                         open={open}
                         onClose={handleClose}
                         content={`밥약 신청을 하시겠어요?`}
@@ -201,13 +207,13 @@ const Groups = () => {
                         onRightButtonClick={() => {
                             handleSubmit(selectedGroupId);
                         }}
-                    />
+                    /> */}
 
-                    <CustomPopupNoBtn
+                    {/* <CustomPopupNoBtn
                         open={isPopupMessageOpen}
                         onClose={() => setIsPopupMessageOpen(false)}
                         content={popupMessage}
-                    />
+                    /> */}
                 </Grid>
             </Card> 
             )) 
