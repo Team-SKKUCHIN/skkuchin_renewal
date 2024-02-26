@@ -74,7 +74,7 @@ public class GroupProfileService {
         if (groupProfileRepo.findMyGroupProfiles(user.getId()).size() >= 5) {
             throw new CustomRuntimeException("그룹 프로필은 5개 이하로만 생성 가능합니다");
         }
-        if (smsList.size() == 0 || !smsList.get(0).isVerified()) {
+        if (smsList.isEmpty() || !smsList.get(0).isVerified()) {
             throw new CustomRuntimeException("전화번호가 등록되지 않았습니다");
         }
         groupProfileRepo.save(dto.toEntity(user));

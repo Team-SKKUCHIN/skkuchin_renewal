@@ -51,7 +51,7 @@ public class SmsService {
         }
 
         List<Sms> smsList = smsRepo.findByUser(user);
-        if (smsList.size() > 0) {
+        if (!smsList.isEmpty()) {
             throw new CustomRuntimeException("이미 전화번호를 등록하였습니다");
         }
 
@@ -74,7 +74,7 @@ public class SmsService {
         }
 
         List<Sms> smsList = smsRepo.findByUser(user);
-        if (smsList.size() == 0) {
+        if (smsList.isEmpty()) {
             throw new CustomRuntimeException("전화번호가 등록되지 않았습니다");
         }
 
@@ -127,7 +127,7 @@ public class SmsService {
     @Transactional
     public void deletePhoneNumber(AppUser user) {
         List<Sms> smsList = smsRepo.findByUser(user);
-        if (smsList.size() == 0) {
+        if (smsList.isEmpty()) {
             throw new CustomRuntimeException("전화번호가 등록되지 않았습니다");
         }
         smsRepo.delete(smsList.get(0));

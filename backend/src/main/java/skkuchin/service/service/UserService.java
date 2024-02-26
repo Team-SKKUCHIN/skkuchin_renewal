@@ -32,6 +32,7 @@ public class UserService {
     private final EmailAuthRepo emailAuthRepo;
     private final PasswordEncoder passwordEncoder;
     private final ChatRoomRepo chatRoomRepo;
+    private final SmsRepo smsRepo;
 
     private final Random random = new Random();
 
@@ -129,7 +130,9 @@ public class UserService {
     @Transactional
     public UserDto.Response getUser(Long userId) {
         AppUser user = userRepo.findById(userId).orElseThrow(() -> new CustomValidationApiException("존재하지 않는 유저입니다"));
-        return new UserDto.Response(user);
+        List<Sms> smsList = smsRepo.findByUser(user);
+        Sms sms = smsList.isEmpty() ? null : smsList.get(0);
+        return new UserDto.Response(user, sms);
     }
 
     @Transactional
@@ -142,7 +145,11 @@ public class UserService {
         log.info("Fetching all users");
         return userRepo.findAll()
                 .stream()
-                .map(user -> new UserDto.Response(user))
+                .map(user -> {
+                    List<Sms> smsList = smsRepo.findByUser(user);
+                    Sms sms = smsList.isEmpty() ? null : smsList.get(0);
+                    return new UserDto.Response(user, sms);
+                })
                 .collect(Collectors.toList());
     }
 
