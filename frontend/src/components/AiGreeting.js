@@ -38,9 +38,10 @@ import INTJ from '../image/mbti/profile/INTJ.png';
 import ISFJ from '../image/mbti/profile/ISFJ.png';
 import ESFP from '../image/mbti/profile/ESFP.png';
 
-const AiGreeting = () => {
+const AiGreeting = ({option}) => {
     const dispatch = useDispatch();
     const router = useRouter();
+    
     const user = useSelector(state => state.auth.user);
     const userInfo = useSelector(state => state.matchingUser.matchingUser);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
@@ -103,6 +104,14 @@ const AiGreeting = () => {
     const handleMatching = () => {
         dispatch(change_status_info(!status));
         setStatus(!status);
+    }
+
+    const handleShowMoreBtn = () => {
+        if(option == '여럿이서 먹어요') {
+            router.push('/showAllGroupLists');
+        } else if(option == '둘이 먹어요') {
+            router.push('/showAllTwoLists');
+        }
     }
 
     const IOSSwitch = styled((props) => (
@@ -169,7 +178,7 @@ const AiGreeting = () => {
             query: { src : '스꾸챗프로필설정', }
         })
     }
-
+    
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -177,10 +186,15 @@ const AiGreeting = () => {
             <div style={{ position:"relative", paddingTop:"10px", width: "100%", background: "white", alignContent:"center", maxWidth:"420px"}}>
                 <div style={{ display: "flex", justifyContent: "space-between"}}>
                     <Typography style={{fontWeight:700, color: '#3C3C3C', fontSize: '21px', fontWeight: 700, padding:"10px 24px"}}>
-                        같이 한끼 해요 🍚
+                        같이 한끼 해요
                     </Typography>
+
+                    <Button onClick={handleShowMoreBtn} style={{fontWeight:700, color: '#9E9E9E', fontSize: '16px', fontWeight: 700, padding:"10px 24px"}}>
+                        전체보기
+                    </Button>
                 </div>
             </div>
+
             {user && userInfo !== null ?
             <Modal
                 open={open}
@@ -272,23 +286,6 @@ const AiGreeting = () => {
                             }}>
                         {userInfo.mbti}
                         </Typography>
-                            {/* {(userInfo.keywords) != null?
-                                ((userInfo.keywords).slice(0,2).map(((index,interest) =>
-                                    <Typography 
-                                        key={index}
-                                        style={{
-                                        color:"white", 
-                                        background:"#BABABA",
-                                        borderRadius:"20px", 
-                                        border:"1px solid #BABABA", 
-                                        display:"inline-block", 
-                                        marginRight:"5px",
-                                        padding:"4.5px 7.5px",
-                                        fontSize:'12px'}}>
-                                    {interest}
-                                    </Typography>
-                                )))
-                            :null} */}
                     </Grid>
                 </div>
 

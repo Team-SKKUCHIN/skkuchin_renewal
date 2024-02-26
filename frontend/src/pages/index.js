@@ -1,14 +1,16 @@
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import { CssBaseline, ThemeProvider, Divider } from '@mui/material';
 import UpperBar from '../components/UpperBar';
 import theme from '../theme/theme';
 import MatchPage from './match';
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import mainCharacter from '../image/login_enheng.png';
+import Image from 'next/image';
 
 const GameContent = () => {
     const games = [
         {
-            name: "오늘 뭐 먹지?",
+            name: "오늘은 이거다!",
             hashtag: "#성대 메뉴 추천 룰렛",
             link: "/recommend",
         },
@@ -48,29 +50,40 @@ const GameContent = () => {
                                     margin: index === 0 ? "0 4px 0 0" : (index === 1 ? "0 4px" : "0 0 0 4px"),
                                     cursor: "pointer",
                                     whiteSpace: "nowrap",
+                                    display: "flex",
+                                    gap: "20px",
                                 }}
                             >
-                                <p
-                                    style={{
-                                        margin: 0,
-                                        color: "#777",
-                                        fontSize: "12px",
-                                        fontWeight: 400,
-                                        letterSpacing: "-0.24px",
-                                    }}
-                                >
-                                    {game.hashtag}
-                                </p>
-                                <p
-                                    style={{
-                                        margin: 0,
-                                        fontSize: "18px",
-                                        fontWeight: 700,
-                                        letterSpacing: "-0.36px",
-                                    }}
-                                >
-                                    {game.name}
-                                </p>
+                                <div>
+                                    <p
+                                        style={{
+                                            margin: 0,
+                                            color: "#777",
+                                            fontSize: "12px",
+                                            fontWeight: 400,
+                                            letterSpacing: "-0.24px",
+                                        }}
+                                    >
+                                        {game.hashtag}
+                                    </p>
+                                    <p
+                                        style={{
+                                            margin: 0,
+                                            fontSize: "18px",
+                                            fontWeight: 700,
+                                            letterSpacing: "-0.36px",
+                                        }}
+                                    >
+                                        {game.name}
+                                    </p>
+                                </div>
+                                <div style={{marginTop: '10px'}}>
+                                    {
+                                        index == 0 ? (
+                                            <Image src={mainCharacter} sx={{ width: "60px", height: "51px" }} />
+                                        ) : null
+                                    }
+                                </div>
                         </div>
                     </Link>
                 ))}
@@ -87,6 +100,7 @@ const Home = () => {
                 <UpperBar />
                 <div style={{ width: '100%', height: '100%' }}>
                     <GameContent />
+                    <Divider orientation="horizontal" sx={{ mt: "20px", border: '5px solid #F2F2F2' }} />
                     <MatchPage />
                 </div>
             </ThemeProvider>
