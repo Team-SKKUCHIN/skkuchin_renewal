@@ -6,10 +6,9 @@ import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
 import style from 'styled-components';
 
-const CustomCalendar = () => {
-  const defaultDate = [new Date(), new Date()]
-  const [dates, setDates] = useState(defaultDate); 
-
+const CustomCalendar = ({ dates, onDateChange }) => {
+  const defaultDate = [new Date(), new Date()];
+  
   const isToday = (date) => {
     const today = new Date();
     return date.getFullYear() === today.getFullYear() &&
@@ -27,10 +26,6 @@ const CustomCalendar = () => {
     const koreanDay = dayOfWeek[date.getDay()];
     const formmatedKoreanDay = '(' + koreanDay + ')';
     return dayjs(date).format(`YYYY.MM.DD ${formmatedKoreanDay}`);
-  };
-
-  const handleDateChange = (newDate) => {
-    setDates(newDate);
   };
 
   const tileDisabled = ({ date }) => {
@@ -51,7 +46,7 @@ const CustomCalendar = () => {
           <Grid style={{ border: '1px solid #E2E2E2', borderRadius: '20px', width: '100%',  padding: '18px 12px' }}>
             <CalendarDesign>
                 <Calendar
-                    onChange={handleDateChange}
+                    onChange={onDateChange}
                     value={dates}
                     selectRange={true} 
                     next2Label={null}

@@ -1,8 +1,9 @@
 import React from 'react';
 
-const StudentIdInput = ({ value, onChange }) => {
+const StudentIdInput = ({ value, onChange, editable = true }) => {
   return (
     <input
+      readOnly={!editable}
       variant="standard"
       placeholder=""
       value={value}

@@ -20,6 +20,7 @@ import commentReducer from './comment';
 import likeReducer from './like';
 import magazineReducer from './magazine';
 import worldcupReducer from './worldcup';
+import groupProfileReducer from './groupProfile';
 
 export default combineReducers({
     auth: authReducer,
@@ -43,4 +44,5 @@ export default combineReducers({
     like: likeReducer,
     magazine: magazineReducer,
     worldcup: worldcupReducer,
+    groupProfile: groupProfileReducer
 });

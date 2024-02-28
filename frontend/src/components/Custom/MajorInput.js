@@ -17,10 +17,11 @@ const majorList = [
     '인문과학계열', '사회과학계열', '자연과학계열', '공학계열'
 ];
 
-const MajorInput = ({ value, onChange }) => {
+const MajorInput = ({ value, onChange, editable = true }) => {
   return (
     <Autocomplete
       value={value}
+      readOnly={!editable}
       sx={{
         '& .MuiOutlinedInput-notchedOutline': {
           border: 'none'

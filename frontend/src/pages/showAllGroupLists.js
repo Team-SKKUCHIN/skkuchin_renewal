@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import { ThemeProvider, CssBaseline, IconButton } from '@mui/material';
 import theme from '../theme/theme';
 import GroupItem from '../components/MealPromise/GroupItem';
@@ -6,6 +7,8 @@ import Header from '../components/MealPromise/Header';
 import Filter from '../components/MealPromise/Filter';
 import { useRouter } from 'next/router';
 import AddIcon from '@mui/icons-material/Add';
+import { load_group_profile } from '../actions/groupProfile/groupProfile';
+import { useSelector, useDispatch } from 'react-redux';
 
 const dummyProfiles = [
     {
@@ -48,6 +51,15 @@ const dummyProfiles = [
 
 const ShowAllGroupLists = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
+
+    const groups = useSelector(state => state.groupProfile.groupProfile);
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+    useEffect(() => {
+        if(!groups) dispatch(load_group_profile(isAuthenticated));
+    }, [isAuthenticated, groups]);
+
     const [selectedFilter, setSelectedFilter] = useState('전체');
     const filterOptions = ['전체', '여자', '남자'];
 
@@ -62,11 +74,15 @@ const ShowAllGroupLists = () => {
         router.push(`/showGroupProfile?id=${id}`);
     }
 
+    const handleBackClick = () => {
+        router.push(`/mealPromise`);
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             {/* header */}
-            <Header title="여럿이서 먹어요" onBackClick={()=> router.push('/mealPromise')} />
+            <Header title="여럿이서 먹어요" onBackClick={handleBackClick} />
 
             {/* 필터 */}
             <Filter
