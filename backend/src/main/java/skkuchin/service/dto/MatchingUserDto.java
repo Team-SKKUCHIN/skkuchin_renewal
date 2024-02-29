@@ -83,7 +83,7 @@ public class MatchingUserDto {
             this.campus = findCampus(user.getMajor());
         }
 
-        public Map<String, List<String>> getKeywordMap(List<UserKeyword> keywords) {
+        private Map<String, List<String>> getKeywordMap(List<UserKeyword> keywords) {
             Map<String, List<String>> keywordMap = new HashMap<>();
 
             for (UserKeyword userKeyword : keywords) {
@@ -98,7 +98,7 @@ public class MatchingUserDto {
             return keywordMap;
         }
 
-        public Campus findCampus(Major major) {
+        private Campus findCampus(Major major) {
             EnumSet<Major> majors = EnumSet.allOf(Major.class);
             List<Major> majorList = new ArrayList<>();
             majorList.addAll(majors);

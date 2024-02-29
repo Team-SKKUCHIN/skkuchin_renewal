@@ -2,6 +2,8 @@ package skkuchin.service.domain.User;
 
 import lombok.*;
 import skkuchin.service.domain.Chat.ChatRoom;
+import skkuchin.service.domain.Chat.GroupProfile;
+import skkuchin.service.domain.Chat.PersonalChatRequest;
 import skkuchin.service.domain.Forum.*;
 import skkuchin.service.domain.Magazine.Magazine;
 import skkuchin.service.domain.Map.Campus;
@@ -136,4 +138,16 @@ public class AppUser {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Worldcup> worldcups = new ArrayList<>();
+
+    @OneToMany(mappedBy = "friend1", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GroupProfile> groupProfiles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PersonalChatRequest> personalChatRequestsAsSender = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PersonalChatRequest> personalChatRequestsReceiver = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Sms> smsList = new ArrayList<>();
 }

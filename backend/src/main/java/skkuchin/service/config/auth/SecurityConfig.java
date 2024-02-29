@@ -21,58 +21,64 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 public class SecurityConfig {
-    private static final String[] PERMIT_API_URL_ARRAY = {
-            "/",
-            "/api/user/login",
-            "/api/user/save",
-            "/api/user/token/**",
-            "/api/user/check/**",
-            "/api/user/find/**",
-            "/api/place/**",
-            "/api/review/**",
-            "/api/menu/**",
-            "/api/notice/**",
-            "/api/rank/**",
-            "/api/matching/user/new/**",
-            "/api/user/password/reset",
-            "/api/email/**",
-            "/api/worldcup/**",
-            "/api/traffic/**",
-            "/ws/chat/**"
-    };
-    private static final String[] PERMIT_SWAGGER_URL_ARRAY = {
-            "/v2/api-docs",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/v3/api-docs/**",
-            "/swagger-ui/**"
-    };
-    private final UserRepo userRepo;
+        private static final String[] PERMIT_API_URL_ARRAY = {
+                        "/",
+                        "/api/user/login",
+                        "/api/user/save",
+                        "/api/user/token/**",
+                        "/api/user/check/**",
+                        "/api/user/find/**",
+                        "/api/place/**",
+                        "/api/review/**",
+                        "/api/menu/**",
+                        "/api/notice/**",
+                        "/api/rank/**",
+                        "/api/matching/user/new/**",
+                        "/api/user/password/reset",
+                        "/api/email/**",
+                        "/api/worldcup/**",
+                        "/api/traffic/**",
+                        "/api/group-profile/**",
+                        "/api/group-chat-request/**",
+                        "/api/personal-chat-request/**",
+                        "/api/sms/**",
+                        "/ws/chat/**"
+        };
+        private static final String[] PERMIT_SWAGGER_URL_ARRAY = {
+                        "/v2/api-docs",
+                        "/swagger-resources",
+                        "/swagger-resources/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**"
+        };
+        private final UserRepo userRepo;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf().disable();
-        http.cors(Customizer.withDefaults());
-        http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests()
-                .antMatchers(PERMIT_API_URL_ARRAY).permitAll()
-                .antMatchers(PERMIT_SWAGGER_URL_ARRAY).permitAll()
-                .anyRequest().authenticated();
-        http.apply(new MyCustomDsl());
-        return http.build();
-    }
-
-    public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
-        @Override
-        public void configure(HttpSecurity builder) throws Exception {
-            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-            CustomAuthenticationFilter authenticationFilter = new CustomAuthenticationFilter(authenticationManager);
-            authenticationFilter.setFilterProcessesUrl("/api/user/login");
-            builder
-                    .addFilter(authenticationFilter)
-                    .addFilterBefore(new CustomAuthorizationFilter(userRepo),
-                            UsernamePasswordAuthenticationFilter.class);
+                http.csrf().disable();
+                http.cors(Customizer.withDefaults());
+                http.sessionManagement().sessionCreationPolicy(STATELESS);
+                http.authorizeRequests()
+                                .antMatchers(PERMIT_API_URL_ARRAY).permitAll()
+                                .antMatchers(PERMIT_SWAGGER_URL_ARRAY).permitAll()
+                                .anyRequest().authenticated();
+                http.apply(new MyCustomDsl());
+                return http.build();
         }
-    }
+
+        public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
+                @Override
+                public void configure(HttpSecurity builder) throws Exception {
+                        AuthenticationManager authenticationManager = builder
+                                        .getSharedObject(AuthenticationManager.class);
+                        CustomAuthenticationFilter authenticationFilter = new CustomAuthenticationFilter(
+                                        authenticationManager);
+                        authenticationFilter.setFilterProcessesUrl("/api/user/login");
+                        builder
+                                        .addFilter(authenticationFilter)
+                                        .addFilterBefore(new CustomAuthorizationFilter(userRepo),
+                                                        UsernamePasswordAuthenticationFilter.class);
+                }
+        }
 }

@@ -38,9 +38,10 @@ import INTJ from '../image/mbti/profile/INTJ.png';
 import ISFJ from '../image/mbti/profile/ISFJ.png';
 import ESFP from '../image/mbti/profile/ESFP.png';
 
-const AiGreeting = () => {
+const AiGreeting = ({option}) => {
     const dispatch = useDispatch();
     const router = useRouter();
+    
     const user = useSelector(state => state.auth.user);
     const userInfo = useSelector(state => state.matchingUser.matchingUser);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
@@ -103,6 +104,14 @@ const AiGreeting = () => {
     const handleMatching = () => {
         dispatch(change_status_info(!status));
         setStatus(!status);
+    }
+
+    const handleShowMoreBtn = () => {
+        if(option == '여럿이서 먹어요') {
+            router.push('/showAllGroupLists');
+        } else if(option == '둘이 먹어요') {
+            router.push('/showAllTwoLists');
+        }
     }
 
     const IOSSwitch = styled((props) => (
@@ -169,10 +178,6 @@ const AiGreeting = () => {
             query: { src : '스꾸챗프로필설정', }
         })
     }
-  
-    const handleShowMoreBtn = () => {
-        console.log('전체보기 버튼 클릭');
-    };
     
     return (
         <ThemeProvider theme={theme}>

@@ -58,6 +58,8 @@ const Friends = () => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [isLogin, setIsLogin] = useState(false);
 
+    const [selectedPersonId, setSelectedPersonId] = useState(null);
+    
     useEffect(() => {
         if (isAuthenticated) {
             dispatch(load_request_id(([result, message]) => {
@@ -68,26 +70,25 @@ const Friends = () => {
         }
     }, [isAuthenticated]);
 
-    const [open, setOpen] = useState(false);
-    const [selectedPersonId, setSelectedPersonId] = useState(null);
+    // const [open, setOpen] = useState(false);
 
-    const [isPopupMessageOpen, setIsPopupMessageOpen] = useState(false);
-    const [popupMessage, setPopupMessage] = useState('');
+    // const [isPopupMessageOpen, setIsPopupMessageOpen] = useState(false);
+    // const [popupMessage, setPopupMessage] = useState('');
 
-    const handleOpen = (id) => {
-        setOpen(true);
-        setSelectedPersonId(id);
-    }
-    const handleClose = () => {
-        setOpen(false);
-    }
-    const handleSubmit = (id) => {
-        setOpen(false);
-        dispatch(request_chat(id));
+    // const handleOpen = (id) => {
+    //     setOpen(true);
+    //     setSelectedPersonId(id);
+    // }
+    // const handleClose = () => {
+    //     setOpen(false);
+    // }
+    // const handleSubmit = (id) => {
+    //     setOpen(false);
+    //     dispatch(request_chat(id));
 
-        setPopupMessage('신청이 완료되었습니다!');
-        setIsPopupMessageOpen(true);
-    }
+    //     setPopupMessage('신청이 완료되었습니다!');
+    //     setIsPopupMessageOpen(true);
+    // }
     
     const handleSettingOpen = () => {
         if (isAuthenticated) {
@@ -101,7 +102,7 @@ const Friends = () => {
     }
 
     const handleFriendClick = (friendId) => {
-        router.push(`/clickProfile?id=${friendId}`);
+        router.push(`/showFriendProfile?id=${friendId}`);
     };
 
     return (
@@ -109,7 +110,7 @@ const Friends = () => {
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
             { candidate ? 
             candidate.map((person, index) => (
-            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '20px', flexShrink: 0, mr: '19px', mb: '21px'}}>
+            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '21px'}}>
                 <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                     {displayMBTI(person.mbti, 90, 90)}
                     <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
@@ -130,12 +131,12 @@ const Friends = () => {
                         </Grid>
                     </Grid>
                     <Grid item sx={{display: 'flex', p: '10px 0', m: '10px 0', gap: '4px'}}>
-                        <Grid item sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '4px 12px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
+                        <Grid item sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
                             {person.mbti}
                         </Grid>
                         {(person.keywords) != null ?
                             ((person.keywords).slice(0, 2).map((interest, index)=> (
-                                <Grid item key={index} sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '4px 12px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
+                                <Grid item key={index} sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
                                     {interest}
                                 </Grid>
                             )))
@@ -188,7 +189,7 @@ const Friends = () => {
                                 disableElevation
                                 disableTouchRipple
                                 key="apply-button"
-                                onClick={() => handleOpen(person.id)}
+                                onClick={() => router.push('/enrollOpenChat', { type: 'friend'})}
                                 sx={{
                                     color: '#FFAC0B',
                                     fontSize: '14px',
@@ -201,7 +202,9 @@ const Friends = () => {
                             </Button>
                         )}
                     </Grid>
-                    <CustomPopup
+
+                    {/* 팝업 없이 바로 연결 */}
+                    {/* <CustomPopup
                         open={open}
                         onClose={handleClose}
                         content={`밥약 신청을 하시겠어요?`}
@@ -217,7 +220,7 @@ const Friends = () => {
                         open={isPopupMessageOpen}
                         onClose={() => setIsPopupMessageOpen(false)}
                         content={popupMessage}
-                    />
+                    /> */}
                 </Grid>
             </Card> 
             )) 
@@ -225,7 +228,7 @@ const Friends = () => {
             <>
                 { dummyProfiles.length !== 0 &&
                     dummyProfiles.map((person, index) => (
-                    <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '15px', flexShrink: 0, mr: '19px', mb: '21px'}}>
+                    <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '21px'}}>
                         <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                             <Image src={noCharacter} width={80} height={80} placeholder="blur" layout='fixed' />
                             <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>

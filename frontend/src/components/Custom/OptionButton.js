@@ -9,7 +9,7 @@ const OptionButton = ({ options, selectedOption, handleButtonClick }) => {
         <Button
           key={option.value}
           variant='outlined'
-          sx={{
+          style={{
             flex: 1,
             fontSize: 16,
             fontWeight: selectedOption === option.value ? 700 : 500,

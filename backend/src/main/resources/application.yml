@@ -34,3 +34,4 @@ spring:
       - chat.yml
       - push.yml
       - debezium.yml
+      - sms.yml
