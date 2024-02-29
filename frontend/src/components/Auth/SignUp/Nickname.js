@@ -5,20 +5,17 @@ import check from '../../../image/check_circle.png';
 import Image from 'next/image';
 import { useRouter } from "next/router";
 import { check_nickname } from "../../../actions/auth/auth";
+import { register } from '../../../actions/auth/auth';
 import { useDispatch } from 'react-redux';
 import { Loading } from '../../Loading';
 
 const SignUpNickname = (props) => {
     const router = useRouter();
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [validNickname, setValidNickname] = useState(null);
     const [nicknameMsg, setNicknameMsg] = useState("");
     const [validSId, setValidSId] = useState(null);
-    const [phone1, setPhone1] = useState("010");
-    const [phone2, setPhone2] = useState("");
-    const [phone3, setPhone3] = useState("");
-    const [validPhone2, setValidPhone2] = useState(null);
-    const [validPhone3, setValidPhone3] = useState(null);
 
     const majorList = [
       '경영학과', '글로벌경영학과', '앙트레프레너십연계전공', '경제학과','국제통상학전공', '소비자학과',
@@ -48,11 +45,19 @@ const SignUpNickname = (props) => {
         return;
       }
       check_nickname(props.data.nickname, ([result, message]) => {
-        setLoading(false);
+        //setLoading(false);
         setValidNickname(result);
         if (result) {
           if (next) {
-            props.handleNextStep();
+            //props.handleNextStep();
+            dispatch(register(props.data, ([result, message]) => {
+              setLoading(false);
+              if (result) {
+                props.handleNextStep();
+              } else {
+                console.log(message);
+              }
+            }))
           }
         } else {
           if (typeof(message) == 'string') {
@@ -62,12 +67,20 @@ const SignUpNickname = (props) => {
       })
     }
 
+    const tempSignUp = () => {
+      dispatch(register(props.data, ([result, message]) => {
+        setLoading(false);
+        if (result) {
+          console.log(message);
+          props.handleNextStep();
+        } else {
+          console.log(message);
+        }
+      }))
+    }
+
     const handleNextStep = () => {
       setLoading(true);
-
-      if (phone1 && validPhone2 && validPhone3) {
-        props.setData({...props.data, phone: phone1+phone2+phone3})
-      }
       checkNickname(true);
     }
 
@@ -97,49 +110,12 @@ const SignUpNickname = (props) => {
       validateSId(sId);
     } 
 
-    const validatePhone2 = (p2) => {
-      let isNum = /^\d+$/.test(p2)
-      setPhone2(p2)
-      if (p2 == "") {
-        setValidPhone2(null)
-      }
-      else if (!isNum || p2.length !== 4) {
-        setValidPhone2(false)
-      } else {
-        setValidPhone2(true)
-      }
-    }
-    const validatePhone3 = (p3) => {
-      let isNum = /^\d+$/.test(p3)
-      setPhone3(p3)
-      if (p3 == "") {
-        setValidPhone3(null)
-      }
-      else if (!isNum || p3.length !== 4) {
-        setValidPhone3(false)
-      } else {
-        setValidPhone3(true)
-      }
-    }
 
-    // 숫자 네 자리 넘는지, 문자 포함되어 있는지 검사
-    const handlePhone2Change = (e) => {
-      let p2 = e.target.value
-      validatePhone2(p2);
-    }
-    const handlePhone3Change = (e) => {
-      let p3 = e.target.value
-      validatePhone3(p3);
-    }
 
     useEffect(() => {
       if (props.data.nickname !== '') {
         checkNickname(false);
         validateSId(props.data.student_id);
-        if (props.data.phone.length === 11) {
-          validatePhone2(props.data.phone.slice(3, 7));
-          validatePhone3(props.data.phone.slice(7, 11));
-        } 
       }
     }, [])
 
@@ -274,7 +250,7 @@ const SignUpNickname = (props) => {
         
         </form>
         <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff'}}>
-        {(props.data.nickname != '' && validNickname != false && majorList.indexOf(props.data.major) != -1 && validSId) && validPhone2 != false && validPhone3 != false ?
+        {(props.data.nickname != '' && validNickname != false && majorList.indexOf(props.data.major) != -1 && validSId) ?
                     <Button variant="contained" onClick={handleNextStep} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
                         다음
                     </Button>

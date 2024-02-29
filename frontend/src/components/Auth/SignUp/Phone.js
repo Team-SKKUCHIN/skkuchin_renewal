@@ -19,12 +19,16 @@ const SignUpPhone = (props) => {
     const [phone3, setPhone3] = useState("");
     const [validPhone2, setValidPhone2] = useState(null);
     const [validPhone3, setValidPhone3] = useState(null);
+    const [showBelow, setShowBelow] = useState(false);
     const phoneNumList = ['010']
 
     const handlePrevStep = () => {
       props.handlePrevStep();
     }
 
+    const handleSendBtn = () => {
+      setShowBelow(true);
+    }
 
     const handleNextStep = () => {
       setLoading(true);
@@ -177,7 +181,7 @@ const SignUpPhone = (props) => {
         </div>
 
         {validPhone2 && validPhone3 ?
-                    <Button variant="contained" onClick={handleNextStep} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+                    <Button variant="contained" onClick={handleSendBtn} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
                         인증문자 받기
                     </Button>
                 :

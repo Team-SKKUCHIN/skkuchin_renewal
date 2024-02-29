@@ -254,7 +254,7 @@ const myPage = () => {
         {user && <div style={{marginTop: '30px'}}>
             {/* 상단 회원 정보 */}
             <div style={{display: 'flex', gridTemplateColumns: '72px 1fr 38px', alignItems: 'center', margin: '0 10px 15px 0px'}}>
-                <div style={{width: '80px', height:'80px', margin:'0 15px', backgroundColor:'#FFF8D9', border:'0px solid transparent', borderRadius:'10px'}}>
+                <div style={{width: '80px', height:'80px', margin:'0 24px', backgroundColor:'#FFF8D9', border:'0px solid transparent', borderRadius:'10px'}}>
                     {displayProfile(user.image, 80, 80)}
                 </div>
                 <div style={{display: 'flex', flexDirection: 'column', marginLeft: '0px'}}>
@@ -269,33 +269,33 @@ const myPage = () => {
             </div>
             <div style={{height:'5px',backgroundColor:"white"}}></div>
             
-            {/* 사용자 설정 */}
-            <Container style={{display: 'grid', padding: '0 15px', marginTop: '30px'}}>
-                <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '15px'}}>사용자 설정</Typography>
+            {/* 내 정보 */}
+            <Container style={{display: 'grid', padding: '0 24px', marginTop: '30px'}}>
+                <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '15px'}}>내 정보</Typography>
                 <div onClick={() => router.push('/editNickname')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>내 정보 &nbsp; &nbsp; &nbsp;</Button></div>
                 <div onClick={() => router.push('/changePassword')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>비밀번호 재설정</Button></div>
                 <div onClick={() => router.push('/editProfileImage')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>프로필 이미지 변경</Button></div>
             </Container>
-            <div style={{height:'1px', backgroundColor:'#E2E2E2', margin:'0 10px'}}></div>
+            <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'0 24px'}}></div>
 
             {/* 커뮤니티 */}
-            <Container style={{display: 'grid', padding: '0 15px', marginTop: '30px'}}>
+            <Container style={{display: 'grid', padding: '0 24px', marginTop: '30px'}}>
                 <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '15px'}}>커뮤니티</Typography>
                 <div onClick={() => router.push('/myPost')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>내 게시글 &nbsp; &nbsp;</Button></div>
                 <div onClick={() => router.push('/myFavPost')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>좋아요 누른 게시글</Button></div>
             </Container>
-            <div style={{height:'1px', backgroundColor:'#E2E2E2', margin:'0 10px'}}></div>
+            <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'0 24px'}}></div>
 
             {/* 매칭 프로필 */}
-            <Container style={{display: 'grid', padding: '0 15px', marginTop: '30px'}}>
+            <Container style={{display: 'grid', padding: '0 24px', marginTop: '30px'}}>
                 <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '15px'}}>밥약 매칭 설정</Typography>
                 <div onClick={() => router.push('/changeProfile')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>매칭 프로필 변경</Button></div>
                 <div style={{display:'flex'}}><Typography variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>매칭 ON/OFF</Typography><CustomSwitch defaultChecked/></div>
             </Container>
-            <div style={{height:'1px', backgroundColor:'#E2E2E2', margin:'0 10px'}}></div>
+            <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'0 24px'}}></div>
 
             {/* 알림 설정 */}
-            <Container style={{padding: '0 15px', marginTop: '25px'}}>
+            <Container style={{padding: '0 24px', marginTop: '25px'}}>
                 <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '15px'}}>알림 설정</Typography>
                 {/* <div onClick={() => router.push('/enrollSMS')} style={{display: 'grid', gridTemplateColumns: '1fr 49px', alignItems: 'start', marginBottom: '20px'}}>
                     <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>채팅 알림</Typography>
@@ -341,10 +341,10 @@ const myPage = () => {
                 
 
             </Container>
-            <div style={{height:'1px', backgroundColor:'#E2E2E2', margin:'0 10px'}}></div>
+            <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'0 24px'}}></div>
 
             {/* 기타 */}
-            <Container style={{display: 'grid', padding: '0 15px', marginTop: '25px'}}>
+            <Container style={{display: 'grid', padding: '0 24px', marginTop: '25px'}}>
                 <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '25px'}}>기타</Typography>
                 <div onClick={() => router.push('/requestPlace')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>식당 추가 요청</Button></div>
                 <Typography onClick={() => window.open('http://pf.kakao.com/_KmNnG', '_blank')} style={{fontSize: '14px', fontWeight: '400',marginBottom: '5px', color: '#3C3C3C',}}>문의하기</Typography>
