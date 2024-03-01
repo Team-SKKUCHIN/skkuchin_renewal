@@ -18,10 +18,33 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MatchingUserService {
-
     private final UserKeywordRepo userKeywordRepo;
     private final UserRepo userRepo;
     private final KeywordRepo keywordRepo;
+
+    @Transactional
+    public List<MatchingUserDto.Response> getUserProfileListAsNonUser() {
+        return userRepo.findAll()
+            .stream()
+            .filter(user -> user.getMatching() != null && user.getMatching() == true)
+            .map(user -> {
+                List<UserKeyword> keywords = userKeywordRepo.findByUser(user);
+                return new MatchingUserDto.Response(user, keywords);
+            })
+            .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<MatchingUserDto.Response> getUserProfileListAsUser(Long userId) {
+        return userRepo.findAll()
+            .stream()
+            .filter(user -> user.getMatching() != null && user.getMatching() == true && user.getId() != userId)
+            .map(user -> {
+                List<UserKeyword> keywords = userKeywordRepo.findByUser(user);
+                return new MatchingUserDto.Response(user, keywords);
+            })
+            .collect(Collectors.toList());   
+    }
 
     @Transactional
     public void addInfo(Long userId, MatchingUserDto.Request dto) {

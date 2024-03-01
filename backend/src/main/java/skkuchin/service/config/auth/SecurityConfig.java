@@ -33,6 +33,7 @@ public class SecurityConfig {
                         "/api/menu/**",
                         "/api/notice/**",
                         "/api/rank/**",
+                        "/api/matching/profiles",
                         "/api/matching/user/new/**",
                         "/api/user/password/reset",
                         "/api/email/**",

@@ -4,6 +4,7 @@ import lombok.*;
 import skkuchin.service.domain.User.AppUser;
 import skkuchin.service.domain.User.Major;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,9 +63,9 @@ public class GroupProfile {
     @Column(name = "friend3_introduction", nullable = false)
     private String friend3Introduction;
 
-    private LocalDateTime meetingStartDate;
+    private LocalDate meetingStartDate;
 
-    private LocalDateTime meetingEndDate;
+    private LocalDate meetingEndDate;
 
     @Enumerated(EnumType.STRING)
     private ProfileStatus status;
