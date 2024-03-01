@@ -23,6 +23,7 @@ import skkuchin.service.exception.CustomRuntimeException;
 import skkuchin.service.exception.CustomValidationApiException;
 import skkuchin.service.repo.PersonalChatRequestRepo;
 import skkuchin.service.repo.SmsRepo;
+import skkuchin.service.repo.UserKeywordRepo;
 import skkuchin.service.repo.UserRepo;
 import skkuchin.service.util.StringUtils;
 
@@ -32,6 +33,7 @@ public class PersonalChatRequestService {
     private static final Pattern LINK_PATTERN = Pattern.compile("https://open\\.kakao\\.com/o/[a-zA-Z0-9]+");
     private final PersonalChatRequestRepo personalChatRequestRepo;
     private final UserRepo userRepo;
+    private final UserKeywordRepo userKeywordRepo;
     private final SmsRepo smsRepo;
     private final SmsService smsService;
 
@@ -46,12 +48,14 @@ public class PersonalChatRequestService {
         List<PersonalChatRequestDto.ConfirmedResponse> allConfirmedRequests = new ArrayList<>();
 
         for (PersonalChatRequest request : personalChatRequests) {
-            List<String> senderKeywordNames = request.getSender().getUserKeywords().stream()
+            List<String> senderKeywordNames = userKeywordRepo.findByUser(request.getSender()).stream()
                     .map(userKeyword -> userKeyword.getKeyword().getName())
+                    .limit(2)
                     .collect(Collectors.toList());
 
-            List<String> receiverKeywordNames = request.getReceiver().getUserKeywords().stream()
+            List<String> receiverKeywordNames = userKeywordRepo.findByUser(request.getReceiver()).stream()
                     .map(userKeyword -> userKeyword.getKeyword().getName())
+                    .limit(2)
                     .collect(Collectors.toList());
 
             if (request.getStatus() == ResponseType.HOLD) {
@@ -87,22 +91,18 @@ public class PersonalChatRequestService {
     public void createPersonalChatRequest(Long userId, PersonalChatRequestDto.PostRequest dto) {
         AppUser receiver = userRepo.findById(dto.getReceiverId())
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 유저입니다"));
-        AppUser sender = userRepo.findById(dto.getSenderId())
+        AppUser sender = userRepo.findById(userId)
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 유저입니다"));
 
-        List<Sms> senderSmsList = smsRepo.findByUser(sender);
         List<Sms> receiverSmsList = smsRepo.findByUser(receiver);
 
-        if (senderSmsList.isEmpty()) {
-            throw new CustomRuntimeException("요청자의 전화번호가 등록되지 않았습니다");
-        }
         if (receiver.getMatching() == null || sender.getMatching() == null) {
             throw new CustomRuntimeException("매칭 프로필이 등록되지 않았습니다");
         }
         if (!receiver.getMatching() || !sender.getMatching()) {
             throw new CustomRuntimeException("매칭 활성화 버튼이 꺼져있습니다");
         }
-        if (receiver.getId() == userId || sender.getId() != userId) {
+        if (receiver.getId() == userId) {
             throw new CustomRuntimeException("비정상적인 접근입니다");
         }
         if (!LINK_PATTERN.matcher(dto.getLink()).matches()) {

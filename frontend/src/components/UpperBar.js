@@ -31,8 +31,8 @@ const UpperBar = () => {
 
     useEffect(() => {
         const currentPathname = window.location.pathname;
-        if (currentPathname === "/message") {
-            setSelected("스꾸챗");
+        if (currentPathname === "/showRequests") {
+            setSelected("신청 현황");
         } else if ( currentPathname === "/mealPromise") {
             setSelected("밥약");
         } else if (currentPathname === "/myPage"){
@@ -99,20 +99,20 @@ const UpperBar = () => {
                 </span>
                 </a>
             </Link>
-            <Link href="/message">
+            <Link href="/showRequests">
                 <a
                     style={{
                         display: "flex",
                         fontSize: "11px",
                         fontWeight: 700,
-                        color: selected === "스꾸챗" ? "#FFCE00" : "#505050",
+                        color: selected === "신청 현황" ? "#FFCE00" : "#505050",
                         textDecoration: "none",
-                        borderBottom: selected === "스꾸챗" ? "2px solid #FFCE00" : "none"
+                        borderBottom: selected === "신청 현황" ? "2px solid #FFCE00" : "none"
                 }}
-                onClick={() => setSelected("스꾸챗")}
+                onClick={() => setSelected("신청 현황")}
                 >
                     <span style={{padding:"0 0 2px 0"}}>
-                        스꾸챗
+                        신청 현황
                     </span>
                     {chatAlarm && <div
                         style={{

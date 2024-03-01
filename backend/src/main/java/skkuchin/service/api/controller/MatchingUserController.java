@@ -18,6 +18,7 @@ import skkuchin.service.service.MatchingUserService;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -26,6 +27,17 @@ import java.util.Objects;
 @RequestMapping("/api/matching")
 public class MatchingUserController {
     private final MatchingUserService matchingUserService;
+
+    @GetMapping("/profiles")
+    public ResponseEntity<?> getUserProfileList(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        List<MatchingUserDto.Response> userProfiles;
+        if (principalDetails != null && principalDetails.getUser() != null) {
+            userProfiles = matchingUserService.getUserProfileListAsUser(principalDetails.getUser().getId());
+        } else {
+            userProfiles = matchingUserService.getUserProfileListAsNonUser();
+        }
+        return new ResponseEntity<>(new CMRespDto<>(1, "전체 개인 프로필 조회 완료", userProfiles), HttpStatus.OK);
+    }
 
     @PostMapping("/user")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")

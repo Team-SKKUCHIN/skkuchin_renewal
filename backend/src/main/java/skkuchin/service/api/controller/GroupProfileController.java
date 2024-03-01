@@ -97,4 +97,11 @@ public class GroupProfileController {
         groupProfileService.inactivateGroupProfile(principalDetails.getUser().getId(), profileId);
         return new ResponseEntity<>(new CMRespDto<>(1, "그룹 프로필 비활성화 완료", true), HttpStatus.OK);
     }
+
+    @GetMapping("/random-name")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    public ResponseEntity<?> getRandomName(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        String randomName = groupProfileService.getRandomName(principalDetails.getUser());
+        return new ResponseEntity<>(new CMRespDto<>(1, "랜덤 그룹명 조회 완료", randomName), HttpStatus.OK);
+    }    
 }
