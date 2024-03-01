@@ -11,12 +11,14 @@ import logo from '../image/main_logo.png'
 import check from '../image/check_circle.png';
 import uncheck from '../image/uncheck.png';
 import { Loading } from '../components/Loading';
+import Popup from '../components/Custom/Popup';
 
 const LoginPage = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const user = useSelector(state => state.auth.user);
 
     const [loading, setLoading] = useState(false);
     const [rememberUsername, setRememberUsername] = useState(false);
@@ -25,6 +27,11 @@ const LoginPage = () => {
     const [isClicked, setIsClicked] = useState(false);
     const [idFocused, setIdFocused] = useState(false);
     const [pwFocused, setPwFocused] = useState(false);
+
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupType, setPopupType] = useState('question');
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupDescription, setPopupDescription] = useState('');
 
     const [formData, setFormData] = useState({
         username: '',
@@ -70,9 +77,16 @@ const LoginPage = () => {
         }));
     };
 
-    if (typeof window !== 'undefined' && isAuthenticated){
+    if (typeof window !== 'undefined' && isAuthenticated && user.phone_verification){
         router.push('/');
     } 
+
+    const gotoVerification = () => {
+        router.push({
+            pathname: '/verification',
+            query: {username: username}
+        });
+    }
 
     useEffect(() => {
         setRemainHeight(window.innerHeight - 490 + "px");
@@ -88,6 +102,14 @@ const LoginPage = () => {
         setRemainHeight(window.innerHeight - 480 + "px");
         }
     }, [window.innerHeight])
+
+    useEffect(() => {
+        if (username && user != null && !user.phone_verification) {
+            setPopupMessage(`밥약 서비스 이용을 위해선\n휴대폰 본인인증이 필요해요.\n안전한 서비스 이용을 위해 인증해주세요.`);
+            setPopupType('verification');
+            setPopupOpen(true);
+        }
+    }, [user])
 
     return(
         <ThemeProvider theme={theme}>
@@ -131,7 +153,7 @@ const LoginPage = () => {
                                         backgroundColor: pwFocused || password ? '#FFFCE4' : 'white'}}
                                     placeholderStyle={{color: 'red'}}
                                 />
-                                <div style={{alignSelf: 'start', justifySelf: 'start'}}><Typography sx={{height: '15px', fontSize: '9px', fontWeight: '500', color: '#FF0000', mt: '6px'}}>{error}</Typography></div>
+                                <div style={{alignSelf: 'start', justifySelf: 'start'}}><Typography sx={{height: '15px', fontSize: '12px', fontWeight: '500', color: '#F47806', mt: '6px'}}>{error}</Typography></div>
                             </div>
                             <div style={{display: 'flex', margin: '10px 24px', marginTop: '12px'}}>
                                 {rememberUsername ? 
@@ -148,12 +170,12 @@ const LoginPage = () => {
                         </form>
                     </div>
 
-                <div style={{fontSize: '12px', color: '#505050', marginTop: '10px', marginBottom: `calc(${remainHeight} * 0.42)`, marginBottom: '25px', marginLeft: '10px'}}>
-                    <span onClick={() => router.push('/')}>홈 화면</span>
+                <div style={{fontSize: '12px', color: '#505050', marginTop: '10px', marginBottom: `calc(${remainHeight} * 0.42)`, marginBottom: '25px'}}>
+                    <span onClick={() => router.push('/findUsername')}>아이디 찾기</span>
+                    <span style={{padding: '0 13px'}}>|</span>
+                    <span onClick={() => router.push('/resetPassword')}>비밀번호 재설정</span>
                     <span style={{padding: '0 13px'}}>|</span>
                     <span onClick={() => router.push('/register')}>회원가입</span>
-                    <span style={{padding: '0 13px'}}>|</span>
-                    <span onClick={() => router.push('/resetPassword')}>비밀번호 초기화</span>
                 </div>
                     </Box>
                 </Container>
@@ -164,6 +186,15 @@ const LoginPage = () => {
             </div>
             </div>
             {loading && <Loading />}
+
+        <Popup 
+            open={popupOpen}
+            handleClose={() => setPopupOpen(false)}
+            type={popupType}
+            message={popupMessage}
+            description={popupDescription}
+            onConfirm={gotoVerification}
+        />
         </ThemeProvider>
     )
 };

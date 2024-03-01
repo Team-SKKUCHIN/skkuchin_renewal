@@ -5,8 +5,9 @@ import Image from 'next/image';
 import { useRouter } from "next/router";
 import { Loading } from '../../Loading';
 import { enroll_phone, verify_phone } from '../../../actions/sms/sms';
+import Popup from '../../Custom/Popup';
 
-const SignUpPhone = (props) => {
+const VerificationPhone = (props) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [phone1, setPhone1] = useState("010");
@@ -19,24 +20,50 @@ const SignUpPhone = (props) => {
     const [isValid, setIsValid] = useState(null);
     const phoneNumList = ['010']
 
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupType, setPopupType] = useState('question');
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupDescription, setPopupDescription] = useState('');
+
     const handlePrevStep = () => {
-      props.handlePrevStep();
+      router.push('/login');
     }
 
-    const handleSendBtn = () => {
-      setLoading(true);
-      let data = {
-        username: props.data.username,
-        phoneNumber: phone1+phone2+phone3 
-      }
-      enroll_phone(data, ([result, message]) => {
-        setLoading(false);
-        if (result) {
-          setShowBelow(true);
-        } else {
-          console.log(message);
+    const handleSendBtn = (resend) => {
+        setLoading(true);
+        let data = {
+            username: props.data.username,
+            phoneNumber: phone1+phone2+phone3 
         }
-      })
+        enroll_phone(data, ([result, message]) => {
+            setLoading(false);
+            if (result) {
+                setShowBelow(true);
+            } else {
+            console.log(message);
+            setPopupMessage(message);
+            setPopupType('error');
+            setPopupOpen(true);
+            }
+        })
+    }
+
+    const handleResendBtn = () => {
+        setLoading(true);
+        let data = {
+            username: props.data.username,
+            phoneNumber: phone1+phone2+phone3 
+        }
+        enroll_phone(data, ([result, message]) => {
+            setLoading(false);
+            if (result) {
+              setPopupMessage('인증 문자를 재전송했습니다');
+              setPopupType('error');
+              setPopupOpen(true);
+            } else {
+            console.log(message);
+            }
+        })
     }
 
     const handleVerifyBtn = () => {
@@ -102,14 +129,15 @@ const SignUpPhone = (props) => {
     return (
       <div>
         <Container style={{padding:'0px', alignItems: 'center', marginTop: '45px'}}>
-                        <Grid container>
-                            <Grid item style={{margin:'0px 0px 0px 24px', visibility:'none'}}>
-                                <Image src={back} width={11} height={18} name='back' onClick={handlePrevStep} layout='fixed' />
-                            </Grid>
-                            <Grid item style={{marginLeft:'35%'}}>
-                                {/* <Typography style={{margin:'0px 0px 0px 0px', textAlign:'center',fontSize:'18px', fontWeight: '700'}}>회원가입</Typography> */}
-                            </Grid>
-                        </Grid>
+                        <div style={{margin: '0 10px 0 24px', display: 'flex', justifyContent: 'space-between'}}>
+                        <Image src={back} width={11} height={18} name='back' onClick={handlePrevStep} layout='fixed' />
+                        {
+                            isValid ? 
+                            <Button onClick={handleNextStep} style={{color: '#FFCE00', padding: 0, fontSize: '16px', fontWeight: 'bolder'}}>다음</Button>
+                            :
+                            <Button style={{color: '#BABABA', padding: 0, fontSize: '16px', fontWeight: 'bolder'}}>다음</Button>
+                        }
+                        </div>
         </Container>
       <Box
         sx={{
@@ -121,12 +149,6 @@ const SignUpPhone = (props) => {
     >
       <form style={{ width: '100%'}}>
         <div style={{margin: '0 24px 29px'}}>
-        <Grid container>
-                <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
-                <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
-                <Typography style={{fontSize: '26px', color: '#FFCE00', marginRight: '7px'}}>&bull;</Typography>
-                <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
-                </Grid>
                 <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C'}}>휴대폰 본인인증</Typography>
                 <Typography style={{marginBottom: '30px', fontWeight: 'bold', fontSize: '12px', color: '#777777'}}>등록하신 전화번호로 밥약 확정 알림이 발송될 예정이에요.</Typography>
 
@@ -198,14 +220,14 @@ const SignUpPhone = (props) => {
 
         {!showBelow ? 
           (validPhone2 && validPhone3 ?
-                    <Button variant="contained" onClick={handleSendBtn} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+                    <Button variant="contained" onClick={() => handleSendBtn(false)} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
                         인증문자 받기
                     </Button>
                 :
                     <Button variant="contained" disabled style={{margin: '0 24px', width: '88%', backgroundColor: "#E2E2E2", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
                         인증문자 받기
                     </Button>)
-          : <Button variant="contained" onClick={handleSendBtn} style={{margin: '0 24px', width: '88%', backgroundColor: "#BABABA", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+          : <Button variant="contained" onClick={() => handleResendBtn()} style={{margin: '0 24px', width: '88%', backgroundColor: "#BABABA", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
             인증문자 다시 받기
           </Button>
             }
@@ -255,25 +277,17 @@ const SignUpPhone = (props) => {
             </div>
             }
         </form>
-        
-        <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff'}}>
-        {isValid ?
-                    <Button variant="contained" onClick={handleNextStep} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                        다음
-                    </Button>
-                :
-                    <Button variant="contained" disabled style={{margin: '0 24px', width: '88%', backgroundColor: "#E2E2E2", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                        다음
-                    </Button>
-            }
-        <div style={{display: 'flex', justifyItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '500', padding: '31px 0', color: '#505050'}}>
-                <span style={{alignSelf: 'center'}}>이미 회원이신가요?</span><Button onClick={() => router.push('/login')} variant="text" style={{alignSelf: 'start', justifySelf: 'start', fontSize: '12px', color: '#FFCE00', padding: 0, fontWeight: '700'}}>로그인</Button>
-        </div>
-        </div>
-      </Box>
-      {loading && <Loading />}
+        </Box>
+        {loading && <Loading />}
+        <Popup 
+            open={popupOpen}
+            handleClose={() => setPopupOpen(false)}
+            type={popupType}
+            message={popupMessage}
+            description={popupDescription}
+        />
       </div>
     );
-  };
+}
 
-  export default SignUpPhone;
+export default VerificationPhone;

@@ -222,7 +222,7 @@ const SignUpMatchInfo = (props) => {
 
     const handleNextStep = () => {
         let data = props.data;
-        dispatch(register(data, ([result, message]) => {
+        /*dispatch(register(data, ([result, message]) => {
             if (result) {
                 dispatch(add_new_matching_info(data.username, gender, keyword, introduction, mbti, ([result, message]) => {
                     if (result) {
@@ -231,6 +231,13 @@ const SignUpMatchInfo = (props) => {
                         console.log(result, message)
                     }
                 }))
+            } else {
+                console.log(result, message)
+            }
+        }))*/
+        dispatch(add_new_matching_info(data.username, gender, keyword, introduction, mbti, ([result, message]) => {
+            if (result) {
+                props.handleNextStep();
             } else {
                 console.log(result, message)
             }
@@ -264,7 +271,7 @@ const SignUpMatchInfo = (props) => {
     }, [mbtiChoose, food, study, art, sports]);
 
     useEffect(()=>{
-        if(gender && keyword.length >0 && introduction != '' && mbti){
+        if(gender && keyword.length >=3 && introduction != '' && mbti){
     
             setCondition(true);
         } else {
@@ -286,7 +293,7 @@ const SignUpMatchInfo = (props) => {
     </Container>
     <Box
         sx={{
-        margin: '35px 0px 15px 0',
+        margin: '35px 0px 170px 0',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -380,7 +387,7 @@ const SignUpMatchInfo = (props) => {
         </div>
     </form>
 
-    <div style={{width: '100%'}}>
+    {/* <div style={{width: '100%'}}>
             <div style={{margin: '60px 24px 12px'}}>
                 {condition?
                         <Button variant="contained" onClick={handleNextStep} style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
@@ -392,13 +399,17 @@ const SignUpMatchInfo = (props) => {
                         </Button>
                 }
             </div>
-            </div>
+            </div> */}
     </Box>
 
     <div style={{width: '100%', position: 'fixed', bottom: 0, backgroundColor: '#fff', paddingBottom: '35px'}}>
             <div style={{margin: '10px 24px 20px', display: 'flex', width: 'calc(100% - 48px)', justifyContent: 'space-between'}}>
-                <Button variant="contained" style={{width: '100%', backgroundColor: '#E2E2E2', color: '#fff', borderRadius: '8px', height: '56px', boxShadow: 'none', fontWeight: '900', marginRight: '5px'}}>건너뛰기</Button>
-                <Button variant="contained" style={{width: '100%', backgroundColor: '#FFCE00', color: '#fff', borderRadius: '8px', height: '56px', boxShadow: 'none', fontWeight: '900', marginLeft: '5px'}}>다음</Button>
+                {/* <Button variant="contained" style={{width: '100%', backgroundColor: '#E2E2E2', color: '#fff', borderRadius: '8px', height: '56px', boxShadow: 'none', fontWeight: '900', marginRight: '5px'}}>건너뛰기</Button> */}
+                {condition ? 
+                    <Button variant="contained" onClick={handleNextStep} style={{width: '100%', backgroundColor: '#FFCE00', color: '#fff', borderRadius: '8px', height: '56px', boxShadow: 'none', fontWeight: '900', marginLeft: '5px'}}>다음</Button>
+                    :
+                    <Button variant="contained" style={{width: '100%', backgroundColor: '#E2E2E2', color: '#fff', borderRadius: '8px', height: '56px', boxShadow: 'none', fontWeight: '900', marginLeft: '5px'}}>다음</Button>
+                }
             </div>
         
             <div style={{display: 'flex', flexDirection: 'column',  fontSize: '12px', fontWeight: '500', color: '#505050', textAlign: 'center'}}>

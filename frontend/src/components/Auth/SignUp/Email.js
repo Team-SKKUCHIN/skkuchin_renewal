@@ -38,8 +38,9 @@ const SignUpEmail = (props) => {
           props.setData({...props.data, email: emailId+domain});
           props.handleNextStep();
         } else {
-          setDialogMsg(message);
-          setDialogOpen(true);
+          //setDialogMsg(message);
+          console.log(message);
+          //setDialogOpen(true);
         }
       }));
     }
