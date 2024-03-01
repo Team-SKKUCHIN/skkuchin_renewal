@@ -30,10 +30,6 @@ public class PersonalChatRequestDto {
     public static class PostRequest {
         @NotNull
         @JsonProperty
-        private Long senderId;
-
-        @NotNull
-        @JsonProperty
         private Long receiverId;
 
         @NotBlank
@@ -53,10 +49,6 @@ public class PersonalChatRequestDto {
     @AllArgsConstructor
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class ReplyRequest {
-        @NotNull
-        @JsonProperty
-        private Long requestId;
-
         @NotNull
         private ResponseType status;
     }

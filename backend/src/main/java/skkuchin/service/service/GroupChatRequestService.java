@@ -65,19 +65,15 @@ public class GroupChatRequestService {
     public void createGroupChatRequest(Long userId, GroupChatRequestDto.PostRequest dto) {
         GroupProfile receiver = groupProfileRepo.findById(dto.getReceiverId())
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 그룹 프로필입니다"));
-        GroupProfile sender = groupProfileRepo.findById(dto.getSenderId())
+        GroupProfile sender = groupProfileRepo.findById(userId)
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 그룹 프로필입니다"));
 
-        List<Sms> senderSmsList = smsRepo.findByUser(sender.getFriend1());
         List<Sms> receiverSmsList = smsRepo.findByUser(sender.getFriend1());
 
-        if (senderSmsList.isEmpty()) {
-            throw new CustomRuntimeException("요청자의 전화번호가 등록되지 않았습니다");
-        }
         if (receiver.getStatus() == ProfileStatus.INACTIVE || sender.getStatus() == ProfileStatus.INACTIVE) {
             throw new CustomRuntimeException("비활성화된 프로필입니다");
         }
-        if (receiver.getFriend1().getId() == userId || sender.getFriend1().getId() != userId) {
+        if (receiver.getFriend1().getId() == userId) {
             throw new CustomRuntimeException("비정상적인 접근입니다");
         }
         if (!LINK_PATTERN.matcher(dto.getLink()).matches()) {

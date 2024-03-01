@@ -1,6 +1,6 @@
 package skkuchin.service.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -66,10 +66,10 @@ public class GroupProfileDto {
         private String friend3Introduction;
 
         @JsonProperty
-        private LocalDateTime meetingStartDate;
+        private LocalDate meetingStartDate;
 
         @JsonProperty
-        private LocalDateTime meetingEndDate;
+        private LocalDate meetingEndDate;
 
         public GroupProfile toEntity(AppUser friend1) {
             return GroupProfile.builder()
@@ -184,10 +184,10 @@ public class GroupProfileDto {
         private String friend3Introduction;
 
         @JsonProperty
-        private LocalDateTime meetingStartDate;
+        private LocalDate meetingStartDate;
 
         @JsonProperty
-        private LocalDateTime meetingEndDate;
+        private LocalDate meetingEndDate;
 
         public FullResponse(GroupProfile groupProfile) {
             this.id = groupProfile.getId();

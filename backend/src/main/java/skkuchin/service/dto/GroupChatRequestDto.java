@@ -26,10 +26,6 @@ public class GroupChatRequestDto {
     public static class PostRequest {
         @NotNull
         @JsonProperty
-        private Long senderId;
-
-        @NotNull
-        @JsonProperty
         private Long receiverId;
 
         @NotBlank
