@@ -152,6 +152,7 @@ public class UserDto {
         private Gender gender;
         private String phoneNumber;
         private boolean isAlarmOn;
+        private boolean phoneVerification;
 
         public Response(AppUser user, Sms sms) {
             if (user != null) {
@@ -179,9 +180,11 @@ public class UserDto {
             if (sms != null) {
                 this.phoneNumber = sms.getPhoneNumber();
                 this.isAlarmOn = sms.isAlarmOn();
+                this.phoneVerification = sms.isVerified();
             } else {
                 this.phoneNumber = null;
                 this.isAlarmOn = false;
+                this.phoneVerification = false;
             }
         }
 
