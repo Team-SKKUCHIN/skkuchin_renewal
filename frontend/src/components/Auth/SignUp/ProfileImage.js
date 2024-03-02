@@ -243,7 +243,7 @@ export default function SignUpProfileImage(props) {
                     </div>
             
         </Box>
-        <div style={{width: '100%', position: 'fixed', bottom: 0, backgroundColor: '#fff', paddingBottom: '30px'}}>
+        <div style={{width: '100%', position: 'fixed', bottom: '0', display: 'grid', backgroundColor: '#fff', paddingBottom: '30px', maxwidth: '420px'}}>
             <div style={{margin: '30px 24px 12px'}}>
                 {image ?
                         <Button variant="contained" onClick={handleNextStep} style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>

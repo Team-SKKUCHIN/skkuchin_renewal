@@ -7,14 +7,18 @@ import logo from '../../../image/email_enhang.png'
 import Image from 'next/image';
 import { signup_email_check, signup_email_send } from '../../../actions/email/email';
 import { Loading } from "../../Loading";
+import Popup from '../../Custom/Popup';
 
 const SignUpEmailCheck = (props) => {
     const dispatch = useDispatch();
 
     const [loading, setLoading] = useState(false);
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const [dialogMsg, setDialogMsg] = useState("");
     const [remainHeight, setRemainHeight] = useState(window.innerHeight - 456 + "px");
+
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupType, setPopupType] = useState('error');
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupDescription, setPopupDescription] = useState('');
     
     const handlePrevStep = () => {
       props.handlePrevStep();
@@ -27,13 +31,13 @@ const SignUpEmailCheck = (props) => {
           setLoading(false);
 
           if (result) {
-            setDialogMsg("이메일을 재전송했습니다.");
+            setPopupMessage("이메일을 재전송했습니다.");
           } else {
             if (typeof(message) == 'string') {
-              setDialogMsg(message);
+              setPopupMessage(message);
             }
           }
-          setDialogOpen(true);
+          setPopupOpen(true);
         }));
     }
 
@@ -50,12 +54,8 @@ const SignUpEmailCheck = (props) => {
       }));
     }
 
-    const handleDialogOpen = (e) => {
-      if(dialogOpen){
-          setDialogOpen(false);
-      } else{
-          setDialogOpen(true);
-      }
+    const handlePopupClose = () => {
+      setPopupOpen(false);
     }
 
     useEffect(() => {
@@ -119,37 +119,17 @@ const SignUpEmailCheck = (props) => {
             <Button variant="contained" onClick={handleSubmit} style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
                 확인
             </Button>
-            {/* <Link component="button" variant="body2" color="#777777" onClick={handleResend} sx={{fontSize: '12px', mt: '32px'}}>이메일 재발송</Link> */}
             </div>
       </div>
-      
-      {/* <div style={{display: 'grid', justifyItems: 'center', marginBottom: '24px'}}>
-        <Typography sx={{fontSize: '9px', fontWeight: '400', ml: '5.58px', color: '#BABABA', marginTop: '22px'}}>*이메일 인증을 완료하지 않으면 서비스 이용에 어려움이 있을 수 있습니다.</Typography>
-        <Typography sx={{fontSize: '9px', fontWeight: '400', ml: '5.58px', color: '#BABABA', mt: '8px'}}>*이메일이 도착하지 않을 경우, 스팸메일함을 확인해주세요.</Typography>
-      </div> */}
-        <Dialog open={dialogOpen} onClose={handleDialogOpen} PaperProps={{ style: { borderRadius: '10px' } }}>
-                <DialogContent style={{display: 'grid', alignItems: 'center', width:'270px', marginBottom:'0px', padding: '28px 16px 24px 16px'}}>
-                    <Typography style={{fontSize:'14px', color:'black', textAlign:'center', lineHeight:'22px'}} fontWeight={theme.typography.h1}>
-                      
-                      {(dialogMsg||'').split('\n').length > 1 ? 
-                      <>
-                      {dialogMsg.split('\n')[0]}<br/>
-                      {dialogMsg.split('\n')[1]}
-                      </>
-                      : dialogMsg}
-                    </Typography>
-                </DialogContent>
-                <DialogActions style={{justifyContent:'center', borderTop: '1px solid #E2E2E2'}}>
-                    
-                        <Button onClick={e => setDialogOpen(false)} variant="text" style={{fontSize:"14px", fontWeight: '700', color:`${theme.palette.fontColor.dark}`}}>
-                            <Typography style={{fontSize:"14px", fontWeight: '700', color:'#FC9712', marginBottom:'10px', height: '16px'}}>
-                                확인
-                            </Typography>
-                        </Button>
-
-                </DialogActions>
-        </Dialog>
+        
         {loading && <Loading />}
+        <Popup 
+            open={popupOpen}
+            handleClose={handlePopupClose}
+            type={popupType}
+            message={popupMessage}
+            description={popupDescription}
+          />
       </ThemeProvider>
     );
   };

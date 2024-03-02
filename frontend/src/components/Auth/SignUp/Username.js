@@ -8,7 +8,7 @@ import { check_username } from '../../../actions/auth/auth';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import check from '../../../image/check.png';
-import check2 from '../../../image/checkGreen.png';
+import check2 from '../../../image/checkYellow.png';
 
 const SignUpUsername = (props) => {
     const router = useRouter();
@@ -68,7 +68,7 @@ const SignUpUsername = (props) => {
     const checkPassword = (password) => {
         setContainEng(/[a-zA-Z]/.test(password));
         setContainNum(/\d/.test(password));
-        setContainSpe(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(password));
+        //setContainSpe(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(password));
         setValidLen(password.length >= 8 && password.length <= 16);
     }
 
@@ -77,11 +77,11 @@ const SignUpUsername = (props) => {
 
         let num = password.search(/[0-9]/g)
         let eng = password.search(/[a-z]/ig)
-        let spe = password.search(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g)
+        //let spe = password.search(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g)
 
         if (password.length < 8 || password.length > 16) {
             setValidPW(false);
-        } else if (num < 0 || eng < 0 || spe < 0) {
+        } else if (num < 0 || eng < 0) {
             setValidPW(false);
         } else {
             setValidPW(true);
@@ -167,7 +167,7 @@ const SignUpUsername = (props) => {
                     {validUsername == false ? <Typography sx={{fontSize: '12px', fontWeight: '500', color: '#F47806', marginTop: '6px'}}>{usernameMsg}</Typography> : <div style={{height: '24px'}}></div>}
                 </div>
 
-                <Typography style={{fontSize: '14px', marginTop: '25px', color: '#3C3C3C'}}>비밀번호</Typography>
+                <Typography style={{fontSize: '14px', marginTop: '15px', color: '#3C3C3C'}}>비밀번호</Typography>
                 <OutlinedInput
                 color='none'
                 type={showPassword ? 'text' : 'password'}
@@ -212,9 +212,9 @@ const SignUpUsername = (props) => {
                         <div style={{display:'flex'}}>
                             <Image src={check2} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>숫자 </span>
                         </div>
-                        <div style={{display:'flex'}}>
+                        {/* <div style={{display:'flex'}}>
                             <Image src={check2} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>특수문자 </span>
-                        </div>
+                        </div> */}
                         <div style={{display:'flex'}}>
                             <Image src={check2} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>8~16자 이내</span>
                         </div>
@@ -226,9 +226,9 @@ const SignUpUsername = (props) => {
                         <div style={{display:'flex',color: containNum ? '#FDB714' : '#777777'}}>
                             <Image src={containNum ? check2 : check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>숫자 </span>
                         </div>
-                        <div style={{display:'flex',color: containSpe ? '#FDB714' : '#777777'}}>
+                        {/* <div style={{display:'flex',color: containSpe ? '#FDB714' : '#777777'}}>
                             <Image src={containSpe ? check2 :check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>특수문자 </span>
-                        </div>
+                        </div> */}
                         <div style={{display:'flex',color: validLen ? '#FDB714' : '#777777'}}>
                             <Image src={validLen ? check2 : check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>8~16자 이내</span>
                         </div>
@@ -240,16 +240,16 @@ const SignUpUsername = (props) => {
                     <div style={{display:'flex'}}>
                         <Image src={check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>숫자 </span>
                     </div>
-                    <div style={{display:'flex'}}>
+                    {/* <div style={{display:'flex'}}>
                         <Image src={check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>특수문자 </span>
-                    </div>
+                    </div> */}
                     <div style={{display:'flex'}}>
                         <Image src={check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>8~16자 이내</span>
                     </div>
                 </div> 
                 }
 
-                <Typography style={{fontSize: '14px', marginTop: '40px', color: '#3C3C3C'}}>비밀번호 확인</Typography>
+                <Typography style={{fontSize: '14px', marginTop: '30px', color: '#3C3C3C'}}>비밀번호 확인</Typography>
                 <OutlinedInput
                 color={(props.data.re_password != '') && props.data.password !== props.data.re_password ? 'wrong' : 'none'}
                 type={showRePassword ? 'text' : 'password'}

@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { signup_email_send } from '../../../actions/email/email';
 import { useRouter } from 'next/router';
 import { Loading } from "../../Loading";
+import Popup from '../../Custom/Popup';
 
 const SignUpEmail = (props) => {
     const dispatch = useDispatch();
@@ -23,6 +24,11 @@ const SignUpEmail = (props) => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMsg, setDialogMsg] = useState('');
     const [remainHeight, setRemainHeight] = useState(window.innerHeight - 505 + "px");
+
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupType, setPopupType] = useState('question');
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupDescription, setPopupDescription] = useState('');
     
     const handlePrevStep = () => {
       props.handlePrevStep();
@@ -38,9 +44,9 @@ const SignUpEmail = (props) => {
           props.setData({...props.data, email: emailId+domain});
           props.handleNextStep();
         } else {
-          //setDialogMsg(message);
-          console.log(message);
-          //setDialogOpen(true);
+          setPopupMessage(message);
+          setPopupType('error');
+          setPopupOpen(true);
         }
       }));
     }
@@ -55,6 +61,9 @@ const SignUpEmail = (props) => {
       } else{
           setDialogOpen(true);
       }
+    }
+    const handlePopupClose = () => {
+      setPopupOpen(false);
     }
       
     return (
@@ -228,6 +237,13 @@ const SignUpEmail = (props) => {
                 </DialogActions>
           </Dialog>
           {loading && <Loading />}
+          <Popup 
+            open={popupOpen}
+            handleClose={handlePopupClose}
+            type={popupType}
+            message={popupMessage}
+            description={popupDescription}
+          />
       </ThemeProvider>
     );
   };

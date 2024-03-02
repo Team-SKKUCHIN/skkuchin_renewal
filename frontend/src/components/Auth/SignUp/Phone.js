@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from "next/router";
 import { Loading } from '../../Loading';
 import { enroll_phone, verify_phone } from '../../../actions/sms/sms';
+import Popup from '../../Custom/Popup';
 
 const SignUpPhone = (props) => {
     const router = useRouter();
@@ -18,6 +19,11 @@ const SignUpPhone = (props) => {
     const [verificationCode, setVerificationCode] = useState('');
     const [isValid, setIsValid] = useState(null);
     const phoneNumList = ['010']
+
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupType, setPopupType] = useState('question');
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupDescription, setPopupDescription] = useState('');
 
     const handlePrevStep = () => {
       props.handlePrevStep();
@@ -35,6 +41,9 @@ const SignUpPhone = (props) => {
           setShowBelow(true);
         } else {
           console.log(message);
+          setPopupMessage(message);
+          setPopupType('error');
+          setPopupOpen(true);
         }
       })
     }
@@ -89,6 +98,10 @@ const SignUpPhone = (props) => {
     const handlePhone3Change = (e) => {
       let p3 = e.target.value
       validatePhone3(p3);
+    }
+
+    const handlePopupClose = () => {
+      setPopupOpen(false);
     }
 
     useEffect(() => {
@@ -272,6 +285,13 @@ const SignUpPhone = (props) => {
         </div>
       </Box>
       {loading && <Loading />}
+      <Popup 
+            open={popupOpen}
+            handleClose={handlePopupClose}
+            type={popupType}
+            message={popupMessage}
+            description={popupDescription}
+        />
       </div>
     );
   };

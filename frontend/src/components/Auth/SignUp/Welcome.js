@@ -14,7 +14,7 @@ const SignUpWelcome = () => {
 
     const handleButtonClick = () => {
         router.push({
-          pathname: '/',
+          pathname: '/login',
           //query: { src : '회원가입', username: props.username }
         });
     }
