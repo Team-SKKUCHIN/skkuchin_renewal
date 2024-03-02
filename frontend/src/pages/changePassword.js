@@ -111,10 +111,13 @@ const changePassword = () => {
     return (
         <ThemeProvider theme={theme}>
         <CssBaseline />
+        {
+            
+        }
         <Container style={{padding:'0px', alignItems: 'center', marginTop: '45px'}}>
                         <Grid container>
                             <Grid item style={{margin:'0px 0px 0px 24px', visibility:'none'}}>
-                                <Image src={back} width={11} height={18} name='back' onClick={backClick} layout='fixed' />
+                                {/* <Image src={back} width={11} height={18} name='back' onClick={backClick} layout='fixed' /> */}
                             </Grid>
                             <Grid item style={{marginLeft:'35%'}}>
                                 {/* <Typography style={{margin:'0px 0px 0px 0px', textAlign:'center',fontSize:'18px', fontWeight: '700'}}>회원가입</Typography> */}
