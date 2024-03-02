@@ -77,16 +77,9 @@ const LoginPage = () => {
         }));
     };
 
-    if (typeof window !== 'undefined' && isAuthenticated && user.phone_verification){
+    if (typeof window !== 'undefined' && isAuthenticated) {
         router.push('/');
     } 
-
-    const gotoVerification = () => {
-        router.push({
-            pathname: '/verification',
-            query: {username: username}
-        });
-    }
 
     useEffect(() => {
         setRemainHeight(window.innerHeight - 490 + "px");
@@ -103,13 +96,13 @@ const LoginPage = () => {
         }
     }, [window.innerHeight])
 
-    useEffect(() => {
+    /*useEffect(() => {
         if (username && user != null && !user.phone_verification) {
             setPopupMessage(`밥약 서비스 이용을 위해선\n휴대폰 본인인증이 필요해요.\n안전한 서비스 이용을 위해 인증해주세요.`);
             setPopupType('verification');
             setPopupOpen(true);
         }
-    }, [user])
+    }, [user])*/
 
     return(
         <ThemeProvider theme={theme}>
@@ -155,7 +148,7 @@ const LoginPage = () => {
                                 />
                                 <div style={{alignSelf: 'start', justifySelf: 'start'}}><Typography sx={{height: '15px', fontSize: '12px', fontWeight: '500', color: '#F47806', mt: '6px'}}>{error}</Typography></div>
                             </div>
-                            <div style={{display: 'flex', margin: '10px 24px', marginTop: '12px'}}>
+                            <div style={{display: 'flex', margin: '15px 24px', marginTop: '43px'}}>
                                 {rememberUsername ? 
                                     <Image onClick={() => setRememberUsername(false)} src={check} width={15.83} height={15.83} sx={{p: '1.58px'}} layout='fixed' style={{marginTop: '5px'}} /> : 
                                     <Image onClick={() => setRememberUsername(true)} src={uncheck} width={15.83} height={15.83} sx={{p: '1.58px'}} layout='fixed' style={{marginTop: '5px'}} />}
@@ -179,7 +172,7 @@ const LoginPage = () => {
                 </div>
                     </Box>
                 </Container>
-            <div style={{display: 'grid', justifyItems: 'center', marginBottom: '40px'}}>
+            <div style={{position: 'fixed', bottom: '0', left: '0', width: '100%', display: 'grid', justifyItems: 'center', marginBottom: '40px'}}>
             <div style={{display: 'grid', justifyItems: 'center', fontSize: '9px', fontWeight: '500', color: '#BABABA', bottom: '36px'}}>
                 <div>로그인하면 스꾸친 <span onClick={() => router.push({pathname: '/userAgreement', query: {page: 'login'}})} style={{textDecoration: 'underline'}}>이용약관</span>에 동의하는 것으로 간주합니다.</div>
                 <div style={{marginTop: '6px', textAlign: 'center'}}>스꾸친의 회원정보 처리방식은 <span onClick={() => router.push({pathname: '/policy', query: {page: 'login'}})} style={{textDecoration: 'underline'}}>개인정보 처리방침</span> 및 쿠키 정책에서 확인해보세요.</div>
@@ -187,14 +180,14 @@ const LoginPage = () => {
             </div>
             {loading && <Loading />}
 
-        <Popup 
+        {/* <Popup 
             open={popupOpen}
             handleClose={() => setPopupOpen(false)}
             type={popupType}
             message={popupMessage}
             description={popupDescription}
             onConfirm={gotoVerification}
-        />
+        /> */}
         </ThemeProvider>
     )
 };
