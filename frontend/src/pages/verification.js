@@ -8,11 +8,12 @@ import VerificationDone from '../components/Auth/Verification/Done';
 
 const Verification = () => {
     const router = useRouter();
-    const pathUsername = router.query.username;
+    const user = useSelector(state => state.auth.user);
+    //const pathUsername = router.query.username;
 
     const [step, setStep] = useState(1);
     const [data, setData] = useState({
-        username: pathUsername,
+        username: user.username,
         phone: "",
     })
 
@@ -28,7 +29,7 @@ const Verification = () => {
         <ThemeProvider theme={theme}>
         <CssBaseline />
             {
-                step === 1 && <VerificationPhone handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} />
+                step === 1 && <VerificationPhone handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} enroll={true} />
             }
             {
                 step === 2 && <VerificationAgreement handleNextStep={handleNextStep} />

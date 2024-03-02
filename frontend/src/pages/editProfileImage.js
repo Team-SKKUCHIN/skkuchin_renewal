@@ -7,7 +7,7 @@ const editProfileImage = () => {
     const [image, setImage] = useState("");
 
     useEffect(() => {
-        console.log("image: ", image);
+        //console.log("image: ", image);
     }, [image]);
     
     return(

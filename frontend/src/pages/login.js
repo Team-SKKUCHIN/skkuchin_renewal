@@ -146,7 +146,7 @@ const LoginPage = () => {
                                         backgroundColor: pwFocused || password ? '#FFFCE4' : 'white'}}
                                     placeholderStyle={{color: 'red'}}
                                 />
-                                <div style={{alignSelf: 'start', justifySelf: 'start'}}><Typography sx={{height: '15px', fontSize: '12px', fontWeight: '500', color: '#F47806', mt: '6px'}}>{error}</Typography></div>
+                                <div style={{alignSelf: 'start', justifySelf: 'start'}}><Typography sx={{height: '15px', fontSize: '12px', fontWeight: 'bold', color: '#F47806', mt: '6px'}}>{error}</Typography></div>
                             </div>
                             <div style={{display: 'flex', margin: '15px 24px', marginTop: '43px'}}>
                                 {rememberUsername ? 

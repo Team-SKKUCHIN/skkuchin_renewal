@@ -90,7 +90,7 @@ const RegisterPage = () => {
                 step === 6 && <SignUpEmailNotice handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} />
             }
             {
-                step === 7 && <SignUpEmail handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} />
+                step === 7 && <SignUpEmail handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} />
             }
             {
                 // step === 8 && <SignUpEmailCheck handlePrevStep={handlePrevStep} username={data.username} /> 

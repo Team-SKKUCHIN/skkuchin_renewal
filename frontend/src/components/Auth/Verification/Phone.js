@@ -26,7 +26,10 @@ const VerificationPhone = (props) => {
     const [popupDescription, setPopupDescription] = useState('');
 
     const handlePrevStep = () => {
-      router.push('/login');
+      if (props.enroll)
+        router.push('/login');
+      else
+        props.handlePrevStep();
     }
 
     const handleSendBtn = (resend) => {
@@ -131,12 +134,13 @@ const VerificationPhone = (props) => {
         <Container style={{padding:'0px', alignItems: 'center', marginTop: '45px'}}>
                         <div style={{margin: '0 10px 0 24px', display: 'flex', justifyContent: 'space-between'}}>
                         <Image src={back} width={11} height={18} name='back' onClick={handlePrevStep} layout='fixed' />
-                        {
+                        {props.enroll ? ( 
                             isValid ? 
                             <Button onClick={handleNextStep} style={{color: '#FFCE00', padding: 0, fontSize: '16px', fontWeight: 'bolder'}}>다음</Button>
                             :
                             <Button style={{color: '#BABABA', padding: 0, fontSize: '16px', fontWeight: 'bolder'}}>다음</Button>
-                        }
+                        ) : <div></div>
+                          }
                         </div>
         </Container>
       <Box
