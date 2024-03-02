@@ -345,19 +345,19 @@ const SignUpMatchInfo = (props) => {
         {/* 한 줄 자기소개 */}
         <div style={{height: '129px'}}>
         <Typography style={{fontSize: '14px', marginBottom: '8px', marginLeft: '4px', color: '#3C3C3C'}}>한줄 자기 소개</Typography>
-        <div style={{width: '100%', border: '1px solid #E2E2E2', borderRadius: '8px'}}>
+        {/* <div style={{width: '100%', border: '1px solid #E2E2E2', borderRadius: '8px'}}> */}
         <textarea 
         value={introduction}
         onChange={(e)=> {setIntroduction(e.target.value)}}
-        maxLength={29}
+        //maxLength={29}
         placeholder='간단히 자신을 소개해보세요 (필수)'
-        style={{width: '100%', outline: 'none', resize: 'none', fontSize: '16px', border: 'none', height: '60px', padding: '12px 18px', fontFamily: 'inherit'}}>
+        style={{width: '100%', border: '1px solid #E2E2E2', borderRadius: '8px', outline: 'none', resize: 'none', fontSize: '16px', border: 'none', height: '60px', padding: '12px 18px', fontFamily: 'inherit'}}>
         </textarea>
-        <div style={{width: '100%', height: '25px', display: 'flex', justifyContent: 'space-between'}}>
+        {/* <div style={{width: '100%', height: '25px', display: 'flex', justifyContent: 'space-between'}}>
             <div></div>
-            {/* <Typography style={{padding: '0 18px 12px 0', color: '#FC9712', fontSize: '12px'}}>{introduction.length}/30자</Typography> */}
+            <Typography style={{padding: '0 18px 12px 0', color: '#FC9712', fontSize: '12px'}}>{introduction.length}/30자</Typography>
         </div>
-        </div>
+        </div> */}
         </div>
         </div>
 
