@@ -146,6 +146,7 @@ public class UserDto {
         @JsonProperty
         private int studentId;
         private Major major;
+        private String email;
         private Profile image;
         private Campus campus;
         private Campus toggle;
@@ -159,6 +160,7 @@ public class UserDto {
                 this.username = user.getUsername();
                 this.studentId = user.getStudentId();
                 this.major = user.getMajor();
+                this.email = user.getEmail();
                 this.image = user.getImage();
                 this.campus = findCampus(user.getMajor());
                 this.toggle = user.getToggle();
@@ -169,6 +171,7 @@ public class UserDto {
                 this.username = null;
                 this.studentId = 0;
                 this.major = null;
+                this.email = null;
                 this.image = Profile.DEFAULT1;
                 this.campus = null;
                 this.toggle = null;

@@ -28,7 +28,7 @@ const Popup = ({ open, handleClose, type, message, description, onConfirm }) => 
             <div style={{padding: '32px 16px 16px', textAlign: 'center', minWidth: 300}}>
             {/* <DialogTitle> */}
                 {
-                    type === 'settings' && (
+                    (type === 'settings' || type === 'verification') && (
                     <IconButton
                         edge="end"
                         color="inherit"
@@ -78,6 +78,11 @@ const Popup = ({ open, handleClose, type, message, description, onConfirm }) => 
                 <Button disableElevation onClick={handleClose} variant="contained" sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 18, p: '16px' }}>
                     설정하기
                 </Button>
+                )}
+                {type === 'verification' && (
+                    <Button disableElevation fullWidth onClick={onConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                        인증하러 가기
+                    </Button>
                 )}
             </DialogActions>
         </div>

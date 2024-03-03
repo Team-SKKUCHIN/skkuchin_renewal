@@ -7,7 +7,7 @@ import back from '../../../image/arrow_back_ios.png'
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import check from '../../../image/check.png';
-import check2 from '../../../image/checkGreen.png';
+import check2 from '../../../image/checkYellow.png';
 import { Loading } from '../../Loading';
 
 const Step3 = (props) => {
@@ -43,8 +43,7 @@ const Step3 = (props) => {
             if (result) {
                 props.handleNextStep();
             } else {
-                setDialogMsg(message);
-                setDialogOpen(true);
+                console.log(message);
             }
         });
     }
@@ -64,7 +63,7 @@ const Step3 = (props) => {
     const checkPassword = (password) => {
         setContainEng(/[a-zA-Z]/.test(password));
         setContainNum(/\d/.test(password));
-        setContainSpe(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(password));
+        //setContainSpe(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(password));
         setValidLen(password.length >= 8 && password.length <= 16);
       }
     
@@ -75,11 +74,11 @@ const Step3 = (props) => {
 
         let num = password.search(/[0-9]/g)
         let eng = password.search(/[a-z]/ig)
-        let spe = password.search(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g)
+        //let spe = password.search(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g)
 
         if (password.length < 8 || password.length > 16) {
             setValidPW(false);
-        } else if (num < 0 || eng < 0 || spe < 0) {
+        } else if (num < 0 || eng < 0) {
             setValidPW(false);
         } else {
             setValidPW(true);
@@ -121,13 +120,14 @@ const Step3 = (props) => {
        
         <form style={{ width: '100%'}}>
             <div style={{margin: '0 24px'}}>
-            <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C'}}>비밀번호 초기화</Typography>
-            <Typography style={{fontSize: '12px', fontWeight: '900', marginTop: '45px', color: '#3C3C3C'}}>새로운 비밀번호</Typography>
+            <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C'}}>비밀번호 재설정</Typography>
+        <Typography style={{fontSize: '12px', fontWeight: '400', marginBottom: '13px', color: '#777777'}}>새로운 비밀번호를 입력해주세요.</Typography>
+            <Typography style={{fontSize: '14px', marginTop: '45px', color: '#3C3C3C'}}>새로운 비밀번호</Typography>
             <OutlinedInput
                 color='none'
                 type={showPassword ? 'text' : 'password'}
                 value={password}
-                placeholder="비밀번호"
+                placeholder="새로운 비밀번호 입력"
                 onChange={handlePasswordChange}
                 style={{width:'100%', outline: 'none', marginTop: '8px'}}
                 required
@@ -160,31 +160,31 @@ const Step3 = (props) => {
                 />
                 {(password != '') ? 
                     validPW ? 
-                    <div style={{height: '21px', marginBottom: '20px', marginTop:'5px', display:'flex', fontSize:'12px', color:'#12A054'}}>
+                    <div style={{height: '21px', marginBottom: '20px', marginTop:'5px', display:'flex', fontSize:'12px', color:'#FDB714'}}>
                         <div style={{display:'flex'}}>
                             <Image src={check2} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>영문</span>
                         </div>
                         <div style={{display:'flex'}}>
                             <Image src={check2} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>숫자 </span>
                         </div>
-                        <div style={{display:'flex'}}>
+                        {/* <div style={{display:'flex'}}>
                             <Image src={check2} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>특수문자 </span>
-                        </div>
+                        </div> */}
                         <div style={{display:'flex'}}>
                             <Image src={check2} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>8~16자 이내</span>
                         </div>
                     </div>
                     : <div style={{height: '21px', marginBottom: '20px', marginTop:'5px', display:'flex', fontSize:'12px'}}>
-                        <div style={{display:'flex', color: containEng ? '#12A054' : '#777777'}}>
+                        <div style={{display:'flex', color: containEng ? '#FDB714' : '#777777'}}>
                             <Image src={containEng ? check2 : check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>영문</span>
                         </div>
-                        <div style={{display:'flex',color: containNum ? '#12A054' : '#777777'}}>
+                        <div style={{display:'flex',color: containNum ? '#FDB714' : '#777777'}}>
                             <Image src={containNum ? check2 : check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>숫자 </span>
                         </div>
-                        <div style={{display:'flex',color: containSpe ? '#12A054' : '#777777'}}>
+                        {/* <div style={{display:'flex',color: containSpe ? '#12A054' : '#777777'}}>
                             <Image src={containSpe ? check2 :check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>특수문자 </span>
-                        </div>
-                        <div style={{display:'flex',color: validLen ? '#12A054' : '#777777'}}>
+                        </div> */}
+                        <div style={{display:'flex',color: validLen ? '#FDB714' : '#777777'}}>
                             <Image src={validLen ? check2 : check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>8~16자 이내</span>
                         </div>
                     </div> 
@@ -195,47 +195,16 @@ const Step3 = (props) => {
                     <div style={{display:'flex'}}>
                         <Image src={check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>숫자 </span>
                     </div>
-                    <div style={{display:'flex'}}>
+                    {/* <div style={{display:'flex'}}>
                         <Image src={check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>특수문자 </span>
-                    </div>
+                    </div> */}
                     <div style={{display:'flex'}}>
                         <Image src={check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>8~16자 이내</span>
                     </div>
                 </div> 
                 }
-                {/* <input
-                    variant="standard"
-                    type="password"
-                    placeholder="비밀번호"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    style={{
-                        fontSize: '16px',
-                        padding: '20px 15px 21px 12px',
-                        height: '56px',
-                        border: '1px solid #E2E2E2',
-                        margin: '8px 0 4px 0',
-                        borderRadius: '8px',
-                        width: '100%',
-                        outline: 'none'
-                    }}
-                />
-        <Grid container>
-            <Grid item>
-                <Typography style={{fontSize: '12px', color: containEng ? '#12A054' : '#777777', marginRight: '8px'}}>&#10003;영문</Typography>
-            </Grid>
-            <Grid item>
-                <Typography style={{fontSize: '12px', color: containNum ? '#12A054' : '#777777', marginRight: '8px'}}>&#10003;숫자</Typography>
-            </Grid>
-            {/* <Grid item>
-                <Typography style={{fontSize: '12px', color: containSpe ? '#12A054' : '#777777', marginRight: '8px'}}>&#10003;특수문자</Typography>
-            </Grid> 
-            <Grid item>
-                <Typography style={{fontSize: '12px', color: validLen ? '#12A054' : '#777777', marginRight: '8px'}}>&#10003;8~16자 이내</Typography>
-            </Grid>
-        </Grid> */}
 
-        <Typography style={{fontSize: '12px', fontWeight: '900', marginTop: '20px', color: '#3C3C3C'}}>비밀번호 확인</Typography>
+        <Typography style={{fontSize: '14px', marginTop: '20px', color: '#3C3C3C'}}>비밀번호 확인</Typography>
         <OutlinedInput
                 color={(rePassword != '') && password !== rePassword ? 'wrong' : 'none'}
                 type={showRePassword ? 'text' : 'password'}
@@ -264,42 +233,25 @@ const Step3 = (props) => {
                       fontSize: '16px',
                     },
                     height: '56px',
-                    border: (rePassword != '') && password !== rePassword ? '1px solid #FF3B3B' : '1px solid #E2E2E2',
+                    border: '1px solid #E2E2E2',
                     borderRadius: '8px',
                     outline: 'none',
                     appearance: 'none',
                     fontSize: '16px',
                   }}
                 />
-        {/* <input
-            variant="standard"
-            type="password"
-            placeholder="비밀번호 재입력"
-            value={rePassword}
-            onChange={(e) => setRePassword(e.target.value)}
-            style={{
-                fontSize: '16px',
-                padding: '20px 15px 21px 12px',
-                height: '56px',
-                border: (rePassword != '') && password !== rePassword ? '1px solid #FF3B3B' : '1px solid #E2E2E2',
-                margin: '8px 0 4px 0',
-                borderRadius: '8px',
-                width: '100%',
-                outline: 'none'
-            }}
-        /> */}
-        {(rePassword != '') && password !== rePassword ? <Typography sx={{fontSize: '12px', fontWeight: '500', color: '#FF3B3B'}}>일치하지 않는 비밀번호입니다.</Typography>
+        {(rePassword != '') && password !== rePassword ? <Typography sx={{fontSize: '12px', fontWeight: 'bold', color: '#F47806', marginTop: '6px'}}>일치하지 않는 비밀번호입니다.</Typography>
             : <div style={{height: '18px'}}></div>}
         </div>
             
             <div style={{margin: '32px 24px'}}>
             {validPW && (password == rePassword) ?
                     <Button variant="contained" onClick={handleNextStep} style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                        비밀번호 초기화하기
+                        비밀번호 재설정하기
                     </Button>
                 :
                     <Button variant="contained" disabled style={{width: '100%', backgroundColor: "#E2E2E2", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                        비밀번호 초기화하기
+                        비밀번호 재설정하기
                     </Button>
             }
             </div>

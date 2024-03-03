@@ -31,6 +31,7 @@ const myPage = () => {
     const [chatAlarm, setChatAlarm] = useState(false);
     const [infoAlarm, setInfoAlarm] = useState(false);
     const [MatchChecked, setMatchChecked] = useState(false);
+    const [selectedKeywords, setSelectedKeywords] = useState([]);
     
     if (typeof window !== 'undefined' && !isAuthenticated) {
         router.push('/login');
@@ -69,12 +70,23 @@ const myPage = () => {
 
     const handleMatching = () => {
         if (userMatchInfo?.gender) {
-            dispatch(change_status_info(!MatchChecked));
-            setMatchChecked(!MatchChecked);
+            dispatch(change_status_info(!MatchChecked, ([result, message]) => {
+                if (result)
+                    setMatchChecked(!MatchChecked);
+                else {
+                    console.log(message);
+                }
+            }));
+            
         } else {
             if (MatchChecked) {
-                dispatch(change_status_info(false));
-                setMatchChecked(false);
+                dispatch(change_status_info(false, ([result, message]) => {
+                    if (result)
+                        setMatchChecked(false);
+                    else {
+                        console.log(message);
+                    }
+                }));
             }
             router.push('/changeProfile');
         }
@@ -90,17 +102,42 @@ const myPage = () => {
     useEffect(()=>{
         if (userMatchInfo) {
             setMatchChecked(userMatchInfo.matching);
+
+            const top3Keywords = [];
+            for (const key in userMatchInfo.keywords) {
+                console.log(top3Keywords.length)
+                if (top3Keywords.legnth >= 2) {
+                    console.log('break..')
+                    break;
+                }
+                const values = userMatchInfo.keywords[key];
+                top3Keywords.push(values[0]);
+            }
+            if (top3Keywords.length < 2) {
+                const keys = Object.keys(userMatchInfo.keywords);
+                const values = userMatchInfo.keywords[keys];
+                top3Keywords.push(values[1])
+            }
+            top3Keywords.unshift(userMatchInfo.mbti)
+            setSelectedKeywords(top3Keywords);
         }
     },[userMatchInfo])
 
     const CustomSwitch = styled((props)=>(<Switch disableRipple {...props} onClick={handleMatching} checked={MatchChecked}/>))(({ theme }) => ({
         '& .MuiSwitch-thumb': {
           backgroundColor: 'white',
+          height: '12px',
+          width: '12px',
+          marginTop: '9px',
+          marginLeft: '5px',
+          marginRight: '3px'
         },
         '& .MuiSwitch-track': {
-          backgroundColor: MatchChecked ? theme.palette.primary.main : 'gray',
-          height: '12px',
-          marginTop:'2px'
+          backgroundColor: MatchChecked ? '#FFCE00' : 'gray',
+          height: '20px',
+          width: '40px',
+          marginTop:'2px',
+          borderRadius: '12px',
         },
         marginTop:"-10px",
         marginLeft:'auto'
@@ -253,63 +290,64 @@ const myPage = () => {
         <UpperBar />
         {user && <div style={{marginTop: '30px'}}>
             {/* 상단 회원 정보 */}
-            <div style={{display: 'flex', gridTemplateColumns: '72px 1fr 38px', alignItems: 'center', margin: '0 10px 15px 0px'}}>
-                <div style={{width: '80px', height:'80px', margin:'0 15px', backgroundColor:'#FFF8D9', border:'0px solid transparent', borderRadius:'10px'}}>
-                    {displayProfile(user.image, 80, 80)}
+            <div style={{display: 'flex', gridTemplateColumns: '72px 1fr 38px', alignItems: 'center', margin: '0 10px 10px 0px'}}>
+                <div style={{width: '80px', height:'80px', margin:'0 24px', backgroundColor:'#FFF8D9', border:'0px solid transparent', borderRadius:'10px'}}>
+                    {displayProfile(user.image, 100, 100)}
                 </div>
-                <div style={{display: 'flex', flexDirection: 'column', marginLeft: '0px'}}>
+                <div style={{display: 'flex', flexDirection: 'column', marginLeft: '15px', marginTop: '10px'}}>
                     {/* 닉네임, 캠퍼스, 학과, 학번 */}
-                    <div style={{display: 'flex'}}>
-                        <Typography style={{fontSize: '15px', fontWeight: '700', marginBottom: '9px'}}>{user.nickname}</Typography>
-                        {user.campus == "명륜" ? <Typography sx={{height: '24px', border: "1px solid #FFFCE4", borderRadius:'10px', fontSize: '12px',  fontWeight:'700',p: '2px 4px 0px 4px', color:'#FFAC0B', backgroundColor:'#FFFCE4', margin:'-2px 0px 0px 5px'}} >명륜</Typography> : <Typography sx={{height: '24px', border: "1px solid #DCF8DB", borderRadius:'10px', fontSize: '12px',  fontWeight:'700',p: '2px 4px 0px 4px', color:'#58C85A', backgroundColor:'#DCF8DB', margin:'-2px 0px 0px 5px'}} >율전</Typography>}
+                    <div style={{display: 'flex', height: '24px', marginBottom: '6px'}}>
+                        <Typography style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '9px'}}>{user.nickname}</Typography>
+                        {user.campus == "명륜" ? <Typography sx={{height: '24px', border: "1px solid #FFFCE4", borderRadius:'10px', fontSize: '12px',  fontWeight:'700',p: '2px 4px 0px 4px', color:'#FFAC0B', backgroundColor:'#FFFCE4', margin:'2px 0px 0px 8px'}} >명륜</Typography> : <Typography sx={{height: '24px', border: "1px solid #DCF8DB", borderRadius:'10px', fontSize: '12px',  fontWeight:'700',p: '2px 4px 0px 4px', color:'#58C85A', backgroundColor:'#DCF8DB', margin:'2px 0px 0px 5px'}} >율전</Typography>}
                     </div>
                     <Typography sx={{fontSize: '12px', p: '0px 3.5px 0px 0px', color:'#3C3C3C'}}>{user.major} / {user.student_id}학번 {user.gender && <span>/ {user.gender[0]}</span>}</Typography>
-
+                    <div style={{display: 'flex', marginTop: '6px'}}>
+                        {selectedKeywords.length > 0 && selectedKeywords.slice(0, 3).map((keyword, index) => (
+                            <div key={index} style={{backgroundColor: '#F2F2F2', borderRadius: '24px', padding: '3px 12px', marginRight: '4px', fontSize: '12px', color: '#777777'}}>{keyword}</div>
+                        ))}
+                    </div>
                 </div>
             </div>
-            <div style={{height:'5px',backgroundColor:"white"}}></div>
+            {/* <div style={{height:'5px',backgroundColor:"white"}}></div> */}
             
-            {/* 사용자 설정 */}
-            <Container style={{display: 'grid', padding: '0 15px', marginTop: '30px'}}>
-                <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '15px'}}>사용자 설정</Typography>
-                <div onClick={() => router.push('/editNickname')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>내 정보 &nbsp; &nbsp; &nbsp;</Button></div>
-                <div onClick={() => router.push('/changePassword')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>비밀번호 재설정</Button></div>
-                <div onClick={() => router.push('/editProfileImage')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>프로필 이미지 변경</Button></div>
+            {/* 내 정보 */}
+            <Container style={{display: 'grid', padding: '0 24px', marginTop: '20px'}}>
+                <Typography style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '24px', marginTop: '30px', height: '20px'}}>내 정보</Typography>
+                <div onClick={() => router.push('/editNickname')} style={{height: '20px', marginBottom: '15px'}}><Button variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>계정 정보 &nbsp; &nbsp; &nbsp;</Button></div>
+                <div onClick={() => router.push('/resetPassword')} style={{height: '20x'}}><Button variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>비밀번호 재설정</Button></div>
+                {/* <div onClick={() => router.push('/editProfileImage')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>프로필 이미지 변경</Button></div> */}
             </Container>
-            <div style={{height:'1px', backgroundColor:'#E2E2E2', margin:'0 10px'}}></div>
+            <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'24px'}}></div>
 
-            {/* 커뮤니티 */}
-            <Container style={{display: 'grid', padding: '0 15px', marginTop: '30px'}}>
-                <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '15px'}}>커뮤니티</Typography>
-                <div onClick={() => router.push('/myPost')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>내 게시글 &nbsp; &nbsp;</Button></div>
-                <div onClick={() => router.push('/myFavPost')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>좋아요 누른 게시글</Button></div>
+            {/* 밥약 프로필 */}
+            <Container style={{display: 'grid', padding: '0 24px',}}>
+                <Typography style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '24px', height: '20px'}}>밥약 프로필</Typography>
+                <div style={{display:'flex', height: '20px', marginBottom: '15px'}}><Typography variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>개인 프로필 공개</Typography><CustomSwitch defaultChecked/></div>
+                <div onClick={() => router.push('/changeProfile')} style={{height: '20px', marginBottom: '15px'}}><Button variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>개인 프로필 수정</Button></div>
+                <div style={{height: '28px'}}><Button variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>그룹 프로필 수정</Button></div>
+                {/* <div onClick={() => router.push('/myPost')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>내 게시글 &nbsp; &nbsp;</Button></div> */}
+                {/* <div onClick={() => router.push('/myFavPost')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>좋아요 누른 게시글</Button></div> */}
             </Container>
-            <div style={{height:'1px', backgroundColor:'#E2E2E2', margin:'0 10px'}}></div>
+            <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'24px'}}></div>
 
             {/* 매칭 프로필 */}
-            <Container style={{display: 'grid', padding: '0 15px', marginTop: '30px'}}>
+            {/* <Container style={{display: 'grid', padding: '0 24px', marginTop: '30px'}}>
                 <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '15px'}}>밥약 매칭 설정</Typography>
                 <div onClick={() => router.push('/changeProfile')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>매칭 프로필 변경</Button></div>
                 <div style={{display:'flex'}}><Typography variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>매칭 ON/OFF</Typography><CustomSwitch defaultChecked/></div>
             </Container>
-            <div style={{height:'1px', backgroundColor:'#E2E2E2', margin:'0 10px'}}></div>
+            <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'0 24px'}}></div> */}
 
             {/* 알림 설정 */}
-            <Container style={{padding: '0 15px', marginTop: '25px'}}>
+            {/* <Container style={{padding: '0 24px', marginTop: '25px'}}>
                 <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '15px'}}>알림 설정</Typography>
-                {/* <div onClick={() => router.push('/enrollSMS')} style={{display: 'grid', gridTemplateColumns: '1fr 49px', alignItems: 'start', marginBottom: '20px'}}>
-                    <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>채팅 알림</Typography>
-                </div>
-                <div onClick={() => router.push('/enrollSMS')} style={{display: 'grid', gridTemplateColumns: '1fr 49px', alignItems: 'start', marginBottom: '20px'}}>
-                    <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>공지/이벤트 알림</Typography>
-                </div> */}
+                
                 {pushToken ?
                 <>
                     <div style={{display:'flex', marginBottom:'5px'}}>
                         <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>채팅 알림</Typography>
-                        {/* 토글 스위치 */}
                         <CustomSwitch2 defaultChecked/>
-                    </div>
+                    </div> */}
 
                     {/* <div style={{display:'flex' , marginBottom:'5px'}}>
                         <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>SMS 알림</Typography>
@@ -317,18 +355,17 @@ const myPage = () => {
                         <CustomSwitch4 defaultChecked/>
                     </div> */}
 
-                    <div style={{display:'flex' , marginBottom:'5px'}}>
+                    {/* <div style={{display:'flex' , marginBottom:'5px'}}>
                         <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>공지/이벤트 알림</Typography>
-                        {/* 토글 스위치 */}
                         <CustomSwitch3 defaultChecked/>
-                    </div>
+                    </div> */}
                     
                     {/* <div onClick={() => router.push('/enrollSMS')} style={{display:'flex', marginBottom:'10px'}}>
                         <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>
                             {pushToken.phone ? 'SMS 알림 변경' : 'SMS 알림 등록'}
                         </Typography>
                     </div> */}
-                    <div onClick={() => router.push('/editPhoneNumber')} style={{display: 'flex', marginBottom:'25px'}}>
+                    {/* <div onClick={() => router.push('/editPhoneNumber')} style={{display: 'flex', marginBottom:'25px'}}>
                         <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>전화번호 변경</Typography>
                     </div>
                     
@@ -341,27 +378,30 @@ const myPage = () => {
                 
 
             </Container>
-            <div style={{height:'1px', backgroundColor:'#E2E2E2', margin:'0 10px'}}></div>
+            <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'0 24px'}}></div> */}
 
-            {/* 기타 */}
-            <Container style={{display: 'grid', padding: '0 15px', marginTop: '25px'}}>
-                <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '25px'}}>기타</Typography>
-                <div onClick={() => router.push('/requestPlace')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>식당 추가 요청</Button></div>
-                <Typography onClick={() => window.open('http://pf.kakao.com/_KmNnG', '_blank')} style={{fontSize: '14px', fontWeight: '400',marginBottom: '5px', color: '#3C3C3C',}}>문의하기</Typography>
-                <Typography onClick={handleDialogOpen} style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C'}}>로그아웃</Typography>
+            {/* 고객 지원 */}
+            <Container style={{display: 'grid', padding: '0 24px', marginTop: '25px'}}>
+                <Typography style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '24px', height: '20px'}}>고객 지원</Typography>
+                {/* <div onClick={() => router.push('/requestPlace')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>식당 추가 요청</Button></div> */}
+                <div style={{height: '20px', marginBottom: '15px'}}><Typography onClick={() => window.open('http://pf.kakao.com/_KmNnG', '_blank')} style={{fontSize: '16px', fontWeight: '400',marginBottom: '5px', color: '#3C3C3C',}}>문의하기</Typography></div>
+                <div style={{height: '20px', marginBottom: '15px'}}><Typography style={{fontSize: '16px', fontWeight: '400',marginBottom: '5px', color: '#3C3C3C',}}>서비스 정보</Typography></div>
+                {/* <Typography onClick={handleDialogOpen} style={{height: '20px', marginBottom: '15px', fontSize: '16px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C'}}>로그아웃</Typography> */}
             </Container>
 
             {/* 하단 */}
-            <Container style={{width: '100%', display: 'grid', justifyItems: 'center', marginTop: '20px', marginBottom: '50px'}}>
+            <Container style={{width: '100%', display: 'grid', justifyItems: 'center', marginTop: '20px', marginBottom: '20px'}}>
                 <div style={{display: 'flex', fontSize: '14px'}}>
+                    <Button onClick={handleLogout} variant="text" style={{color: "#BABABA"}}>로그아웃</Button>
+                    <div style={{padding: '0 15px', color: '#BABABA', alignSelf: 'center', fontSize: '16px'}}>|</div>
                     <Button onClick={() => router.push('/deleteUser')} variant="text" style={{color: "#BABABA"}}>탈퇴하기</Button>
-                    <Button onClick={() => router.push('/agreementList')} variant="text" style={{color: "#BABABA"}}>약관 및 정책</Button>
+                    {/* <Button onClick={() => router.push('/agreementList')} variant="text" style={{color: "#BABABA"}}>약관 및 정책</Button> */}
                     {/* <Button onClick={() => router.push('/agreementList')} variant="text" style={{color: "#BABABA"}}><Image src={insta} width={20} height={20}></Image></Button> */}
-                    <a href="https://www.instagram.com/skkuchin/" target="_blank" rel="noopener noreferrer">
+                    {/* <a href="https://www.instagram.com/skkuchin/" target="_blank" rel="noopener noreferrer">
                     <Button style={{ color: "#BABABA" }}>
                         <Image src={insta} width={20} height={20} />
                     </Button>
-                    </a>
+                    </a> */}
                 </div>
             </Container>
 

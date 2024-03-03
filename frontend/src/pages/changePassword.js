@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import {  TextField, Button, Typography, Box, Dialog, DialogContent, DialogActions, ThemeProvider, CssBaseline, Container, Grid, OutlinedInput,InputAdornment,IconButton } from '@mui/material';
-import back from '../image/close.png';
+//import back from '../image/close.png';
+import back from '../image/arrow_back_ios.png'
 import Image from 'next/image';
 import theme from '../theme/theme';
 import { change_password } from '../actions/auth/auth';
@@ -110,10 +111,70 @@ const changePassword = () => {
     return (
         <ThemeProvider theme={theme}>
         <CssBaseline />
+        {
+            
+        }
+        <Container style={{padding:'0px', alignItems: 'center', marginTop: '45px'}}>
+                        <Grid container>
+                            <Grid item style={{margin:'0px 0px 0px 24px', visibility:'none'}}>
+                                {/* <Image src={back} width={11} height={18} name='back' onClick={backClick} layout='fixed' /> */}
+                            </Grid>
+                            <Grid item style={{marginLeft:'35%'}}>
+                                {/* <Typography style={{margin:'0px 0px 0px 0px', textAlign:'center',fontSize:'18px', fontWeight: '700'}}>회원가입</Typography> */}
+                            </Grid>
+                        </Grid>
+        </Container>
+        <Box
+            sx={{
+            margin: '35px 0 55px 0',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            }}
+        >
+                <Typography style={{fontSize: '14px', marginTop: '25px', color: '#3C3C3C'}}>새로운 비밀번호</Typography>
+                <OutlinedInput
+                color='none'
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                placeholder="비밀번호"
+                onChange={handlePasswordChange}
+                style={{width:'100%', outline: 'none', marginTop: '8px'}}
+                required
+                endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }            
+                  sx={{
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '& input': {
+                      fontSize: '16px',
+                    },
+                    height: '56px',
+                    border: '1px solid #E2E2E2',
+                    borderRadius: '8px',
+                    outline: 'none',
+                    appearance: 'none',
+                    fontSize: '16px',
+                  }}
+                />                  
+        </Box>
+
+
         <Container style={{padding:'0px', alignItems: 'center', marginTop: '45px'}}>
             <Grid container>
                 <Grid item style={{margin:'0px 0px 0px 25px', visibility:'none'}}>
-                    <Image src={back} width={25} height={25} name='back' onClick={handleArrowClick} layout='fixed'/>
+                    {/* <Image src={back} width={25} height={25} name='back' onClick={handleArrowClick} layout='fixed'/> */}
                 </Grid>
                 <Grid item style={{marginLeft:'20%'}}>
                     <Typography style={{margin:'0px 0px 0px 15px', textAlign:'center',fontSize:'18px', fontWeight: '700'}}>비밀번호 재설정</Typography>
@@ -139,41 +200,9 @@ const changePassword = () => {
             alignItems: 'center',
             }}
         >
-        {/* <header style={{display: 'flex',  width: '100%', justifyContent: 'space-between', marginBottom: '42px'}}>
-            <Image width={11} height={18} src={back} onClick={handleArrowClick}/>
-            <Typography align='center' style={{margin: 'auto', fontSize: '18px', fontWeight: '700'}}>비밀번호 변경</Typography>
-        </header> */}
 
         <form style={{ width: '100%'}}>
-            {/* <div style={{margin: '0 36px 39px 36px'}}>
-                <TextField
-                variant="standard"
-                label="현재 비밀번호"
-                type="password"
-                value={curPassword}
-                onChange={(e) => setCurPassword(e.target.value)}
-                style={{width: '100%'}}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                required
-                />
-            </div> */}
             <div style={{margin: '0 20px'}}>
-                {/* <TextField
-                variant="outlined"
-                type="password"
-                value={password}
-                onChange={handlePasswordChange}
-                style={{width: '100%'}}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                required
-                InputProps={{
-                    endAdornment: (validPW) ? <Image src={check} width={15.83} height={15.83} sx={{p: '1.58px', mb: '5.58px'}} layout='fixed' /> : null 
-                }}
-                /> */}
                 <Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#777777'}}>새로운 비밀번호</Typography>
                 <OutlinedInput
                 color='none'
@@ -243,21 +272,6 @@ const changePassword = () => {
                 }
             </div>
             <div style={{margin: '0 20px'}}>
-                {/* <TextField
-                variant="standard"
-                label="비밀번호 확인"
-                type="password"
-                value={rePassword}
-                onChange={(e) => setRePassword(e.target.value)}
-                style={{width: '100%'}}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                required
-                InputProps={{
-                    endAdornment: (password === rePassword && validPW) ? <Image src={check} width={15.83} height={15.83} sx={{p: '1.58px', mb: '5.58px'}} layout='fixed' /> : null 
-                }}
-                /> */}
                 <Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#777777'}}>비밀번호 확인</Typography>
                 <OutlinedInput
                 color={isCorrect}

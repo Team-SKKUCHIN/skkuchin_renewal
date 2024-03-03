@@ -1,17 +1,18 @@
 import { useState } from "react";
 import {  TextField, Button,  Typography,  Box, Select, MenuItem, Dialog, DialogContent, DialogActions, ThemeProvider, CssBaseline, Container, Grid } from '@mui/material';
 import { useDispatch } from "react-redux";
-import theme from '../../theme/theme';
-import check from '../../image/check_circle.png';
-import uncheck from '../../image/uncheck.png';
-import logo from '../../image/email_enhang.png'
-import back from '../../image/arrow_back_ios.png';
+import theme from '../../../theme/theme';
+import check from '../../../image/check_circle.png';
+import uncheck from '../../../image/uncheck.png';
+import logo from '../../../image/email_enhang.png'
+import back from '../../../image/arrow_back_ios.png';
 import Image from 'next/image';
-import { signup_email_send } from '../../actions/email/email';
+import { signup_email_send } from '../../../actions/email/email';
 import { useRouter } from 'next/router';
-import { Loading } from "../Loading";
+import { Loading } from "../../Loading";
+import Popup from '../../Custom/Popup';
 
-const SignUpStep6 = (props) => {
+const SignUpEmail = (props) => {
     const dispatch = useDispatch();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -23,6 +24,11 @@ const SignUpStep6 = (props) => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMsg, setDialogMsg] = useState('');
     const [remainHeight, setRemainHeight] = useState(window.innerHeight - 505 + "px");
+
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupType, setPopupType] = useState('question');
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupDescription, setPopupDescription] = useState('');
     
     const handlePrevStep = () => {
       props.handlePrevStep();
@@ -38,8 +44,9 @@ const SignUpStep6 = (props) => {
           props.setData({...props.data, email: emailId+domain});
           props.handleNextStep();
         } else {
-          setDialogMsg(message);
-          setDialogOpen(true);
+          setPopupMessage(message);
+          setPopupType('error');
+          setPopupOpen(true);
         }
       }));
     }
@@ -54,6 +61,9 @@ const SignUpStep6 = (props) => {
       } else{
           setDialogOpen(true);
       }
+    }
+    const handlePopupClose = () => {
+      setPopupOpen(false);
     }
       
     return (
@@ -141,12 +151,11 @@ const SignUpStep6 = (props) => {
         </form> */}
         <form onSubmit={handleSubmit} style={{ width: '100%'}}>
         <div style={{margin: '0 24px'}}>
-        <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C'}}>이메일 인증</Typography>
-        <Typography style={{fontSize: '12px', fontWeight: '900', marginTop: '31px', marginLeft: '4px', color: '#3C3C3C'}}>이메일 입력</Typography>
+        <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C'}}>학교 이메일 인증</Typography>
+        <Typography style={{fontSize: '14px', marginTop: '42px', paddingTop: '10px', color: '#3C3C3C'}}>이메일</Typography>
         <div style={{textAlign: 'center', display: 'grid', gridTemplateColumns: '1fr 1fr', marginTop: '8px'}}>
         <input
             variant="standard"
-            placeholder="이메일 주소"
             value={emailId}
             onClick={e => setDialogOpen(false)}
             onChange={(e) => setEmailId(e.target.value)}
@@ -183,33 +192,33 @@ const SignUpStep6 = (props) => {
             <MenuItem value='@skku.edu'>@skku.edu</MenuItem>
         </Select>   
         </div>
-        <div style={{display:'flex', height: '28px', alignItems: 'center', justifyItems: 'center', marginBottom: '28px', marginTop: '20px'}}>
+        <div style={{display:'flex', height: '28px', alignItems: 'center', justifyItems: 'center', margin: '19px 0'}}>
             {
               checkState ?
                 <Image src={check} onClick={handleCheck} width={15.83} height={15.83} layout='fixed' />
               :  
                 <Image src={uncheck} onClick={handleCheck} width={15.83} height={15.83} layout='fixed' />
             }
-          <Typography sx={{fontSize: '12px', fontWeight: '500', ml: '5.58px', color: '#3C3C3C'}}><span onClick={() => router.push({pathname: '/policy', query: {page: 'register', pathUsername: props.data.username}})} style={{textDecoration: 'underline', fontWeight: '700', color: '#3C3C3C'}}>개인정보처리방침</span> 및 <span onClick={() => router.push({pathname: '/userAgreement', query: {page: 'register', pathUsername: props.data.username}})} style={{textDecoration: 'underline', fontWeight: '700', color: '#3C3C3C'}}>이용약관</span>에 동의합니다</Typography>
+          <Typography sx={{fontSize: '12px', ml: '5.58px', color: '#3C3C3C'}}><span onClick={() => router.push({pathname: '/policy', query: {page: 'register', pathUsername: props.data.username}})} style={{textDecoration: 'underline', fontWeight: 'bold', color: '#3C3C3C'}}>개인정보처리방침</span> 및 <span onClick={() => router.push({pathname: '/userAgreement', query: {page: 'register', pathUsername: props.data.username}})} style={{textDecoration: 'underline', fontWeight: '700', color: '#3C3C3C'}}>이용약관</span>에 동의합니다</Typography>
         </div>
         </div>
-            <div style={{margin: '28px 24px 12px'}}>
+            <div style={{margin: '0 24px 12px'}}>
             {emailId != '' && checkState ?
                 <Button variant="contained" onClick={handleSubmit} style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                    이메일 인증하기
+                    인증하기
                 </Button>
                 :
                 <Button variant="contained"  disabled style={{width: '100%', backgroundColor: "#E2E2E2", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                    이메일 인증하기
+                    인증하기
                 </Button>
             }
             </div>
             </form>
       </Box>
-      <div style={{display: 'grid', justifyItems: 'center', marginBottom: '22px', marginTop: remainHeight}}>
+      {/* <div style={{display: 'grid', justifyItems: 'center', marginBottom: '22px', marginTop: remainHeight}}>
         <Typography sx={{fontSize: '9px', fontWeight: '400', ml: '5.58px', color: '#BABABA', marginTop: '22px'}}>*이메일 인증을 완료하지 않으면 서비스 이용에 어려움이 있을 수 있습니다.</Typography>
         <Typography sx={{fontSize: '9px', fontWeight: '400', ml: '5.58px', color: '#BABABA', mt: '8px'}}>*이메일이 도착하지 않을 경우, 스팸메일함을 확인해주세요.</Typography>
-      </div>
+      </div> */}
 
         <Dialog open={dialogOpen} onClose={handleDialogOpen} PaperProps={{ style: { borderRadius: '10px' } }}>
                 <DialogContent style={{width:'270px', height:'100px', padding:'29px 0px 0px 0px', marginBottom:'0px'}}>
@@ -228,8 +237,15 @@ const SignUpStep6 = (props) => {
                 </DialogActions>
           </Dialog>
           {loading && <Loading />}
+          <Popup 
+            open={popupOpen}
+            handleClose={handlePopupClose}
+            type={popupType}
+            message={popupMessage}
+            description={popupDescription}
+          />
       </ThemeProvider>
     );
   };
 
-  export default SignUpStep6;
+  export default SignUpEmail;

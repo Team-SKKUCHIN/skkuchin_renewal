@@ -1,53 +1,53 @@
 import { useState, useEffect } from "react";
 import {  Container, Typography, Box, Grid, Button } from '@mui/material';
-import back from '../../image/arrow_back_ios.png';
-import check from '../../image/check_circle.png';
-import theme from '../../theme/theme';
+import back from '../../../image/arrow_back_ios.png';
+import check from '../../../image/check_circle.png';
+import theme from '../../../theme/theme';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from "next/router";
 
-import profile1 from '../../image/mbti/profile/mainCharacter.png';
-import profile2 from '../../image/mbti/profile/mealCharacter.png';
-import profile3 from '../../image/mbti/profile/ENFJ.png';
-import profile4 from '../../image/mbti/profile/ENTP.png';
-import profile5 from '../../image/mbti/profile/INFP.png';
-import profile6 from '../../image/mbti/profile/ENFP.png';
-import profile7 from '../../image/mbti/profile/ISTJ.png';
-import profile8 from '../../image/mbti/profile/ISTP.png';
-import profile9 from '../../image/mbti/profile/ISFP.png';
-import profile10 from '../../image/mbti/profile/INTP.png';
-import profile11 from '../../image/mbti/profile/ESTJ.png';
-import profile12 from '../../image/mbti/profile/INFJ.png';
-import profile13 from '../../image/mbti/profile/ENTJ.png';
-import profile14 from '../../image/mbti/profile/ESTP.png';
-import profile15 from '../../image/mbti/profile/ESFJ.png';
-import profile16 from '../../image/mbti/profile/INTJ.png';
-import profile17 from '../../image/mbti/profile/ISFJ.png';
-import profile18 from '../../image/mbti/profile/ESFP.png';
+import profile1 from '../../../image/mbti/profile/mbti_non_select/mainCharacter.png';
+import profile2 from '../../../image/mbti/profile/mbti_non_select/mealCharacter.png';
+import profile3 from '../../../image/mbti/profile/mbti_non_select/ENFJ.png';
+import profile4 from '../../../image/mbti/profile/mbti_non_select/ENTP.png';
+import profile5 from '../../../image/mbti/profile/mbti_non_select/INFP.png';
+import profile6 from '../../../image/mbti/profile/mbti_non_select/ENFP.png';
+import profile7 from '../../../image/mbti/profile/mbti_non_select/ISTJ.png';
+import profile8 from '../../../image/mbti/profile/mbti_non_select/ISTP.png';
+import profile9 from '../../../image/mbti/profile/mbti_non_select/ISFP.png';
+import profile10 from '../../../image/mbti/profile/mbti_non_select/INTP.png';
+import profile11 from '../../../image/mbti/profile/mbti_non_select/ESTJ.png';
+import profile12 from '../../../image/mbti/profile/mbti_non_select/INFJ.png';
+import profile13 from '../../../image/mbti/profile/mbti_non_select/ENTJ.png';
+import profile14 from '../../../image/mbti/profile/mbti_non_select/ESTP.png';
+import profile15 from '../../../image/mbti/profile/mbti_non_select/ESFJ.png';
+import profile16 from '../../../image/mbti/profile/mbti_non_select/INTJ.png';
+import profile17 from '../../../image/mbti/profile/mbti_non_select/ISFJ.png';
+import profile18 from '../../../image/mbti/profile/mbti_non_select/ESFP.png';
 
-import profile1On from '../../image/mbti/profile/selectMainCharacter.png';
-import profile2On from '../../image/mbti/profile/selectMealCharacter.png';
-import profile3On from '../../image/mbti/profile/selectENFJ.png';
-import profile4On from '../../image/mbti/profile/selectENTP.png';
-import profile5On from '../../image/mbti/profile/selectINFP.png';
-import profile6On from '../../image/mbti/profile/selectENFP.png';
-import profile7On from '../../image/mbti/profile/selectISTJ.png';
-import profile8On from '../../image/mbti/profile/selectISTP.png';
-import profile9On from '../../image/mbti/profile/selectISFP.png';
-import profile10On from '../../image/mbti/profile/selectINTP.png';
-import profile11On from '../../image/mbti/profile/selectESTJ.png';
-import profile12On from '../../image/mbti/profile/selectINFJ.png';
-import profile13On from '../../image/mbti/profile/selectENTJ.png';
-import profile14On from '../../image/mbti/profile/selectESTP.png';
-import profile15On from '../../image/mbti/profile/selectESFJ.png';
-import profile16On from '../../image/mbti/profile/selectINTJ.png';
-import profile17On from '../../image/mbti/profile/selectISFJ.png';
-import profile18On from '../../image/mbti/profile/selectESFP.png';
-import { register } from '../../actions/auth/auth';
+import profile1On from '../../../image/mbti/profile/mbti_select/MainCharacter.png';
+import profile2On from '../../../image/mbti/profile/mbti_select/MealCharacter.png';
+import profile3On from '../../../image/mbti/profile/mbti_select/ENFJ.png';
+import profile4On from '../../../image/mbti/profile/mbti_select/ENTP.png';
+import profile5On from '../../../image/mbti/profile/mbti_select/INFP.png';
+import profile6On from '../../../image/mbti/profile/mbti_select/ENFP.png';
+import profile7On from '../../../image/mbti/profile/mbti_select/ISTJ.png';
+import profile8On from '../../../image/mbti/profile/mbti_select/ISTP.png';
+import profile9On from '../../../image/mbti/profile/mbti_select/ISFP.png';
+import profile10On from '../../../image/mbti/profile/mbti_select/INTP.png';
+import profile11On from '../../../image/mbti/profile/mbti_select/ESTJ.png';
+import profile12On from '../../../image/mbti/profile/mbti_select/INFJ.png';
+import profile13On from '../../../image/mbti/profile/mbti_select/ENTJ.png';
+import profile14On from '../../../image/mbti/profile/mbti_select/ESTP.png';
+import profile15On from '../../../image/mbti/profile/mbti_select/ESFJ.png';
+import profile16On from '../../../image/mbti/profile/mbti_select/INTJ.png';
+import profile17On from '../../../image/mbti/profile/mbti_select/ISFJ.png';
+import profile18On from '../../../image/mbti/profile/mbti_select/ESFP.png';
+import { register } from '../../../actions/auth/auth';
 import { useDispatch } from 'react-redux';
 
-export default function SignUpStep3(props) {
+export default function SignUpProfileImage(props) {
     const router = useRouter();
     const dispatch = useDispatch();
     const [image, setImage] = useState('');
@@ -138,24 +138,36 @@ export default function SignUpStep3(props) {
         </Container>
         <Box
             sx={{
-            margin: '35px 0px 15px 0px',
+            margin: '35px 0px 155px 0px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             }}
             >
+            <div style={{width: '100%'}}>
+                <div style={{margin: '0 24px 29px'}}>
+                <Grid container>
+                    <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
+                    <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
+                    <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
+                    <Typography style={{fontSize: '26px', color: '#FFCE00', marginRight: '7px'}}>&bull;</Typography>
+                </Grid>
+                    <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C', textAlign: 'left'}}>개인 밥약 프로필</Typography>
+                    <Typography style={{marginBottom: '30px', fontWeight: 'bold', fontSize: '12px', color: '#777777', textAlign: 'left'}}>1개의 이미지를 선택해주세요.</Typography>
+                </div>
+            </div>
 
-            <div name='스꾸챗 프로필 사진' style={{textAlign:'center', display:'flex', justifyContent:'center'}}>
+            <div name='스꾸챗 프로필 사진' style={{textAlign:'center', display:'flex', justifyContent:'center', width: '100%'}}>
                         <div>
-                            <Container  style={{padding:'0px', margin:'0px 0px 0px 0px', justifyContent:'center'}}>
-                                <Grid container>
+                            <div  style={{padding:'0px', margin:'0px 0px 0px 0px', justifyContent:'center'}}>
+                                {/* <Grid container>
                                 <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
                                 <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
-                                <Typography style={{fontSize: '26px', color: '#9E9E9E', marginRight: '7px'}}>&bull;</Typography>
                                 <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
+                                <Typography style={{fontSize: '26px', color: '#FFCE00', marginRight: '7px'}}>&bull;</Typography>
                                 </Grid>
-                                <Typography style={{fontSize:'24px', textAlign:'left', margin:'0px 0px 8px 0px'}} color={theme.palette.fontColor.dark} fontWeight={theme.typography.h2}>프로필 이미지 선택</Typography>
-                                <Typography style={{fontSize:'12px', textAlign:'left', margin:'12px 0px 30px 0px'}} color={theme.palette.fontColor.main} fontWeight={theme.typography.h2}>1개의 이미지를 선택해주세요.</Typography>
+                                <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C', textAlign: 'left'}}>개인 밥약 프로필</Typography>
+                                <Typography style={{marginBottom: '30px', fontWeight: 'bold', fontSize: '12px', color: '#777777', textAlign: 'left'}}>1개의 이미지를 선택해주세요.</Typography> */}
                                 <div style={{marginTop:'10px'}}>
                                     <Grid container style={{maxWidth:'340px'}}>
                                         <Grid container>
@@ -226,11 +238,13 @@ export default function SignUpStep3(props) {
                                         </Grid>
                                     </Grid>
                                 </div> 
-                            </Container>
+                            </div>
                         </div>
                     </div>
-            <div style={{width: '100%'}}>
-            <div style={{margin: '20px 36px 12px'}}>
+            
+        </Box>
+        <div style={{width: '100%', position: 'fixed', bottom: '0', display: 'grid', backgroundColor: '#fff', paddingBottom: '30px', maxwidth: '420px'}}>
+            <div style={{margin: '30px 24px 12px'}}>
                 {image ?
                         <Button variant="contained" onClick={handleNextStep} style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
                             다음
@@ -241,12 +255,11 @@ export default function SignUpStep3(props) {
                         </Button>
                 }
             </div>
-            </div>
         
-            <div style={{display: 'flex', fontSize: '12px', fontWeight: '500', padding: '6px 0', color: '#505050'}}>
-                <span style={{alignSelf: 'center'}}>이미 회원이신가요?</span><Button onClick={() => router.push('/login')} variant="text" style={{alignSelf: 'start', justifySelf: 'start', fontSize: '12px', color: '#FFCE00', padding: 0, fontWeight: '700'}}>로그인</Button>
+            <div style={{display: 'flex', flexDirection: 'column',  fontSize: '12px', fontWeight: '500', padding: '6px 0', color: '#505050', textAlign: 'center'}}>
+                <span style={{alignSelf: 'center'}}>이미 회원이신가요?<Button onClick={() => router.push('/login')} variant="text" style={{alignSelf: 'start', justifySelf: 'start', fontSize: '12px', color: '#FFCE00', padding: 0, fontWeight: '700', textDecoration: 'underline'}}>로그인하기</Button></span>
             </div>
-        </Box>
+            </div>
         </div>
     )
 }
