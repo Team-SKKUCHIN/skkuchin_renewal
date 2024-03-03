@@ -146,12 +146,14 @@ public class UserDto {
         @JsonProperty
         private int studentId;
         private Major major;
+        private String email;
         private Profile image;
         private Campus campus;
         private Campus toggle;
         private Gender gender;
         private String phoneNumber;
         private boolean isAlarmOn;
+        private boolean phoneVerification;
 
         public Response(AppUser user, Sms sms) {
             if (user != null) {
@@ -160,6 +162,7 @@ public class UserDto {
                 this.username = user.getUsername();
                 this.studentId = user.getStudentId();
                 this.major = user.getMajor();
+                this.email = user.getEmail();
                 this.image = user.getImage();
                 this.campus = findCampus(user.getMajor());
                 this.toggle = user.getToggle();
@@ -170,6 +173,7 @@ public class UserDto {
                 this.username = null;
                 this.studentId = 0;
                 this.major = null;
+                this.email = null;
                 this.image = Profile.DEFAULT1;
                 this.campus = null;
                 this.toggle = null;
@@ -179,9 +183,11 @@ public class UserDto {
             if (sms != null) {
                 this.phoneNumber = sms.getPhoneNumber();
                 this.isAlarmOn = sms.isAlarmOn();
+                this.phoneVerification = sms.isVerified();
             } else {
                 this.phoneNumber = null;
                 this.isAlarmOn = false;
+                this.phoneVerification = false;
             }
         }
 

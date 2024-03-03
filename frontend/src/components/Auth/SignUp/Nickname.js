@@ -1,24 +1,21 @@
 import { useState, useEffect } from "react";
 import {  TextField, Button, InputLabel, Typography, Box, FormControl, Select, MenuItem, Container, Grid, Autocomplete, OutlinedInput} from '@mui/material';
-import back from '../../image/arrow_back_ios.png';
-import check from '../../image/check_circle.png';
+import back from '../../../image/arrow_back_ios.png';
+import check from '../../../image/check_circle.png';
 import Image from 'next/image';
 import { useRouter } from "next/router";
-import { check_nickname } from "../../actions/auth/auth";
+import { check_nickname } from "../../../actions/auth/auth";
+import { register } from '../../../actions/auth/auth';
 import { useDispatch } from 'react-redux';
-import { Loading } from '../Loading';
+import { Loading } from '../../Loading';
 
-const SignUpStep2 = (props) => {
+const SignUpNickname = (props) => {
     const router = useRouter();
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [validNickname, setValidNickname] = useState(null);
     const [nicknameMsg, setNicknameMsg] = useState("");
     const [validSId, setValidSId] = useState(null);
-    const [phone1, setPhone1] = useState("010");
-    const [phone2, setPhone2] = useState("");
-    const [phone3, setPhone3] = useState("");
-    const [validPhone2, setValidPhone2] = useState(null);
-    const [validPhone3, setValidPhone3] = useState(null);
 
     const majorList = [
       '경영학과', '글로벌경영학과', '앙트레프레너십연계전공', '경제학과','국제통상학전공', '소비자학과',
@@ -41,12 +38,26 @@ const SignUpStep2 = (props) => {
     }
 
     const checkNickname = (next) => {
-      check_nickname(props.data.nickname, ([result, message]) => {
+      if (props.data.nickname.length > 10) {
         setLoading(false);
+        setValidNickname(false);
+        setNicknameMsg("닉네임은 최대 10자까지 가능합니다.")
+        return;
+      }
+      check_nickname(props.data.nickname, ([result, message]) => {
+        //setLoading(false);
         setValidNickname(result);
         if (result) {
           if (next) {
-            props.handleNextStep();
+            //props.handleNextStep();
+            dispatch(register(props.data, ([result, message]) => {
+              setLoading(false);
+              if (result) {
+                props.handleNextStep();
+              } else {
+                console.log(message);
+              }
+            }))
           }
         } else {
           if (typeof(message) == 'string') {
@@ -56,12 +67,20 @@ const SignUpStep2 = (props) => {
       })
     }
 
+    const tempSignUp = () => {
+      dispatch(register(props.data, ([result, message]) => {
+        setLoading(false);
+        if (result) {
+          console.log(message);
+          props.handleNextStep();
+        } else {
+          console.log(message);
+        }
+      }))
+    }
+
     const handleNextStep = () => {
       setLoading(true);
-
-      if (phone1 && validPhone2 && validPhone3) {
-        props.setData({...props.data, phone: phone1+phone2+phone3})
-      }
       checkNickname(true);
     }
 
@@ -91,49 +110,12 @@ const SignUpStep2 = (props) => {
       validateSId(sId);
     } 
 
-    const validatePhone2 = (p2) => {
-      let isNum = /^\d+$/.test(p2)
-      setPhone2(p2)
-      if (p2 == "") {
-        setValidPhone2(null)
-      }
-      else if (!isNum || p2.length !== 4) {
-        setValidPhone2(false)
-      } else {
-        setValidPhone2(true)
-      }
-    }
-    const validatePhone3 = (p3) => {
-      let isNum = /^\d+$/.test(p3)
-      setPhone3(p3)
-      if (p3 == "") {
-        setValidPhone3(null)
-      }
-      else if (!isNum || p3.length !== 4) {
-        setValidPhone3(false)
-      } else {
-        setValidPhone3(true)
-      }
-    }
 
-    // 숫자 네 자리 넘는지, 문자 포함되어 있는지 검사
-    const handlePhone2Change = (e) => {
-      let p2 = e.target.value
-      validatePhone2(p2);
-    }
-    const handlePhone3Change = (e) => {
-      let p3 = e.target.value
-      validatePhone3(p3);
-    }
 
     useEffect(() => {
       if (props.data.nickname !== '') {
         checkNickname(false);
         validateSId(props.data.student_id);
-        if (props.data.phone.length === 11) {
-          validatePhone2(props.data.phone.slice(3, 7));
-          validatePhone3(props.data.phone.slice(7, 11));
-        } 
       }
     }, [])
 
@@ -162,23 +144,23 @@ const SignUpStep2 = (props) => {
         <div style={{margin: '0 24px 100px'}}>
         <Grid container>
                 <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
-                <Typography style={{fontSize: '26px', color: '#9E9E9E', marginRight: '7px'}}>&bull;</Typography>
+                <Typography style={{fontSize: '26px', color: '#FFCE00', marginRight: '7px'}}>&bull;</Typography>
                 <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
                 <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
                 </Grid>
                 <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C'}}>개인정보 입력</Typography>
 
-                <Typography style={{fontSize: '12px', fontWeight: '900', marginTop: '35px', marginLeft: '4px', color: '#3C3C3C'}}>닉네임</Typography>
+                <Typography style={{fontSize: '14px', marginTop: '35px', color: '#3C3C3C'}}>닉네임</Typography>
                 <input
                     variant="standard"
-                    placeholder="닉네임"
+                    placeholder="닉네임 (최대 10자)"
                     value={props.data.nickname}
                     onChange={handleNicknameChange}
                     style={{
                         fontSize: '16px',
                         padding: '20px 15px 21px 12px',
                         height: '56px',
-                        border: validNickname == null ? '1px solid #E2E2E2' : (validNickname ? '1px solid #12A054' : '1px solid #FF3B3B'),
+                        border: '1px solid #E2E2E2',
                         margin: '8px 0 0px 0',
                         borderRadius: '8px',
                         width: '100%',
@@ -188,14 +170,14 @@ const SignUpStep2 = (props) => {
             <div style={{display:'flex'}}>
               {/* <Button variant="contained" onClick={checkNickname} style={{backgroundColor: '#FFCE00', color: '#fff', borderRadius: '8px', width: '47px', height: '20px', fontSize: '9px', padding: '3px 4px', marginTop: '4px', boxShadow: 'none'}}>중복확인</Button> */}
               {/* {validNickname == null && <Typography sx={{fontSize: '12px', fontWeight: '500', color: '#3C3C3C', margin: '5px 0 0 5px'}}>닉네임 중복 확인 체크를 해주세요</Typography>} */}
-              {validNickname && <Typography sx={{fontSize: '12px', fontWeight: '500', color: '#12A054', margin: '5px 0 0 5px'}}>{nicknameMsg}</Typography>}
-              {validNickname == false && <Typography sx={{fontSize: '12px', fontWeight: '500', color: '#FF3B3B', margin: '5px 0 0 5px'}}>{nicknameMsg}</Typography>}
+              {/* {validNickname && <Typography sx={{fontSize: '12px', fontWeight: '500', color: '#12A054', margin: '5px 0 0 5px'}}>{nicknameMsg}</Typography>} */}
+              {validNickname == false ? <Typography sx={{fontSize: '12px', fontWeight: '500', color: '#F47806', marginTop: '6px'}}>{nicknameMsg}</Typography> : <div style={{height: '24px'}}></div>}
             </div>
 
             {/* 학번 */}
             <Grid container style={{marginTop: '16px'}}>
             <FormControl variant="standard" style={{width: '27%'}}>
-              <Typography style={{paddingBottom: '4px', fontSize: '12px', fontWeight: '900', color: '#3C3C3C', marginLeft: '4px'}}>학번</Typography>
+              <Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#3C3C3C', }}>학번</Typography>
               <Grid container>
               <input
                   variant="standard"
@@ -208,7 +190,7 @@ const SignUpStep2 = (props) => {
                       color: '#3C3C3C',
                       padding: '16px 0px 16px 12px',
                       height: '56px',
-                      border: validSId == false ? '1px solid #FF3B3B' : '1px solid #E2E2E2',
+                      border: '1px solid #E2E2E2',
                       borderRight: validSId == false ? '#fff' : 'white',
                       borderRadius: '8px 0 0 8px',
                       width: '50%',
@@ -224,7 +206,7 @@ const SignUpStep2 = (props) => {
                       textAlign: 'end',
                       padding: '16px 12px 16px 0px',
                       height: '56px',
-                      border: validSId == false ? '1px solid #FF3B3B' : '1px solid #E2E2E2',
+                      border: '1px solid #E2E2E2',
                       borderLeft: validSId == false ? '#fff' : 'white',
                       borderRadius: '0 8px 8px 0',
                       width: '50%',
@@ -232,33 +214,11 @@ const SignUpStep2 = (props) => {
                   }}
               />
               </Grid>
-              {/* <Autocomplete
-                //clearOnEscape
-                disablePortal
-                sx={{
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    border: 'none'
-                  },
-                  '& input': {
-                    fontSize: '14px',
-                    padding: '0'
-                  },
-                  height: '56px',
-                  border: '1px solid #E2E2E2',
-                  borderRadius: '8px',
-                  outline: 'none',
-                  appearance: 'none' 
-                }}
-                value={props.data.studentId}
-                onChange={(e, value) => props.setData({...props.data, student_id: value.slice(0, 2)})}
-                options={studentIdList}
-                renderInput={(params) => <TextField {...params} />} 
-              /> */}
             </FormControl>
 
             {/* 학과 */}
             <FormControl variant="standard" style={{width: '73%'}}>
-            <Typography style={{paddingBottom: '4px', fontSize: '12px', fontWeight: '900', color: '#3C3C3C', marginLeft: '12px'}}>학부/학과</Typography>
+            <Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#3C3C3C', marginLeft: '8px'}}>학부/학과</Typography>
             <Autocomplete
               //disablePortal
               value={props.data.major}
@@ -285,78 +245,12 @@ const SignUpStep2 = (props) => {
             />
           </FormControl>
           </Grid>
-          {validSId === false && <Typography style={{color: '#FF3B3B', fontSize: '12px', margin: '4px 0 0 4px'}}>다른 학번을 입력해주세요</Typography>}
-
-
-          {/* 전화번호 */}
-          <Typography style={{paddingBottom: '4px', fontSize: '12px', fontWeight: '900', color: '#3C3C3C', marginLeft: '4px', marginTop: '16px'}}>전화번호 <span style={{color: '#BABABA'}}>(선택)</span></Typography>
-          <Grid>
-          <FormControl variant="standard" style={{width: '31%'}}>
-          <Autocomplete
-              //disablePortal
-              value={phone1}
-              sx={{
-                '& .MuiOutlinedInput-notchedOutline': {
-                  border: 'none'
-                },
-                '& input': {
-                  fontSize: '16px',
-                  padding: '0'
-                },
-                height: '56px',
-                border: '1px solid #E2E2E2',
-                borderRadius: '8px',
-                outline: 'none',
-                appearance: 'none',
-                fontSize: '16px',
-                padding: '0',
-              }}
-              onChange={(e, value) => setPhone1(value)}
-              options={phoneNumList}
-              renderInput={(params) => <TextField {...params} style={{fontSize: '12px'}} />} 
-            />
-            </FormControl>
-            <input
-                  variant="standard"
-                  placeholder=""
-                  value={phone2}
-                  //onClick={e => setDialogOpen(false)}
-                  onChange={handlePhone2Change}
-                  style={{
-                      fontSize: '18px',
-                      color: '#3C3C3C',
-                      padding: '16px 0px 16px 12px',
-                      height: '56px',
-                      border: validPhone2 == false ? '1px solid #FF3B3B' : '1px solid #E2E2E2',
-                      borderRadius: '8px',
-                      width: '33%',
-                      outline: 'none',
-                      margin: '0 8px'
-                  }}
-              />
-              <input
-                  variant="standard"
-                  placeholder=""
-                  value={phone3}
-                  //onClick={e => setDialogOpen(false)}
-                  onChange={handlePhone3Change}
-                  style={{
-                      fontSize: '18px',
-                      color: '#3C3C3C',
-                      padding: '16px 0px 16px 12px',
-                      height: '56px',
-                      border: validPhone3 == false ? '1px solid #FF3B3B' : '1px solid #E2E2E2',
-                      borderRadius: '8px',
-                      width: '31%',
-                      outline: 'none'
-                  }}
-              />
-          </Grid>
+          {validSId === false && <Typography style={{color: '#F47806', fontSize: '12px', margin: '4px 0 0 4px'}}>다른 학번을 입력해주세요</Typography>}
         </div>
         
         </form>
         <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff'}}>
-        {(props.data.nickname != '' && validNickname != false && majorList.indexOf(props.data.major) != -1 && validSId) && validPhone2 != false && validPhone3 != false ?
+        {(props.data.nickname != '' && validNickname != false && majorList.indexOf(props.data.major) != -1 && validSId) ?
                     <Button variant="contained" onClick={handleNextStep} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
                         다음
                     </Button>
@@ -375,4 +269,4 @@ const SignUpStep2 = (props) => {
     );
   };
 
-  export default SignUpStep2;
+  export default SignUpNickname;

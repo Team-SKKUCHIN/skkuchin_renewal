@@ -50,16 +50,20 @@ public class SmsService {
             throw new CustomRuntimeException("먼저 회원가입을 진행해주시기 바랍니다");
         }
 
-        List<Sms> smsList = smsRepo.findByUser(user);
-        if (!smsList.isEmpty()) {
-            throw new CustomRuntimeException("이미 전화번호를 등록하였습니다");
-        }
 
         Sms existingSms = smsRepo.findByPhoneNumber(phoneNumber);
-        if (existingSms != null && existingSms.isVerified()) {
-            throw new CustomRuntimeException("사용 중인 번호입니다");
+        if (existingSms != null) {
+            if (existingSms.isVerified()) {
+                throw new CustomRuntimeException("사용 중인 번호입니다");
+            } else {
+                // 인증문자 재전송
+                existingSms.setVerificationCode(verificationCode);
+                smsRepo.save(existingSms);
+            }
+        } else {
+            smsRepo.save(dto.toEntity(user, verificationCode));
         }
-        smsRepo.save(dto.toEntity(user, verificationCode));
+
         sendSms(phoneNumber, String.format("스꾸친 본인확인 인증번호는 [%s]입니다.", verificationCode));
     }
 

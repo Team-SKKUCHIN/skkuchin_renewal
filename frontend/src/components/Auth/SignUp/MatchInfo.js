@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import {  TextField, Button, InputLabel, Typography, Box, FormControl, Select, MenuItem, Container, Grid, Autocomplete} from '@mui/material';
-import back from '../../image/arrow_back_ios.png';
+import back from '../../../image/arrow_back_ios.png';
 import Image from 'next/image';
-import theme from '../../theme/theme';
+import theme from '../../../theme/theme';
 import { useRouter } from "next/router";
 import { useDispatch } from 'react-redux';
-import { register } from '../../actions/auth/auth';
-import { add_new_matching_info } from '../../actions/matchingUser/matchingUser';
+import { register } from '../../../actions/auth/auth';
+import { add_new_matching_info } from '../../../actions/matchingUser/matchingUser';
 
-const SignUpStep4 = (props) => {
+const SignUpMatchInfo = (props) => {
     const dispatch = useDispatch();
     const [gender, setGender] = useState(null);
     const [mbtiChoose, setMbtiChoose] = useState({
@@ -222,7 +222,7 @@ const SignUpStep4 = (props) => {
 
     const handleNextStep = () => {
         let data = props.data;
-        dispatch(register(data, ([result, message]) => {
+        /*dispatch(register(data, ([result, message]) => {
             if (result) {
                 dispatch(add_new_matching_info(data.username, gender, keyword, introduction, mbti, ([result, message]) => {
                     if (result) {
@@ -231,6 +231,13 @@ const SignUpStep4 = (props) => {
                         console.log(result, message)
                     }
                 }))
+            } else {
+                console.log(result, message)
+            }
+        }))*/
+        dispatch(add_new_matching_info(data.username, gender, keyword, introduction, mbti, ([result, message]) => {
+            if (result) {
+                props.handleNextStep();
             } else {
                 console.log(result, message)
             }
@@ -264,7 +271,7 @@ const SignUpStep4 = (props) => {
     }, [mbtiChoose, food, study, art, sports]);
 
     useEffect(()=>{
-        if(gender && keyword.length >0 && introduction != '' && mbti){
+        if(gender && keyword.length >=3 && introduction != '' && mbti){
     
             setCondition(true);
         } else {
@@ -286,7 +293,7 @@ const SignUpStep4 = (props) => {
     </Container>
     <Box
         sx={{
-        margin: '35px 0px 15px 0',
+        margin: '35px 0px 170px 0',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -299,21 +306,21 @@ const SignUpStep4 = (props) => {
             <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
             <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
             <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
-            <Typography style={{fontSize: '26px', color: '#9E9E9E', marginRight: '7px'}}>&bull;</Typography>
+            <Typography style={{fontSize: '26px', color: '#FFCE00', marginRight: '7px'}}>&bull;</Typography>
         </Grid>
-        <Typography style={{fontSize:'24px', textAlign:'left', margin:'0px 0px 8px 0px'}} color={theme.palette.fontColor.dark} fontWeight={theme.typography.h2}>매칭 프로필 작성</Typography>
-        <Typography style={{fontSize:'12px', textAlign:'left', margin:'12px 0px 36px 0px'}} color={theme.palette.fontColor.main} fontWeight={theme.typography.h2}>AI매칭 활성화를 위해 프로필을 작성해 주세요.</Typography>
+        <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C', textAlign: 'left'}}>개인 밥약 프로필</Typography>
+        <Typography style={{marginBottom: '30px', fontWeight: 'bold', fontSize: '12px', color: '#777777', textAlign: 'left'}}>밥약 매칭을 위한 프로필을 완성해주세요.</Typography>
 
         {/* 성별 */}
-        <Typography style={{fontSize: '12px', fontWeight: '900', marginBottom: '8px', marginLeft: '4px', color: '#3C3C3C'}}>성별</Typography>
-        <Grid container style={{marginBottom: '16px'}}>
+        <Typography style={{fontSize: '14px', marginBottom: '8px', marginLeft: '4px', color: '#3C3C3C'}}>성별</Typography>
+        <Grid container style={{marginBottom: '18px'}}>
             <Button value="남성" onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '8px 0 0 8px', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '남성' ? '#FFFCE4' : '#fff'}}>남</Button>
             <Button value="여성" onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '0 8px 8px 0', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '여성' ? '#FFFCE4' : '#fff'}}>여</Button>
         </Grid>
 
         {/* MBTI */}
-        <Typography style={{fontSize: '12px', fontWeight: '900', marginBottom: '8px', marginLeft: '4px', color: '#3C3C3C'}}>MBTI</Typography>
-        <Grid container style={{marginBottom: '16px'}}>
+        <Typography style={{fontSize: '14px', marginBottom: '8px', marginLeft: '4px', color: '#3C3C3C'}}>MBTI</Typography>
+        <Grid container style={{marginBottom: '18px'}}>
             <div style={{width: '22%'}}>
                 <Button onClick={() => handleMbtiClick("E")} style={{backgroundColor: mbtiChoose.E == true ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '8px 8px 0 0', color: '#3C3C3C', width: '100%'}}>E</Button>
                 <Button onClick={() => handleMbtiClick("I")} style={{backgroundColor: mbtiChoose.E == false ? "#FFFCE4" : "#fff", border: '1px solid #E2E2E2', borderRadius: '0 0 8px 8px', color: '#3C3C3C', width: '100%'}}>I</Button>
@@ -336,24 +343,31 @@ const SignUpStep4 = (props) => {
         </Grid>
 
         {/* 한 줄 자기소개 */}
-        <Typography style={{fontSize: '12px', fontWeight: '900', marginBottom: '8px', marginLeft: '4px', color: '#3C3C3C'}}>한 줄 자기소개</Typography>
-        <div style={{width: '100%', border: '1px solid #E2E2E2', borderRadius: '8px'}}>
+        <div style={{height: '129px'}}>
+        <Typography style={{fontSize: '14px', marginBottom: '8px', marginLeft: '4px', color: '#3C3C3C'}}>한줄 자기 소개</Typography>
+        {/* <div style={{width: '100%', border: '1px solid #E2E2E2', borderRadius: '8px'}}> */}
         <textarea 
         value={introduction}
         onChange={(e)=> {setIntroduction(e.target.value)}}
-        maxLength={29}
-        placeholder='스꾸친에 오신 걸 환영합니다'
-        style={{width: '100%', outline: 'none', resize: 'none', fontSize: '16px', border: 'none', height: '60px', padding: '12px 18px', fontFamily: 'inherit'}}>
+        //maxLength={29}
+        placeholder='간단히 자신을 소개해보세요 (필수)'
+        style={{width: '100%', border: '1px solid #E2E2E2', borderRadius: '8px', outline: 'none', resize: 'none', fontSize: '16px', border: 'none', height: '60px', padding: '12px 18px', fontFamily: 'inherit'}}>
         </textarea>
-        <div style={{width: '100%', height: '25px', display: 'flex', justifyContent: 'space-between'}}>
+        {/* <div style={{width: '100%', height: '25px', display: 'flex', justifyContent: 'space-between'}}>
             <div></div>
             <Typography style={{padding: '0 18px 12px 0', color: '#FC9712', fontSize: '12px'}}>{introduction.length}/30자</Typography>
         </div>
+        </div> */}
+        </div>
         </div>
 
+        
+        <div style={{ borderTop: '10px solid #E2E2E2', margin: '45px 0 30px 0' }}></div>
+
+        <div style={{margin: '0 24px'}}>
         {/* 관심사 */}
-        <Typography style={{fontSize: '16px', marginTop: '60px', marginBottom: '8px', color: '#3C3C3C'}} fontWeight={theme.typography.h1}>관심사</Typography>
-        <Typography style={{fontSize:'12px', textAlign:'left', margin:'8px 0px 20px 0px'}} color={theme.palette.fontColor.main} fontWeight={theme.typography.h2}>3개 이상의 태그를 선택해주세요.</Typography>
+        <Typography style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '6px', color: '#3C3C3C'}} fontWeight={theme.typography.h1}>관심사</Typography>
+        <Typography style={{fontSize:'12px', textAlign:'left', margin:'8px 0px 30px 0px', color: '#9E9E9E'}} fontWeight={theme.typography.h2}>태그를 3개 이상 선택해주세요.</Typography>
 
         {/* 음식 */}
         <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '8px', color: '#3C3C3C'}}>음식</Typography>
@@ -373,7 +387,7 @@ const SignUpStep4 = (props) => {
         </div>
     </form>
 
-    <div style={{width: '100%'}}>
+    {/* <div style={{width: '100%'}}>
             <div style={{margin: '60px 24px 12px'}}>
                 {condition?
                         <Button variant="contained" onClick={handleNextStep} style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
@@ -385,11 +399,26 @@ const SignUpStep4 = (props) => {
                         </Button>
                 }
             </div>
-            </div>
+            </div> */}
     </Box>
+
+    <div style={{width: '100%', position: 'fixed', bottom: 0, backgroundColor: '#fff', paddingBottom: '35px'}}>
+            <div style={{margin: '10px 24px 20px', display: 'flex', width: 'calc(100% - 48px)', justifyContent: 'space-between'}}>
+                {/* <Button variant="contained" style={{width: '100%', backgroundColor: '#E2E2E2', color: '#fff', borderRadius: '8px', height: '56px', boxShadow: 'none', fontWeight: '900', marginRight: '5px'}}>건너뛰기</Button> */}
+                {condition ? 
+                    <Button variant="contained" onClick={handleNextStep} style={{width: '100%', backgroundColor: '#FFCE00', color: '#fff', borderRadius: '8px', height: '56px', boxShadow: 'none', fontWeight: '900', marginLeft: '5px'}}>다음</Button>
+                    :
+                    <Button variant="contained" style={{width: '100%', backgroundColor: '#E2E2E2', color: '#fff', borderRadius: '8px', height: '56px', boxShadow: 'none', fontWeight: '900', marginLeft: '5px'}}>다음</Button>
+                }
+            </div>
+        
+            <div style={{display: 'flex', flexDirection: 'column',  fontSize: '12px', fontWeight: '500', color: '#505050', textAlign: 'center'}}>
+                <span style={{alignSelf: 'center'}}>이미 회원이신가요?<Button onClick={() => router.push('/login')} variant="text" style={{alignSelf: 'start', justifySelf: 'start', fontSize: '12px', color: '#FFCE00', padding: 0, fontWeight: '700', textDecoration: 'underline'}}>로그인하기</Button></span>
+            </div>
+        </div>
     </div>
     )
 
 }
 
-export default SignUpStep4;
+export default SignUpMatchInfo;
