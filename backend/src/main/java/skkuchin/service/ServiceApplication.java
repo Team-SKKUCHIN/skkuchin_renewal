@@ -29,17 +29,11 @@ public class ServiceApplication {
 	@Bean
 	CommandLineRunner run(
 			UserService userService,
-			TagService tagService,
 			PlaceService placeService,
 			ImageService imageService,
-			MenuService menuService,
 			KeywordService keywordService,
-			ReviewService reviewService,
-			RankService rankService,
-			ChatRoomService chatRoomService,
-			ChatMessageService chatMessageService,
 			NoticeService noticeService,
-			ReportService reportService,
+			GroupProfileService groupProfileService,
 			WorldcupService worldcupService) {
 		return args -> {
 			userService.saveRole(Role.builder().name("ROLE_USER").build());
@@ -59,19 +53,13 @@ public class ServiceApplication {
 			// // 병준 경로
 
 			try {
-				// tagService.insertData(path);
 				placeService.insertData(path);
 				imageService.insertData();
-				// menuService.insertData(path);
 				keywordService.insertData(path);
-				// reviewService.insertData(path);
-				// rankService.addRank();
 				userService.saveTestMatchingUsers(100);
+				groupProfileService.saveGroupProfiles(10);
 				worldcupService.insertData(100);
-				chatRoomService.insertData();
-				chatMessageService.insertData();
 				noticeService.insertData();
-				reportService.insertData();
 			} catch (Exception e) {
 				System.out.println(e);
 			}

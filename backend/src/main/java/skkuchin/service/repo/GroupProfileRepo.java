@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import skkuchin.service.domain.Chat.GroupProfile;
 
 public interface GroupProfileRepo extends JpaRepository<GroupProfile, Long> {
+    GroupProfile findByGroupName(String groupName);
+
     @Query("SELECT p FROM GroupProfile p WHERE p.friend1.id <> :userId")
     List<GroupProfile> findGroupProfilesExceptMine(@Param("userId") Long userId);
 
