@@ -20,7 +20,7 @@ const resetPassword = () => {
     }
     
     const handlePrevStep = () => {
-        setStep(step - 1);
+        router.push('/myPage')
     }
 
     useEffect(() => {

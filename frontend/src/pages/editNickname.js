@@ -9,12 +9,13 @@ import check from '../image/check_circle.png';
 import { change_user, check_nickname } from '../actions/auth/auth';
 import { Dialog } from "@mui/material";
 import { DialogContent } from "@mui/material";
+import Popup from "../components/Custom/Popup";
 
 const editNickname = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const user = useSelector(state => state.auth.user);
-    const [validNickname, setValidNickname] = useState(false);
+    const [validNickname, setValidNickname] = useState(null);
     const [nicknameMsg, setNicknameMsg] = useState("");
     const [isCorrect, setIsCorrect] = useState("none");
     const [isNickFocused, setIsNickFocused] = useState(false);
@@ -28,6 +29,12 @@ const editNickname = () => {
     const [nickname, setNickname] = useState("");
     const [major, setMajor] = useState("");
     const [studentId, setStudentId] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupType, setPopupType] = useState('error');
+    const [popupMessage, setPopupMessage] = useState('');
 
     const majorList = [
         '경영학과', '글로벌경영학과', '앙트레프레너십연계전공', '경제학과','국제통상학전공', '소비자학과',
@@ -86,16 +93,30 @@ const editNickname = () => {
         if (major == '화학공학/고분자공학부') {
             finalMajor = '화학공학_고분자공학부'
         }
+        if (nickname.length > 10) {
+            console.log('here')
+            setValidNickname(false);
+            setNicknameMsg('닉네임은 최대 10자까지 가능합니다.');
+            return;
+        }
         check_nickname(nickname)
         .then((message) => {
           setValidNickname(true);
           setNicknameMsg(message);
-          dispatch(change_user(nickname, finalMajor, image, studentId.slice(0, 2)))
+          const data = {
+            nickname: nickname,
+            major: finalMajor,
+            image: image,
+            student_id: studentId.slice(0, 2)
+          }
+          dispatch(change_user(data))
             .then(() => {
-                setDialogOpen(true);
-                setTimeout(() => {
-                    router.push('/myPage');
-                  }, 1000); 
+                //setDialogOpen(true);
+                setPopupMessage('변경 내용을 저장하였습니다.')
+                setPopupOpen(true);
+                // setTimeout(() => {
+                //     router.push('/myPage');
+                //   }, 1000); 
             })
             .catch((error) => {
                 console.log(error);
@@ -104,17 +125,22 @@ const editNickname = () => {
         })
         .catch((error) => {
           setValidNickname(false);
-          setNicknameMsg(error);
+          setNicknameMsg('이미 사용중인 닉네임입니다.');
           setIsCorrect("wrong");
-        })
+        })   
+    }
 
-        
+    const handlePopupClose = () => {
+        setPopupOpen(false);
+        router.push('/myPage');
     }
 
     useEffect(() => {
         if (user) {
             setImage(user.image);
             setNickname(user.nickname);
+            setEmail(user.email);
+            setPhone(user.phone_number);
             user.major == '화학공학_고분자공학부' ? setMajor('화학공학/고분자공학부') : setMajor(user.major);
             setStudentId(user.student_id + "학번");
         }
@@ -149,16 +175,16 @@ const editNickname = () => {
                     <Image src={back} width={25} height={25} name='back' onClick={handleArrowClick} layout='fixed'/>
                 </Grid>
                 <Grid item style={{marginLeft:'25%'}}>
-                    <Typography style={{margin:'0px 0px 0px 10px', textAlign:'center',fontSize:'18px', fontWeight: '700'}}>닉네임 변경</Typography>
+                    <Typography style={{margin:'0px 0px 0px 10px', textAlign:'center',fontSize:'18px', fontWeight: '700'}}>계정 정보</Typography>
                 </Grid>
                 <Grid item style={{padding:'0', marginLeft:'auto', marginRight:'20px'}}>
                 {(nickname != '' && majorList.indexOf(major) != -1 && studentIdList.indexOf(studentId) != -1) ?
                     <Button onClick={handleNextStep} style={{padding:'0', right:'0'}}>
-                        <Typography style={{margin:'0px 0px 0px 10px',color:'#FFCE00', textAlign:'center',fontSize:'18px', fontWeight: '500'}}>저장</Typography>
+                        <Typography style={{margin:'0px 0px 0px 10px',color:'#FFCE00', textAlign:'center',fontSize:'18px', fontWeight: 'bold'}}>저장</Typography>
                     </Button>
                     :
                     <Button style={{padding:'0', right:'0'}}>
-                        <Typography style={{margin:'0px 0px 0px 10px',color:'#BABABA', textAlign:'center',fontSize:'18px', fontWeight: '500'}}>저장</Typography>
+                        <Typography style={{margin:'0px 0px 0px 10px',color:'#BABABA', textAlign:'center',fontSize:'18px', fontWeight: 'bold'}}>저장</Typography>
                     </Button>
                 }
                 </Grid>
@@ -167,100 +193,166 @@ const editNickname = () => {
         {user && 
         <Box
             sx={{
-            margin: '45px 10px 16px 10px',
+            margin: '35px 0px 16px 0px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            justifyItems: 'center',
             }}
         >
         <form style={{ width: '100%'}}>
-        <div style={{margin: '0 20px 20px'}}>
-            <div style={{display:'flex'}}><Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#777777', fontWeight:'700'}}>닉네임&nbsp;</Typography> <Typography style={{fontSize:'14px', color:'#BABABA'}}>(최대 10자)</Typography></div>
-            <TextField
-                color={isCorrect}
-                variant="outlined"
-                placeholder="닉네임을 입력해주세요."
+        <div style={{margin: '0 24px 20px'}}>
+            <div style={{display:'flex'}}><Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#3C3C3C'}}>닉네임</Typography></div>
+            <input
+                variant="standard"
+                placeholder="닉네임 입력 필수 (최대 10자)"
                 value={nickname}
                 onChange={handleNicknameChange}
-                style={{width: '100%',}}
-                required
-                // InputProps={{
-                //     endAdornment: (validNickname) && (nickname != '') ? <Image src={check} width={15.83} height={15.83} sx={{p: '1.58px', mb: '5.58px'}} layout='fixed' /> : null 
-                // }}
-                InputProps={{
-                    style: {
-                      backgroundColor: isNickFocused ? 'white' : '#F2F2F2',
-                      borderRadius:'10px',
-                      
-                    },
-                    onFocus: () => {
-                      setIsNickFocused(true);
-                    },
-                    onBlur: () => {
-                      setIsNickFocused(false);
-                    },
-                  }}
+                style={{
+                    fontSize: '16px',
+                    padding: '20px 15px 21px 12px',
+                    height: '56px',
+                    border: '1px solid #E2E2E2',
+                    borderRadius: '8px',
+                    width: '100%',
+                    outline: 'none'
+                }}
             />
             {/* 중복확인 메소드 추가 */}
             {nickname !== user.nickname ? 
-            <div key={validNickname} style={{display:'flex', margin: '0px 0 0 3px'}}>
-                {/* <Button variant="contained" onClick={checkNickname} style={{backgroundColor: '#FFCE00', color: '#fff', borderRadius: '15px', width: '47px', height: '20px', fontSize: '9px', padding: '3px 4px', margin: '4px 0px', boxShadow: 'none'}}>중복확인</Button> */}
-                {/* {validNickname && nickname != "" && <Typography sx={{fontSize: '9px', fontWeight: '500', color:`${theme.palette.correct.main}` }} >사용 가능한 닉네임입니다</Typography>} */}
-                {validNickname == false &&  <Typography sx={{fontSize: '9px', fontWeight: '500', color:`${theme.palette.wrong.main}`}}>이미 사용중인 닉네임입니다</Typography>}
+            <div key={validNickname} style={{display:'flex', margin: '6px 0 0 3px'}}>
+                {validNickname === false ? <Typography sx={{fontSize: '12px', fontWeight: 'bold', color:'#F47806'}}>{nicknameMsg}</Typography>
+                : <div style={{height: '20px'}}></div>}
             </div> :
-            null}
+            <div style={{height: '26px'}}></div>}
             
+        {/* 학번 */}
+        <Grid container style={{marginTop: '16px'}}>
+            <FormControl variant="standard" style={{width: '27%'}}>
+              <Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#3C3C3C', }}>학번</Typography>
+              <Grid container>
+              <input
+                    readOnly
+                  variant="standard"
+                  placeholder=""
+                  value={studentId.slice(0, 2)}
+                  //onChange={(e, value) => handleStudentIdChange(e, value)}
+                  style={{
+                      fontSize: '18px',
+                      color: '#9E9E9E',
+                      padding: '16px 10px 16px 12px',
+                      height: '56px',
+                      border: '1px solid #E2E2E2',
+                      borderRight: 'white',
+                      borderRadius: '8px 0 0 8px',
+                      width: '50%',
+                      outline: 'none',
+                      textAlign: 'end',
+                      backgroundColor: '#FBFBFB',
+                      cursor: 'default'
+                  }}
+              />
+              <input
+                  readOnly
+                  value='학번'
+                  style={{
+                      fontSize: '16px',
+                      color: '#BABABA',
+                      textAlign: 'end',
+                      padding: '16px 20px 16px 0px',
+                      height: '56px',
+                      border: '1px solid #E2E2E2',
+                      borderLeft: 'white',
+                      borderRadius: '0 8px 8px 0',
+                      width: '50%',
+                      outline: 'none',
+                      backgroundColor: '#FBFBFB',
+                      cursor: 'default'
+                  }}
+              />
+              </Grid>
+            </FormControl>
+
+            {/* 학과 */}
+            <FormControl variant="standard" style={{width: '73%'}}>
+            <Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#3C3C3C', marginLeft: '8px'}}>학부/학과</Typography>
+            <Autocomplete
+              //disablePortal
+              value={major}
+              sx={{
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none'
+                },
+                '& input': {
+                  fontSize: '16px',
+                  padding: '0'
+                },
+                height: '56px',
+                border: '1px solid #E2E2E2',
+                borderRadius: '8px',
+                outline: 'none',
+                appearance: 'none',
+                marginLeft: '8px',
+                fontSize: '16px',
+                padding: '0'
+              }}
+              onChange={(e, value) => setMajor(value)}
+              options={majorList.sort()}
+              renderInput={(params) => <TextField {...params} style={{fontSize: '12px'}} />} 
+            />
+          </FormControl>
+          </Grid>
+
+          <div style={{display:'flex'}}><Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#3C3C3C', marginTop: '25px'}}>학교 이메일</Typography></div>
+            <input
+                readOnly
+                value={email}
+                style={{
+                    fontSize: '16px',
+                    padding: '20px 15px 21px 12px',
+                    height: '56px',
+                    border: '1px solid #E2E2E2',
+                    borderRadius: '8px',
+                    width: '100%',
+                    outline: 'none',
+                    backgroundColor: '#FBFBFB',
+                    color: '#9E9E9E',
+                    cursor: 'default'
+                }}
+            />
+
+            <div style={{display:'flex'}}><Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#3C3C3C', marginTop: '25px'}}>전화번호</Typography></div>
+            <input
+                readOnly
+                value={phone ? phone.slice(0, 3)+'-'+phone.slice(3, 7)+'-'+phone.slice(7, 11) : ''}
+                style={{
+                    fontSize: '16px',
+                    padding: '20px 15px 21px 12px',
+                    height: '56px',
+                    border: '1px solid #E2E2E2',
+                    borderRadius: '8px',
+                    width: '100%',
+                    outline: 'none',
+                    backgroundColor: '#FBFBFB',
+                    color: '#9E9E9E',
+                    cursor: 'default'
+                }}
+            />
+
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%'}}><Button onClick={() => router.push('/editPhoneNumber')} style={{fontSize: '14px', fontWeight: 'bold', color: '#3C3C3C', textDecoration: 'underline', marginTop: '30px'}}>전화번호 변경하기</Button></div>
         </div>
-        <div style={{display:'flex'}}>
-            <div style={{margin: '0 10px 0 20px', width:'30%'}}>
-                <FormControl variant="standard" style={{width: '100%'}}>
-                    <Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#777777', fontWeight:'700'}}>학번</Typography>
-                    <Autocomplete
-                    freeSolo
-                    value={studentId}
-                    onChange={(e, value) => setStudentId(value)}
-                    onFocus={()=>{setIsNumFocused(true)}}
-                    onBlur = {()=>{setIsNumFocused(false)}}
-                    sx={{ borderRadius: 1, }}
-                    options={studentIdList}
-                    renderInput={(params) => <TextField {...params} variant="outlined" style={{
-                        fontSize: '12px',
-                        borderRadius: '10px',
-                        background: isNumFocused ? 'white' : '#F2F2F2',
-                        
-                    }}/>} 
-                    />
-                </FormControl>
-            </div>
-            <div style={{margin: '0 20px 0 0px', width:'60%'}}>
-                <FormControl variant="standard" style={{width: '100%', borderRadius:'10px'}}>
-                <Typography style={{paddingBottom: '4px', fontSize: '14px', color: '#777777', fontWeight:'700'}}>학부/학과</Typography>
-                <Autocomplete
-                    freeSolo
-                    value={major}
-                    onChange={(e, value) => setMajor(value)}
-                    onFocus={()=>{setIsMajorFocused(true)}}
-                    onBlur={()=>{setIsMajorFocused(false)}}
-                    options={majorList.sort()}
-                    sx={{ borderRadius: 1 }}
-                    isOptionEqualToValue={(option, value) => option === value}
-                    renderInput={(params) => <TextField {...params} variant="outlined" style={{
-                        fontSize: '12px',
-                        borderRadius: '10px',
-                        background: isMajorFocused ? 'white' : '#F2F2F2',
-                        color: isMajorFocused ? 'white' : '#F2F2F2',
-                    }}
-                    />} 
-                />
-                </FormControl>
-            </div>
-        </div>
-        
         
         
         </form>
         </Box>}
-        <Dialog open={dialogOpen}><DialogContent><Typography style={{color:'#3C3C3C', fontWeight:'700', fontSize:'16px'}}>저장이 완료되었습니다.</Typography></DialogContent></Dialog>
+        <Popup 
+            open={popupOpen}
+            handleClose={handlePopupClose}
+            type={popupType}
+            message={popupMessage}
+
+        />
+        {/* <Dialog open={dialogOpen}><DialogContent><Typography style={{color:'#3C3C3C', fontWeight:'700', fontSize:'16px'}}>저장이 완료되었습니다.</Typography></DialogContent></Dialog> */}
         </ThemeProvider>
     )
 }

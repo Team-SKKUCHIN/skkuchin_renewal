@@ -39,7 +39,7 @@ const Step1 = (props) => {
     }
 
     const backClick = () => {
-        router.push('/login');
+        router.push('/myPage');
     }
 
     const handleDialogOpen = (e) => {
@@ -77,14 +77,13 @@ const Step1 = (props) => {
     </header> */}
     <form onSubmit={handleSubmit} style={{ width: '100%'}}>
     <div style={{margin: '0 24px'}}>
-        <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C'}}>비밀번호 초기화</Typography>
+        <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C'}}>비밀번호 재설정</Typography>
         <Typography style={{fontSize: '12px', fontWeight: '400', marginBottom: '13px', color: '#777777'}}>회원가입시 입력하신 이메일을 입력해주세요.</Typography>
-        <Typography style={{fontSize: '12px', fontWeight: '900', marginTop: '45px', color: '#3C3C3C'}}>이메일 입력</Typography>
+        <Typography style={{fontSize: '14px', marginTop: '45px', color: '#3C3C3C'}}>이메일</Typography>
 
         <div style={{textAlign: 'center', display: 'grid', gridTemplateColumns: '1fr 1fr', marginTop: '8px'}}>
         <input
             variant="standard"
-            placeholder="이메일 주소"
             value={emailId}
             onClick={e => setDialogOpen(false)}
             onChange={(e) => setEmailId(e.target.value)}
@@ -92,7 +91,7 @@ const Step1 = (props) => {
                 fontSize: '16px',
                 padding: '20px 15px 21px 12px',
                 height: '56px',
-                border: dialogOpen ? '1px solid #FF3B3B' : '1px solid #E2E2E2',
+                border: '1px solid #E2E2E2',
                 borderRadius: '8px 0 0 8px',
                 width: '100%',
                 outline: 'none'
@@ -109,7 +108,7 @@ const Step1 = (props) => {
             //padding: '0px 0px 1px 12px',
             textAlign: 'left',
             height: '56px',
-            border: dialogOpen ? '1px solid #FF3B3B' : '1px solid #E2E2E2',
+            border: '1px solid #E2E2E2',
             borderLeft: '1px solid white',
             borderRadius: '0 8px 8px 0',
             outline: 'none',
@@ -121,42 +120,22 @@ const Step1 = (props) => {
             <MenuItem value='@skku.edu'>@skku.edu</MenuItem>
         </Select>   
         </div>
-        <div>{dialogOpen ? <Typography sx={{fontSize: '12px', fontWeight: '500', color: '#FF3B3B', mt: '4px'}}>가입되어 있지 않은 이메일 주소입니다.</Typography> : <div style={{height: '20px'}}></div>}</div>
+        <div>{dialogOpen ? <Typography sx={{fontSize: '12px', fontWeight: 'bold', color: '#F47806', mt: '4px'}}>가입되어 있지 않은 이메일입니다.</Typography> : <div style={{height: '20px'}}></div>}</div>
         </div>
-        <div style={{margin: '32px 24px 12px'}}>
+        <div style={{margin: '19px 24px 12px'}}>
         {emailId != '' && !dialogOpen?
             <Button variant="contained" onClick={handleSubmit} style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                비밀번호 초기화하기
+                비밀번호 재설정하기
             </Button>
             :
             <Button variant="contained"  disabled style={{width: '100%', backgroundColor: "#E2E2E2", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                비밀번호 초기화하기
+                비밀번호 재설정하기
             </Button>
         }
         </div>
 
         </form>
-        <div style={{textAlign: 'center', fontSize: '12px', fontWeight: '500', padding: '6px 0', color: '#505050'}}>
-                <Link component="button" onClick={handleLinkClick} color="#BABABA" sx={{fontSize: '12px', mb: '18px'}}>아이디 찾기</Link>
-        </div>
       </Box>
-
-      {/* <Dialog open={dialogOpen} onClose={handleDialogOpen} PaperProps={{ style: { borderRadius: '10px' } }}>
-                <DialogContent style={{display: 'grid', alignItems: 'center', width:'270px', height:'100px', padding:'29px 0px 0px 0px', marginBottom:'0px'}}>
-                    <Typography style={{fontSize:'14px', color:'black', textAlign:'center', lineHeight:'22px', fontWeight: '700'}}>
-                      {dialogMsg}
-                    </Typography>
-                </DialogContent>
-                <DialogActions style={{justifyContent:'center'}}>
-                    
-                        <Button onClick={e => setDialogOpen(false)} variant="text" style={{fontSize:"14px", fontWeight: '700', color:'#505050'}}>
-                            <Typography style={{fontSize:"14px", fontWeight: '700', color:'#505050', marginBottom:'10px'}}>
-                                확인
-                            </Typography>
-                        </Button>
-
-                </DialogActions>
-          </Dialog> */}
         {loading && <Loading />}
       </>
     );

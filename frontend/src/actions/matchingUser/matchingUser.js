@@ -254,7 +254,7 @@ export const change_status_info = (status, callback) => async dispatch => {
 export const change_matching_info = (userData, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
-    console.log('전달 받은 USER DATA', userData);
+    //console.log('전달 받은 USER DATA', userData);
     
     const body = JSON.stringify({
         gender: userData.gender,
@@ -263,7 +263,7 @@ export const change_matching_info = (userData, callback) => async dispatch => {
         mbti: userData.mbti
     });
 
-    console.log('BODY VALUE', body);
+    //console.log('BODY VALUE', body);
 
     try {
         const res = await fetch(`${API_URL}/api/matching/user`,{

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {  Container, Typography, Box, Grid, Button } from '@mui/material';
-import back from '../../image/close.png';
+import back from '../../image/arrow_back_ios.png';
 import theme from '../../theme/theme';
 import Image from 'next/image';
 import { useRouter } from "next/router";
@@ -112,20 +112,31 @@ export default function EditProfileImage(props) {
         }
     }
 
+    // useEffect(() => {
+    //     setProfile({
+    //         ...profile,
+    //         [props.image] : true
+    //     })
+    //     setImage(props.image);
+    // }, [])
+
     useEffect(() => {
-        setProfile({
-            ...profile,
-            [props.image] : true
-        })
-        setImage(props.image);
-    }, [])
+        if (user) {
+            setProfile({
+                ...profile,
+                [user.image] : true
+            })
+            setImage(user.image);
+        }
+    }, [user])
 
     const handleSaveBtnClick = async () => {
         if (image) {
             console.log('저장 new Image: ', image);
             await dispatch(change_user({...userData, image: image}));
 
-            router.push('../myPage');
+            //router.push('../myPage');
+            router.back();
         }
     };
 
@@ -139,9 +150,10 @@ export default function EditProfileImage(props) {
             }}
             >
             <header style={{display: 'flex',  width: '100%', justifyContent: 'space-between', marginBottom: '42px'}}>
-                    <Image width={25} height={25} src={back} onClick={()=> router.push('../myPage')} layout='fixed' />
-                    <Typography align='center' style={{marginLeft:'30px', fontSize: '18px', fontWeight: '700'}}>프로필 이미지</Typography>
-                    { image ?
+                    <Image width={11} height={18} src={back} onClick={handleSaveBtnClick} layout='fixed' />
+                    <Typography align='center' style={{marginLeft:'30px', fontSize: '18px', fontWeight: '700'}}>프로필 이미지 변경</Typography>
+                    <div></div>
+                    {/* { image ?
                     <Button onClick={handleSaveBtnClick} style={{padding:'0', right:'0'}}>
                         <Typography style={{margin:'0px 0px 0px 10px',color:'#FFCE00', textAlign:'center',fontSize:'18px', fontWeight: '500'}}>저장</Typography>
                     </Button>
@@ -149,7 +161,7 @@ export default function EditProfileImage(props) {
                     <Button style={{padding:'0', right:'0'}}>
                         <Typography style={{margin:'0px 0px 0px 10px',color:'#BABABA', textAlign:'center',fontSize:'18px', fontWeight: '500'}}>저장</Typography>
                     </Button>
-                }
+                } */}
             </header>
 
             <div name='스꾸챗 프로필 사진' style={{textAlign:'center', display:'flex', justifyContent:'center'}}>
