@@ -121,14 +121,13 @@ public class GroupProfileService {
         List<GroupChatRequest> groupChatRequests = groupChatRequestRepo
                 .findGroupChatRequestsByGroupProfileId(groupProfileId);
 
-        groupChatRequests
+        boolean isRemain = groupChatRequests
                 .stream()
-                .filter(request -> request.getReceiver().getFriend1().getId() == userId
-                        && request.getStatus() == ResponseType.HOLD)
-                .forEach(request -> {
-                    request.setStatus(ResponseType.REFUSE);
-                    groupChatRequestRepo.save(request);
-                });
+                .anyMatch(request -> request.getReceiver().getFriend1().getId() == userId
+                        && request.getStatus() == ResponseType.HOLD);
+        if (isRemain) {
+            throw new CustomRuntimeException("보류 중인 신청이 존재합니다");
+        }
 
         groupChatRequests
                 .stream()
@@ -148,7 +147,7 @@ public class GroupProfileService {
         if (user.getGender() == null) {
             throw new CustomRuntimeException("성별을 등록하지 않았습니다");
         }
-        
+
         String groupName;
         int maxAttempts = 10;
         int attempts = 0;
@@ -162,31 +161,30 @@ public class GroupProfileService {
         }
         throw new CustomRuntimeException("유일한 그룹 이름을 생성할 수 없습니다.");
     }
-    
+
     @Transactional
     public void saveGroupProfiles(int count) {
         List<MatchingUserDto.Response> users = matchingUserService.getUserProfileListAsNonUser();
 
         for (int i = 1; i <= count; i++) {
             MatchingUserDto.Response matchingUser = users.get(random.nextInt(users.size()));
-            AppUser user  = userRepo.findById(matchingUser.getId()).orElseThrow();
+            AppUser user = userRepo.findById(matchingUser.getId()).orElseThrow();
             String randomName = getRandomName(user);
             Boolean isDateOn = random.nextBoolean();
 
             GroupProfileDto.PostRequest groupProfile = new GroupProfileDto.PostRequest(
-                randomName,
-                String.format("%s 팀입니다. 잘 부탁드려요", randomName),
-                String.format("%s 입니다. 잘 부탁드려요", user.getNickname()),
-                random.nextInt(24 - 10 + 1) + 10,
-                Major.values()[random.nextInt(Major.values().length)],
-                "친구2입니다. 잘 부탁드려요",
-                random.nextInt(24 - 10 + 1) + 10, 
-                Major.values()[random.nextInt(Major.values().length)],
-                "친구3입니다. 잘 부탁드려요",
-                isDateOn ? LocalDate.now() : null,
-                isDateOn ? RandomDateGenerator.getRandomDate() : null
-            );
+                    randomName,
+                    String.format("%s 팀입니다. 잘 부탁드려요", randomName),
+                    String.format("%s 입니다. 잘 부탁드려요", user.getNickname()),
+                    random.nextInt(24 - 10 + 1) + 10,
+                    Major.values()[random.nextInt(Major.values().length)],
+                    "친구2입니다. 잘 부탁드려요",
+                    random.nextInt(24 - 10 + 1) + 10,
+                    Major.values()[random.nextInt(Major.values().length)],
+                    "친구3입니다. 잘 부탁드려요",
+                    isDateOn ? LocalDate.now() : null,
+                    isDateOn ? RandomDateGenerator.getRandomDate() : null);
             groupProfileRepo.save(groupProfile.toEntity(user));
-        }   
+        }
     }
 }

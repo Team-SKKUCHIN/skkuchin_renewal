@@ -90,7 +90,6 @@ public class SmsService {
         mySms.setPhoneNumber(dto.getPhoneNumber());
         mySms.setVerificationCode(verificationCode);
         mySms.setVerified(false);
-        mySms.setAlarmOn(false);
         mySms.setModifiedAt(LocalDateTime.now());
         smsRepo.save(mySms);
         sendSms(phoneNumber, String.format("스꾸친 본인확인 인증번호는 [%s]입니다.", verificationCode));
@@ -119,7 +118,6 @@ public class SmsService {
 
         existingSms.setVerificationCode(null);
         existingSms.setVerified(true);
-        existingSms.setAlarmOn(true);
         existingSms.setModifiedAt(LocalDateTime.now());
         smsRepo.save(existingSms);
     }

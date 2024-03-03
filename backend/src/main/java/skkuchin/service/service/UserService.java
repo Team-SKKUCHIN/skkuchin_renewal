@@ -131,7 +131,7 @@ public class UserService {
     public UserDto.Response getUser(Long userId) {
         AppUser user = userRepo.findById(userId).orElseThrow(() -> new CustomValidationApiException("존재하지 않는 유저입니다"));
         List<Sms> smsList = smsRepo.findByUser(user);
-        Sms sms = smsList.isEmpty() ? null : smsList.get(0);
+        Sms sms = smsList.isEmpty() || !smsList.get(0).isVerified() ? null : smsList.get(0);
         return new UserDto.Response(user, sms);
     }
 

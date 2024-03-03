@@ -151,7 +151,6 @@ public class UserDto {
         private Campus toggle;
         private Gender gender;
         private String phoneNumber;
-        private boolean isAlarmOn;
 
         public Response(AppUser user, Sms sms) {
             if (user != null) {
@@ -178,10 +177,8 @@ public class UserDto {
 
             if (sms != null) {
                 this.phoneNumber = sms.getPhoneNumber();
-                this.isAlarmOn = sms.isAlarmOn();
             } else {
                 this.phoneNumber = null;
-                this.isAlarmOn = false;
             }
         }
 
