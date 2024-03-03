@@ -12,6 +12,7 @@ import skkuchin.service.exception.CustomRuntimeException;
 import skkuchin.service.repo.CandidateRepo;
 import skkuchin.service.repo.UserKeywordRepo;
 import skkuchin.service.repo.UserRepo;
+import skkuchin.service.util.CampusUtils;
 
 import javax.transaction.Transactional;
 import java.time.Duration;
@@ -66,18 +67,16 @@ public class CandidateService {
                     recentCandidate.getCandidate2(),
                     recentCandidate.getCandidate3(),
                     recentCandidate.getCandidate4(),
-                    recentCandidate.getCandidate5()
-            );
+                    recentCandidate.getCandidate5());
 
             return fiveCandidates.stream()
                     .filter(Objects::nonNull)
                     .map(candidate -> new CandidateDto.Response(
                             candidate,
-                            userKeywordRepo.findByUser(candidate)
-                    ))
+                            userKeywordRepo.findByUser(candidate)))
                     .collect(Collectors.toList());
         } else {
-//            List<AppUser> returnUsers = findReturnUsers(user);
+            // List<AppUser> returnUsers = findReturnUsers(user);
             List<AppUser> returnUsers = findRandomUsers(user);
 
             if (returnUsers.size() > 0) {
@@ -95,8 +94,7 @@ public class CandidateService {
             return returnUsers.stream()
                     .map(returnUser -> new CandidateDto.Response(
                             returnUser,
-                            userKeywordRepo.findByUser(returnUser)
-                    ))
+                            userKeywordRepo.findByUser(returnUser)))
                     .collect(Collectors.toList());
         }
     }
@@ -107,10 +105,14 @@ public class CandidateService {
         List<Candidate> candidates = candidateRepo.findByUserId(user.getId());
         for (Candidate candidate : candidates) {
             excludeIds.add(candidate.getCandidate1().getId());
-            if (candidate.getCandidate2() != null) excludeIds.add(candidate.getCandidate2().getId());
-            if (candidate.getCandidate3() != null) excludeIds.add(candidate.getCandidate3().getId());
-            if (candidate.getCandidate4() != null) excludeIds.add(candidate.getCandidate4().getId());
-            if (candidate.getCandidate5() != null) excludeIds.add(candidate.getCandidate5().getId());
+            if (candidate.getCandidate2() != null)
+                excludeIds.add(candidate.getCandidate2().getId());
+            if (candidate.getCandidate3() != null)
+                excludeIds.add(candidate.getCandidate3().getId());
+            if (candidate.getCandidate4() != null)
+                excludeIds.add(candidate.getCandidate4().getId());
+            if (candidate.getCandidate5() != null)
+                excludeIds.add(candidate.getCandidate5().getId());
         }
         excludeIds.add(user.getId());
 
@@ -121,10 +123,10 @@ public class CandidateService {
     }
 
     public List<AppUser> findReturnUsers(AppUser user) {
-        int remain = 3; //뽑아야 하는 인원
+        int remain = 3; // 뽑아야 하는 인원
         List<AppUser> returnUsers = new ArrayList<>();
-        List<Long> excludeIds = new ArrayList<>(); //제외 대상인 userId 리스트
-        Campus campus = findCampus(user.getMajor());
+        List<Long> excludeIds = new ArrayList<>(); // 제외 대상인 userId 리스트
+        Campus campus = CampusUtils.findCampus(user.getMajor());
 
         /**
          * 1순위: 겹치는 키워드가 많은 순
@@ -157,8 +159,9 @@ public class CandidateService {
             }
         }
 
-        if (returnUsers.size() < 3) return returnUsers;
-        //else return returnUsers.subList(0, 3);
+        if (returnUsers.size() < 3)
+            return returnUsers;
+        // else return returnUsers.subList(0, 3);
         else if (returnUsers.size() < 10) {
             Collections.shuffle(returnUsers);
         } else {
@@ -166,25 +169,29 @@ public class CandidateService {
         }
         return returnUsers.subList(0, 3);
     }
+
     public List<AppUser> orderByKeyword(AppUser user, List<Long> excludeIds) {
-        //유저의 키워드 리스트
+        // 유저의 키워드 리스트
         List<Long> keywordIds = userKeywordRepo.findKeywordIdsByUserId(user.getId());
-        //이미 대화 후보로 올랐던 유저는 제외 대상
+        // 이미 대화 후보로 올랐던 유저는 제외 대상
         List<Candidate> candidates = candidateRepo.findByUserId(user.getId());
         for (int i = 0; i < candidates.size(); i++) {
             Candidate candidate = candidates.get(i);
             excludeIds.add(candidate.getCandidate1().getId());
-            if (candidate.getCandidate2() != null) excludeIds.add(candidate.getCandidate2().getId());
-            if (candidate.getCandidate3() != null) excludeIds.add(candidate.getCandidate3().getId());
-            //excludeIds.addAll(List.of(candidate.getCandidate1().getId(), candidate.getCandidate2().getId(), candidate.getCandidate3().getId()));
+            if (candidate.getCandidate2() != null)
+                excludeIds.add(candidate.getCandidate2().getId());
+            if (candidate.getCandidate3() != null)
+                excludeIds.add(candidate.getCandidate3().getId());
+            // excludeIds.addAll(List.of(candidate.getCandidate1().getId(),
+            // candidate.getCandidate2().getId(), candidate.getCandidate3().getId()));
         }
-        excludeIds.add(user.getId()); //자기 자신도 제외 대상에 포함
+        excludeIds.add(user.getId()); // 자기 자신도 제외 대상에 포함
         return userKeywordRepo.findUsersByKeywordIds(keywordIds, excludeIds, user.getMajor().name());
     }
 
     public List<AppUser> orderByCategory(AppUser user, List<Long> excludeIds, List<AppUser> usersOrderByKeyword) {
         List<Long> firstUsers = usersOrderByKeyword.stream().map(u -> u.getId()).collect(Collectors.toList());
-        excludeIds.addAll(firstUsers); //1순위로 뽑힌 유저들은 제외 대상
+        excludeIds.addAll(firstUsers); // 1순위로 뽑힌 유저들은 제외 대상
         List<String> categoryList = userKeywordRepo.findCategoryNamesByUserId(user.getId());
 
         return userKeywordRepo.findUsersByCategoryNames(categoryList, excludeIds, user.getMajor().name());
@@ -192,27 +199,15 @@ public class CandidateService {
 
     public List<AppUser> findRemainingUsers(AppUser user, List<Long> excludeIds, List<AppUser> usersOrderByCategory) {
         List<Long> secondUsers = usersOrderByCategory.stream().map(u -> u.getId()).collect(Collectors.toList());
-        excludeIds.addAll(secondUsers); //2순위로 뽑힌 유저들은 제외 대상
+        excludeIds.addAll(secondUsers); // 2순위로 뽑힌 유저들은 제외 대상
         return userKeywordRepo.findRemainUsers(excludeIds, user.getMajor().name());
     }
 
     @Transactional
-    @Scheduled(cron = "0 30 8 * * ?") //매일 오전 8시 30분에 만료된 데이터가 삭제됨
+    @Scheduled(cron = "0 30 8 * * ?") // 매일 오전 8시 30분에 만료된 데이터가 삭제됨
     public void deleteExpiredData() {
         List<Candidate> candidates = candidateRepo.findByExpireDateBefore(LocalDateTime.now());
         candidateRepo.deleteAll(candidates);
-    }
-
-    public Campus findCampus(Major major) {
-        EnumSet<Major> majors = EnumSet.allOf(Major.class);
-        List<Major> majorList = new ArrayList<>();
-        majorList.addAll(majors);
-
-        if (majorList.indexOf(major) < majorList.indexOf(Major.건설환경공학부)) {
-            return Campus.명륜;
-        } else {
-            return Campus.율전;
-        }
     }
 
     public List<AppUser> orderByCampus(List<AppUser> userList, Campus campus) {
@@ -220,7 +215,7 @@ public class CandidateService {
         List<AppUser> differentCampus = new ArrayList<>();
 
         for (AppUser user : userList) {
-            if (findCampus(user.getMajor()).equals(campus)) {
+            if (CampusUtils.findCampus(user.getMajor()).equals(campus)) {
                 result.add(user);
             } else {
                 differentCampus.add(user);

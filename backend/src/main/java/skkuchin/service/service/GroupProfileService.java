@@ -156,15 +156,15 @@ public class GroupProfileService {
 
     @Transactional
     public String getRandomName(AppUser user) {
-        if (user.getGender() == null) {
-            throw new CustomRuntimeException("성별을 등록하지 않았습니다");
+        if (user.getGender() == null || user.getMajor() == null) {
+            throw new CustomRuntimeException("성별 또는 전공을 등록하지 않았습니다");
         }
 
         String groupName;
         int maxAttempts = 10;
         int attempts = 0;
         while (attempts < maxAttempts) {
-            groupName = RandomNameGenerator.getRandomName(user.getGender());
+            groupName = RandomNameGenerator.getRandomName(user);
             GroupProfile existingProfile = groupProfileRepo.findByGroupName(groupName);
             if (existingProfile == null) {
                 return groupName;

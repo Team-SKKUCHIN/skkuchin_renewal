@@ -9,6 +9,7 @@ import lombok.Setter;
 import skkuchin.service.domain.Map.Campus;
 import skkuchin.service.domain.Matching.Gender;
 import skkuchin.service.domain.User.Profile;
+import skkuchin.service.util.CampusUtils;
 import skkuchin.service.domain.User.*;
 
 import javax.validation.constraints.*;
@@ -49,22 +50,10 @@ public class UserDto {
                     .studentId(this.studentId)
                     .major(this.major)
                     .image(this.image)
-                    .toggle(findCampus(this.major))
+                    .toggle(CampusUtils.findCampus(this.major))
                     .startDate(LocalDateTime.now())
                     .emailAuth(false)
                     .build();
-        }
-
-        public Campus findCampus(Major major) {
-            EnumSet<Major> majors = EnumSet.allOf(Major.class);
-            List<Major> majorList = new ArrayList<>();
-            majorList.addAll(majors);
-
-            if (majorList.indexOf(major) < majorList.indexOf(Major.건설환경공학부)) {
-                return Campus.명륜;
-            } else {
-                return Campus.율전;
-            }
         }
     }
 
@@ -162,7 +151,7 @@ public class UserDto {
                 this.major = user.getMajor();
                 this.email = user.getEmail();
                 this.image = user.getImage();
-                this.campus = findCampus(user.getMajor());
+                this.campus = CampusUtils.findCampus(user.getMajor());
                 this.toggle = user.getToggle();
                 this.gender = user.getGender();
             } else {
@@ -182,18 +171,6 @@ public class UserDto {
                 this.phoneNumber = sms.getPhoneNumber();
             } else {
                 this.phoneNumber = null;
-            }
-        }
-
-        public Campus findCampus(Major major) {
-            EnumSet<Major> majors = EnumSet.allOf(Major.class);
-            List<Major> majorList = new ArrayList<>();
-            majorList.addAll(majors);
-
-            if (majorList.indexOf(major) < majorList.indexOf(Major.건설환경공학부)) {
-                return Campus.명륜;
-            } else {
-                return Campus.율전;
             }
         }
     }
