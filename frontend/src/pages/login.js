@@ -96,14 +96,6 @@ const LoginPage = () => {
         }
     }, [window.innerHeight])
 
-    /*useEffect(() => {
-        if (username && user != null && !user.phone_verification) {
-            setPopupMessage(`밥약 서비스 이용을 위해선\n휴대폰 본인인증이 필요해요.\n안전한 서비스 이용을 위해 인증해주세요.`);
-            setPopupType('verification');
-            setPopupOpen(true);
-        }
-    }, [user])*/
-
     return(
         <ThemeProvider theme={theme}>
         <CssBaseline />

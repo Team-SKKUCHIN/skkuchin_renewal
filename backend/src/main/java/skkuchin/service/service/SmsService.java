@@ -50,13 +50,11 @@ public class SmsService {
             throw new CustomRuntimeException("먼저 회원가입을 진행해주시기 바랍니다");
         }
 
-
         Sms existingSms = smsRepo.findByPhoneNumber(phoneNumber);
         if (existingSms != null) {
             if (existingSms.isVerified()) {
                 throw new CustomRuntimeException("사용 중인 번호입니다");
             } else {
-                // 인증문자 재전송
                 existingSms.setVerificationCode(verificationCode);
                 smsRepo.save(existingSms);
             }
@@ -110,10 +108,6 @@ public class SmsService {
 
         if (existingSms == null) {
             throw new CustomRuntimeException("전화번호가 등록되지 않았습니다");
-        }
-
-        if (existingSms.isVerified()) {
-            throw new CustomRuntimeException("이미 인증된 전화번호입니다");
         }
 
         if (!existingSms.getVerificationCode().equals(dto.getVerificationCode())) {

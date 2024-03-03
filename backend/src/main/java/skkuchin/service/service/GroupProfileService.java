@@ -110,6 +110,18 @@ public class GroupProfileService {
     }
 
     @Transactional
+    public void checkGroupName(String groupName) {
+        if (groupName == null || groupName.isBlank()) {
+            throw new CustomRuntimeException("그룹명을 입력해주시기 바랍니다");
+        }
+
+        GroupProfile existingGroupProfile = groupProfileRepo.findByGroupName(groupName);
+        if (existingGroupProfile != null) {
+            throw new CustomRuntimeException("사용 중인 그룹명입니다");
+        }
+    }
+
+    @Transactional
     public void inactivateGroupProfile(Long userId, Long groupProfileId) {
         GroupProfile existingGroupProfile = groupProfileRepo.findById(groupProfileId)
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 그룹 프로필입니다"));

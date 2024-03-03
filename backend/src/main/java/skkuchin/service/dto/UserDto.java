@@ -34,7 +34,7 @@ public class UserDto {
         @NotNull
         @JsonProperty
         @Min(value = 10)
-        @Max(value = 23)
+        @Max(value = 24)
         private int studentId;
         @NotNull
         private Major major;
@@ -105,7 +105,7 @@ public class UserDto {
         @NotNull
         @JsonProperty
         @Min(value = 10)
-        @Max(value = 23)
+        @Max(value = 24)
         private int studentId;
     }
 
