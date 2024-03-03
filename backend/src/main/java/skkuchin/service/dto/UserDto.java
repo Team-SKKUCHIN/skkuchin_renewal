@@ -34,7 +34,7 @@ public class UserDto {
         @NotNull
         @JsonProperty
         @Min(value = 10)
-        @Max(value = 23)
+        @Max(value = 24)
         private int studentId;
         @NotNull
         private Major major;
@@ -105,7 +105,7 @@ public class UserDto {
         @NotNull
         @JsonProperty
         @Min(value = 10)
-        @Max(value = 23)
+        @Max(value = 24)
         private int studentId;
     }
 
@@ -152,8 +152,6 @@ public class UserDto {
         private Campus toggle;
         private Gender gender;
         private String phoneNumber;
-        private boolean isAlarmOn;
-        private boolean phoneVerification;
 
         public Response(AppUser user, Sms sms) {
             if (user != null) {
@@ -182,12 +180,8 @@ public class UserDto {
 
             if (sms != null) {
                 this.phoneNumber = sms.getPhoneNumber();
-                this.isAlarmOn = sms.isAlarmOn();
-                this.phoneVerification = sms.isVerified();
             } else {
                 this.phoneNumber = null;
-                this.isAlarmOn = false;
-                this.phoneVerification = false;
             }
         }
 

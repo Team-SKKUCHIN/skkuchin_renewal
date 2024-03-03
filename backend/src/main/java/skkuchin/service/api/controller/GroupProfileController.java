@@ -90,6 +90,12 @@ public class GroupProfileController {
         return new ResponseEntity<>(new CMRespDto<>(1, "그룹 프로필 수정 완료", true), HttpStatus.OK);
     }
 
+    @PostMapping("/check/group-name")
+    public ResponseEntity<?> checkGroupName(@RequestBody Map<String, String> groupNameMap) {
+        groupProfileService.checkGroupName(groupNameMap.get("group_name"));
+        return new ResponseEntity<>(new CMRespDto<>(1, "그룹명 중복 확인 완료", true), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{profileId}")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<?> inactivateGroupProfile(@PathVariable Long profileId,
@@ -103,5 +109,5 @@ public class GroupProfileController {
     public ResponseEntity<?> getRandomName(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         String randomName = groupProfileService.getRandomName(principalDetails.getUser());
         return new ResponseEntity<>(new CMRespDto<>(1, "랜덤 그룹명 조회 완료", randomName), HttpStatus.OK);
-    }    
+    }
 }

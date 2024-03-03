@@ -15,6 +15,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "sender_id", "receiver_id" }))
 public class PersonalChatRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

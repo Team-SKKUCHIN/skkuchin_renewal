@@ -69,7 +69,7 @@ const RegisterPage = () => {
     
     return(
         <ThemeProvider theme={theme}>
-        <CssBaseline />
+            <CssBaseline />
             {/* <Container component="main" maxWidth="xs"> */}
             {
                 step === 1 && <SignUpUsername handleNextStep={handleNextStep} data={data} setData={setData} />

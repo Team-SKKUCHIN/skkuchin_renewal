@@ -36,9 +36,6 @@ public class Sms {
     @Column(columnDefinition = "BIT DEFAULT FALSE", nullable = false)
     private boolean isVerified;
 
-    @Column(columnDefinition = "BIT DEFAULT FALSE", nullable = false)
-    private boolean isAlarmOn;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private AppUser user;
