@@ -13,6 +13,7 @@ import skkuchin.service.domain.User.AppUser;
 import skkuchin.service.domain.User.Major;
 import skkuchin.service.domain.Matching.Mbti;
 import skkuchin.service.domain.User.Profile;
+import skkuchin.service.util.CampusUtils;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -80,7 +81,7 @@ public class MatchingUserDto {
             this.gender = user.getGender();
             this.keywords = getKeywordMap(keywords);
             this.introduction = user.getIntroduction();
-            this.campus = findCampus(user.getMajor());
+            this.campus = CampusUtils.findCampus(user.getMajor());
         }
 
         private Map<String, List<String>> getKeywordMap(List<UserKeyword> keywords) {
@@ -96,18 +97,6 @@ public class MatchingUserDto {
                 keywordMap.get(category).add(name);
             }
             return keywordMap;
-        }
-
-        private Campus findCampus(Major major) {
-            EnumSet<Major> majors = EnumSet.allOf(Major.class);
-            List<Major> majorList = new ArrayList<>();
-            majorList.addAll(majors);
-
-            if (majorList.indexOf(major) < majorList.indexOf(Major.건설환경공학부)) {
-                return Campus.명륜;
-            } else {
-                return Campus.율전;
-            }
         }
     }
 }
