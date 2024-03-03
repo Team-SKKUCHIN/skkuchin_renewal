@@ -17,7 +17,8 @@ const StudentIdInput = ({ value, onChange, editable = true }) => {
         borderRight: 'white',
         borderRadius: '8px 0 0 8px',
         width: '50%',
-        outline: 'none'
+        outline: 'none',
+        backgroundColor: editable ? 'white' : '#FBFBFB',
       }}
     />
   );

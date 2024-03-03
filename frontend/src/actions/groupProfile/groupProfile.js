@@ -5,12 +5,15 @@ import {
     GET_MY_GROUP_PROFILE_FAIL,
     ADD_GROUP_PROFILE_SUCCESS,
     ADD_GROUP_PROFILE_FAIL,
-    LOAD_GROUP_PROFILE_SUCCESS,
-    LOAD_GROUP_PROFILE_FAIL,
+    LOAD_ALL_GROUP_PROFILE_SUCCESS,
+    LOAD_ALL_GROUP_PROFILE_FAIL,
+    LOAD_CANDIDATE_PROFILE_SUCCESS,
+    LOAD_CANDIDATE_PROFILE_FAIL,
     CHANGE_GROUP_PROFILE_SUCCESS,
     CHANGE_GROUP_PROFILE_FAIL,
     DELETE_GROUP_PROFILE_SUCCESS,
     DELETE_GROUP_PROFILE_FAIL,
+    CLEAR_CANDIDATE_PROFILE
 } from "./types";
 
 export const get_my_group_profile = () => async dispatch => {
@@ -93,7 +96,41 @@ export const add_group_profile = (profileData) => async dispatch => {
     }
 }
 
-export const load_group_profile = (isAuthenticated) => async dispatch => {
+export const load_candidate_profile = (id, callback) => async dispatch => {
+    try {
+        const res = await fetch(`${API_URL}/api/group-profile/${id}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
+
+        const apiRes = await res.json();
+
+        if (res.status === 200) {
+            dispatch({
+                type: LOAD_CANDIDATE_PROFILE_SUCCESS,
+                payload: apiRes.data
+            });
+            if(callback) callback([true, apiRes.message]);
+        } else {
+            dispatch({
+                type: LOAD_CANDIDATE_PROFILE_FAIL
+            });
+        }
+    }
+
+    catch (error) {
+        console.log(error);
+        dispatch({
+            type: LOAD_CANDIDATE_PROFILE_FAIL
+        });
+    }
+}
+
+
+export const load_all_group_profile = (isAuthenticated) => async dispatch => {
     try {
         const headers = {
             'Accept': 'application/json',
@@ -116,21 +153,23 @@ export const load_group_profile = (isAuthenticated) => async dispatch => {
 
         if (res.status === 200) {
             dispatch({
-                type: LOAD_GROUP_PROFILE_SUCCESS,
+                type: LOAD_ALL_GROUP_PROFILE_SUCCESS,
                 payload: apiRes.data
             });
         } else {
             dispatch({
-                type: LOAD_GROUP_PROFILE_FAIL
+                type: LOAD_ALL_GROUP_PROFILE_FAIL
             });
         }
     } catch (error) {
         console.log(error);
         dispatch({
-            type: LOAD_GROUP_PROFILE_FAIL
+            type: LOAD_ALL_GROUP_PROFILE_FAIL
         });
     }
 }
+
+
 
 export const update_group_profile = (profileId, updatedData) => async dispatch => {
     await dispatch(request_refresh());
@@ -201,4 +240,11 @@ export const delete_group_profile = (profileId) => async dispatch => {
             type: DELETE_GROUP_PROFILE_FAIL
         });
     }
+}
+
+
+export const clear_candidate_profile = () => dispatch => {
+    dispatch({
+        type: CLEAR_CANDIDATE_PROFILE
+    });
 }

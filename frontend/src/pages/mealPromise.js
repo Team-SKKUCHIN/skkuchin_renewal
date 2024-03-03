@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ThemeProvider, CssBaseline, Typography, Button, Grid, Divider, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 import AddIcon from '@mui/icons-material/Add';
 import UpperBar from "../components/UpperBar";
 import theme from "../theme/theme";
@@ -20,6 +21,9 @@ const LayoutContainer = styled.div`
 
 const MealPromisePage = () => {
   const router = useRouter();
+
+  const user = useSelector(state => state.auth.user);
+  
   const [activeStep, setActiveStep] = useState(0);
   const [isScrollingDown, setIsScrollingDown] = useState(false);
 
@@ -56,6 +60,14 @@ const MealPromisePage = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const handleAddBtnClick = () => {
+    if(user && user.phone_number !== null) {
+        router.push('/makeGroupProfile');
+    } else {
+        alert('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+    }
+  }
 
   return (
     <LayoutContainer>
@@ -117,7 +129,7 @@ const MealPromisePage = () => {
                 height: '52px',
                 width: '52px'
               }}
-              onClick={() => router.push('/makeGroupProfile')}
+              onClick={handleAddBtnClick}
             >
               <AddIcon fontSize="medium" />
             </IconButton>
@@ -134,7 +146,7 @@ const MealPromisePage = () => {
                 height: '52px',
                 boxShadow: 'none',
               }}
-              onClick={() => router.push('/makeGroupProfile')}
+              onClick={handleAddBtnClick}
             >
               + 그룹 프로필 작성
             </Button>

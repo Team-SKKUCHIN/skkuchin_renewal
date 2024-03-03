@@ -62,6 +62,7 @@ const MemberInfoInput = ({ label, studentId, major, introduction, onUpdate }) =>
                 borderRadius: '0 8px 8px 0',
                 width: '50%',
                 outline: 'none',
+                backgroundColor: isEditable ? 'white' : '#FBFBFB',
               }}
             />
           </Grid>
