@@ -81,14 +81,15 @@ public class GroupProfileService {
     public void createGroupProfile(GroupProfileDto.PostRequest dto, AppUser user) {
         List<Sms> smsList = smsRepo.findByUser(user);
 
-        if (user.getMatching() == null) {
-            throw new CustomRuntimeException("매칭 프로필을 생성해주시기 바랍니다");
-        }
         if (groupProfileRepo.findMyGroupProfiles(user.getId()).size() == 5) {
             throw new CustomRuntimeException("그룹 프로필은 5개 이하로만 생성 가능합니다");
         }
         if (!user.getNickname().startsWith("test") && (smsList.isEmpty() || !smsList.get(0).isVerified())) {
             throw new CustomRuntimeException("전화번호가 등록되지 않았습니다");
+        }
+        if (dto.getGender() != null) {
+            user.setGender(dto.getGender());
+            userRepo.save(user);
         }
         groupProfileRepo.save(dto.toEntity(user));
     }
@@ -185,6 +186,7 @@ public class GroupProfileService {
             Boolean isDateOn = random.nextBoolean();
 
             GroupProfileDto.PostRequest groupProfile = new GroupProfileDto.PostRequest(
+                    null,
                     randomName,
                     String.format("%s 팀입니다. 잘 부탁드려요", randomName),
                     String.format("%s 입니다. 잘 부탁드려요", user.getNickname()),

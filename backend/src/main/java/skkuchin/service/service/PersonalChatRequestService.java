@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import skkuchin.service.domain.Chat.PersonalChatRequest;
 import skkuchin.service.domain.Chat.ResponseType;
+import skkuchin.service.domain.Matching.UserKeyword;
 import skkuchin.service.domain.User.AppUser;
 import skkuchin.service.domain.User.Sms;
 import skkuchin.service.dto.PersonalChatRequestDto;
@@ -48,32 +48,25 @@ public class PersonalChatRequestService {
         List<PersonalChatRequestDto.ConfirmedResponse> allConfirmedRequests = new ArrayList<>();
 
         for (PersonalChatRequest request : personalChatRequests) {
-            List<String> senderKeywordNames = userKeywordRepo.findByUser(request.getSender()).stream()
-                    .map(userKeyword -> userKeyword.getKeyword().getName())
-                    .limit(2)
-                    .collect(Collectors.toList());
-
-            List<String> receiverKeywordNames = userKeywordRepo.findByUser(request.getReceiver()).stream()
-                    .map(userKeyword -> userKeyword.getKeyword().getName())
-                    .limit(2)
-                    .collect(Collectors.toList());
+            List<UserKeyword> senderKeywords = userKeywordRepo.findByUser(request.getSender());
+            List<UserKeyword> receiverKeywords = userKeywordRepo.findByUser(request.getReceiver());
 
             if (request.getStatus() == ResponseType.HOLD) {
                 if (request.getReceiver().getId() == userId) {
                     receiveRequests.add(
-                            new PersonalChatRequestDto.BaseResponse(request, request.getSender(), senderKeywordNames));
+                            new PersonalChatRequestDto.BaseResponse(request, request.getSender(), senderKeywords));
                 } else if (request.getSender().getId() == userId) {
                     sendRequests.add(new PersonalChatRequestDto.BaseResponse(request, request.getSender(),
-                            receiverKeywordNames));
+                            receiverKeywords));
                 }
             } else {
                 PersonalChatRequestDto.ConfirmedResponse confirmedResponse;
                 if (request.getSender().getId() == userId) {
                     confirmedResponse = new PersonalChatRequestDto.ConfirmedResponse(request, request.getReceiver(),
-                            receiverKeywordNames);
+                            receiverKeywords);
                 } else {
                     confirmedResponse = new PersonalChatRequestDto.ConfirmedResponse(request, request.getSender(),
-                            senderKeywordNames);
+                            senderKeywords);
                 }
                 allConfirmedRequests.add(confirmedResponse);
             }

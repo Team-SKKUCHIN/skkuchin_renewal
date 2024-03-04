@@ -14,9 +14,6 @@ import skkuchin.service.domain.User.*;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 
 public class UserDto {
     @Getter
@@ -140,6 +137,7 @@ public class UserDto {
         private Campus campus;
         private Campus toggle;
         private Gender gender;
+        @JsonProperty
         private String phoneNumber;
 
         public Response(AppUser user, Sms sms) {

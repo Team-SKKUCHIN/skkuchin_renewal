@@ -77,9 +77,9 @@ const LoginPage = () => {
         }));
     };
 
-    if (typeof window !== 'undefined' && isAuthenticated) {
+    if (isAuthenticated && user.phone_number !== null) {
         router.push('/');
-    } 
+    }
 
     useEffect(() => {
         setRemainHeight(window.innerHeight - 490 + "px");
@@ -95,6 +95,18 @@ const LoginPage = () => {
         setRemainHeight(window.innerHeight - 480 + "px");
         }
     }, [window.innerHeight])
+
+    useEffect(() => {
+        if (username && user !== null && user.phone_number === null) {
+            setPopupMessage(`밥약 서비스 이용을 위해선\n휴대폰 본인인증이 필요해요.\n안전한 서비스 이용을 위해 인증해주세요.`);
+            setPopupType('verification');
+            setPopupOpen(true);
+        }
+    }, [user])
+
+    const gotoVerification = () => {
+        router.push('/verification');
+    }
 
     return(
         <ThemeProvider theme={theme}>
@@ -172,14 +184,14 @@ const LoginPage = () => {
             </div>
             {loading && <Loading />}
 
-        {/* <Popup 
+        <Popup 
             open={popupOpen}
             handleClose={() => setPopupOpen(false)}
             type={popupType}
             message={popupMessage}
             description={popupDescription}
             onConfirm={gotoVerification}
-        /> */}
+        />
         </ThemeProvider>
     )
 };

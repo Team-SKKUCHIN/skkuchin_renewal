@@ -17,7 +17,6 @@ import {
 } 
     from './types';
 import { clear_search_results } from '../place/place';
-import { load_token } from '../pushToken/pushToken';
 
 export const getToken = (tokenName) => dispatch => {
     const tokenDic = {
@@ -102,24 +101,6 @@ export const logout = () => dispatch => {
         dispatch({
             type: LOGOUT_SUCCESS
         });
-
-        if (typeof window !== 'undefined' && 'serviceWorker' in navigator && window.workbox !== undefined) {
-            navigator.serviceWorker.ready.then((reg) => {
-                reg.pushManager.getSubscription().then((subscription) => {
-                    if (subscription) {
-                        subscription
-                        .unsubscribe()
-                        .then(() => {
-                            console.log("You've successfully unsubscribed");
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
-                    }
-                });
-            });
-        }
-        
     } catch(error) {
         console.log(error);
     }
@@ -146,7 +127,6 @@ export const load_user = (callback) => async dispatch => {
                 payload: apiRes.data
             });
             dispatch(load_favorite());
-            dispatch(load_token());
             if (callback) callback([true, apiRes.message]);
         } else {
             await dispatch({

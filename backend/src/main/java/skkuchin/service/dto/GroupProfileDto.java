@@ -25,8 +25,11 @@ public class GroupProfileDto {
     @AllArgsConstructor
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class PostRequest {
+        private Gender gender;
+
         @NotBlank
         @JsonProperty
+        @Size(max = 12)
         private String groupName;
 
         @NotBlank
