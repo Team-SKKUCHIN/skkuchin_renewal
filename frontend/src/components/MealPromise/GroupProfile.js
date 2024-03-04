@@ -6,13 +6,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { clear_candidate_profile, load_candidate_profile } from '../../actions/groupProfile/groupProfile';
 import { Loading } from '../Loading';
 
-const GroupProfile = () => {
+const GroupProfile = ({id, isMyProfile}) => {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    const id = router.query.id;
     const group = useSelector(state => state.groupProfile.candidateGroup);
-    
+    const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
+
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -31,8 +31,13 @@ const GroupProfile = () => {
     }, [id]);
 
     const handleSubmit = () => {
-        console.log("밥약 신청하기 버튼 클릭");
-        router.push('/selectMyGroupProfile')
+        if (myGroupProfiles && myGroupProfiles.length > 0) {
+            router.push('/selectMyGroupProfile')
+            localStorage.setItem('candidateId', id);
+        } else {
+            alert("그룹 밥약을 신청하기 위해선 그룹 프로필 작성이 필요해요.");
+            router.push('/mealPromise');
+        }
     }
 
     if (id === undefined || group === null) return <Loading />;
@@ -84,15 +89,18 @@ const GroupProfile = () => {
                 ))}
             </List>
             </div>
-            <Button
-                onClick={handleSubmit}
-                color="primary"
-                variant="contained"
-                disableElevation
-                sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
-            >
-                밥약 신청하기
-            </Button>
+            {
+                !isMyProfile &&
+                <Button
+                    onClick={handleSubmit}
+                    color="primary"
+                    variant="contained"
+                    disableElevation
+                    sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
+                >
+                    밥약 신청하기
+                </Button>
+            }
 
             { loading && <Loading />}
         </>

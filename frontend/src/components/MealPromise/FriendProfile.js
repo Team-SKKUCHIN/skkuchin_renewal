@@ -2,11 +2,18 @@ import React from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 import { displayMBTI } from '../Matching/MBTIList';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 
 const FriendProfile = ({ candidate }) => {
     const router = useRouter();
+    const user = useSelector(state => state.auth.user);
+    
     const handleSubmit = () => {
         console.log("밥약 신청하기 버튼 클릭");
+        if(user && user.phone_number === null) { 
+            alert("밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.")
+        } 
+        
         router.push({
             pathname: '/enrollOpenChat',
             query: { type: 'friend' },

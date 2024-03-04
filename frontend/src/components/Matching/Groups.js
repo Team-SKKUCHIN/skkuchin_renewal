@@ -10,6 +10,7 @@ import Image from 'next/image';
 import CustomPopup from "../SkkuChat/CustomPopup";
 import CustomPopupNoBtn from "../SkkuChat/CustomPopupNoBtn";
 import GoLogin from "../GoLogin";
+import { load_all_group_profile } from "../../actions/groupProfile/groupProfile";
 
 const dummyProfiles = [
     {
@@ -65,6 +66,7 @@ const Groups = () => {
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.matchingUser.matchingUser);
+    const groupProfiles = useSelector(state => state.groupProfile.allGroupProfiles);
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [isLogin, setIsLogin] = useState(false);
@@ -74,35 +76,10 @@ const Groups = () => {
     const [isGroupProfileEnrolled, setIsGroupProfileEnrolled] = useState(true);
 
     useEffect(() => {
-        if (isAuthenticated) {
-            dispatch(load_request_id(([result, message]) => {
-                if (result) {
-                    dispatch(load_candidate());
-                }
-            }))
+        if (groupProfiles === null || groupProfiles.length === 0) {
+            dispatch(load_all_group_profile());
         }
-    }, [isAuthenticated]);
-
-    // const [open, setOpen] = useState(false);
-
-    // const [isPopupMessageOpen, setIsPopupMessageOpen] = useState(false);
-    // const [popupMessage, setPopupMessage] = useState('');
-
-    // const handleOpen = (id) => {
-    //     setOpen(true);
-    //     setSelectedGroupId(id);
-    // }
-    // const handleClose = () => {
-    //     setOpen(false);
-    // }
-
-    // const handleSubmit = (id) => {
-    //     setOpen(false);
-    //     dispatch(request_chat(id));
-
-    //     setPopupMessage('신청이 완료되었습니다!');
-    //     setIsPopupMessageOpen(true);
-    // }
+    }, []);
     
     const handleSettingOpen = () => {
         if (isAuthenticated) {
@@ -115,28 +92,26 @@ const Groups = () => {
         }
     }
 
-    const handleGroupClick = (groupId) => {
-        // 추후 수정해야 함
-        // router.push(`/clickProfile?id=${groupId}`);
-        router.push(`/showGroupProfile`);
-    };
+    const handleGroupClick = (id) => {
+        router.push(`/showGroupProfile?id=${id}`);
+    }
 
     return (
         <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0'}}>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
             { isGroupProfileEnrolled ? 
-            realProfiles.map((group, index) => (
+            groupProfiles && groupProfiles.map((group, index) => (
             <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '10px'}}>
                 <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
-                    {displayMBTI(group.mbti, 90, 90)}
+                    {displayMBTI('GROUP', 90, 90)}
                     <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
-                        <Typography sx={{fontSize: '20px', fontWeight: '700', mr: '5px'}}>{group !== null && group.groupName}</Typography>
+                        <Typography sx={{fontSize: '20px', fontWeight: '700', mr: '5px'}}>{group !== null && group.group_name}</Typography>
                         <Typography sx={{p: '3px 7px', borderRadius: '10px', fontWeight: 'bold', fontSize: '12px', backgroundColor: (group.gender).charAt(0) === '여' ? '#FFF4F9' : '#E8F9FF', color: (group.gender).charAt(0) === '여' ? '#FAA4C3' : '#83B6F2'}}>
                             {(group.gender).charAt(0)}
                         </Typography>
                     </Grid>
                     <Typography sx={{ fontSize: '14px', height: '40px', lineHeight: '20px', fontWeight: 400, color: '#3C3C3C', m: '20px 0 30px', textAlign: 'center', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
-                        {'"'+ group.introduction +'"'}
+                        {'"'+ group.group_introduction +'"'}
                     </Typography>
                     <Grid item sx={{ display: 'flex',  alignItems: 'center', width: '100%', justifyContent: 'center' }}>
                         <Button
@@ -195,31 +170,12 @@ const Groups = () => {
                             </Button>
                         )}
                     </Grid>
-
-                    {/* 팝업 없이 바로 이동 */}
-                    {/* <CustomPopup
-                        open={open}
-                        onClose={handleClose}
-                        content={`밥약 신청을 하시겠어요?`}
-                        leftButtonLabel="아니요"
-                        rightButtonLabel="신청"
-                        onLeftButtonClick={handleClose}
-                        onRightButtonClick={() => {
-                            handleSubmit(selectedGroupId);
-                        }}
-                    /> */}
-
-                    {/* <CustomPopupNoBtn
-                        open={isPopupMessageOpen}
-                        onClose={() => setIsPopupMessageOpen(false)}
-                        content={popupMessage}
-                    /> */}
                 </Grid>
             </Card> 
             )) 
             :
             <>
-                { realProfiles.length === 0 &&
+                { groupProfiles && groupProfiles.length === 0 &&
                     dummyProfiles.map((group, index) => (
                     <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '21px'}}>
                         <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>

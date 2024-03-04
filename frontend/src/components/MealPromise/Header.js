@@ -37,7 +37,7 @@ const Header = ({title, onBackClick, icon}) => {
                         <Image src={iconClose} onClick={()=> router.back()} layout="fixed" width={24} height={24} />
                     ) : 
                     icon === 'close' ?
-                    <Image src={iconClose} onClick={()=> router.back()} layout="fixed" width={18} height={18} />
+                    <Image src={iconClose} onClick={()=> router.push('/mealPromise')} layout="fixed" width={18} height={18} />
                     : icon ?
                     <Image src={iconSearch} layout="fixed" width={24} height={24} />
                     : null

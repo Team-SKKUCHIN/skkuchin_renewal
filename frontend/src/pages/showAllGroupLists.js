@@ -45,6 +45,7 @@ const ShowAllGroupLists = () => {
             router.push('/makeGroupProfile');
         } else {
             alert('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+            router.push('/verification');
         }
     }
 

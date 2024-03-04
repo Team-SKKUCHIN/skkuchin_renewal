@@ -51,7 +51,7 @@ export const get_my_group_profile = () => async dispatch => {
     }
 }
 
-export const add_group_profile = (profileData) => async dispatch => {
+export const add_group_profile = (profileData, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
 
@@ -75,7 +75,6 @@ export const add_group_profile = (profileData) => async dispatch => {
         if(res.status === 201){
             dispatch({
                 type: ADD_GROUP_PROFILE_SUCCESS,
-                payload: apiRes
             })
 
             if(callback) callback([true, apiRes.message]);

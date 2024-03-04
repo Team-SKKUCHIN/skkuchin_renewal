@@ -1,6 +1,7 @@
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import VerificationPhone from '../components/Auth/Verification/Phone';
 import VerificationAgreement from '../components/Auth/Verification/Agreement';
 import theme from '../theme/theme';

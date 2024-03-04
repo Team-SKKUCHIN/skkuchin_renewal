@@ -10,6 +10,16 @@ const enrollOpenChat = () => {
 
     const { type } = router.query;
 
+    useEffect(() => {
+        console.log('type', type);
+        
+        const id = localStorage.getItem('myProfileId');
+        const candidateId = localStorage.getItem('candidateId');
+
+        console.log('id', id);
+        console.log('candidateId', candidateId);
+    }, []);
+    
     const [openChatLink, setOpenChatLink] = useState(''); 
 
     const [popupOpen, setPopupOpen] = useState(false);

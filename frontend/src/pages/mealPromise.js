@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ThemeProvider, CssBaseline, Typography, Button, Grid, Divider, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import AddIcon from '@mui/icons-material/Add';
 import UpperBar from "../components/UpperBar";
 import theme from "../theme/theme";
@@ -9,6 +9,7 @@ import styled from '@emotion/styled';
 import BannerCarousel from "../components/MealPromise/BannerCarousel";
 import Groups from "../components/Matching/Groups";
 import Friends from "../components/Matching/Friends";
+import { load_all_group_profile, get_my_group_profile } from "../actions/groupProfile/groupProfile";
 
 const LayoutContainer = styled.div`
   ::-webkit-scrollbar {
@@ -21,9 +22,12 @@ const LayoutContainer = styled.div`
 
 const MealPromisePage = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const user = useSelector(state => state.auth.user);
-  
+  const allGroupProfiles = useSelector(state => state.groupProfile.allGroupProfiles);
+  const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
+
   const [activeStep, setActiveStep] = useState(0);
   const [isScrollingDown, setIsScrollingDown] = useState(false);
 
@@ -66,8 +70,14 @@ const MealPromisePage = () => {
         router.push('/makeGroupProfile');
     } else {
         alert('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+        router.push('/verification');
     }
   }
+
+  useEffect(() => {
+    if(allGroupProfiles === null) dispatch(load_all_group_profile());
+    else if(myGroupProfiles === null) dispatch(get_my_group_profile());
+  }, []);
 
   return (
     <LayoutContainer>

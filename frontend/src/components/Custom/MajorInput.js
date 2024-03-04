@@ -28,7 +28,8 @@ const MajorInput = ({ value, onChange, editable = true }) => {
         },
         '& input': {
           fontSize: '16px',
-          padding: '0'
+          padding: '0',
+          color: editable ? '#3C3C3C' : '#9E9E9E',
         },
         height: '56px',
         border: '1px solid #E2E2E2',
@@ -37,7 +38,8 @@ const MajorInput = ({ value, onChange, editable = true }) => {
         appearance: 'none',
         marginLeft: '8px',
         fontSize: '16px',
-        padding: '0'
+        padding: '0',
+        backgroundColor: editable ? 'white' : '#FBFBFB',
       }}
       onChange={(e, newValue) => onChange(newValue)}
       options={majorList.sort()}

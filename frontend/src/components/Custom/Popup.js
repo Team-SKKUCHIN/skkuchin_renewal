@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 const Popup = ({ open, handleClose, type, message, description, onConfirm }) => {
     const router = useRouter();
-    const [infoBtnClicked, setInfoBtnClicked] = useState(false);
+    // const [infoBtnClicked, setInfoBtnClicked] = useState(false);
 
     const handleQuestionConfirm = () => {
         handleClose();
@@ -14,14 +14,14 @@ const Popup = ({ open, handleClose, type, message, description, onConfirm }) => 
 
     const handleInfoConfirm = () => {
         handleClose();
-        setInfoBtnClicked(true);
+        // setInfoBtnClicked(true);
     }
 
-    useEffect(() => {
-        if(infoBtnClicked) {
-            router.push('/mealPromise');
-        }
-    }, [infoBtnClicked]);
+    // useEffect(() => {
+    //     if(infoBtnClicked) {
+    //         router.push('/mealPromise');
+    //     }
+    // }, [infoBtnClicked]);
 
     return (
         <Dialog open={open} onClose={handleClose}>

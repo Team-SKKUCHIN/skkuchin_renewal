@@ -35,10 +35,6 @@ const groupProfileReducer = (state = initialState, action) => {
                 myGroupProfiles: null
             }
         case ADD_GROUP_PROFILE_SUCCESS:
-            return {
-                ...state,
-                myGroupProfiles: payload
-            }
         case ADD_GROUP_PROFILE_FAIL:
             return {
                 ...state

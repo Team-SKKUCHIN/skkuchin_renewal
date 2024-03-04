@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CssBaseline, ThemeProvider, Typography, Grid, TextField, Button, Divider } from '@mui/material';
 import theme from '../theme/theme';
 import Header from '../components/MealPromise/Header';
@@ -7,9 +7,10 @@ import MemberInfoInput from '../components/MealPromise/MemberInfoInput';
 import CalendarContainer from '../components/MealPromise/CalendarContainer';
 import Popup from '../components/Custom/Popup';
 import { add_group_profile } from '../actions/groupProfile/groupProfile';
-import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 const MakeGroupProfile = () => {
+    const router = useRouter();
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
 
@@ -85,6 +86,7 @@ const MakeGroupProfile = () => {
                 setPopupDescription('한줄 소개 수정은 마이페이지에서 할 수 있어요.');
                 setPopupOpen(true);
                 setPopupType('info');
+                router.push('/mealPromise')
             } else {
                 alert(message);
             }
@@ -107,12 +109,12 @@ const MakeGroupProfile = () => {
                     `}
                 </style>
                 <Typography sx={{fontSize: 14, color: '#3C3C3C', mb: '8px'}}>그룹명</Typography>
-                <TextField InputProps={{ style: { height: 48, padding: '0 6px'}}} variant='outlined' fullWidth placeholder='그룹명을 입력해주세요 (필수)' value={groupName} onChange={(event) => setGroupName(event.target.value)}/>
+                <TextField InputProps={{ style: { height: 48, padding: '0 6px'}}} sx={{mb: '18px'}} variant='outlined' fullWidth placeholder='그룹명을 입력해주세요 (필수)' value={groupName} onChange={(event) => setGroupName(event.target.value)}/>
 
                 <Typography sx={{fontSize: 14, color: '#3C3C3C', mb: '8px'}}>성별</Typography>
                 <Grid container sx={{mb: '18px'}}>
-                    <Button value="남성" disabled onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '8px 0 0 8px', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '남성' ? '#FFFCE4' : '#fff'}}>남</Button>
-                    <Button value="여성" disabled onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '0 8px 8px 0', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '여성' ? '#FFFCE4' : '#fff'}}>여</Button>
+                    <Button value="남성" disabled onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '8px 0 0 8px', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '남성' ? '#FBFBFB' : '#fff'}}>남</Button>
+                    <Button value="여성" disabled onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '0 8px 8px 0', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '여성' ? '#FBFBFB' : '#fff'}}>여</Button>
                 </Grid>
 
                 <Typography sx={{fontSize: 14, color: '#3C3C3C', mb: '8px'}}>그룹 한줄 소개</Typography>
