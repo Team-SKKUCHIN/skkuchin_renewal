@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Grid, Typography, Button } from '@mui/material';
 import { displayMBTI } from '../Matching/MBTIList';
 import styled from '@emotion/styled';
@@ -22,10 +22,18 @@ const StyledCard = styled(Card)`
 const MyGroupProfileCard = ({ group, selected, onClick }) => {
     const router = useRouter();
 
-    const handleGroupClick = (id) => {
-        router.push(`/showGroupProfile?id=${id}&isMyProfile=${true}`);
-    }
+    useEffect(() => {
+        let isMounted = true;
 
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const handleGroupClick = (id) => {
+        router.push(`/showGroupProfile?id=${id}`);
+    }
+    
     return (
         <StyledCard selected={selected} variant="outlined" onClick={onClick}>
             <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>

@@ -36,30 +36,6 @@ const dummyProfiles = [
     },
 
 ];
-  
-const realProfiles = [
-    {
-        groupName: '진짜그룹명1',
-        gender: '남',
-        mbti: 'GROUP',
-        introduction:
-            '긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 👀',
-    },
-    {
-        groupName: '진짜그룹명2',
-        gender: '여',
-        mbti: 'GROUP',
-        introduction:
-            '그룹 한줄 소개입니다 👀',
-    },
-    {
-        groupName: '진짜그룹명3',
-        gender: '여',
-        mbti: 'GROUP',
-        introduction:
-            '그룹 한줄 소개입니다 👀',
-    },
-];
 
 const Groups = () => {
     const router = useRouter();
@@ -67,6 +43,7 @@ const Groups = () => {
 
     const user = useSelector(state => state.matchingUser.matchingUser);
     const groupProfiles = useSelector(state => state.groupProfile.allGroupProfiles);
+    const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [isLogin, setIsLogin] = useState(false);
@@ -76,9 +53,7 @@ const Groups = () => {
     const [isGroupProfileEnrolled, setIsGroupProfileEnrolled] = useState(true);
 
     useEffect(() => {
-        if (groupProfiles === null || groupProfiles.length === 0) {
-            dispatch(load_all_group_profile());
-        }
+        dispatch(load_all_group_profile());
     }, []);
     
     const handleSettingOpen = () => {
@@ -100,79 +75,55 @@ const Groups = () => {
         <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0'}}>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
             { isGroupProfileEnrolled ? 
-            groupProfiles && groupProfiles.map((group, index) => (
-            <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '10px'}}>
-                <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
-                    {displayMBTI('GROUP', 90, 90)}
-                    <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
-                        <Typography sx={{fontSize: '20px', fontWeight: '700', mr: '5px'}}>{group !== null && group.group_name}</Typography>
-                        <Typography sx={{p: '3px 7px', borderRadius: '10px', fontWeight: 'bold', fontSize: '12px', backgroundColor: (group.gender).charAt(0) === '여' ? '#FFF4F9' : '#E8F9FF', color: (group.gender).charAt(0) === '여' ? '#FAA4C3' : '#83B6F2'}}>
-                            {(group.gender).charAt(0)}
-                        </Typography>
-                    </Grid>
-                    <Typography sx={{ fontSize: '14px', height: '40px', lineHeight: '20px', fontWeight: 400, color: '#3C3C3C', m: '20px 0 30px', textAlign: 'center', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
-                        {'"'+ group.group_introduction +'"'}
-                    </Typography>
-                    <Grid item sx={{ display: 'flex',  alignItems: 'center', width: '100%', justifyContent: 'center' }}>
-                        <Button
-                            disableElevation
-                            disableTouchRipple
-                            key="profile-button"
-                            onClick={() => handleGroupClick(group.id)}
-                            sx={{
-                                color: '#777777',
-                                fontSize: '14px',
-                                fontWeight: 700,
-                                textAlign: 'center',
-                                pr: '15px',
-                            }}
-                        >
-                            그룹 프로필
-                        </Button>
-                        <div
-                            style={{
-                                width: '2px',
-                                height: '12px', 
-                                backgroundColor: '#E2E2E2',
-                                borderRadius: '10px',
-                            }}
-                        />
-                        {requestId && requestId.includes(group.id) ? (
-                            <Button
-                                disableElevation
-                                disableTouchRipple
-                                key="completed-button"
-                                sx={{
-                                    color: '#505050',
-                                    fontSize: '14px',
-                                    fontWeight: 700,
-                                    textAlign: 'center',
-                                    pl: '15px',
-                                }}
-                            >
-                                신청 완료
-                            </Button>
-                        ) : (
-                            <Button
-                                disableElevation
-                                disableTouchRipple
-                                key="apply-button"
-                                onClick={() => router.push('/selectMyGroupProfile')}
-                                sx={{
-                                    color: '#FFAC0B',
-                                    fontSize: '14px',
-                                    fontWeight: 700,
-                                    textAlign: 'center',
-                                    pl: '15px',
-                                }}
-                            >
-                                밥약 걸기
-                            </Button>
-                        )}
-                    </Grid>
-                </Grid>
-            </Card> 
-            )) 
+                groupProfiles && groupProfiles.map((group, index) => (
+                        <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '10px'}}>
+                            <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
+                                {displayMBTI('GROUP', 90, 90)}
+                                <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
+                                    <Typography sx={{fontSize: '20px', fontWeight: '700', mr: '5px'}}>{group !== null && group.group_name}</Typography>
+                                    <Typography sx={{p: '3px 7px', borderRadius: '10px', fontWeight: 'bold', fontSize: '12px', backgroundColor: (group.gender).charAt(0) === '여' ? '#FFF4F9' : '#E8F9FF', color: (group.gender).charAt(0) === '여' ? '#FAA4C3' : '#83B6F2'}}>
+                                        {(group.gender).charAt(0)}
+                                    </Typography>
+                                </Grid>
+                                <Typography sx={{ fontSize: '14px', height: '40px', lineHeight: '20px', fontWeight: 400, color: '#3C3C3C', m: '20px 0 30px', textAlign: 'center', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
+                                    {'"'+ group.group_introduction +'"'}
+                                </Typography>
+                                <Grid item sx={{ display: 'flex',  alignItems: 'center', width: '100%', justifyContent: 'center' }}>
+                                    <Button
+                                        disableElevation
+                                        disableTouchRipple
+                                        key="profile-button"
+                                        onClick={() => handleGroupClick(group.id)}
+                                        sx={{ color: '#777777', fontSize: '14px', fontWeight: 700, textAlign: 'center', pr: '15px'}}
+                                    >
+                                        그룹 프로필
+                                    </Button>
+                                    <div style={{ width: '2px', height: '12px', backgroundColor: '#E2E2E2', borderRadius: '10px'}} />
+                                        {requestId && requestId.includes(group.id) ? (
+                                            <Button
+                                                disableElevation
+                                                disableTouchRipple
+                                                key="completed-button"
+                                                sx={{ color: '#505050', fontSize: '14px', fontWeight: 700, textAlign: 'center', pl: '15px'}}
+                                            >
+                                                신청 완료
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                disableElevation
+                                                disableTouchRipple
+                                                key="apply-button"
+                                                onClick={() => router.push('/selectMyGroupProfile')}
+                                                sx={{ color: '#FFAC0B', fontSize: '14px', fontWeight: 700, textAlign: 'center', pl: '15px' }}
+                                            >
+                                                밥약 걸기
+                                            </Button>
+                                        )}
+                                </Grid>
+                            </Grid>
+                        </Card> 
+                ))
+
             :
             <>
                 { groupProfiles && groupProfiles.length === 0 &&

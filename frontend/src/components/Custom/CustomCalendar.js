@@ -55,7 +55,7 @@ const CustomCalendar = ({ dates, onDateChange }) => {
                     formatDay={(locale, date) =>
                         date.toLocaleString('en', { day: 'numeric' })
                     }
-                    calendarType="US"
+                    calendarType="gregory"
                     tileDisabled={tileDisabled}
                 />
             </CalendarDesign>

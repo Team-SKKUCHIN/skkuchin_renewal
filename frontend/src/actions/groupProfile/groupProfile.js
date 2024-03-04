@@ -16,6 +16,56 @@ import {
     CLEAR_CANDIDATE_PROFILE
 } from "./types";
 
+export const get_random_nickname = () => async dispatch => {
+    await dispatch(request_refresh());
+    const access = dispatch(getToken('access'));
+
+    try {
+        const res = await fetch(`${API_URL}/api/group-profile/random-name`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${access}`
+            }
+        });
+
+        const apiRes = await res.json();
+        console.log('랜덤 닉네임 조회 요청 완료 :', apiRes.data);
+
+        if (res.status === 200) {
+            return apiRes.data;
+        } else {
+            return null;
+        }
+    }
+    catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+export const check_group_name_duplicate = async (groupName) => {
+    try {
+        const res = await fetch(`${API_URL}/api/group-profile/check/group-name`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ group_name: groupName })
+        });
+
+        const apiRes = await res.json();
+        if(res.status === 200) {
+            return apiRes.data;
+        } else return false;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 export const get_my_group_profile = () => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
@@ -76,7 +126,8 @@ export const add_group_profile = (profileData, callback) => async dispatch => {
             dispatch({
                 type: ADD_GROUP_PROFILE_SUCCESS,
             })
-
+            dispatch(get_my_group_profile());
+            dispatch(load_all_group_profile(true));
             if(callback) callback([true, apiRes.message]);
         } else {
             dispatch({
@@ -128,46 +179,64 @@ export const load_candidate_profile = (id, callback) => async dispatch => {
     }
 }
 
-
-export const load_all_group_profile = (isAuthenticated) => async dispatch => {
+export const load_all_group_profile = () => async (dispatch) => {
     try {
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        };
-
-        if(isAuthenticated) {
+        try {
             await dispatch(request_refresh());
             const access = await dispatch(getToken('access'));
-            headers['Authorization'] = `Bearer ${access}`;
-        }
+            
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            };
 
-        const res = await fetch(`${API_URL}/api/group-profile`, {
-            method: 'GET',
-            headers: headers
-        });
+            if (access) headers['Authorization'] = `Bearer ${access}`;
 
-        const apiRes = await res.json();
-        console.log('그룹 프로필 목록 조회 요청 완료 :', apiRes.data);
-
-        if (res.status === 200) {
-            dispatch({
-                type: LOAD_ALL_GROUP_PROFILE_SUCCESS,
-                payload: apiRes.data
+            const res = await fetch(`${API_URL}/api/group-profile`, {
+                method: 'GET',
+                headers: headers
             });
-        } else {
-            dispatch({
-                type: LOAD_ALL_GROUP_PROFILE_FAIL
+
+            const apiRes = await res.json();
+
+            if (res.status === 200) {
+                dispatch({
+                    type: LOAD_ALL_GROUP_PROFILE_SUCCESS,
+                    payload: apiRes.data
+                });
+            } else {
+                dispatch({
+                    type: LOAD_ALL_GROUP_PROFILE_FAIL
+                });
+            }
+        } catch (tokenError) {
+            const res = await fetch(`${API_URL}/api/group-profile`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
             });
+
+            const apiRes = await res.json();
+
+            if (res.status === 200) {
+                dispatch({
+                    type: LOAD_ALL_GROUP_PROFILE_SUCCESS,
+                    payload: apiRes.data
+                });
+            } else {
+                dispatch({
+                    type: LOAD_ALL_GROUP_PROFILE_FAIL
+                });
+            }
         }
     } catch (error) {
-        console.log(error);
         dispatch({
             type: LOAD_ALL_GROUP_PROFILE_FAIL
         });
     }
 }
-
 
 
 export const update_group_profile = (profileId, updatedData) => async dispatch => {
@@ -228,6 +297,7 @@ export const delete_group_profile = (profileId) => async dispatch => {
                 type: DELETE_GROUP_PROFILE_SUCCESS,
                 payload: apiRes.data
             });
+            dispatch(get_my_group_profile());
         } else {
             dispatch({
                 type: DELETE_GROUP_PROFILE_FAIL

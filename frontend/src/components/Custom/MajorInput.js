@@ -18,9 +18,12 @@ const majorList = [
 ];
 
 const MajorInput = ({ value, onChange, editable = true }) => {
+  const isValidInitialValue = majorList.includes(value);
+  const initialValue = isValidInitialValue ? value : null;
+
   return (
     <Autocomplete
-      value={value}
+      value={initialValue}
       readOnly={!editable}
       sx={{
         '& .MuiOutlinedInput-notchedOutline': {

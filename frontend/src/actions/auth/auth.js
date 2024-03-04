@@ -145,7 +145,7 @@ export const load_user = (callback) => async dispatch => {
                 type: LOAD_USER_SUCCESS,
                 payload: apiRes.data
             });
-            dispatch(load_favorite());
+            // dispatch(load_favorite());
             dispatch(load_token());
             if (callback) callback([true, apiRes.message]);
         } else {

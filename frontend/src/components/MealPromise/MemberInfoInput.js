@@ -3,7 +3,7 @@ import { Grid, Typography, FormControl, TextField } from '@mui/material';
 import MajorInput from '../Custom/MajorInput';
 import StudentIdInput from '../Custom/StudentIdInput';
 
-const MemberInfoInput = ({ label, studentId, major, introduction, onUpdate }) => {
+const MemberInfoInput = ({ label, studentId, major, introduction, mode, onUpdate, onChange }) => {
   const handleStudentIdChange = (value) => {
     onUpdate({ studentId: value });
   };
@@ -47,7 +47,7 @@ const MemberInfoInput = ({ label, studentId, major, introduction, onUpdate }) =>
         <FormControl variant="standard" style={{ width: '27%' }}>
           <Typography sx={{ fontSize: 14, color: '#3C3C3C', mb: '8px' }}>학번</Typography>
           <Grid container>
-            <StudentIdInput value={studentId} onChange={handleStudentIdChange} editable={isEditable}/>
+            <StudentIdInput value={studentId} onChange={handleStudentIdChange} editable={isEditable && mode !== 'modify'}/>
             <input
               readOnly
               value="학번"
@@ -71,7 +71,7 @@ const MemberInfoInput = ({ label, studentId, major, introduction, onUpdate }) =>
         {/* 학과 */}
         <FormControl variant="standard" style={{ width: '73%' }}>
           <Typography sx={{ fontSize: 14, color: '#3C3C3C', mb: '8px' }}>학부/학과</Typography>
-          <MajorInput value={major} onChange={handleMajorChange} editable={isEditable}/>
+          <MajorInput value={major} onChange={handleMajorChange} editable={isEditable && mode !== 'modify'}/>
         </FormControl>
       </Grid>
 

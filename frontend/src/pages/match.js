@@ -29,7 +29,7 @@ const MatchPage = () => {
     const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
 
     useEffect(() => {
-        if(!allGroupProfiles) dispatch(load_all_group_profile());
+        if(allGroupProfiles === null) dispatch(load_all_group_profile());
         if(isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
     }, [isAuthenticated]);
 

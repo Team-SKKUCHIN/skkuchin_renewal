@@ -3,32 +3,10 @@ import { List, ListItem, ListItemText, Typography, Button, Divider } from '@mui/
 import { displayMBTI } from "../Matching/MBTIList";
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
-import { clear_candidate_profile, load_candidate_profile } from '../../actions/groupProfile/groupProfile';
-import { Loading } from '../Loading';
 
-const GroupProfile = ({id, isMyProfile}) => {
+const GroupProfile = ({isMyProfile, mode, group, handleEditProfileClick}) => {
     const router = useRouter();
-    const dispatch = useDispatch();
-
-    const group = useSelector(state => state.groupProfile.candidateGroup);
     const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
-
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        dispatch(clear_candidate_profile());
-
-        if(id) {
-            dispatch(load_candidate_profile(id, ([result, message]) => {
-                if (result) {
-                    console.log("그룹 프로필 불러오기 성공");
-                    setLoading(false);
-                } else {
-                    console.log("그룹 프로필 불러오기 오류" + message);
-                }
-            }));
-        }
-    }, [id]);
 
     const handleSubmit = () => {
         if (myGroupProfiles && myGroupProfiles.length > 0) {
@@ -39,8 +17,6 @@ const GroupProfile = ({id, isMyProfile}) => {
             router.push('/mealPromise');
         }
     }
-
-    if (id === undefined || group === null) return <Loading />;
 
     return (
         <>
@@ -101,8 +77,18 @@ const GroupProfile = ({id, isMyProfile}) => {
                     밥약 신청하기
                 </Button>
             }
-
-            { loading && <Loading />}
+            {
+                isMyProfile && mode === 'edit' &&
+                <Button
+                    onClick={handleEditProfileClick}
+                    color="primary"
+                    variant="contained"
+                    disableElevation
+                    sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
+                >
+                    프로필 수정하기
+                </Button>
+            }
         </>
     )
 }

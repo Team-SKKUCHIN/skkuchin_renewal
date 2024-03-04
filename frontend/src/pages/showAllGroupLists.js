@@ -16,13 +16,12 @@ const ShowAllGroupLists = () => {
 
     const user = useSelector(state => state.auth.user);
     const groups = useSelector(state => state.groupProfile.allGroupProfiles);
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 
     useEffect(() => {
-        if(!groups) { 
-            dispatch(load_all_group_profile(isAuthenticated));
+        if(groups === null) { 
+            dispatch(load_all_group_profile());
         }
-    }, [isAuthenticated, groups]);
+    }, []);
 
     const [selectedFilter, setSelectedFilter] = useState('전체');
     const filterOptions = ['전체', '여성', '남성'];
@@ -66,7 +65,7 @@ const ShowAllGroupLists = () => {
             <div style={{ overflow: 'scroll', padding: '12px 24px' }}>
                 {filteredProfiles && filteredProfiles.length !== 0 ? (
                     filteredProfiles.map((group, index) => (
-                        <div style={{ marginBottom: '15px' }} key={index} onClick={() => handleGroupClick(group.id)}>
+                        <div style={{ marginBottom: '12px' }} key={index} onClick={() => handleGroupClick(group.id)}>
                             <GroupItem group={group} />
                         </div>
                     ))
