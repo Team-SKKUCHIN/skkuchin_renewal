@@ -17,8 +17,6 @@ const deleteUser = () => {
     const [reason, setReason] = useState("");
     const [agreement, setAgreement] = useState(false);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const chatAlarmSubscription = useSelector(state => state.chatAlarm.chatAlarmSubscription);
-    const noticeAlarmSubscription = useSelector(state => state.noticeAlarm.noticeAlarmSubscription);
 
     if (typeof window !== 'undefined' && !isAuthenticated) {
         router.push('/login');
@@ -34,12 +32,6 @@ const deleteUser = () => {
                 let username = localStorage.getItem("username");
                 if (username != null) {
                     localStorage.removeItem("username");
-                }
-                if (chatAlarmSubscription) {
-                    chatAlarmSubscription.unsubscribe();
-                }
-                if (noticeAlarmSubscription) {
-                    noticeAlarmSubscription.unsubscribe();
                 }
                 dispatch(logout());
             }
