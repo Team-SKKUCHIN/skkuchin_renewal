@@ -14,13 +14,11 @@ import skkuchin.service.domain.User.Major;
 import skkuchin.service.domain.Matching.Mbti;
 import skkuchin.service.domain.User.Profile;
 import skkuchin.service.util.CampusUtils;
+import skkuchin.service.util.KeywordUtils;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -79,24 +77,9 @@ public class MatchingUserDto {
             this.mbti = user.getMbti();
             this.matching = user.getMatching();
             this.gender = user.getGender();
-            this.keywords = getKeywordMap(keywords);
+            this.keywords = KeywordUtils.getKeywordMap(keywords);
             this.introduction = user.getIntroduction();
             this.campus = CampusUtils.findCampus(user.getMajor());
-        }
-
-        private Map<String, List<String>> getKeywordMap(List<UserKeyword> keywords) {
-            Map<String, List<String>> keywordMap = new HashMap<>();
-
-            for (UserKeyword userKeyword : keywords) {
-                String category = userKeyword.getKeyword().getCategory();
-                String name = userKeyword.getKeyword().getName();
-
-                if (!keywordMap.containsKey(category)) {
-                    keywordMap.put(category, new ArrayList<>());
-                }
-                keywordMap.get(category).add(name);
-            }
-            return keywordMap;
         }
     }
 }

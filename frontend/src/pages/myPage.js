@@ -1,19 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from "next/router";
-import Image from 'next/image';
-import { CssBaseline, ThemeProvider, Grid,Button, Container, Typography, Dialog, DialogContent, DialogContentText, DialogTitle, DialogActions } from '@mui/material';
+import { CssBaseline, ThemeProvider, Button, Container, Typography, Dialog, DialogContent, DialogContentText, DialogTitle, DialogActions } from '@mui/material';
 import theme from '../theme/theme';
-import next from '../image/arrow_next.png';
-import insta from '../image/insta.png';
 import { displayProfile } from '../components/MyPage/ProfileList';
 import { logout } from '../actions/auth/auth';
 
-// 스위치
 import { styled } from '@mui/material/styles';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { set_chat_push, set_info_push } from '../actions/pushToken/pushToken';
 import { change_status_info } from '../actions/matchingUser/matchingUser';
 
 import UpperBar from "../components/UpperBar";
@@ -24,12 +18,7 @@ const myPage = () => {
     const user = useSelector(state => state.auth.user);
     const userMatchInfo = useSelector(state => state.matchingUser.matchingUser);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const pushToken = useSelector(state => state.pushToken.pushToken);
-    const chatAlarmSubscription = useSelector(state => state.chatAlarm.chatAlarmSubscription);
-    const noticeAlarmSubscription = useSelector(state => state.noticeAlarm.noticeAlarmSubscription);
 
-    const [chatAlarm, setChatAlarm] = useState(false);
-    const [infoAlarm, setInfoAlarm] = useState(false);
     const [MatchChecked, setMatchChecked] = useState(false);
     const [selectedKeywords, setSelectedKeywords] = useState([]);
     
@@ -40,32 +29,11 @@ const myPage = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleLogout = () => {
-        if (chatAlarmSubscription) {
-            chatAlarmSubscription.unsubscribe();
-        }
-        if (noticeAlarmSubscription) {
-            noticeAlarmSubscription.unsubscribe();
-        }
         dispatch(logout());
         setDialogOpen(false);
     }
-    const handleDialogOpen = () => {
-        setDialogOpen(true);
-    }
     const handleDialogClose = () => {
         setDialogOpen(false);
-    }
-
-    const handleChatToggle = (e) => {
-        if (pushToken) {
-            dispatch(set_chat_push(!chatAlarm))
-        }
-    }
-
-    const handleNoticeToggle = (e) => {
-        if (pushToken) {
-            dispatch(set_info_push(!infoAlarm))
-        }
     }
 
     const handleMatching = () => {
@@ -91,13 +59,6 @@ const myPage = () => {
             router.push('/changeProfile');
         }
     }
-
-    useEffect(() => {
-        if (pushToken) {
-            setChatAlarm(pushToken.chat_alarm);
-            setInfoAlarm(pushToken.info_alarm);
-        }
-    }, [pushToken])
 
     useEffect(()=>{
         if (userMatchInfo) {
@@ -141,147 +102,6 @@ const myPage = () => {
         marginLeft:'auto'
       }));
 
-    const CustomSwitch2 = styled((props)=>(<Switch disableRipple {...props} onClick={handleChatToggle}  checked={chatAlarm}/>))(({ theme }) => ({
-        '& .MuiSwitch-thumb': {
-          backgroundColor: 'white',
-        },
-        '& .MuiSwitch-track': {
-          backgroundColor: chatAlarm ? theme.palette.primary.main : 'gray',
-          height: '12px',
-          marginTop:'2px'
-        },
-        marginTop:"-10px",
-        marginLeft:'auto'
-      }));
-
-    const CustomSwitch3 = styled((props)=>(<Switch disableRipple {...props} onClick={handleNoticeToggle}   checked={infoAlarm}/>))(({ theme }) => ({
-        '& .MuiSwitch-thumb': {
-          backgroundColor: 'white',
-        },
-        '& .MuiSwitch-track': {
-          backgroundColor: infoAlarm ? theme.palette.primary.main : 'gray',
-          height: '12px',
-          marginTop:'2px'
-        },
-        marginTop:"-10px",
-        marginLeft:'auto'
-      }));
-    
-    // const CustomSwitch4 = styled((props)=>(<Switch disableRipple {...props} onClick={handleNoticeToggle}   checked={infoAlarm}/>))(({ theme }) => ({
-    // '& .MuiSwitch-thumb': {
-    //     backgroundColor: 'white',
-    // },
-    // '& .MuiSwitch-track': {
-    //     backgroundColor: infoAlarm ? theme.palette.primary.main : 'gray',
-    //     height: '12px',
-    //     marginTop:'2px'
-    // },
-    // marginTop:"-10px",
-    // marginLeft:'auto'
-    // }));     
-    const IOSSwitch = styled((props) => (
-        <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} checked={chatAlarm} />
-        ))(({ theme }) => ({
-            width: 40,
-            height: 22,
-            padding: 0,
-
-            '& .MuiSwitch-switchBase': {
-            padding: 1,
-            margin: 3,
-            transitionDuration: '300ms',
-            '&.Mui-checked': {
-                transform: 'translateX(16px)',
-                color: '#fff',
-                '& + .MuiSwitch-track': {
-                backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#FFCE00',
-                opacity: 1,
-                border: 0,
-                },
-                '&.Mui-disabled + .MuiSwitch-track': {
-                opacity: 0.5,
-                },
-            },
-            '&.Mui-focusVisible .MuiSwitch-thumb': {
-                color: '#FFCE00',
-                border: '6px solid #fff',
-            },
-            '&.Mui-disabled .MuiSwitch-thumb': {
-                color:
-                theme.palette.mode === 'light'
-                    ? theme.palette.grey[100]
-                    : theme.palette.grey[600],
-            },
-            '&.Mui-disabled + .MuiSwitch-track': {
-                opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
-            },
-            },
-            '& .MuiSwitch-thumb': {
-            boxSizing: 'border-box',
-            width: 15,
-            height: 15,
-            },
-            '& .MuiSwitch-track': {
-            borderRadius: 26 / 2,
-            backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
-            opacity: 1,
-            transition: theme.transitions.create(['background-color'], {
-                duration: 500,
-            }),
-            },
-    }));
-    const IOSSwitch2 = styled((props) => (
-        <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} checked={infoAlarm} />
-        ))(({ theme }) => ({
-            width: 40,
-            height: 22,
-            padding: 0,
-
-            '& .MuiSwitch-switchBase': {
-            padding: 1,
-            margin: 3,
-            transitionDuration: '300ms',
-            '&.Mui-checked': {
-                transform: 'translateX(16px)',
-                color: '#fff',
-                '& + .MuiSwitch-track': {
-                backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#FFCE00',
-                opacity: 1,
-                border: 0,
-                },
-                '&.Mui-disabled + .MuiSwitch-track': {
-                opacity: 0.5,
-                },
-            },
-            '&.Mui-focusVisible .MuiSwitch-thumb': {
-                color: '#FFCE00',
-                border: '6px solid #fff',
-            },
-            '&.Mui-disabled .MuiSwitch-thumb': {
-                color:
-                theme.palette.mode === 'light'
-                    ? theme.palette.grey[100]
-                    : theme.palette.grey[600],
-            },
-            '&.Mui-disabled + .MuiSwitch-track': {
-                opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
-            },
-            },
-            '& .MuiSwitch-thumb': {
-            boxSizing: 'border-box',
-            width: 15,
-            height: 15,
-            },
-            '& .MuiSwitch-track': {
-            borderRadius: 26 / 2,
-            backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
-            opacity: 1,
-            transition: theme.transitions.create(['background-color'], {
-                duration: 500,
-            }),
-            },
-    }));
-
     return (
         <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -306,14 +126,12 @@ const myPage = () => {
                     </div>
                 </div>
             </div>
-            {/* <div style={{height:'5px',backgroundColor:"white"}}></div> */}
             
             {/* 내 정보 */}
             <Container style={{display: 'grid', padding: '0 24px', marginTop: '20px'}}>
                 <Typography style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '24px', marginTop: '30px', height: '20px'}}>내 정보</Typography>
                 <div onClick={() => router.push('/editNickname')} style={{height: '20px', marginBottom: '15px'}}><Button variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>계정 정보 &nbsp; &nbsp; &nbsp;</Button></div>
                 <div onClick={() => router.push('/resetPassword')} style={{height: '20x'}}><Button variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>비밀번호 재설정</Button></div>
-                {/* <div onClick={() => router.push('/editProfileImage')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>프로필 이미지 변경</Button></div> */}
             </Container>
             <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'24px'}}></div>
 
@@ -323,68 +141,14 @@ const myPage = () => {
                 <div style={{display:'flex', height: '20px', marginBottom: '15px'}}><Typography variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>개인 프로필 공개</Typography><CustomSwitch defaultChecked/></div>
                 <div onClick={() => router.push('/changeProfile')} style={{height: '20px', marginBottom: '15px'}}><Button variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>개인 프로필 수정</Button></div>
                 <div onClick={() => router.push('/myGroupProfileLists')} style={{height: '28px'}}><Button variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>그룹 프로필 수정</Button></div>
-                {/* <div onClick={() => router.push('/myPost')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>내 게시글 &nbsp; &nbsp;</Button></div> */}
-                {/* <div onClick={() => router.push('/myFavPost')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>좋아요 누른 게시글</Button></div> */}
             </Container>
             <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'24px'}}></div>
-
-            {/* 매칭 프로필 */}
-            {/* <Container style={{display: 'grid', padding: '0 24px', marginTop: '30px'}}>
-                <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '15px'}}>밥약 매칭 설정</Typography>
-                <div onClick={() => router.push('/changeProfile')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>매칭 프로필 변경</Button></div>
-                <div style={{display:'flex'}}><Typography variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>매칭 ON/OFF</Typography><CustomSwitch defaultChecked/></div>
-            </Container>
-            <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'0 24px'}}></div> */}
-
-            {/* 알림 설정 */}
-            {/* <Container style={{padding: '0 24px', marginTop: '25px'}}>
-                <Typography style={{fontSize: '16px', fontWeight: '700', marginBottom: '15px'}}>알림 설정</Typography>
-                
-                {pushToken ?
-                <>
-                    <div style={{display:'flex', marginBottom:'5px'}}>
-                        <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>채팅 알림</Typography>
-                        <CustomSwitch2 defaultChecked/>
-                    </div> */}
-
-                    {/* <div style={{display:'flex' , marginBottom:'5px'}}>
-                        <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>SMS 알림</Typography>
-                        토글 스위치
-                        <CustomSwitch4 defaultChecked/>
-                    </div> */}
-
-                    {/* <div style={{display:'flex' , marginBottom:'5px'}}>
-                        <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>공지/이벤트 알림</Typography>
-                        <CustomSwitch3 defaultChecked/>
-                    </div> */}
-                    
-                    {/* <div onClick={() => router.push('/enrollSMS')} style={{display:'flex', marginBottom:'10px'}}>
-                        <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>
-                            {pushToken.phone ? 'SMS 알림 변경' : 'SMS 알림 등록'}
-                        </Typography>
-                    </div> */}
-                    {/* <div onClick={() => router.push('/editPhoneNumber')} style={{display: 'flex', marginBottom:'25px'}}>
-                        <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>전화번호 변경</Typography>
-                    </div>
-                    
-                </>
-                :
-                 <div onClick={() => router.push('/enrollSMS')} style={{display: 'flex', marginBottom:'25px'}}>
-                    <Typography style={{fontSize: '14px', fontWeight: '400', alignSelf: 'center'}}>SMS 알림 등록</Typography>
-                </div>
-                } 
-                
-
-            </Container>
-            <div style={{height:'1px', backgroundColor:'#F2F2F2', margin:'0 24px'}}></div> */}
 
             {/* 고객 지원 */}
             <Container style={{display: 'grid', padding: '0 24px', marginTop: '25px'}}>
                 <Typography style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '24px', height: '20px'}}>고객 지원</Typography>
-                {/* <div onClick={() => router.push('/requestPlace')}><Button variant="text" style={{fontSize: '14px', fontWeight: '400', marginBottom: '5px', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>식당 추가 요청</Button></div> */}
                 <div style={{height: '20px', marginBottom: '15px'}}><Typography onClick={() => window.open('http://pf.kakao.com/_KmNnG', '_blank')} style={{fontSize: '16px', fontWeight: '400',marginBottom: '5px', color: '#3C3C3C',}}>문의하기</Typography></div>
                 <div style={{height: '20px', marginBottom: '15px'}}><Typography style={{fontSize: '16px', fontWeight: '400',marginBottom: '5px', color: '#3C3C3C',}}>서비스 정보</Typography></div>
-                {/* <Typography onClick={handleDialogOpen} style={{height: '20px', marginBottom: '15px', fontSize: '16px', fontWeight: '400', marginBottom: '25px', color: '#3C3C3C'}}>로그아웃</Typography> */}
             </Container>
 
             {/* 하단 */}
@@ -393,13 +157,6 @@ const myPage = () => {
                     <Button onClick={handleLogout} variant="text" style={{color: "#BABABA"}}>로그아웃</Button>
                     <div style={{padding: '0 15px', color: '#BABABA', alignSelf: 'center', fontSize: '16px'}}>|</div>
                     <Button onClick={() => router.push('/deleteUser')} variant="text" style={{color: "#BABABA"}}>탈퇴하기</Button>
-                    {/* <Button onClick={() => router.push('/agreementList')} variant="text" style={{color: "#BABABA"}}>약관 및 정책</Button> */}
-                    {/* <Button onClick={() => router.push('/agreementList')} variant="text" style={{color: "#BABABA"}}><Image src={insta} width={20} height={20}></Image></Button> */}
-                    {/* <a href="https://www.instagram.com/skkuchin/" target="_blank" rel="noopener noreferrer">
-                    <Button style={{ color: "#BABABA" }}>
-                        <Image src={insta} width={20} height={20} />
-                    </Button>
-                    </a> */}
                 </div>
             </Container>
 

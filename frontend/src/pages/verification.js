@@ -1,16 +1,13 @@
 import { CssBaseline, ThemeProvider } from '@mui/material'
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useState } from 'react'
 import VerificationPhone from '../components/Auth/Verification/Phone';
 import VerificationAgreement from '../components/Auth/Verification/Agreement';
 import theme from '../theme/theme';
 import VerificationDone from '../components/Auth/Verification/Done';
+import { useSelector } from 'react-redux';
 
 const Verification = () => {
-    const router = useRouter();
     const user = useSelector(state => state.auth.user);
-    //const pathUsername = router.query.username;
 
     const [step, setStep] = useState(1);
     const [data, setData] = useState({

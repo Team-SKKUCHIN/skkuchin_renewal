@@ -5,29 +5,14 @@ import theme from '../theme/theme';
 import { useState } from 'react';
 import {Container} from '@mui/material';
 import mainLogo from '../image/upperBar/mainLogo.png'
-// import messageIcon from '../image/upperBar/message_X.png'
-import notiIcon from '../image/upperBar/notification_X.png'
-// import messageOnIcon from '../image/upperBar/message.png'
-import notiOnIcon from '../image/upperBar/notification.png'
+import notiIcon from '../image/upperBar/notification_X.png';
 import Image from 'next/image'
 import { useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux';
-import { get_chat_alarm } from '../actions/chat/chatAlarm';
-import { get_notice_alarm } from '../actions/notice/noticeAlarm';
+import { useSelector } from 'react-redux';
 
 const UpperBar = () => {
-    const dispatch = useDispatch();
     const [selected, setSelected] = useState("홈");
-    const chatAlarm = useSelector(state => state.chatAlarm.chatAlarm);
-    const noticeAlarm = useSelector(state => state.noticeAlarm.noticeAlarm);
     const user = useSelector(state => state.auth.user);
-
-    useEffect(() => {
-        if (user) {
-            dispatch(get_chat_alarm());
-            dispatch(get_notice_alarm());
-        }
-    }, [user]);
 
     useEffect(() => {
         const currentPathname = window.location.pathname;
@@ -54,14 +39,9 @@ const UpperBar = () => {
                 </Link>
             <div style={{flex: 1}} />
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    {/* <div style={{marginRight:"18px"}}>
-                        <Link href="/message">
-                            <Image src={chatAlarm ? messageOnIcon : messageIcon} width={24} height={24}/>
-                        </Link>
-                    </div> */}
                     <div>
                         <Link href="/notification">
-                            <Image src={noticeAlarm ? notiOnIcon : notiIcon} width={24} height={24}/>
+                            <Image src={notiIcon} width={24} height={24}/>
                         </Link>
                     </div>
                 </div>
@@ -114,7 +94,7 @@ const UpperBar = () => {
                     <span style={{padding:"0 0 2px 0"}}>
                         신청 현황
                     </span>
-                    {chatAlarm && <div
+                    {/* {chatAlarm && <div
                         style={{
                             backgroundColor: "#FFCE00",
                             width: "5px",
@@ -122,7 +102,7 @@ const UpperBar = () => {
                             borderRadius: "2.5px",
                             margin: "0 0 auto 2.5px"
                         }}
-                    />}
+                    />} */}
                 </a>
             </Link>
             {

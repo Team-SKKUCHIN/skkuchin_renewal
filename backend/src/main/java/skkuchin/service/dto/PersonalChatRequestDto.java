@@ -1,9 +1,8 @@
 package skkuchin.service.dto;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -19,9 +18,11 @@ import skkuchin.service.domain.Chat.ResponseType;
 import skkuchin.service.domain.Map.Campus;
 import skkuchin.service.domain.Matching.Gender;
 import skkuchin.service.domain.Matching.Mbti;
+import skkuchin.service.domain.Matching.UserKeyword;
 import skkuchin.service.domain.User.AppUser;
 import skkuchin.service.domain.User.Major;
 import skkuchin.service.util.CampusUtils;
+import skkuchin.service.util.KeywordUtils;
 
 public class PersonalChatRequestDto {
 
@@ -82,13 +83,13 @@ public class PersonalChatRequestDto {
 
         private Mbti mbti;
 
-        private List<String> keywords;
+        private Map<String, List<String>> keywords;
 
         private String introduction;
 
         private ResponseType status;
 
-        public BaseResponse(PersonalChatRequest personalChatRequest, AppUser user, List<String> keywords) {
+        public BaseResponse(PersonalChatRequest personalChatRequest, AppUser user, List<UserKeyword> keywords) {
             this.requestId = personalChatRequest.getId();
             this.createdAt = personalChatRequest.getCreatedAt();
             this.senderId = personalChatRequest.getSender().getId();
@@ -99,7 +100,7 @@ public class PersonalChatRequestDto {
             this.major = user.getMajor();
             this.studentId = user.getStudentId();
             this.mbti = user.getMbti();
-            this.keywords = keywords;
+            this.keywords = KeywordUtils.getKeywordMap(keywords);
             this.introduction = user.getIntroduction();
             this.status = personalChatRequest.getStatus();
         }
@@ -113,7 +114,7 @@ public class PersonalChatRequestDto {
 
         private String link;
 
-        public ConfirmedResponse(PersonalChatRequest personalChatRequest, AppUser user, List<String> keywords) {
+        public ConfirmedResponse(PersonalChatRequest personalChatRequest, AppUser user, List<UserKeyword> keywords) {
             super(personalChatRequest, user, keywords);
             this.confirmedAt = personalChatRequest.getConfirmedAt();
             this.link = personalChatRequest.getLink();
