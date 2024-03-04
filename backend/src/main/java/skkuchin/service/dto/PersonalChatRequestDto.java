@@ -21,6 +21,7 @@ import skkuchin.service.domain.Matching.Gender;
 import skkuchin.service.domain.Matching.Mbti;
 import skkuchin.service.domain.User.AppUser;
 import skkuchin.service.domain.User.Major;
+import skkuchin.service.util.CampusUtils;
 
 public class PersonalChatRequestDto {
 
@@ -93,7 +94,7 @@ public class PersonalChatRequestDto {
             this.senderId = personalChatRequest.getSender().getId();
             this.receiverId = personalChatRequest.getReceiver().getId();
             this.nickname = user.getNickname();
-            this.campus = findCampus(user.getMajor());
+            this.campus = CampusUtils.findCampus(user.getMajor());
             this.gender = user.getGender();
             this.major = user.getMajor();
             this.studentId = user.getStudentId();
@@ -101,18 +102,6 @@ public class PersonalChatRequestDto {
             this.keywords = keywords;
             this.introduction = user.getIntroduction();
             this.status = personalChatRequest.getStatus();
-        }
-
-        private Campus findCampus(Major major) {
-            EnumSet<Major> majors = EnumSet.allOf(Major.class);
-            List<Major> majorList = new ArrayList<>();
-            majorList.addAll(majors);
-
-            if (majorList.indexOf(major) < majorList.indexOf(Major.건설환경공학부)) {
-                return Campus.명륜;
-            } else {
-                return Campus.율전;
-            }
         }
     }
 

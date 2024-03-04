@@ -105,9 +105,7 @@ const myPage = () => {
 
             const top3Keywords = [];
             for (const key in userMatchInfo.keywords) {
-                console.log(top3Keywords.length)
                 if (top3Keywords.legnth >= 2) {
-                    console.log('break..')
                     break;
                 }
                 const values = userMatchInfo.keywords[key];

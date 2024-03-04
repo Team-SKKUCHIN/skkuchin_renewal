@@ -50,8 +50,8 @@ public class MessageController {
 
         List<Sms> smsList1 = smsRepo.findByUser(user1);
         List<Sms> smsList2 = smsRepo.findByUser(user1);
-        Sms sms1 = smsList1.isEmpty() ? null : smsList1.get(0);
-        Sms sms2 = smsList2.isEmpty() ? null : smsList2.get(0);
+        Sms sms1 = smsList1.isEmpty() || !smsList1.get(0).isVerified() ? null : smsList1.get(0);
+        Sms sms2 = smsList2.isEmpty() || !smsList2.get(0).isVerified() ? null : smsList2.get(0);
 
         UserDto.Response user1Dto = new UserDto.Response(user1, sms1);
         UserDto.Response user2Dto = new UserDto.Response(user2, sms2);

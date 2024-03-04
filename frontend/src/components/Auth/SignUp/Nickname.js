@@ -96,7 +96,7 @@ const SignUpNickname = (props) => {
       if (sId == "") {
         setValidSId(null)
       }
-      else if (!isNum || sId < 10 || sId > 23) {
+      else if (!isNum || sId < 10 || sId > 24) {
         setValidSId(false)
       } else {
         setValidSId(true)

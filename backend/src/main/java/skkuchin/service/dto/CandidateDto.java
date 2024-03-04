@@ -8,6 +8,7 @@ import lombok.Getter;
 import skkuchin.service.domain.Map.Campus;
 import skkuchin.service.domain.Matching.*;
 import skkuchin.service.domain.User.*;
+import skkuchin.service.util.CampusUtils;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -39,15 +40,13 @@ public class CandidateDto {
         @JsonProperty
         private Long candidate5Id;
 
-
         public Candidate toEntity(
                 AppUser user,
                 AppUser candidate1,
                 AppUser candidate2,
                 AppUser candidate3,
                 AppUser candidate4,
-                AppUser candidate5
-        ) {
+                AppUser candidate5) {
             return Candidate.builder()
                     .user(user)
                     .candidate1(candidate1)
@@ -89,21 +88,10 @@ public class CandidateDto {
             this.studentId = user.getStudentId();
             this.mbti = user.getMbti();
             this.gender = user.getGender();
-            this.keywords = keywords.stream().map(keyword -> keyword.getKeyword().getName()).collect(Collectors.toList());
+            this.keywords = keywords.stream().map(keyword -> keyword.getKeyword().getName())
+                    .collect(Collectors.toList());
             this.introduction = user.getIntroduction();
-            this.campus = findCampus(user.getMajor());
-        }
-
-        public Campus findCampus(Major major) {
-            EnumSet<Major> majors = EnumSet.allOf(Major.class);
-            List<Major> majorList = new ArrayList<>();
-            majorList.addAll(majors);
-
-            if (majorList.indexOf(major) < majorList.indexOf(Major.건설환경공학부)) {
-                return Campus.명륜;
-            } else {
-                return Campus.율전;
-            }
+            this.campus = CampusUtils.findCampus(user.getMajor());
         }
     }
 }
