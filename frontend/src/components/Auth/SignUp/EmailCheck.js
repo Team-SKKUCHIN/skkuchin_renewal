@@ -111,7 +111,7 @@ const SignUpEmailCheck = (props) => {
         </div>
       </Box>
 
-      <div style={{position: 'fixed', bottom: 0, width: '100%'}}>
+      {/* <div style={{position: 'fixed', bottom: 0, width: '100%'}}>
             <div style={{margin: '0 24px 30px 24px'}}>
             <Button variant="contained" onClick={handleResend} style={{width: '100%', backgroundColor: "#E2E2E2", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none', marginBottom: '10px'}}>
                 이메일 재전송
@@ -120,8 +120,17 @@ const SignUpEmailCheck = (props) => {
                 확인
             </Button>
             </div>
-      </div>
-        
+      </div> */}
+      <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff', paddingTop: '30px', paddingBottom: '32px'}}>
+        <Button variant="contained" onClick={handleResend} style={{margin: '0 24px', width: '88%', backgroundColor: "#E2E2E2", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+            이메일 재전송
+        </Button>
+        <div style={{height: '10px'}}></div>
+        <Button variant="contained" onClick={handleSubmit} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+            확인
+        </Button>
+      </div>  
+
         {loading && <Loading />}
         <Popup 
             open={popupOpen}

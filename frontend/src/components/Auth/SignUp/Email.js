@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {  TextField, Button,  Typography,  Box, Select, MenuItem, Dialog, DialogContent, DialogActions, ThemeProvider, CssBaseline, Container, Grid } from '@mui/material';
 import { useDispatch } from "react-redux";
 import theme from '../../../theme/theme';
@@ -65,6 +65,11 @@ const SignUpEmail = (props) => {
     const handlePopupClose = () => {
       setPopupOpen(false);
     }
+
+    useEffect(() => {
+      const atIndex = props.data.email.indexOf('@');
+      setEmailId(props.data.email.slice(0, atIndex));
+    }, [])
       
     return (
       <ThemeProvider theme={theme}>

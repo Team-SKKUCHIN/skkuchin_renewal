@@ -106,12 +106,14 @@ export default function SignUpProfileImage(props) {
         if (props.data.major == '화학공학/고분자공학부') {
             data = {...props.data, major: '화학공학_고분자공학부'}
         }
-        // dispatch(register(data, ([result, message]) => {
-        //     if (result) {
-        //         props.handleNextStep();
-        //     }
-        // }));
-        props.handleNextStep();
+        dispatch(register(data, ([result, message]) => {
+            if (result) {
+                props.handleNextStep();
+            } else {
+                console.log(result, message)
+            }
+        }));
+        //props.handleNextStep();
     }
     useEffect(() => {
         if (props.data.image !== '') {
@@ -149,8 +151,8 @@ export default function SignUpProfileImage(props) {
                 <Grid container>
                     <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
                     <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
-                    <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
                     <Typography style={{fontSize: '26px', color: '#FFCE00', marginRight: '7px'}}>&bull;</Typography>
+                    <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
                 </Grid>
                     <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C', textAlign: 'left'}}>개인 밥약 프로필</Typography>
                     <Typography style={{marginBottom: '30px', fontWeight: 'bold', fontSize: '12px', color: '#777777', textAlign: 'left'}}>1개의 이미지를 선택해주세요.</Typography>
@@ -243,20 +245,18 @@ export default function SignUpProfileImage(props) {
                     </div>
             
         </Box>
-        <div style={{width: '100%', position: 'fixed', bottom: '0', display: 'grid', backgroundColor: '#fff', paddingBottom: '30px', maxwidth: '420px'}}>
-            <div style={{margin: '30px 24px 12px'}}>
-                {image ?
-                        <Button variant="contained" onClick={handleNextStep} style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+            <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff', paddingTop: '30px', paddingBottom: '32px'}}>
+            {image ?
+                        <Button variant="contained" onClick={handleNextStep} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
                             다음
-                        </Button>
-                        :
-                        <Button variant="contained" disabled style={{width: '100%', backgroundColor: "#BABABA", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+                        </Button> 
+                    :
+                        <Button variant="contained" disabled style={{margin: '0 24px', width: '88%', backgroundColor: "#E2E2E2", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
                             다음
                         </Button>
                 }
-            </div>
         
-            <div style={{display: 'flex', flexDirection: 'column',  fontSize: '12px', fontWeight: '500', padding: '6px 0', color: '#505050', textAlign: 'center'}}>
+            <div style={{display: 'flex', flexDirection: 'column',  fontSize: '12px', fontWeight: '500', paddingTop: '20px', color: '#505050', textAlign: 'center'}}>
                 <span style={{alignSelf: 'center'}}>이미 회원이신가요?<Button onClick={() => router.push('/login')} variant="text" style={{alignSelf: 'start', justifySelf: 'start', fontSize: '12px', color: '#FFCE00', padding: 0, fontWeight: '700', textDecoration: 'underline'}}>로그인하기</Button></span>
             </div>
             </div>
