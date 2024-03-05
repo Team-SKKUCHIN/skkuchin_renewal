@@ -25,6 +25,7 @@ const MealPromisePage = () => {
   const dispatch = useDispatch();
 
   const user = useSelector(state => state.auth.user);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const allGroupProfiles = useSelector(state => state.groupProfile.allGroupProfiles);
   const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
 
@@ -76,7 +77,7 @@ const MealPromisePage = () => {
 
   useEffect(() => {
     if(allGroupProfiles === null) dispatch(load_all_group_profile());
-    else if(myGroupProfiles === null) dispatch(get_my_group_profile());
+    else if(!user && isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
   }, []);
 
   return (

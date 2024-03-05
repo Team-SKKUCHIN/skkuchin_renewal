@@ -7,17 +7,23 @@ import { useSelector } from 'react-redux';
 const FriendProfile = ({ candidate }) => {
     const router = useRouter();
     const user = useSelector(state => state.auth.user);
-    
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
+
     const handleSubmit = () => {
-        console.log("밥약 신청하기 버튼 클릭");
-        if(user && user.phone_number === null) { 
-            alert("밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.")
-        } 
-        
-        router.push({
-            pathname: '/enrollOpenChat',
-            query: { type: 'friend'},
-        });
+        if(isAuthenticated && matchingUser) {
+            if(user && user.phone_number === null) { 
+                alert("밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.")
+            } 
+            router.push({
+                pathname: '/enrollOpenChat',
+                query: { type: 'friend'},
+            });
+        } else if(isAuthenticated) {
+            alert("1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.");
+        } else {
+            alert("로그인이 필요한 서비스입니다");
+        }
     }
     return (
         <div>
@@ -46,13 +52,16 @@ const FriendProfile = ({ candidate }) => {
                         <Grid item sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
                             {candidate.mbti}
                         </Grid>
-                        {(candidate.keywords) != null ?
-                            ((candidate.keywords).slice(0, 2).map((interest, index) => (
-                                <Grid item key={index} sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
-                                    {interest}
-                                </Grid>
-                            )))
-                            : null}
+                        {
+                            (candidate.keywords) != null &&
+                                <>
+                                    {(Object.values(candidate.keywords).flat().slice(0, 2).map((keyword, index) => (
+                                        <Grid item key={index} sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
+                                            {keyword}
+                                        </Grid>
+                                    )))}
+                                </>
+                        }
                     </Grid >
                     <Typography sx={{ fontSize: '13px', height: '36px', lineHeight: '18px', fontWeight: 600, color: '#3C3C3C', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2}}>
                         {'"' + candidate.introduction + '"'}

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button, Card, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Typography, Grid, Divider } from '@mui/material';
 import { displayMBTI } from './MBTIList';
 import { load_candidate } from '../../actions/candidate/candidate'
-import { load_request_id, request_chat } from '../../actions/chat/chatRoom';
+
 import noCharacter from '../../image/mbti/profile/noCharacter.png'
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -95,17 +95,26 @@ const Friends = () => {
         }
     }
 
-    const handleFriendClick = (friendId) => {
-        localStorage.setItem('candidateId', friendId);
-        router.push(`/showFriendProfile?id=${friendId}`);
+    const handleFriendClick = (friend) => {
+        localStorage.setItem('candidateId', friend.id);
+        localStorage.setItem('selectedFriend', JSON.stringify(friend));
+        router.push(`/showFriendProfile`);
     };
 
     const handleRequestBtnClick = (id) => {
-        localStorage.setItem('candidateId', id);
-        router.push({
-            pathname: '/enrollOpenChat',
-            query: { type: 'friend'},
-        });
+        if(!isAuthenticated) {
+            alert('로그인이 필요한 서비스입니다.');
+        } else {
+            if (user === null) {
+                alert('1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.');
+            } else {
+                localStorage.setItem('candidateId', id);
+                router.push({
+                    pathname: '/enrollOpenChat',
+                    query: { type: 'friend'},
+                });
+            }
+        }   
     }
 
     return (
@@ -156,7 +165,7 @@ const Friends = () => {
                             disableElevation
                             disableTouchRipple
                             key="profile-button"
-                            onClick={() => handleFriendClick(person.id)}
+                            onClick={() => handleFriendClick(person)}
                             sx={{
                                 color: '#777777',
                                 fontSize: '14px',

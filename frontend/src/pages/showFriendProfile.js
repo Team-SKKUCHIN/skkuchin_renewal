@@ -3,27 +3,17 @@ import Header from '../components/MealPromise/Header';
 import FriendProfile from '../components/MealPromise/FriendProfile';
 import theme from '../theme/theme';
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { useRouter } from 'next/router';
-import { load_other_matching_info } from '../actions/matchingUser/matchingUser';
-import { useDispatch, useSelector } from 'react-redux';
+import { Loading } from '../components/Loading';
 
 const showFriendProfile = () => {
-    const router = useRouter();
-    const dispatch = useDispatch();
-
-    const friendId = router.query.id;
-    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
-
     const [isLoading, setIsLoading] = useState(true);
     const [updatedUserInfo, setUpdatedUserInfo] = useState(null);
+    const [candidate, setCandidate] = useState(null);
 
     useEffect(() => {
-        if(!friendId) {
-            router.push('/mealPromise');
-        } else {
-            dispatch(load_other_matching_info(friendId));
-        } 
-    }, [friendId]);
+        const candidate = JSON.parse(localStorage.getItem('selectedFriend'));
+        setCandidate(candidate);
+    }, []);
 
 
     const updateUserInfo = (user) => {
@@ -38,11 +28,11 @@ const showFriendProfile = () => {
     }
 
     useEffect(() => {
-        if(matchingUser !== null && matchingUser.id == friendId) {
+        if(candidate) {
+            updateUserInfo(candidate);
             setIsLoading(false);
-            updateUserInfo(matchingUser);
         }
-    }, [matchingUser]);
+    }, [candidate]);
 
 
     return (
@@ -51,7 +41,7 @@ const showFriendProfile = () => {
             <Header title="둘이 먹어요" />
             {
                 isLoading ? (
-                    <div></div>
+                    <Loading />
                 ) : (
                     <FriendProfile candidate={updatedUserInfo} />
                 )

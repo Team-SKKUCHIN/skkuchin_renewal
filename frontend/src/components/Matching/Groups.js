@@ -67,8 +67,18 @@ const Groups = () => {
         }
     }
     const handleRequestBtnClick = (id) => {
-        localStorage.setItem('candidateId', id);
-        router.push('/selectMyGroupProfile')
+        if(isAuthenticated) {
+            if (myGroupProfiles && myGroupProfiles.length > 0) {
+                localStorage.setItem('candidateId', id);
+                router.push('/selectMyGroupProfile')
+            }
+            else {
+                alert("그룹 밥약을 신청하기 위해선 그룹 프로필 작성이 필요해요.");
+            }
+        } else {
+            alert("로그인이 필요한 서비스입니다.");
+            // router.push('/login');
+        }
     }
 
     const handleGroupClick = (id) => {
