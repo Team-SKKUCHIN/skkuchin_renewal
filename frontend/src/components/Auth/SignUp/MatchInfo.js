@@ -305,8 +305,8 @@ const SignUpMatchInfo = (props) => {
         <Grid container>
             <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
             <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
-            <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
             <Typography style={{fontSize: '26px', color: '#FFCE00', marginRight: '7px'}}>&bull;</Typography>
+            <Typography style={{fontSize: '26px', color: '#E2E2E2', marginRight: '7px'}}>&bull;</Typography>
         </Grid>
         <Typography style={{fontSize: '24px', fontWeight: '900', marginBottom: '12px', color: '#3C3C3C', textAlign: 'left'}}>개인 밥약 프로필</Typography>
         <Typography style={{marginBottom: '30px', fontWeight: 'bold', fontSize: '12px', color: '#777777', textAlign: 'left'}}>밥약 매칭을 위한 프로필을 완성해주세요.</Typography>
@@ -349,7 +349,7 @@ const SignUpMatchInfo = (props) => {
         <textarea 
         value={introduction}
         onChange={(e)=> {setIntroduction(e.target.value)}}
-        //maxLength={29}
+        maxLength={14}
         placeholder='간단히 자신을 소개해보세요 (필수)'
         style={{width: '100%', border: '1px solid #E2E2E2', borderRadius: '8px', outline: 'none', resize: 'none', fontSize: '16px', border: 'none', height: '60px', padding: '12px 18px', fontFamily: 'inherit'}}>
         </textarea>
@@ -402,17 +402,26 @@ const SignUpMatchInfo = (props) => {
             </div> */}
     </Box>
 
-    <div style={{width: '100%', position: 'fixed', bottom: 0, backgroundColor: '#fff', paddingBottom: '35px'}}>
+    {/* <div style={{width: '100%', position: 'fixed', bottom: 0, backgroundColor: '#fff', paddingBottom: '35px'}}>
             <div style={{margin: '10px 24px 20px', display: 'flex', width: 'calc(100% - 48px)', justifyContent: 'space-between'}}>
-                {/* <Button variant="contained" style={{width: '100%', backgroundColor: '#E2E2E2', color: '#fff', borderRadius: '8px', height: '56px', boxShadow: 'none', fontWeight: '900', marginRight: '5px'}}>건너뛰기</Button> */}
                 {condition ? 
                     <Button variant="contained" onClick={handleNextStep} style={{width: '100%', backgroundColor: '#FFCE00', color: '#fff', borderRadius: '8px', height: '56px', boxShadow: 'none', fontWeight: '900', marginLeft: '5px'}}>다음</Button>
                     :
                     <Button variant="contained" style={{width: '100%', backgroundColor: '#E2E2E2', color: '#fff', borderRadius: '8px', height: '56px', boxShadow: 'none', fontWeight: '900', marginLeft: '5px'}}>다음</Button>
                 }
-            </div>
+            </div> */}
+        <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff', paddingTop: '10px', paddingBottom: '32px'}}>
+            {condition ?
+                        <Button variant="contained" onClick={handleNextStep} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+                            다음
+                        </Button> 
+                    :
+                        <Button variant="contained" disabled style={{margin: '0 24px', width: '88%', backgroundColor: "#E2E2E2", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+                            다음
+                        </Button>
+                }
         
-            <div style={{display: 'flex', flexDirection: 'column',  fontSize: '12px', fontWeight: '500', color: '#505050', textAlign: 'center'}}>
+            <div style={{display: 'flex', flexDirection: 'column',  fontSize: '12px', fontWeight: '500', paddingTop: '20px', color: '#505050', textAlign: 'center'}}>
                 <span style={{alignSelf: 'center'}}>이미 회원이신가요?<Button onClick={() => router.push('/login')} variant="text" style={{alignSelf: 'start', justifySelf: 'start', fontSize: '12px', color: '#FFCE00', padding: 0, fontWeight: '700', textDecoration: 'underline'}}>로그인하기</Button></span>
             </div>
         </div>

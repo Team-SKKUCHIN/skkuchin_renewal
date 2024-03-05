@@ -54,7 +54,7 @@ export default function SignUpEmailNotice(props) {
             </Button>
         </div>
     </div> */}
-    <div style={{width: '100%', position: 'fixed', bottom: 0, backgroundColor: '#fff', paddingBottom: '30px'}}>
+    {/* <div style={{width: '100%', position: 'fixed', bottom: 0, backgroundColor: '#fff', paddingBottom: '30px'}}>
           <div style={{display: 'flex', flexDirection: 'column',  fontSize: '12px', fontWeight: '500', padding: '6px 0', color: '#505050', textAlign: 'center'}}>
           <Typography style={{fontSize: '12px', color: '#777777', marginBottom: '10px'}}>개인 밥약 프로필은 [마이페이지]에서 변경 가능합니다.</Typography>
             </div>
@@ -63,6 +63,15 @@ export default function SignUpEmailNotice(props) {
                             학교 이메일 인증하기
                         </Button>
             </div>
+    </div> */}
+
+    <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff', paddingTop: '30px', paddingBottom: '32px'}}>
+      <div style={{display: 'flex', flexDirection: 'column',  fontSize: '12px', fontWeight: '500', color: '#505050', textAlign: 'center'}}>
+        <Typography style={{fontSize: '12px', color: '#777777', marginBottom: '10px'}}>개인 밥약 프로필은 [마이페이지]에서 변경 가능합니다.</Typography>
+      </div>
+      <Button variant="contained" onClick={handleBtnClick} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+          학교 이메일 인증하기
+      </Button> 
     </div>
     </ThemeProvider>
   )

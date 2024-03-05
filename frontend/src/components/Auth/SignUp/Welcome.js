@@ -35,12 +35,10 @@ const SignUpWelcome = () => {
             <Typography sx={{fontSize: '14px', fontWeight: '500', height: '37px', color: '#777777'}}>이제 스꾸친에서 다양한 친구를 만나보세요!</Typography>
         </div>
       </Box>
-      <div style={{width: '100%', position: 'fixed', bottom: 0, backgroundColor: '#fff'}}>
-            <div style={{margin: '30px 24px'}}>
-                        <Button variant="contained" onClick={handleButtonClick} style={{width: '100%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
-                            로그인하러 가기
-                        </Button>
-            </div>
+      <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff', paddingTop: '30px', paddingBottom: '32px'}}>
+        <Button variant="contained" onClick={handleButtonClick} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+            로그인하러 가기
+        </Button> 
       </div>
       </div>
     );

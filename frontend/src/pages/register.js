@@ -78,13 +78,13 @@ const RegisterPage = () => {
                 step === 2 && <SignUpNickname handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} />
             }
             {
-                step === 3 && <SignUpPhone handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} />
+                step === 3 && <SignUpProfileImage handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} />
             }
             {
-                step === 4 && <SignUpProfileImage handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} />
+                step === 4 && <SignUpMatchInfo handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} />
             }
             {
-                step === 5 && <SignUpMatchInfo handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} />
+                step === 5 && <SignUpPhone handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} />
             }
             {
                 step === 6 && <SignUpEmailNotice handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} data={data} setData={setData} />
