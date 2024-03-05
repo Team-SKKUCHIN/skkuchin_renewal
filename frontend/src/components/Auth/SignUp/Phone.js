@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {  TextField, Button, InputLabel, Typography, Box, FormControl, Select, MenuItem, Container, Grid, Autocomplete, OutlinedInput} from '@mui/material';
 import back from '../../../image/arrow_back_ios.png';
+import close from '../../../image/close.png';
 import Image from 'next/image';
 import { useRouter } from "next/router";
 import { Loading } from '../../Loading';
@@ -115,12 +116,12 @@ const SignUpPhone = (props) => {
     return (
       <div>
         <Container style={{padding:'0px', alignItems: 'center', marginTop: '45px'}}>
-                        <Grid container>
-                            <Grid item style={{margin:'0px 0px 0px 24px', visibility:'none'}}>
-                                <Image src={back} width={11} height={18} name='back' onClick={handlePrevStep} layout='fixed' />
+                        <Grid container justifyContent='space-between'>
+                            <Grid item style={{margin:'4px 0px 0px 24px', visibility:'none'}}>
+                                <Image src={back} width={8} height={16} name='back' onClick={handlePrevStep} layout='fixed' />
                             </Grid>
-                            <Grid item style={{marginLeft:'35%'}}>
-                                {/* <Typography style={{margin:'0px 0px 0px 0px', textAlign:'center',fontSize:'18px', fontWeight: '700'}}>회원가입</Typography> */}
+                            <Grid item style={{marginRight:'24px'}}>
+                                <Image src={close} width={25} height={25} name='close' onClick={() => router.push('/login')} layout='fixed' />
                             </Grid>
                         </Grid>
         </Container>
@@ -230,7 +231,7 @@ const SignUpPhone = (props) => {
                 variant="standard"
                 placeholder=""
                 value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
+                onChange={(e) => {setVerificationCode(e.target.value); setIsValid(null)}}
                 style={{
                     height: '57px',
                     border: '1px solid #E2E2E2',
@@ -243,8 +244,24 @@ const SignUpPhone = (props) => {
                     width: '72%'
                 }}
             />
+            {verificationCode.length === 6 ?
             <Button 
                 onClick={handleVerifyBtn}
+                style={{
+                    height: '56px',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    marginLeft: '4px',
+                    color: '#fff',
+                    backgroundColor: '#FFCE00',
+                    width: '28%',
+                    marginLeft: '8px'
+                }}>
+                인증하기
+            </Button> :
+            <Button 
                 style={{
                     height: '56px',
                     border: '1px solid #E2E2E2',
@@ -257,7 +274,7 @@ const SignUpPhone = (props) => {
                     marginLeft: '8px'
                 }}>
                 인증하기
-            </Button>
+            </Button>}
             </div>
             {
               isValid == null ? <div></div>
