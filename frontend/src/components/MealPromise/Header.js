@@ -7,7 +7,7 @@ import iconSearch from '../../image/icon_header_search.png';
 import iconClose from '../../image/icon_header_close.png';
 import { useRouter } from 'next/router';
 
-const Header = ({title, onBackClick, icon, handleIconClick}) => {
+const Header = ({title, onBackClick, icon, handleIconClick, mode}) => {
     const router = useRouter();
 
     const onBackBtnClick = () => {
@@ -31,8 +31,8 @@ const Header = ({title, onBackClick, icon, handleIconClick}) => {
                     <div onClick={onBackToMyGroupLists} style={{ width: 30, display: 'flex', alignItems: 'center' }}>
                         <Image src={iconClose} layout="fixed" width={16} height={16} />
                     </div>
-                :
-                    <div onClick={title === '나의 그룹 프로필' ? onBackToMyGroupLists :  onBackBtnClick} style={{ width: 30, display: 'flex', alignItems: 'center' }}>
+                  :
+                    <div onClick={mode === 'edit' ? onBackToMyGroupLists : onBackBtnClick} style={{ width: 30, display: 'flex', alignItems: 'center' }}>
                         <Image src={iconBack} layout="fixed" width={10.82} height={18.98} />
                     </div>
             }

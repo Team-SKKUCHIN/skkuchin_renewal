@@ -6,25 +6,28 @@ import { useSelector } from 'react-redux';
 
 const FriendProfile = ({ candidate }) => {
     const router = useRouter();
+
     const user = useSelector(state => state.auth.user);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const matchingUser = useSelector(state => state.matchingUser.matchingUser);
 
     const handleSubmit = () => {
-        if(isAuthenticated && matchingUser) {
-            if(user && user.phone_number === null) { 
-                alert("밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.")
-            } 
-            router.push({
-                pathname: '/enrollOpenChat',
-                query: { type: 'friend'},
-            });
-        } else if(isAuthenticated) {
-            alert("1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.");
-        } else {
-            alert("로그인이 필요한 서비스입니다");
-        }
+        if (!isAuthenticated) 
+            return alert('로그인이 필요한 서비스입니다.');
+        if (!matchingUser) 
+            return alert('1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.');
+        if (matchingUser && !matchingUser.matching) 
+            return alert('1:1 밥약을 신청하기 위해선 개인 프로필을 공개로 변경해주세요');
+        if (user && user.phone_number === null) 
+            return alert("밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.");
+
+        localStorage.setItem('candidateId', candidate.id);
+        router.push({
+            pathname: '/enrollOpenChat',
+            query: { type: 'friend'},
+        });
     }
+
     return (
         <div>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', paddingTop: '50%'}}>

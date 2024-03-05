@@ -15,6 +15,7 @@ const showAllTwoLists = () => {
     const router = useRouter();
 
     const user = useSelector(state => state.auth.user);
+    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
     const candidate = useSelector(state => state.candidate.candidate);
 
     const [selectedFilter, setSelectedFilter] = useState('전체');

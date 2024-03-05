@@ -5,7 +5,7 @@ import Header from '../components/MealPromise/Header';
 import Popup from '../components/Custom/Popup';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { request_group_chat } from '../actions/groupChatRequest/groupChatRequest';
+import { send_group_request } from '../actions/groupChatRequest/groupChatRequest';
 import { send_personal_request } from '../actions/personalChatRequest/personalChatRequest';
 
 const enrollOpenChat = () => {
@@ -36,22 +36,20 @@ const enrollOpenChat = () => {
 
     const handleQuestionConfirm = () => {
         if(type === 'group') {
-            console.log('그룹밥약 신청', type, openChatLink, senderId, receiverId);
-            dispatch(request_group_chat(openChatLink, senderId, receiverId, ([result, message]) => {
-                console.log('밥약 신청 결과', result, message);
+            dispatch(send_group_request(openChatLink, senderId, receiverId, ([result, message]) => {
                 if(result) {
-                    console.log('밥약 신청 성공');
+                    setPopupMessage(`밥약 신청을 완료했어요!\n밥약이 성사되면 SMS로 알려드릴게요`);
+                    setPopupDescription('밥약 신청 내역은 홈 > 신청현황에서 확인할 수 있어요.');
+                    setPopupOpen(true);
+                    setPopupType('info');
                 } else {
                     console.log('밥약 신청 실패');
                     console.log(message);
                 }
             }));
         } else if(type === 'friend'){
-            console.log('개인밥약 신청', type, openChatLink, receiverId);
             dispatch(send_personal_request(openChatLink, receiverId, ([result, message]) => {
-                console.log('밥약 신청 결과', result, message);
                 if(result) {
-                    console.log('밥약 신청 성공');
                     setPopupMessage(`밥약 신청을 완료했어요!\n밥약이 성사되면 SMS로 알려드릴게요`);
                     setPopupDescription('밥약 신청 내역은 홈 > 신청현황에서 확인할 수 있어요.');
                     setPopupOpen(true);

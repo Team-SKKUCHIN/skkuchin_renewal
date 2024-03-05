@@ -3,8 +3,6 @@ import { getToken, request_refresh } from '../auth/auth';
 import { 
     LOAD_PERSONAL_REQUEST_SUCCESS,
     LOAD_PERSONAL_REQUEST_FAIL,
-    REQUEST_PERSONAL_CHAT_SUCCESS,
-    REQUEST_PERSONAL_CHAT_FAIL,
 } 
 from './types';
 

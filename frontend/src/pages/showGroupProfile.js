@@ -97,11 +97,11 @@ const showGroupProfile = () => {
         console.log('그룹 프로필 수정 클릭');
         router.push(`/modifyGroupProfile?id=${id}`);
     }
-    
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Header title= { isMyProfile ? "나의 그룹 프로필" : "여럿이서 먹어요" } icon={mode ? 'delete' : ''} handleIconClick={handleIconClick}/>
+            <Header title= { isMyProfile ? "나의 그룹 프로필" : "여럿이서 먹어요" } icon={mode ? 'delete' : ''} handleIconClick={handleIconClick} mode={mode}/>
             {
                 loading ? <Loading />
                 : <GroupProfile isMyProfile={isMyProfile} mode={mode} group={group} handleEditProfileClick={handleEditBtnClick}/>

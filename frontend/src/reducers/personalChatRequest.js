@@ -2,8 +2,6 @@ import { LOGOUT_SUCCESS } from '../actions/auth/types';
 import {
     LOAD_PERSONAL_REQUEST_SUCCESS,
     LOAD_PERSONAL_REQUEST_FAIL,
-    REQUEST_PERSONAL_CHAT_SUCCESS,
-    REQUEST_PERSONAL_CHAT_FAIL,
 } from '../actions/personalChatRequest/types';
 
 const initialState = {
@@ -23,14 +21,6 @@ const personalChatRequestReducer = (state = initialState, action) => {
             return {
                 ...state,
                 requests: null
-            }
-        case REQUEST_PERSONAL_CHAT_SUCCESS:
-            return {
-                ...state,
-            }
-        case REQUEST_PERSONAL_CHAT_FAIL:
-            return {
-                ...state,
             }
         case LOGOUT_SUCCESS:
             return initialState;

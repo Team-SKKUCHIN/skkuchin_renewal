@@ -3,8 +3,6 @@ import { getToken, request_refresh } from '../auth/auth';
 import { 
     LOAD_GROUP_REQUEST_SUCCESS,
     LOAD_GROUP_REQUEST_FAIL,
-    REQUEST_GROUP_CHAT_SUCCESS,
-    REQUEST_GROUP_CHAT_FAIL,
 } 
 from './types';
 
@@ -44,14 +42,17 @@ export const load_group_requests = (callback) => async dispatch => {
     }
 }
 
-export const send_group_request = (link, receiverId, callback) => async dispatch => {
+export const send_group_request = (link, senderId, receiverId, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
 
     const body = JSON.stringify({
         link,
+        sender_id: senderId,
         receiver_id: receiverId,
     });
+
+    console.log('body', body);
 
     try {
         const res = await fetch(`${API_URL}/api/group-chat-request`,{
@@ -65,7 +66,7 @@ export const send_group_request = (link, receiverId, callback) => async dispatch
         });
         
         const apiRes = await res.json();
-
+        console.log(res.status, apiRes.message);
         if (res.status === 201) {
             if (callback) callback([true, apiRes.message]);
         }
@@ -104,48 +105,5 @@ export const reply_group_request = (requestId, status, callback) => async dispat
         }
     } catch (error) {
         if (callback) callback([false, error]);
-    }
-}
-
-
-export const request_group_chat = (link, senderId, receiverId, callback) => async (dispatch) => {
-    try {
-        await dispatch(request_refresh());
-        const access = await dispatch(getToken('access'));
-
-        const body = JSON.stringify({link: link, sender_id : senderId, receiver_id : receiverId});
-        console.log('그룹 채팅 요청: ', body);
-
-        const res = await fetch(`${API_URL}/api/group-chat-request`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${access}`
-            },
-            body: body
-        });
-
-        const apiRes = await res.json();
-        console.log('그룹 채팅 요청 완료: ', apiRes);
-
-        if (res.status === 201) {
-            dispatch({
-                type: REQUEST_GROUP_CHAT_SUCCESS
-            });
-            if (callback) callback([true, apiRes.message]);
-        } else {
-            dispatch({
-                type: REQUEST_GROUP_CHAT_FAIL
-            });
-            if (callback) callback([false, apiRes.message]);
-        }
-    }
-
-    catch (error) {
-        console.log(error);
-        dispatch({
-            type: REQUEST_GROUP_CHAT_FAIL
-        });
     }
 }

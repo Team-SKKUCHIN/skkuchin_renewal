@@ -9,6 +9,7 @@ import Groups from '../components/Matching/Groups';
 import { useRouter } from 'next/router';
 import { load_all_group_profile, get_my_group_profile } from '../actions/groupProfile/groupProfile';
 import { load_candidate } from '../actions/candidate/candidate';
+import { load_matching_info } from '../actions/matchingUser/matchingUser';
 
 const MatchContainer = styled.div`
   /* 데스크톱에서 스크롤 바를 숨김 */
@@ -27,6 +28,7 @@ const MatchPage = () => {
 
     const user = useSelector(state => state.auth.user);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
     const allGroupProfiles = useSelector(state => state.groupProfile.allGroupProfiles);
     const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
     const candidateProfiles = useSelector(state => state.candidate.candidate);
@@ -34,7 +36,8 @@ const MatchPage = () => {
     useEffect(() => {
         if(allGroupProfiles === null) dispatch(load_all_group_profile());
         if(candidateProfiles === null) dispatch(load_candidate());
-        if(isAuthenticated && !myGroupProfiles && !user) dispatch(get_my_group_profile());
+        if(isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
+        if(isAuthenticated && matchingUser === null) dispatch(load_matching_info());
     }, [isAuthenticated]);
 
     const options = [

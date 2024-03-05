@@ -52,7 +52,8 @@ const Friends = () => {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    const user = useSelector(state => state.matchingUser.matchingUser);
+    const user = useSelector(state => state.auth.user);
+    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
     const candidate = useSelector(state => state.candidate.candidate);
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
@@ -102,21 +103,22 @@ const Friends = () => {
     };
 
     const handleRequestBtnClick = (id) => {
-        if(!isAuthenticated) {
-            alert('로그인이 필요한 서비스입니다.');
-        } else {
-            if (user === null) {
-                alert('1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.');
-            } else {
-                localStorage.setItem('candidateId', id);
-                router.push({
-                    pathname: '/enrollOpenChat',
-                    query: { type: 'friend'},
-                });
-            }
-        }   
-    }
-
+        if (!isAuthenticated) 
+            return alert('로그인이 필요한 서비스입니다.');
+        if (!matchingUser) 
+            return alert('1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.');
+        if (matchingUser && !matchingUser.matching) 
+            return alert('1:1 밥약을 신청하기 위해선 개인 프로필을 공개로 변경해주세요');
+        if (user && user.phone_number === null) 
+            return alert("밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.");
+    
+        localStorage.setItem('candidateId', id);
+        router.push({
+            pathname: '/enrollOpenChat',
+            query: { type: 'friend'},
+        });
+    };
+    
     return (
         <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0'}}>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
@@ -278,14 +280,14 @@ const Friends = () => {
                             <Grid item sx={{width: '169px', textAlign: 'center', pb: '8px'}}>
                                 <Typography sx={{ fontSize:'13px', fontWeight: '500', whiteSpace: 'pre-wrap'}}>
                                     {
-                                        user?.matching === false ?
+                                        matchingUser?.matching === false ?
                                         '성대 학우와 채팅을 나누시려면\n\n[마이페이지]에서\n매칭 ON/OFF 버튼을 켜주세요 👀' 
                                         : '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀'
                                     }
                                 </Typography>
                             </Grid>
                             {
-                                user?.matching === false ? null
+                                matchingUser?.matching === false ? null
                                 :
                                 <Button onClick={()=>handleSettingOpen()}  sx={{backgroundColor: '#FFCE00', borderRadius: '30px', color: '#fff', fontSize: '12px', fontWeight: '700', textAlign: 'center', p: '8.5px 11.5px', m : '5px 0px'}}>
                                     프로필 등록하기
