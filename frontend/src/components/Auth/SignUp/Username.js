@@ -164,7 +164,7 @@ const SignUpUsername = (props) => {
                     {/* <Button variant="contained" onClick={checkUsername} style={{backgroundColor: '#FFCE00', color: '#fff', borderRadius: '8px', width: '47px', height: '20px', fontSize: '9px', padding: '3px 4px', marginTop: '4px', boxShadow: 'none'}}>중복확인</Button> */}
                     {/* {validUsername == null && <Typography sx={{fontSize: '12px', fontWeight: '500', color: '#3C3C3C', margin: '5px 0 0 5px'}}>아이디 중복 확인 체크를 해주세요</Typography>} */}
                     {/* {validUsername && <Typography sx={{fontSize: '12px', fontWeight: '500', color: '#FFCE00', marginTop: '6px'}}>{usernameMsg}</Typography>} */}
-                    {validUsername == false ? <Typography sx={{fontSize: '12px', fontWeight: '500', color: '#F47806', marginTop: '6px'}}>{usernameMsg}</Typography> : <div style={{height: '24px'}}></div>}
+                    {validUsername == false ? <Typography sx={{fontSize: '12px', fontWeight: 'bold', color: '#F47806', marginTop: '6px'}}>{usernameMsg}</Typography> : <div style={{height: '24px'}}></div>}
                 </div>
 
                 <Typography style={{fontSize: '14px', marginTop: '15px', color: '#3C3C3C'}}>비밀번호</Typography>
@@ -205,7 +205,7 @@ const SignUpUsername = (props) => {
                 />
                 {(props.data.password != '') ? 
                     validPW ? 
-                    <div style={{height: '21px', marginBottom: '15px', marginTop:'4px', display:'flex', fontSize:'12px', color:'#FDB714'}}>
+                    <div style={{height: '21px', marginBottom: '15px', marginTop:'4px', display:'flex', fontSize:'12px', color:'#FDB714', fontWeight: 'bold'}}>
                         <div style={{display:'flex'}}>
                             <Image src={check2} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>영문</span>
                         </div>
@@ -219,7 +219,7 @@ const SignUpUsername = (props) => {
                             <Image src={check2} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>8~16자 이내</span>
                         </div>
                     </div>
-                    : <div style={{height: '21px', marginBottom: '20px', marginTop:'5px', display:'flex', fontSize:'12px'}}>
+                    : <div style={{height: '21px', marginBottom: '20px', marginTop:'5px', display:'flex', fontSize:'12px', fontWeight: 'bold'}}>
                         <div style={{display:'flex', color: containEng ? '#FDB714' : '#777777'}}>
                             <Image src={containEng ? check2 : check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>영문</span>
                         </div>
@@ -233,7 +233,7 @@ const SignUpUsername = (props) => {
                             <Image src={validLen ? check2 : check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>8~16자 이내</span>
                         </div>
                     </div> 
-                :<div style={{height: '21px', marginBottom: '15px', marginTop:'5px', display:'flex', fontSize:'12px', color:'#777777'}}>
+                :<div style={{height: '21px', marginBottom: '15px', marginTop:'5px', display:'flex', fontSize:'12px', color:'#777777', fontWeight: 'bold'}}>
                     <div style={{display:'flex'}}>
                         <Image src={check} width={16} height={16}></Image><span style={{marginTop:'2px', marginRight:'10px'}}>영문</span>
                     </div>
@@ -288,11 +288,11 @@ const SignUpUsername = (props) => {
                     fontSize: '16px',
                   }}
                 />
-                {(props.data.re_password != '') && props.data.password !== props.data.re_password ? <Typography sx={{fontSize: '12px', fontWeight: '500', marginTop: '6px', color: '#F47806'}}>일치하지 않는 비밀번호입니다.</Typography>
+                {(props.data.re_password != '') && props.data.password !== props.data.re_password ? <Typography sx={{fontSize: '12px', fontWeight: 'bold', marginTop: '6px', color: '#F47806'}}>일치하지 않는 비밀번호입니다.</Typography>
                     : <div style={{height: '18px'}}></div>}
             </div>
         </form>
-        <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff'}}>
+        <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff', paddingTop: '10px', paddingBottom: '32px'}}>
         {props.data.username != '' && validUsername != false && validPW && (props.data.password == props.data.re_password) && props.data.username != null ?
                     <Button variant="contained" onClick={handleNextStep} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
                         다음
@@ -302,8 +302,8 @@ const SignUpUsername = (props) => {
                         다음
                     </Button>
             }
-        <div style={{display: 'flex', justifyItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '500', padding: '31px 0', color: '#505050'}}>
-                <span style={{alignSelf: 'center'}}>이미 회원이신가요?</span><Button onClick={() => router.push('/login')} variant="text" style={{alignSelf: 'start', justifySelf: 'start', fontSize: '12px', color: '#FFCE00', padding: 0, fontWeight: '700'}}>로그인</Button>
+        <div style={{display: 'flex', flexDirection: 'column',  fontSize: '12px', fontWeight: '500', paddingTop: '20px', color: '#505050', textAlign: 'center'}}>
+            <span style={{alignSelf: 'center'}}>이미 회원이신가요?<Button onClick={() => router.push('/login')} variant="text" style={{alignSelf: 'start', justifySelf: 'start', fontSize: '12px', color: '#FFCE00', padding: 0, fontWeight: '700', textDecoration: 'underline'}}>로그인하기</Button></span>
         </div>
         </div>
       </Box>

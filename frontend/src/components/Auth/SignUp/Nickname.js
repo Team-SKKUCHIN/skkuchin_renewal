@@ -49,15 +49,15 @@ const SignUpNickname = (props) => {
         setValidNickname(result);
         if (result) {
           if (next) {
-            //props.handleNextStep();
-            dispatch(register(props.data, ([result, message]) => {
+            props.handleNextStep();
+            /*dispatch(register(props.data, ([result, message]) => {
               setLoading(false);
               if (result) {
                 props.handleNextStep();
               } else {
                 console.log(message);
               }
-            }))
+            }))*/
           }
         } else {
           if (typeof(message) == 'string') {
@@ -249,7 +249,7 @@ const SignUpNickname = (props) => {
         </div>
         
         </form>
-        <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff'}}>
+        <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff', paddingTop: '30px', paddingBottom: '32px'}}>
         {(props.data.nickname != '' && validNickname != false && majorList.indexOf(props.data.major) != -1 && validSId) ?
                     <Button variant="contained" onClick={handleNextStep} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
                         다음
@@ -259,8 +259,8 @@ const SignUpNickname = (props) => {
                         다음
                     </Button>
             }
-        <div style={{display: 'flex', justifyItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '500', padding: '31px 0', color: '#505050'}}>
-                <span style={{alignSelf: 'center'}}>이미 회원이신가요?</span><Button onClick={() => router.push('/login')} variant="text" style={{alignSelf: 'start', justifySelf: 'start', fontSize: '12px', color: '#FFCE00', padding: 0, fontWeight: '700'}}>로그인</Button>
+        <div style={{display: 'flex', flexDirection: 'column',  fontSize: '12px', fontWeight: '500', paddingTop: '20px', color: '#505050', textAlign: 'center'}}>
+            <span style={{alignSelf: 'center'}}>이미 회원이신가요?<Button onClick={() => router.push('/login')} variant="text" style={{alignSelf: 'start', justifySelf: 'start', fontSize: '12px', color: '#FFCE00', padding: 0, fontWeight: '700', textDecoration: 'underline'}}>로그인하기</Button></span>
         </div>
         </div>
       </Box>
