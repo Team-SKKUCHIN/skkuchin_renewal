@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import {  Container, Typography, Box, Grid, Button } from '@mui/material';
 import back from '../../../image/arrow_back_ios.png';
-import check from '../../../image/check_circle.png';
-import theme from '../../../theme/theme';
+import close from '../../../image/close.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from "next/router";
@@ -129,12 +128,12 @@ export default function SignUpProfileImage(props) {
     return (
         <div>
         <Container style={{padding:'0px', alignItems: 'center', marginTop: '45px'}}>
-                        <Grid container>
-                            <Grid item style={{margin:'0px 0px 0px 24px', visibility:'none'}}>
-                                <Image src={back} width={11} height={18} name='back' onClick={handlePrevStep} layout='fixed' />
+                        <Grid container justifyContent='space-between'>
+                            <Grid item style={{margin:'4px 0px 0px 24px', visibility:'none'}}>
+                                <Image src={back} width={8} height={16} name='back' onClick={handlePrevStep} layout='fixed' />
                             </Grid>
-                            <Grid item style={{marginLeft:'35%'}}>
-                                {/* <Typography style={{margin:'0px 0px 0px 0px', textAlign:'center',fontSize:'18px', fontWeight: '700'}}>회원가입</Typography> */}
+                            <Grid item style={{marginRight:'24px'}}>
+                                <Image src={close} width={25} height={25} name='close' onClick={() => router.push('/login')} layout='fixed' />
                             </Grid>
                         </Grid>
         </Container>
