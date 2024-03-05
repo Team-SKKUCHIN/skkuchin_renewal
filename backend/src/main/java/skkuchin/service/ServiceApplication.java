@@ -34,7 +34,9 @@ public class ServiceApplication {
 			KeywordService keywordService,
 			NoticeService noticeService,
 			GroupProfileService groupProfileService,
-			WorldcupService worldcupService) {
+			WorldcupService worldcupService,
+			GroupChatRequestService groupChatRequestService,
+			PersonalChatRequestService personalChatRequestService) {
 		return args -> {
 			userService.saveRole(Role.builder().name("ROLE_USER").build());
 			userService.saveRole(Role.builder().name("ROLE_ADMIN").build());
@@ -58,6 +60,8 @@ public class ServiceApplication {
 				keywordService.insertData(path);
 				userService.saveTestMatchingUsers(100);
 				groupProfileService.saveGroupProfiles(10);
+				groupChatRequestService.insertData();
+				personalChatRequestService.insertData();
 				worldcupService.insertData(100);
 				noticeService.insertData();
 			} catch (Exception e) {

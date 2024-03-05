@@ -21,6 +21,7 @@ import skkuchin.service.domain.Matching.Mbti;
 import skkuchin.service.domain.Matching.UserKeyword;
 import skkuchin.service.domain.User.AppUser;
 import skkuchin.service.domain.User.Major;
+import skkuchin.service.domain.User.Profile;
 import skkuchin.service.util.CampusUtils;
 import skkuchin.service.util.KeywordUtils;
 
@@ -78,6 +79,8 @@ public class PersonalChatRequestDto {
 
         private Major major;
 
+        private Profile image;
+
         @JsonProperty
         private int studentId;
 
@@ -98,6 +101,7 @@ public class PersonalChatRequestDto {
             this.campus = CampusUtils.findCampus(user.getMajor());
             this.gender = user.getGender();
             this.major = user.getMajor();
+            this.image = user.getImage();
             this.studentId = user.getStudentId();
             this.mbti = user.getMbti();
             this.keywords = KeywordUtils.getKeywordMap(keywords);
@@ -125,21 +129,21 @@ public class PersonalChatRequestDto {
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Responses {
         @JsonProperty
-        private List<BaseResponse> receiveResponses;
+        private List<BaseResponse> receiveRequests;
 
         @JsonProperty
-        private List<BaseResponse> sendResponses;
+        private List<BaseResponse> sendRequests;
 
         @JsonProperty
-        private List<ConfirmedResponse> confirmedResponses;
+        private List<ConfirmedResponse> confirmedRequests;
 
         public Responses(
                 List<BaseResponse> receiveResponses,
                 List<BaseResponse> sendResponses,
                 List<ConfirmedResponse> confirmedResponses) {
-            this.receiveResponses = receiveResponses;
-            this.sendResponses = sendResponses;
-            this.confirmedResponses = confirmedResponses;
+            this.receiveRequests = receiveResponses;
+            this.sendRequests = sendResponses;
+            this.confirmedRequests = confirmedResponses;
         }
     }
 }
