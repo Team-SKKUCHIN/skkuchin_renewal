@@ -62,7 +62,6 @@ const Friends = () => {
     
     useEffect(() => {
         if(candidate === null) dispatch(load_candidate());
-        console.log('candidate', candidate);
     }, []);
 
     // const [open, setOpen] = useState(false);
@@ -97,8 +96,17 @@ const Friends = () => {
     }
 
     const handleFriendClick = (friendId) => {
+        localStorage.setItem('candidateId', friendId);
         router.push(`/showFriendProfile?id=${friendId}`);
     };
+
+    const handleRequestBtnClick = (id) => {
+        localStorage.setItem('candidateId', id);
+        router.push({
+            pathname: '/enrollOpenChat',
+            query: { type: 'friend'},
+        });
+    }
 
     return (
         <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0'}}>
@@ -187,7 +195,7 @@ const Friends = () => {
                                 disableElevation
                                 disableTouchRipple
                                 key="apply-button"
-                                onClick={() => router.push('/enrollOpenChat', { type: 'friend'})}
+                                onClick={()=> handleRequestBtnClick(person.id)}
                                 sx={{
                                     color: '#FFAC0B',
                                     fontSize: '14px',

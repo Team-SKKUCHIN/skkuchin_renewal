@@ -34,7 +34,7 @@ const showGroupProfile = () => {
                 }
             }));
         }
-    }, [id]);
+    }, []);
 
     useEffect(() => {
         if(!myGroupProfiles) return;
@@ -49,7 +49,7 @@ const showGroupProfile = () => {
     const [popupQuestion, setPopupQuestion] = useState('');
     const [popupDescription, setPopupDescription] = useState('');
 
-    const [reasonValue, setReasonValue] = useState('');
+    const [reason, setReason] = useState('');
         
     // 팝업
     const handleIconClick = () => {
@@ -67,10 +67,6 @@ const showGroupProfile = () => {
         setPopupMessage('');
         setPopupQuestion('');
         setPopupDescription('');
-
-        if (popupType === 'reason') {
-            router.push('/myGroupProfileLists');
-        }
     }
 
     const handleQuestionConfirm = () => {
@@ -80,11 +76,15 @@ const showGroupProfile = () => {
         setPopupOpen(true);
     }
 
-    const handleReasonConfirm = (reasonValue) => {
-        dispatch(delete_group_profile(id, ([result, message]) => {
+    const handleReasonConfirm = (reason) => {
+        console.log('삭제 이유', reason);
+        dispatch(delete_group_profile(id, reason, ([result, message]) => {
+            console.log('그룹 프로필 삭제 결과', result, message);
             if(result) {
-                console.log('그룹 프로필 삭제 성공 : ', reasonValue);
+                console.log('그룹 프로필 삭제 성공 : ', reason);
+                router.push('/myGroupProfileLists');
             } else {
+                console.log('그룹 프로필 삭제 실패 : ', message);
                 handleClose();
                 setPopupMessage('다시 시도해주세요.');
                 setPopupType('info');
@@ -115,7 +115,7 @@ const showGroupProfile = () => {
                 description={popupDescription}
                 handleClose={handleClose}
                 onQuestionConfirm={handleQuestionConfirm}
-                onReasonConfirm={(reasonValue) => handleReasonConfirm(reasonValue)} 
+                onReasonConfirm={handleReasonConfirm} 
             />
             
         </ThemeProvider>

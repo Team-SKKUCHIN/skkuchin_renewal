@@ -16,7 +16,7 @@ const FriendProfile = ({ candidate }) => {
         
         router.push({
             pathname: '/enrollOpenChat',
-            query: { type: 'friend' },
+            query: { type: 'friend'},
         });
     }
     return (

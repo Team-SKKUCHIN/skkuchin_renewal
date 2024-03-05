@@ -58,7 +58,8 @@ const ModifyGroupProfile = () => {
         console.log('Updated Data:', updatedData);
         dispatch(update_group_profile(selectedGroup.id, updatedData, ([result, message]) => {
             if (result) {
-                console.log('Group profile updated successfully!');
+                console.log('그룹 프로필 수정 완료');
+                router.push(`/showGroupProfile?id=${selectedGroup.id}`);
             } else {
                 console.error('Error updating group profile:', message);
             }

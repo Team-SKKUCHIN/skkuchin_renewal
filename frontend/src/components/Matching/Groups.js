@@ -66,6 +66,10 @@ const Groups = () => {
             setIsLogin(true);
         }
     }
+    const handleRequestBtnClick = (id) => {
+        localStorage.setItem('candidateId', id);
+        router.push('/selectMyGroupProfile')
+    }
 
     const handleGroupClick = (id) => {
         router.push(`/showGroupProfile?id=${id}`);
@@ -113,7 +117,7 @@ const Groups = () => {
                                                 disableElevation
                                                 disableTouchRipple
                                                 key="apply-button"
-                                                onClick={() => router.push('/selectMyGroupProfile')}
+                                                onClick={() => handleRequestBtnClick(group.id)}
                                                 sx={{ color: '#FFAC0B', fontSize: '14px', fontWeight: 700, textAlign: 'center', pl: '15px' }}
                                             >
                                                 밥약 걸기

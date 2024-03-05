@@ -63,7 +63,6 @@ const groupProfileReducer = (state = initialState, action) => {
         case CHANGE_GROUP_PROFILE_SUCCESS:
             return {
                 ...state,
-                myGroupProfiles: payload
             }
         case CHANGE_GROUP_PROFILE_FAIL:
             return {
@@ -72,7 +71,6 @@ const groupProfileReducer = (state = initialState, action) => {
         case DELETE_GROUP_PROFILE_SUCCESS:
             return {
                 ...state,
-                myGroupProfiles: payload
             }
         case DELETE_GROUP_PROFILE_FAIL:
             return {

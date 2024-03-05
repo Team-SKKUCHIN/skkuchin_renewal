@@ -21,7 +21,6 @@ const MemberInfoInput = ({ label, studentId, major, introduction, mode, onUpdate
   const handleIntroductionChangeForModify = (e) => {
     setUpdatedIntroduction(e.target.value);
     onChange(e.target.value || updatedIntroduction);
-    console.log('updatedIntroduction:', updatedIntroduction);
   };
 
   const isRepresentative = label === '친구1';

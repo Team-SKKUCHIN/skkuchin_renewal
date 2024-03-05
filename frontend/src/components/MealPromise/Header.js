@@ -18,17 +18,21 @@ const Header = ({title, onBackClick, icon, handleIconClick}) => {
         }
     }
     
+    const onBackToMyGroupLists = () => {
+        router.push('/myGroupProfileLists');
+    }
+
     return (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px 24px 12px' }}>
             {
                 title === '그룹 프로필 등록' ? (
                     <div style={{ width: 30, display: 'flex', alignItems: 'center' }} />
                 ) : icon === 'save' ? 
-                    <div onClick={() => router.push('/myGroupProfileLists')} style={{ width: 30, display: 'flex', alignItems: 'center' }}>
+                    <div onClick={onBackToMyGroupLists} style={{ width: 30, display: 'flex', alignItems: 'center' }}>
                         <Image src={iconClose} layout="fixed" width={16} height={16} />
                     </div>
                 :
-                    <div onClick={onBackBtnClick} style={{ width: 30, display: 'flex', alignItems: 'center' }}>
+                    <div onClick={title === '나의 그룹 프로필' ? onBackToMyGroupLists :  onBackBtnClick} style={{ width: 30, display: 'flex', alignItems: 'center' }}>
                         <Image src={iconBack} layout="fixed" width={10.82} height={18.98} />
                     </div>
             }

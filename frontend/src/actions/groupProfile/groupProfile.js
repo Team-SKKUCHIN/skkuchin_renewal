@@ -239,15 +239,12 @@ export const load_all_group_profile = () => async (dispatch) => {
 }
 
 
-export const update_group_profile = (profileId, updatedData) => async dispatch => {
+export const update_group_profile = (profileId, updatedData, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
     console.log(access)
 
     const body = JSON.stringify(updatedData);
-    console.log(profileId)
-    console.log('그룹 프로필 수정 요청: ', body);
-
     try {
         const res = await fetch(`${API_URL}/api/group-profile/${profileId}`, {
             method: 'PATCH',
@@ -265,8 +262,9 @@ export const update_group_profile = (profileId, updatedData) => async dispatch =
         if (res.status === 200) {
             dispatch({
                 type: CHANGE_GROUP_PROFILE_SUCCESS,
-                payload: apiRes.data
             });
+            if (callback) callback([true, apiRes.message]);
+            dispatch(get_my_group_profile());
         } else {
             dispatch({
                 type: CHANGE_GROUP_PROFILE_FAIL
@@ -280,31 +278,35 @@ export const update_group_profile = (profileId, updatedData) => async dispatch =
     }
 }
 
-export const delete_group_profile = (profileId) => async dispatch => {
+export const delete_group_profile = (profileId, reason, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
-
+    
+    const body = JSON.stringify({reason});
     try {
         const res = await fetch(`${API_URL}/api/group-profile/${profileId}`, {
             method: 'DELETE',
             headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
                 'Authorization' : `Bearer ${access}`
-            }
+            },
+            body: body
         });
-
+        
         const apiRes = await res.json();
-        console.log(`그룹 프로필(${profileId}) 삭제 요청 완료 :`, apiRes);
-
+        console.log(res.status, apiRes);
         if (res.status === 200) {
             dispatch({
                 type: DELETE_GROUP_PROFILE_SUCCESS,
-                payload: apiRes.data
             });
             dispatch(get_my_group_profile());
+            if (callback) callback([true, apiRes.message]);
         } else {
             dispatch({
                 type: DELETE_GROUP_PROFILE_FAIL
             });
+            if (callback) callback([false, apiRes.message]);
         }
     } catch (error) {
         console.log(error);
@@ -313,7 +315,6 @@ export const delete_group_profile = (profileId) => async dispatch => {
         });
     }
 }
-
 
 export const clear_candidate_profile = () => dispatch => {
     dispatch({
