@@ -86,7 +86,7 @@ public class GroupProfileController {
             }
             throw new CustomValidationApiException("프로필 소개 문구를 모두 입력해주시기 바랍니다");
         }
-        groupProfileService.updateGroupProfile(profileId, principalDetails.getUser().getId(), dto);
+        groupProfileService.updateGroupProfile(principalDetails.getUser().getId(), profileId, dto);
         return new ResponseEntity<>(new CMRespDto<>(1, "그룹 프로필 수정 완료", true), HttpStatus.OK);
     }
 
@@ -99,8 +99,10 @@ public class GroupProfileController {
     @DeleteMapping("/{profileId}")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<?> inactivateGroupProfile(@PathVariable Long profileId,
+            @RequestBody Map<String, String> reasonMap,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        groupProfileService.inactivateGroupProfile(principalDetails.getUser().getId(), profileId);
+        groupProfileService.inactivateGroupProfile(principalDetails.getUser().getId(), profileId,
+                reasonMap.get("reason"));
         return new ResponseEntity<>(new CMRespDto<>(1, "그룹 프로필 비활성화 완료", true), HttpStatus.OK);
     }
 

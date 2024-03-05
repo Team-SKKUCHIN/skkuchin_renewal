@@ -67,6 +67,8 @@ public class GroupProfile {
 
     private LocalDate meetingEndDate;
 
+    private String reason;
+
     @Enumerated(EnumType.STRING)
     private ProfileStatus status;
 

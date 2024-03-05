@@ -18,6 +18,8 @@ import commentReducer from './comment';
 import likeReducer from './like';
 import magazineReducer from './magazine';
 import worldcupReducer from './worldcup';
+import groupChatRequestReducer from './groupChatRequest';
+import personalChatRequestReducer from './personalChatRequest';
 import groupProfileReducer from './groupProfile';
 
 export default combineReducers({
@@ -40,5 +42,7 @@ export default combineReducers({
     like: likeReducer,
     magazine: magazineReducer,
     worldcup: worldcupReducer,
+    groupChatRequest: groupChatRequestReducer,
+    personalChatRequest: personalChatRequestReducer,
     groupProfile: groupProfileReducer
 });
