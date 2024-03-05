@@ -123,7 +123,7 @@ public class GroupProfileService {
     }
 
     @Transactional
-    public void inactivateGroupProfile(Long userId, Long groupProfileId) {
+    public void inactivateGroupProfile(Long userId, Long groupProfileId, String reason) {
         GroupProfile existingGroupProfile = groupProfileRepo.findById(groupProfileId)
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 그룹 프로필입니다"));
 
@@ -139,7 +139,7 @@ public class GroupProfileService {
                 .anyMatch(request -> request.getReceiver().getFriend1().getId() == userId
                         && request.getStatus() == ResponseType.HOLD);
         if (isRemain) {
-            throw new CustomRuntimeException("보류 중인 신청이 존재합니다");
+            throw new CustomRuntimeException("보류 중인 신청 내역이 존재합니다");
         }
 
         groupChatRequests
@@ -152,7 +152,8 @@ public class GroupProfileService {
 
         existingGroupProfile.setModifiedAt(LocalDateTime.now());
         existingGroupProfile.setStatus(ProfileStatus.INACTIVE);
-        groupProfileRepo.delete(existingGroupProfile);
+        existingGroupProfile.setReason(reason);
+        groupProfileRepo.save(existingGroupProfile);
     }
 
     @Transactional
@@ -179,8 +180,8 @@ public class GroupProfileService {
     public void saveGroupProfiles(int count) {
         List<MatchingUserDto.Response> users = matchingUserService.getUserProfileListAsNonUser();
 
-        for (int i = 1; i <= count; i++) {
-            MatchingUserDto.Response matchingUser = users.get(random.nextInt(users.size()));
+        for (int i = 0; i < count; i++) {
+            MatchingUserDto.Response matchingUser = users.get(i);
             AppUser user = userRepo.findById(matchingUser.getId()).orElseThrow();
             String randomName = getRandomName(user);
             Boolean isDateOn = random.nextBoolean();

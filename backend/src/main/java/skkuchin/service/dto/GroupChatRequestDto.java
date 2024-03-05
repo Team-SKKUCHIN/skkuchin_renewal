@@ -16,7 +16,6 @@ import skkuchin.service.domain.Chat.GroupChatRequest;
 import skkuchin.service.domain.Chat.GroupProfile;
 import skkuchin.service.domain.Chat.ResponseType;
 import skkuchin.service.domain.Matching.Gender;
-import skkuchin.service.domain.User.Profile;
 
 public class GroupChatRequestDto {
 
@@ -24,6 +23,10 @@ public class GroupChatRequestDto {
     @AllArgsConstructor
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class PostRequest {
+        @NotNull
+        @JsonProperty
+        private Long senderId;
+
         @NotNull
         @JsonProperty
         private Long receiverId;
@@ -51,6 +54,23 @@ public class GroupChatRequestDto {
 
     @Getter
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class ProfileResponse {
+        private Long id;
+
+        @JsonProperty
+        private String groupName;
+
+        private Gender gender;
+
+        public ProfileResponse(GroupProfile groupProfile) {
+            this.id = groupProfile.getId();
+            this.groupName = groupProfile.getGroupName();
+            this.gender = groupProfile.getFriend1().getGender();
+        }
+    }
+
+    @Getter
+    @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class BaseResponse {
         @JsonProperty
         private Long requestId;
@@ -59,42 +79,19 @@ public class GroupChatRequestDto {
         private LocalDateTime createdAt;
 
         @JsonProperty
-        private Long senderId;
+        private ProfileResponse senderProfile;
 
         @JsonProperty
-        private String senderGroupName;
-
-        @JsonProperty
-        private Gender senderGender;
-
-        @JsonProperty
-        private Profile senderImage;
-
-        @JsonProperty
-        private Long receiverId;
-
-        @JsonProperty
-        private String receiverGroupName;
-
-        @JsonProperty
-        private Gender receiverGender;
-
-        @JsonProperty
-        private Profile receiverImage;
+        private ProfileResponse receiverProfile;
 
         private ResponseType status;
 
-        public BaseResponse(GroupChatRequest groupChatRequest) {
+        public BaseResponse(GroupChatRequest groupChatRequest, ProfileResponse senderProfile,
+                ProfileResponse receiverProfile) {
             this.requestId = groupChatRequest.getId();
             this.createdAt = groupChatRequest.getCreatedAt();
-            this.senderId = groupChatRequest.getSender().getId();
-            this.senderGroupName = groupChatRequest.getSender().getGroupName();
-            this.senderGender = groupChatRequest.getSender().getFriend1().getGender();
-            this.senderImage = groupChatRequest.getSender().getFriend1().getImage();
-            this.receiverId = groupChatRequest.getReceiver().getId();
-            this.receiverGroupName = groupChatRequest.getReceiver().getGroupName();
-            this.receiverGender = groupChatRequest.getReceiver().getFriend1().getGender();
-            this.receiverImage = groupChatRequest.getReceiver().getFriend1().getImage();
+            this.senderProfile = senderProfile;
+            this.receiverProfile = receiverProfile;
             this.status = groupChatRequest.getStatus();
         }
     }
@@ -107,8 +104,9 @@ public class GroupChatRequestDto {
 
         private String link;
 
-        public ConfirmedResponse(GroupChatRequest groupChatRequest) {
-            super(groupChatRequest);
+        public ConfirmedResponse(GroupChatRequest groupChatRequest, ProfileResponse senderProfile,
+                ProfileResponse receiverProfile) {
+            super(groupChatRequest, senderProfile, receiverProfile);
             this.confirmedAt = groupChatRequest.getConfirmedAt();
             this.link = groupChatRequest.getLink();
         }
@@ -118,21 +116,21 @@ public class GroupChatRequestDto {
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Responses {
         @JsonProperty
-        private List<BaseResponse> receiveResponses;
+        private List<BaseResponse> receiveRequests;
 
         @JsonProperty
-        private List<BaseResponse> sendResponses;
+        private List<BaseResponse> sendRequests;
 
         @JsonProperty
-        private List<ConfirmedResponse> confirmedResponses;
+        private List<ConfirmedResponse> confirmedRequests;
 
         public Responses(
                 List<BaseResponse> receiveResponses,
                 List<BaseResponse> sendResponses,
                 List<ConfirmedResponse> confirmedResponses) {
-            this.receiveResponses = receiveResponses;
-            this.sendResponses = sendResponses;
-            this.confirmedResponses = confirmedResponses;
+            this.receiveRequests = receiveResponses;
+            this.sendRequests = sendResponses;
+            this.confirmedRequests = confirmedResponses;
         }
     }
 }

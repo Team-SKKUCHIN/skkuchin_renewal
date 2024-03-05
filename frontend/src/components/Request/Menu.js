@@ -2,6 +2,7 @@ export const Menu = ({ selectedIndex, setSelectedIndex }) => (
     <div style={{ width: '100%', height: '33px', display: 'flex', marginTop: '90px' }}>
         {['받은 신청', '보낸 신청', '확정 내역'].map((menu, index) => (
             <div
+                key={index}
                 style={{
                     width: '100%',
                     textAlign: 'center', 

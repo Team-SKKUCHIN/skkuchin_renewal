@@ -55,17 +55,17 @@ public class PersonalChatRequestService {
                 if (request.getReceiver().getId() == userId) {
                     receiveRequests.add(
                             new PersonalChatRequestDto.BaseResponse(request, request.getSender(), senderKeywords));
-                } else if (request.getSender().getId() == userId) {
-                    sendRequests.add(new PersonalChatRequestDto.BaseResponse(request, request.getSender(),
+                } else {
+                    sendRequests.add(new PersonalChatRequestDto.BaseResponse(request, request.getReceiver(),
                             receiverKeywords));
                 }
             } else {
                 PersonalChatRequestDto.ConfirmedResponse confirmedResponse;
-                if (request.getSender().getId() == userId) {
-                    confirmedResponse = new PersonalChatRequestDto.ConfirmedResponse(request, request.getReceiver(),
+                if (request.getReceiver().getId() == userId) {
+                    confirmedResponse = new PersonalChatRequestDto.ConfirmedResponse(request, request.getSender(),
                             receiverKeywords);
                 } else {
-                    confirmedResponse = new PersonalChatRequestDto.ConfirmedResponse(request, request.getSender(),
+                    confirmedResponse = new PersonalChatRequestDto.ConfirmedResponse(request, request.getReceiver(),
                             senderKeywords);
                 }
                 allConfirmedRequests.add(confirmedResponse);
@@ -106,7 +106,10 @@ public class PersonalChatRequestService {
         if (!receiverSmsList.isEmpty()) {
             smsService.sendSms(
                     receiverSmsList.get(0).getPhoneNumber(),
-                    String.format("[스꾸친] %s 밥약을 신청했습니다", StringUtils.getPostWord(sender.getNickname(), "이", "가")));
+                    String.format(
+                            "%s 밥약을 신청했어요.\n신청 현황에서 확인 후 수락해주세요.\n\n" +
+                                    "▶ 스꾸친 바로가기 : https://skkuchin.com/",
+                            StringUtils.getPostWord(sender.getNickname(), "이", "가")));
         }
     }
 
@@ -127,9 +130,12 @@ public class PersonalChatRequestService {
         if (!senderSmsList.isEmpty()) {
             String message;
             if (status == ResponseType.ACCEPT) {
-                message = "[스꾸친] %s 밥약을 수락했습니다";
+                message = "%s 밥약을 수락했어요. 곧 오픈채팅 링크로 입장할 예정이에요. 3일 이내에 입장하지 않는다면 '스꾸친 카카오톡'으로 연락주세요.\n\n" +
+                        "▶ 스꾸친 바로가기 : https://skkuchin.com/\n" +
+                        "▶ 카카오톡 채널 : https://pf.kakao.com/_KmNnG";
             } else if (status == ResponseType.REFUSE) {
-                message = "[스꾸친] %s 밥약을 거절했습니다";
+                message = "[신청 현황 > 확정 내역]에서 1:1 밥약 결과를 확인해주세요.\n\n" +
+                        "▶ 스꾸친 바로가기 : https://skkuchin.com/";
             } else {
                 throw new CustomRuntimeException("비정상적인 접근입니다");
             }
@@ -152,5 +158,25 @@ public class PersonalChatRequestService {
                 }
             }
         }
+    }
+
+    @Transactional
+    public void insertData() {
+        String link = "https://open.kakao.com/o/sn34U0dg";
+
+        createPersonalChatRequest(3L, new PersonalChatRequestDto.PostRequest(4L, link));
+        createPersonalChatRequest(3L, new PersonalChatRequestDto.PostRequest(5L, link));
+        createPersonalChatRequest(3L, new PersonalChatRequestDto.PostRequest(6L, link));
+        createPersonalChatRequest(3L, new PersonalChatRequestDto.PostRequest(7L, link));
+
+        createPersonalChatRequest(8L, new PersonalChatRequestDto.PostRequest(3L, link));
+        createPersonalChatRequest(9L, new PersonalChatRequestDto.PostRequest(3L, link));
+        createPersonalChatRequest(10L, new PersonalChatRequestDto.PostRequest(3L, link));
+        createPersonalChatRequest(11L, new PersonalChatRequestDto.PostRequest(3L, link));
+
+        replyPersonalChatRequest(6L, 3L, new PersonalChatRequestDto.ReplyRequest(ResponseType.ACCEPT));
+        replyPersonalChatRequest(7L, 4L, new PersonalChatRequestDto.ReplyRequest(ResponseType.REFUSE));
+        replyPersonalChatRequest(3L, 7L, new PersonalChatRequestDto.ReplyRequest(ResponseType.ACCEPT));
+        replyPersonalChatRequest(3L, 8L, new PersonalChatRequestDto.ReplyRequest(ResponseType.REFUSE));
     }
 }
