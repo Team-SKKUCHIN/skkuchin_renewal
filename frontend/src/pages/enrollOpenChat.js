@@ -4,22 +4,21 @@ import { CssBaseline, ThemeProvider, Typography, OutlinedInput, Button } from '@
 import Header from '../components/MealPromise/Header';
 import Popup from '../components/Custom/Popup';
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 
 const enrollOpenChat = () => {
     const router = useRouter();
 
     const { type } = router.query;
+    
+    const [senderId, setSenderId] = useState(localStorage.getItem('myProfileId') || '');
+    const [receiverId, setReceiverId] = useState(localStorage.getItem('candidateId') || '');
 
     useEffect(() => {
-        console.log('type', type);
-        
-        const id = localStorage.getItem('myProfileId');
-        const candidateId = localStorage.getItem('candidateId');
+        console.log('Sender Id', senderId);
+        console.log('Receiver Id', receiverId);
+    }, [senderId, receiverId]);
 
-        console.log('id', id);
-        console.log('candidateId', candidateId);
-    }, []);
-    
     const [openChatLink, setOpenChatLink] = useState(''); 
 
     const [popupOpen, setPopupOpen] = useState(false);
@@ -37,6 +36,8 @@ const enrollOpenChat = () => {
     }
 
     const handleQuestionConfirm = () => {
+        console.log("확인 버튼 클릭");
+
         setPopupMessage(`밥약 신청을 완료했어요!\n밥약이 성사되면 SMS로 알려드릴게요`);
         setPopupDescription('밥약 신청 내역은 홈 > 신청현황에서 확인할 수 있어요.');
         setPopupOpen(true);

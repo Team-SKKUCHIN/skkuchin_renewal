@@ -8,6 +8,7 @@ import OptionButton from '../components/Custom/OptionButton';
 import Groups from '../components/Matching/Groups';
 import { useRouter } from 'next/router';
 import { load_all_group_profile, get_my_group_profile } from '../actions/groupProfile/groupProfile';
+import { load_candidate } from '../actions/candidate/candidate';
 
 const MatchContainer = styled.div`
   /* 데스크톱에서 스크롤 바를 숨김 */
@@ -27,9 +28,11 @@ const MatchPage = () => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const allGroupProfiles = useSelector(state => state.groupProfile.allGroupProfiles);
     const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
+    const candidateProfiles = useSelector(state => state.candidate.candidate);
 
     useEffect(() => {
         if(allGroupProfiles === null) dispatch(load_all_group_profile());
+        if(candidateProfiles === null) dispatch(load_candidate());
         if(isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
     }, [isAuthenticated]);
 

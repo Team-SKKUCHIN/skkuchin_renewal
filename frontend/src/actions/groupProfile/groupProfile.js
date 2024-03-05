@@ -242,8 +242,11 @@ export const load_all_group_profile = () => async (dispatch) => {
 export const update_group_profile = (profileId, updatedData) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
+    console.log(access)
 
     const body = JSON.stringify(updatedData);
+    console.log(profileId)
+    console.log('그룹 프로필 수정 요청: ', body);
 
     try {
         const res = await fetch(`${API_URL}/api/group-profile/${profileId}`, {

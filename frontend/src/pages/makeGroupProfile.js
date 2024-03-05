@@ -8,6 +8,7 @@ import CalendarContainer from '../components/MealPromise/CalendarContainer';
 import Popup from '../components/Custom/Popup';
 import { add_group_profile, get_random_nickname, check_group_name_duplicate } from '../actions/groupProfile/groupProfile';
 import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
 
 const MakeGroupProfile = () => {
     const router = useRouter();
@@ -19,7 +20,8 @@ const MakeGroupProfile = () => {
     const [gender, setGender] = useState(user && user.gender || '');
     const [groupIntro, setGroupIntro] = useState(''); 
 
-    const [selectedDates, setSelectedDates] = useState([new Date(), new Date()]);
+    const [selectedDates, setSelectedDates] = useState([]);
+    const [isDateEdited, setIsDateEdited] = useState(false);
 
     const [friends, setFriends] = useState([
         { label: '친구1', studentId: user ? user.student_id.toString() : '', major: user && user.major, introduction: '' },
@@ -40,7 +42,9 @@ const MakeGroupProfile = () => {
     }
 
     const handleDateChange = (newDate) => {
+        console.log('날짜 변경! newDate', newDate);
         setSelectedDates(newDate);
+        setIsDateEdited(true);
     };
 
     const [isNicknameEditable, setIsNicknameEditable] = useState(false);
@@ -112,7 +116,7 @@ const MakeGroupProfile = () => {
     };
 
     const handleQuestionConfirm = () => {
-        const formattedDates = selectedDates[0] && selectedDates[1] ? selectedDates.map((date) => date.toISOString()) : ['', ''];
+        const formattedDates = selectedDates[0] || selectedDates[1] ? selectedDates.map((date) => dayjs(date).format('YYYY-MM-DD')) : ['',''];
 
         const profileData = {
             group_name: groupName,
@@ -124,8 +128,8 @@ const MakeGroupProfile = () => {
             friend3_introduction: friends[2].introduction,
             friend3_major: friends[2].major,
             friend3_student_id: parseInt(friends[2].studentId, 10),
-            meeting_start_date: formattedDates[0], 
-            meeting_end_date: formattedDates[1],
+            meeting_start_date: isDateEdited ? formattedDates[0] : '', 
+            meeting_end_date: isDateEdited ? formattedDates[1] : '',
         }
 
         dispatch(add_group_profile(profileData, ([result, message]) => {
@@ -210,7 +214,7 @@ const MakeGroupProfile = () => {
                 <Divider orientation="horizontal" sx={{ border: '5px solid #F2F2F2', margin: '25px -24px' }} />
                 
                 {/* 일정 */}
-                <CalendarContainer dates={selectedDates} onDateChange={handleDateChange} />
+                <CalendarContainer dates={selectedDates} onDateChange={handleDateChange} editable={true} />
 
                 {/* 등록하기 버튼 */}
                 <Button onClick={handleSubmit} fullWidth sx={{backgroundColor: isValid ? '#FFCE00' : '#E2E2E2', color: '#fff', fontSize: 16, fontWeight: 700, borderRadius: '8px', height: 56, m: '60px 0 10px', '&:hover': { backgroundColor: isValid ? '#FFCE00' : '#E2E2E2'}, '&:active': { backgroundColor: isValid ? '#FFCE00' : '#E2E2E2' }}}>

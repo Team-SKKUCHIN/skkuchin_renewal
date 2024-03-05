@@ -61,14 +61,9 @@ const Friends = () => {
     const [selectedPersonId, setSelectedPersonId] = useState(null);
     
     useEffect(() => {
-        if (isAuthenticated) {
-            dispatch(load_request_id(([result, message]) => {
-                if (result) {
-                    dispatch(load_candidate());
-                }
-            }))
-        }
-    }, [isAuthenticated]);
+        if(candidate === null) dispatch(load_candidate());
+        console.log('candidate', candidate);
+    }, []);
 
     // const [open, setOpen] = useState(false);
 
@@ -134,13 +129,16 @@ const Friends = () => {
                         <Grid item sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
                             {person.mbti}
                         </Grid>
-                        {(person.keywords) != null ?
-                            ((person.keywords).slice(0, 2).map((interest, index)=> (
-                                <Grid item key={index} sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
-                                    {interest}
-                                </Grid>
-                            )))
-                        : null}
+                        {
+                            (person.keywords) != null &&
+                            <>
+                                {(Object.values(person.keywords).flat().slice(0, 2).map((keyword, index) => (
+                                    <Grid item key={index} sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
+                                        {keyword}
+                                    </Grid>
+                                )))}
+                            </>
+                        }
                     </Grid >
                     <Typography sx={{ fontSize: '14px', height: '40px', lineHeight: '20px', fontWeight: 400, color: '#3C3C3C', textAlign: 'center', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
                         {'"'+person.introduction+'"'}

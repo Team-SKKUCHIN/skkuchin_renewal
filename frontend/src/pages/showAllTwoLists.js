@@ -23,10 +23,7 @@ const showAllTwoLists = () => {
     const filterOptions = ['전체', '명륜', '율전'];
 
     useEffect(() => {
-        if(!user || !candidate) {
-            dispatch(load_candidate());
-        }
-        console.log('candidate', candidate);
+        dispatch(load_candidate());
     }, []);
 
     const filteredProfiles =

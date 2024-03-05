@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Typography, FormControl, TextField } from '@mui/material';
 import MajorInput from '../Custom/MajorInput';
 import StudentIdInput from '../Custom/StudentIdInput';
 
 const MemberInfoInput = ({ label, studentId, major, introduction, mode, onUpdate, onChange }) => {
+  const [updatedIntroduction, setUpdatedIntroduction] = useState(introduction);
+
   const handleStudentIdChange = (value) => {
     onUpdate({ studentId: value });
   };
@@ -12,8 +14,14 @@ const MemberInfoInput = ({ label, studentId, major, introduction, mode, onUpdate
     onUpdate({ major: value });
   };
 
-  const handleIntroductionChange = (event) => {
-    onUpdate({ introduction: event.target.value });
+  const handleIntroductionChangeForNew = (e) => {
+    onUpdate({ introduction: e.target.value });
+  };
+
+  const handleIntroductionChangeForModify = (e) => {
+    setUpdatedIntroduction(e.target.value);
+    onChange(e.target.value || updatedIntroduction);
+    console.log('updatedIntroduction:', updatedIntroduction);
   };
 
   const isRepresentative = label === '친구1';
@@ -81,8 +89,9 @@ const MemberInfoInput = ({ label, studentId, major, introduction, mode, onUpdate
         variant="outlined"
         fullWidth
         placeholder="한줄 소개를 입력해주세요 (필수)"
-        value={introduction}
-        onChange={handleIntroductionChange}
+        value={mode === 'modify' ? updatedIntroduction : introduction}
+        // onChange={handleIntroductionChange}
+        onChange={mode === 'modify' ? handleIntroductionChangeForModify : handleIntroductionChangeForNew}
       />
     </Grid>
   );

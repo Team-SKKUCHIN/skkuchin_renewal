@@ -11,7 +11,7 @@ const GroupProfile = ({isMyProfile, mode, group, handleEditProfileClick}) => {
     const handleSubmit = () => {
         if (myGroupProfiles && myGroupProfiles.length > 0) {
             router.push('/selectMyGroupProfile')
-            localStorage.setItem('candidateId', id);
+            localStorage.setItem('candidateId', group.id);
         } else {
             alert("그룹 밥약을 신청하기 위해선 그룹 프로필 작성이 필요해요.");
             router.push('/mealPromise');

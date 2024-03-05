@@ -39,10 +39,10 @@ const ModifyGroupProfile = () => {
             dispatch(load_candidate_profile(router.query.id));
         } else {
             setUpdatedData({
+                group_introduction: selectedGroup.group_introduction || '',
                 friend1_introduction: selectedGroup.friend1_introduction || '',
                 friend2_introduction: selectedGroup.friend2_introduction || '',
                 friend3_introduction: selectedGroup.friend3_introduction || '',
-                group_introduction: selectedGroup.group_introduction || '',
             });
         }
     }, [selectedGroup]);
@@ -55,31 +55,19 @@ const ModifyGroupProfile = () => {
     };
 
     const handleSubmit = () => {
-        console.log('Updated Data:', {
-            group_introduction: updatedData.group_introduction,
-            friend1_introduction: updatedData.friend1_introduction,
-            friend2_introduction: updatedData.friend2_introduction,
-            friend3_introduction: updatedData.friend3_introduction,
-        });
-
-        const updatedData = {
-            friend1_introduction: updatedData.friend1_introduction,
-            friend2_introduction: updatedData.friend2_introduction,
-            friend3_introduction: updatedData.friend3_introduction,
-            group_introduction: updatedData.group_introduction,
-        };
-
-        // dispatch(update_group_profile(selectedGroup.id, updatedData, ([result, message]) => {
-        //     if (result) {
-        //         console.log('Group profile updated successfully!');
-        //     } else {
-        //         console.error('Error updating group profile:', message);
-        //     }
-        // }));
+        console.log('Updated Data:', updatedData);
+        dispatch(update_group_profile(selectedGroup.id, updatedData, ([result, message]) => {
+            if (result) {
+                console.log('Group profile updated successfully!');
+            } else {
+                console.error('Error updating group profile:', message);
+            }
+        }));
     };
 
     const handleIconBtnClick = () => {
         console.log('Save button clicked!');
+        handleSubmit();
     }
 
     return (
@@ -158,7 +146,8 @@ const ModifyGroupProfile = () => {
                     variant='outlined'
                     fullWidth
                     placeholder='그룹 한줄 소개를 입력해주세요 (필수)'
-                    value={selectedGroup?.group_introduction}
+                    value={updatedData.group_introduction}
+                    onChange={(e) => handleInfoChange('group_introduction', e.target.value)}
                 />
 
                 <Divider orientation="horizontal" sx={{ border: '5px solid #F2F2F2', margin: '25px -24px' }} />
@@ -172,6 +161,8 @@ const ModifyGroupProfile = () => {
                         studentId={friend.studentId}
                         mode="modify"
                         major={friend.major}
+                        value={friend.introduction}
+                        onChange={(value) => handleInfoChange(`friend${index + 1}_introduction`, value)}
                     />
                 ))}
 
