@@ -15,6 +15,7 @@ const showAllTwoLists = () => {
     const router = useRouter();
 
     const user = useSelector(state => state.auth.user);
+    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
     const candidate = useSelector(state => state.candidate.candidate);
 
     const [selectedFilter, setSelectedFilter] = useState('전체');
@@ -23,10 +24,7 @@ const showAllTwoLists = () => {
     const filterOptions = ['전체', '명륜', '율전'];
 
     useEffect(() => {
-        if(!user || !candidate) {
-            dispatch(load_candidate());
-        }
-        console.log('candidate', candidate);
+        dispatch(load_candidate());
     }, []);
 
     const filteredProfiles =
@@ -39,6 +37,15 @@ const showAllTwoLists = () => {
             setSelectedCandidate(null);
         } else {
             router.push('/mealPromise');
+        }
+    }
+
+    const handleAddBtnClick = () => {
+        if(user && user.phone_number !== null) {
+            router.push('/makeGroupProfile');
+        } else {
+            alert('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+            router.push('/verification');
         }
     }
 
@@ -59,7 +66,6 @@ const showAllTwoLists = () => {
                 )
             }
 
-            
             {selectedCandidate ? (
                 <FriendProfile candidate={selectedCandidate} />
                 ) : (
@@ -91,7 +97,7 @@ const showAllTwoLists = () => {
                             height: '52px',
                             width: '52px'
                         }}
-                        onClick={() => router.push('/makeGroupProfile')}
+                        onClick={handleAddBtnClick}
                         >
                         <AddIcon fontSize="medium" />
                         </IconButton>

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Typography, FormControl, TextField } from '@mui/material';
 import MajorInput from '../Custom/MajorInput';
 import StudentIdInput from '../Custom/StudentIdInput';
 
-const MemberInfoInput = ({ friendName, studentId, major, introduction, onUpdate }) => {
+const MemberInfoInput = ({ label, studentId, major, introduction, mode, onUpdate, onChange }) => {
+  const [updatedIntroduction, setUpdatedIntroduction] = useState(introduction);
+
   const handleStudentIdChange = (value) => {
     onUpdate({ studentId: value });
   };
@@ -12,15 +14,23 @@ const MemberInfoInput = ({ friendName, studentId, major, introduction, onUpdate 
     onUpdate({ major: value });
   };
 
-  const handleIntroductionChange = (event) => {
-    onUpdate({ introduction: event.target.value });
+  const handleIntroductionChangeForNew = (e) => {
+    onUpdate({ introduction: e.target.value });
   };
+
+  const handleIntroductionChangeForModify = (e) => {
+    setUpdatedIntroduction(e.target.value);
+    onChange(e.target.value || updatedIntroduction);
+  };
+
+  const isRepresentative = label === '친구1';
+  const isEditable = !isRepresentative;
 
   return (
     <Grid container>
       <div style={{ gap: 8, display: 'flex', alignItems: 'center' }}>
         {
-            friendName == '친구1' &&
+            isRepresentative &&
             <Typography
                 sx={{
                     color: '#FFAC0B',
@@ -35,7 +45,7 @@ const MemberInfoInput = ({ friendName, studentId, major, introduction, onUpdate 
             </Typography>
         }
         <Typography sx={{ color: '#3C3C3C', fontSize: 18, fontWeight: 700 }}>
-          {friendName}
+          {label}
         </Typography>
       </div>
 
@@ -44,7 +54,7 @@ const MemberInfoInput = ({ friendName, studentId, major, introduction, onUpdate 
         <FormControl variant="standard" style={{ width: '27%' }}>
           <Typography sx={{ fontSize: 14, color: '#3C3C3C', mb: '8px' }}>학번</Typography>
           <Grid container>
-            <StudentIdInput value={studentId} onChange={handleStudentIdChange} />
+            <StudentIdInput value={studentId} onChange={handleStudentIdChange} editable={isEditable && mode !== 'modify'}/>
             <input
               readOnly
               value="학번"
@@ -59,6 +69,7 @@ const MemberInfoInput = ({ friendName, studentId, major, introduction, onUpdate 
                 borderRadius: '0 8px 8px 0',
                 width: '50%',
                 outline: 'none',
+                backgroundColor: isEditable ? 'white' : '#FBFBFB',
               }}
             />
           </Grid>
@@ -67,18 +78,19 @@ const MemberInfoInput = ({ friendName, studentId, major, introduction, onUpdate 
         {/* 학과 */}
         <FormControl variant="standard" style={{ width: '73%' }}>
           <Typography sx={{ fontSize: 14, color: '#3C3C3C', mb: '8px' }}>학부/학과</Typography>
-          <MajorInput value={major} onChange={handleMajorChange} />
+          <MajorInput value={major} onChange={handleMajorChange} editable={isEditable && mode !== 'modify'}/>
         </FormControl>
       </Grid>
 
       <Typography sx={{ fontSize: 14, color: '#3C3C3C', mb: '8px' }}>한줄 소개</Typography>
       <TextField
-        sx={{ mb: friendName === '친구3' ? '0px' : '50px' }}
+        sx={{ mb: label === '친구3' ? '0px' : '50px' }}
         variant="outlined"
         fullWidth
         placeholder="한줄 소개를 입력해주세요 (필수)"
-        value={introduction}
-        onChange={handleIntroductionChange}
+        value={mode === 'modify' ? updatedIntroduction : introduction}
+        // onChange={handleIntroductionChange}
+        onChange={mode === 'modify' ? handleIntroductionChangeForModify : handleIntroductionChangeForNew}
       />
     </Grid>
   );

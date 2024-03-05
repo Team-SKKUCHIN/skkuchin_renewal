@@ -2,7 +2,7 @@ import { API_URL } from '../../config/index';
 import { getToken, request_refresh } from '../auth/auth';
 import { 
     LOAD_GROUP_REQUEST_SUCCESS,
-    LOAD_GROUP_REQUEST_FAIL
+    LOAD_GROUP_REQUEST_FAIL,
 } 
 from './types';
 
@@ -42,14 +42,17 @@ export const load_group_requests = (callback) => async dispatch => {
     }
 }
 
-export const send_group_request = (link, receiverId, callback) => async dispatch => {
+export const send_group_request = (link, senderId, receiverId, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
 
     const body = JSON.stringify({
         link,
+        sender_id: senderId,
         receiver_id: receiverId,
     });
+
+    console.log('body', body);
 
     try {
         const res = await fetch(`${API_URL}/api/group-chat-request`,{
@@ -63,7 +66,7 @@ export const send_group_request = (link, receiverId, callback) => async dispatch
         });
         
         const apiRes = await res.json();
-
+        console.log(res.status, apiRes.message);
         if (res.status === 201) {
             if (callback) callback([true, apiRes.message]);
         }

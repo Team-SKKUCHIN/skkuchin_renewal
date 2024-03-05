@@ -4,11 +4,19 @@ import { CssBaseline, ThemeProvider, Typography, OutlinedInput, Button } from '@
 import Header from '../components/MealPromise/Header';
 import Popup from '../components/Custom/Popup';
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { send_group_request } from '../actions/groupChatRequest/groupChatRequest';
+import { send_personal_request } from '../actions/personalChatRequest/personalChatRequest';
 
 const enrollOpenChat = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const { type } = router.query;
+    console.log('type', type);
+    
+    const [senderId, setSenderId] = useState(localStorage.getItem('myProfileId') || '');
+    const [receiverId, setReceiverId] = useState(localStorage.getItem('candidateId') || '');
 
     const [openChatLink, setOpenChatLink] = useState(''); 
 
@@ -27,10 +35,36 @@ const enrollOpenChat = () => {
     }
 
     const handleQuestionConfirm = () => {
-        setPopupMessage(`밥약 신청을 완료했어요!\n밥약이 성사되면 SMS로 알려드릴게요`);
-        setPopupDescription('밥약 신청 내역은 홈 > 신청현황에서 확인할 수 있어요.');
-        setPopupOpen(true);
-        setPopupType('info');
+        if(type === 'group') {
+            dispatch(send_group_request(openChatLink, senderId, receiverId, ([result, message]) => {
+                if(result) {
+                    setPopupMessage(`밥약 신청을 완료했어요!\n밥약이 성사되면 SMS로 알려드릴게요`);
+                    setPopupDescription('밥약 신청 내역은 홈 > 신청현황에서 확인할 수 있어요.');
+                    setPopupOpen(true);
+                    setPopupType('info');
+                } else {
+                    console.log('밥약 신청 실패');
+                    console.log(message);
+                }
+            }));
+        } else if(type === 'friend'){
+            dispatch(send_personal_request(openChatLink, receiverId, ([result, message]) => {
+                if(result) {
+                    setPopupMessage(`밥약 신청을 완료했어요!\n밥약이 성사되면 SMS로 알려드릴게요`);
+                    setPopupDescription('밥약 신청 내역은 홈 > 신청현황에서 확인할 수 있어요.');
+                    setPopupOpen(true);
+                    setPopupType('info');
+                } else {
+                    console.log('밥약 신청 실패');
+                    console.log(message);
+                }
+            }));
+        }
+    }
+    
+    const handleInfoConfirm = () => {
+        setPopupOpen(false);
+        router.push('/mealPromise');
     }
 
     return (
@@ -85,6 +119,7 @@ const enrollOpenChat = () => {
                 message={popupMessage}
                 description={popupDescription}
                 onConfirm={handleQuestionConfirm}
+                onInfoConfirm={handleInfoConfirm}
             />
         </ThemeProvider>
     );

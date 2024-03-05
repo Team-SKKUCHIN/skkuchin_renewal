@@ -6,10 +6,7 @@ import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
 import style from 'styled-components';
 
-const CustomCalendar = () => {
-  const defaultDate = [new Date(), new Date()]
-  const [dates, setDates] = useState(defaultDate); 
-
+const CustomCalendar = ({ dates, onDateChange, editable }) => {
   const isToday = (date) => {
     const today = new Date();
     return date.getFullYear() === today.getFullYear() &&
@@ -29,19 +26,19 @@ const CustomCalendar = () => {
     return dayjs(date).format(`YYYY.MM.DD ${formmatedKoreanDay}`);
   };
 
-  const handleDateChange = (newDate) => {
-    setDates(newDate);
-  };
-
   const tileDisabled = ({ date }) => {
     return isPastDate(date) && !isToday(date);
   };
 
-  const selectedDatesText = dates === defaultDate 
+  const allTileDisabled = ({ date }) => {
+    return true;
+  };
+
+  const selectedDatesText = dates.length === 0
     ? '날짜를 선택해주세요'
     : `${formatDate(dates[0])} - ${formatDate(dates[1])}`;
 
-  return (
+    return (
     <ThemeProvider theme={theme}>
       <CssBaseline/>
       <div>
@@ -51,7 +48,7 @@ const CustomCalendar = () => {
           <Grid style={{ border: '1px solid #E2E2E2', borderRadius: '20px', width: '100%',  padding: '18px 12px' }}>
             <CalendarDesign>
                 <Calendar
-                    onChange={handleDateChange}
+                    onChange={onDateChange}
                     value={dates}
                     selectRange={true} 
                     next2Label={null}
@@ -60,8 +57,8 @@ const CustomCalendar = () => {
                     formatDay={(locale, date) =>
                         date.toLocaleString('en', { day: 'numeric' })
                     }
-                    calendarType="US"
-                    tileDisabled={tileDisabled}
+                    calendarType="gregory"
+                    tileDisabled={editable ? tileDisabled : allTileDisabled}
                 />
             </CalendarDesign>
           </Grid>
@@ -75,7 +72,6 @@ const CalendarDesign = style.div`
         width: 100%;
         background-color: #fff;
         color: #3C3C3C;
-        border-radius: 8px;
         font-family: 'NanumSquareRound, sans-serif',
         margin: 0;
         border-color: transparent;
@@ -94,6 +90,11 @@ const CalendarDesign = style.div`
        .react-calendar__navigation button[disabled] {
         background-color: #f0f0f0;
        }
+       .react-calendar__tile:disabled {
+          background-color: #fff;
+          color: #ccc;
+          cursor: not-allowed;
+        }
        .react-calendar__month-view__weekdays {
         background: white;
         abbr { /*월,화,수... 글자 부분*/
@@ -130,10 +131,11 @@ const CalendarDesign = style.div`
         color: #FC9712;
        }
        .react-calendar__tile--active {
-        background: #FC9712;
-        color: white;
-        font-weight: bold;
-      }
+        background: #FC9712 !important;
+        color: white !important;
+        font-weight: bold !important;
+       }
+
        .react-calendar__tile--rangeEnd {
         border-radius: 0 25px 25px 0;
        }
@@ -143,11 +145,11 @@ const CalendarDesign = style.div`
        .react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd {
         border-radius: 25px;
       },
-      .react-calendar__tile:disabled {
-        background-color: #fff;
-        color: #ccc;
-        cursor: not-allowed;
+      .react-calendar__tile.react-calendar__tile--hasActive {
+        background: #FC9712;
+        color: white;
       }
+
     `
 
 export default CustomCalendar;

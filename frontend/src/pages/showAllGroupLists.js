@@ -1,72 +1,58 @@
-import { useState } from 'react';
-import { ThemeProvider, CssBaseline, IconButton } from '@mui/material';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { ThemeProvider, CssBaseline, IconButton, Typography } from '@mui/material';
 import theme from '../theme/theme';
 import GroupItem from '../components/MealPromise/GroupItem';
 import Header from '../components/MealPromise/Header';
 import Filter from '../components/MealPromise/Filter';
 import { useRouter } from 'next/router';
 import AddIcon from '@mui/icons-material/Add';
-
-const dummyProfiles = [
-    {
-        groupName: '그룹명1',
-        gender: '여자',
-        mbti: 'GROUP',
-        introduction:
-            '그룹 한줄 소개입니다',
-    },
-    {
-        groupName: '그룹명2',
-        gender: '남자',
-        mbti: 'GROUP',
-        introduction:
-            '긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 긴 그룹 한줄 소개 입니다. 👀',
-    },
-    {
-        groupName: '그룹명3',
-        gender: '남자',
-        mbti: 'GROUP',
-        introduction:
-            '그룹 한줄 소개입니다 👀',
-    },
-    {
-        groupName: '그룹명4',
-        gender: '여자',
-        mbti: 'GROUP',
-        introduction:
-            '그룹 한줄 소개입니다 👀',
-    },
-    {
-        groupName: '그룹명5',
-        gender: '남자',
-        mbti: 'GROUP',
-        introduction:
-            '그룹 한줄 소개입니다 👀',
-    },
-
-];
+import { load_all_group_profile } from '../actions/groupProfile/groupProfile';
+import { useSelector, useDispatch } from 'react-redux';
 
 const ShowAllGroupLists = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
+
+    const user = useSelector(state => state.auth.user);
+    const groups = useSelector(state => state.groupProfile.allGroupProfiles);
+
+    useEffect(() => {
+        if(groups === null) { 
+            dispatch(load_all_group_profile());
+        }
+    }, []);
+
     const [selectedFilter, setSelectedFilter] = useState('전체');
-    const filterOptions = ['전체', '여자', '남자'];
+    const filterOptions = ['전체', '여성', '남성'];
 
     const filteredProfiles =
         selectedFilter === '전체'
-        ? dummyProfiles
-        : dummyProfiles.filter((group) => group.gender === selectedFilter);
+        ? groups
+        : groups.filter((group) => group.gender == selectedFilter);
 
-    const [selectedGroup, setSelectedGroup] = useState(null);
     const handleGroupClick = (id) => {
-        setSelectedGroup(id);
         router.push(`/showGroupProfile?id=${id}`);
+    }
+
+    const handleBackClick = () => {
+        router.push(`/mealPromise`);
+    }
+
+    const handleAddBtnClick = () => {
+        if(user && user.phone_number !== null) {
+            router.push('/makeGroupProfile');
+        } else {
+            alert('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+            router.push('/verification');
+        }
     }
 
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             {/* header */}
-            <Header title="여럿이서 먹어요" onBackClick={()=> router.push('/mealPromise')} />
+            <Header title="여럿이서 먹어요" onBackClick={handleBackClick} />
 
             {/* 필터 */}
             <Filter
@@ -77,9 +63,9 @@ const ShowAllGroupLists = () => {
 
             {/* 목록 */}
             <div style={{ overflow: 'scroll', padding: '12px 24px' }}>
-                {filteredProfiles.length !== 0 ? (
+                {filteredProfiles && filteredProfiles.length !== 0 ? (
                     filteredProfiles.map((group, index) => (
-                        <div style={{ marginBottom: '15px' }} key={index} onClick={() => handleGroupClick(group.id)}>
+                        <div style={{ marginBottom: '12px' }} key={index} onClick={() => handleGroupClick(group.id)}>
                             <GroupItem group={group} />
                         </div>
                     ))
@@ -98,7 +84,7 @@ const ShowAllGroupLists = () => {
                     height: '52px',
                     width: '52px'
                 }}
-                onClick={() => router.push('/makeGroupProfile')}
+                onClick={handleAddBtnClick}
                 >
                 <AddIcon fontSize="medium" />
                 </IconButton>

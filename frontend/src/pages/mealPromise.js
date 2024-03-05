@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ThemeProvider, CssBaseline, Typography, Button, Grid, Divider, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
+import { useSelector, useDispatch } from "react-redux";
 import AddIcon from '@mui/icons-material/Add';
 import UpperBar from "../components/UpperBar";
 import theme from "../theme/theme";
@@ -8,6 +9,8 @@ import styled from '@emotion/styled';
 import BannerCarousel from "../components/MealPromise/BannerCarousel";
 import Groups from "../components/Matching/Groups";
 import Friends from "../components/Matching/Friends";
+import { load_all_group_profile, get_my_group_profile } from "../actions/groupProfile/groupProfile";
+import { load_matching_info } from "../actions/matchingUser/matchingUser";
 
 const LayoutContainer = styled.div`
   ::-webkit-scrollbar {
@@ -20,6 +23,14 @@ const LayoutContainer = styled.div`
 
 const MealPromisePage = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const user = useSelector(state => state.auth.user);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const matchingUser = useSelector(state => state.matchingUser.matchingUser);
+  const allGroupProfiles = useSelector(state => state.groupProfile.allGroupProfiles);
+  const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
+
   const [activeStep, setActiveStep] = useState(0);
   const [isScrollingDown, setIsScrollingDown] = useState(false);
 
@@ -55,6 +66,21 @@ const MealPromisePage = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+  }, []);
+
+  const handleAddBtnClick = () => {
+    if(user && user.phone_number !== null) {
+        router.push('/makeGroupProfile');
+    } else {
+        alert('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+        router.push('/verification');
+    }
+  }
+
+  useEffect(() => {
+    if(allGroupProfiles === null) dispatch(load_all_group_profile());
+    if(isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
+    if(isAuthenticated && matchingUser === null) dispatch(load_matching_info());
   }, []);
 
   return (
@@ -117,7 +143,7 @@ const MealPromisePage = () => {
                 height: '52px',
                 width: '52px'
               }}
-              onClick={() => router.push('/makeGroupProfile')}
+              onClick={handleAddBtnClick}
             >
               <AddIcon fontSize="medium" />
             </IconButton>
@@ -134,7 +160,7 @@ const MealPromisePage = () => {
                 height: '52px',
                 boxShadow: 'none',
               }}
-              onClick={() => router.push('/makeGroupProfile')}
+              onClick={handleAddBtnClick}
             >
               + 그룹 프로필 작성
             </Button>

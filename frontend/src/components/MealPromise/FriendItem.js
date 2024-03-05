@@ -30,13 +30,16 @@ const FriendItem = ({ candidate }) => {
                     <Grid item sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '4px 12px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
                         {candidate.mbti}
                     </Grid>
-                    {(candidate.keywords) != null ?
-                        ((candidate.keywords).slice(0, 2).map((interest, index)=> (
-                            <Grid item key={index} sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '4px 12px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
-                                {interest}
-                            </Grid>
-                        )))
-                    : null}
+                    {
+                        (candidate.keywords) != null &&
+                            <>
+                                {(Object.values(candidate.keywords).flat().slice(0, 2).map((keyword, index) => (
+                                    <Grid item key={index} sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '4px 12px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
+                                        {keyword}
+                                    </Grid>
+                                )))}
+                            </>
+                    }
                 </Grid >
                 {/* <Typography sx={{ fontSize: '13px', height: '36px', lineHeight: '18px', fontWeight: 600, color: '#3C3C3C', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2}}> */}
                 <Typography sx={{ fontSize: '13px', fontWeight: 600, color: '#3c3c3c', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2}}>

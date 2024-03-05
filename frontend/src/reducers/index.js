@@ -20,6 +20,7 @@ import magazineReducer from './magazine';
 import worldcupReducer from './worldcup';
 import groupChatRequestReducer from './groupChatRequest';
 import personalChatRequestReducer from './personalChatRequest';
+import groupProfileReducer from './groupProfile';
 
 export default combineReducers({
     auth: authReducer,
@@ -43,4 +44,5 @@ export default combineReducers({
     worldcup: worldcupReducer,
     groupChatRequest: groupChatRequestReducer,
     personalChatRequest: personalChatRequestReducer,
+    groupProfile: groupProfileReducer
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import CustomCalendar from '../Custom/CustomCalendar';
 
-const CalendarContainer = () => {
+const CalendarContainer = ({ dates, onDateChange, editable }) => {
     return (
         <Grid>
             <div style={{display: 'flex', gap: 5}}>
@@ -12,7 +12,7 @@ const CalendarContainer = () => {
 
             <div>
                 <Typography sx={{ fontSize: 14, color: '#3C3C3C', mt: '15px' }}>밥약 선호 기간</Typography>
-                <CustomCalendar />
+                <CustomCalendar dates={dates} onDateChange={onDateChange} editable={editable} />
             </div>
         </Grid>
     )

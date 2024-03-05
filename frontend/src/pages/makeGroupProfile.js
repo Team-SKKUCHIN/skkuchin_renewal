@@ -1,20 +1,32 @@
-import React, { useState } from 'react';
-import { CssBaseline, ThemeProvider, Typography, Grid, TextField, Button, Divider } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { CssBaseline, ThemeProvider, Typography, Grid, TextField, Button, Divider, InputAdornment } from '@mui/material';
 import theme from '../theme/theme';
 import Header from '../components/MealPromise/Header';
 import MemberInfoInput from '../components/MealPromise/MemberInfoInput';
 import CalendarContainer from '../components/MealPromise/CalendarContainer';
 import Popup from '../components/Custom/Popup';
+import { add_group_profile, get_random_nickname, check_group_name_duplicate } from '../actions/groupProfile/groupProfile';
+import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
 
 const MakeGroupProfile = () => {
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user);
+
+    const [generatedName, setGeneratedName] = useState(''); 
     const [groupName, setGroupName] = useState('');
-    const [gender, setGender] = useState('');
+    const [gender, setGender] = useState(user && user.gender || '');
     const [groupIntro, setGroupIntro] = useState(''); 
-    
+
+    const [selectedDates, setSelectedDates] = useState([]);
+    const [isDateEdited, setIsDateEdited] = useState(false);
+
     const [friends, setFriends] = useState([
-        { name: '친구1', studentId: '', major: '', introduction: '' },
-        { name: '친구2', studentId: '', major: '', introduction: '' },
-        { name: '친구3', studentId: '', major: '', introduction: '' },
+        { label: '친구1', studentId: user ? user.student_id.toString() : '', major: user && user.major, introduction: '' },
+        { label: '친구2', studentId: '', major: '', introduction: '' },
+        { label: '친구3', studentId: '', major: '', introduction: '' },
       ]);
     
     const updateFriendData = (index, data) => {
@@ -28,8 +40,63 @@ const MakeGroupProfile = () => {
     const handleGenderClick = (e) => {
         setGender(e.target.value)
     }
-        
-    const isValid = groupName !== '' && gender !== '' && groupIntro !== '' && friends && friends.every((friend) => friend.studentId !== '' && friend.major !== '' && friend.introduction !== '');
+
+    const handleDateChange = (newDate) => {
+        console.log('날짜 변경! newDate', newDate);
+        setSelectedDates(newDate);
+        setIsDateEdited(true);
+    };
+
+    const [isNicknameEditable, setIsNicknameEditable] = useState(false);
+    const [isDuplicateCheckVisible, setIsDuplicateCheckVisible] = useState(false);
+    const [isValidNickname, setIsValidNickname] = useState(null);
+    const [guideText, setGuideText] = useState('');
+    const [showGuideText, setShowGuideText] = useState(false);
+    
+    const getRandomNickname = async () => {
+        const randomNickname = await dispatch(get_random_nickname());
+        setGroupName(randomNickname);
+        setGeneratedName(randomNickname);
+    };
+
+    useEffect(() => {
+        getRandomNickname();
+    }, []);
+
+    useEffect(() => {
+        if(generatedName === '') return;
+        const isSameAsGeneratedName = groupName === generatedName;
+        setIsDuplicateCheckVisible(!isSameAsGeneratedName);
+    }, [groupName]);
+
+    const handleDupicateCheck = async () => {
+       const isValid = await check_group_name_duplicate(groupName);
+       setIsValidNickname(isValid);
+       console.log(groupName, isValid);
+    };
+
+    useEffect(() => {
+        if (isValidNickname === null) return;
+        else {
+            if (!isValidNickname) {
+                setGuideText('이미 사용중인 그룹명입니다.');
+            } else {
+                setGuideText('사용 가능한 그룹명입니다.');
+                setIsNicknameEditable(false);
+            }
+            setShowGuideText(true); 
+        }
+    }, [isValidNickname]);
+
+    const handleEditBtnClick = () => {
+        console.log('edit btn clicked', isNicknameEditable);
+        setIsNicknameEditable(!isNicknameEditable);
+        setGuideText('');
+        setShowGuideText(false);
+        setIsValidNickname(null);
+    };
+
+    const isValid = groupName !== '' && gender !== '' && groupIntro !== '' && friends && friends.every((friend) => friend.studentId !== '' && friend.major !== '' && friend.introduction !== '' && ((generatedName !== groupName) ? isValidNickname : true));
 
     // 팝업
     const [popupOpen, setPopupOpen] = useState(false);
@@ -49,10 +116,33 @@ const MakeGroupProfile = () => {
     };
 
     const handleQuestionConfirm = () => {
-        setPopupMessage('프로필 등록이 완료되었어요!');
-        setPopupDescription('한줄 소개 수정은 마이페이지에서 할 수 있어요.');
-        setPopupOpen(true);
-        setPopupType('info');
+        const formattedDates = selectedDates[0] || selectedDates[1] ? selectedDates.map((date) => dayjs(date).format('YYYY-MM-DD')) : ['',''];
+
+        const profileData = {
+            group_name: groupName,
+            group_introduction: groupIntro,
+            friend1_introduction: friends[0].introduction,
+            friend2_introduction: friends[1].introduction,
+            friend2_major: friends[1].major,
+            friend2_student_id: parseInt(friends[1].studentId, 10),
+            friend3_introduction: friends[2].introduction,
+            friend3_major: friends[2].major,
+            friend3_student_id: parseInt(friends[2].studentId, 10),
+            meeting_start_date: isDateEdited ? formattedDates[0] : '', 
+            meeting_end_date: isDateEdited ? formattedDates[1] : '',
+        }
+
+        dispatch(add_group_profile(profileData, ([result, message]) => {
+            if(result) {
+                setPopupMessage('프로필 등록이 완료되었어요!');
+                setPopupDescription('한줄 소개 수정은 마이페이지에서 할 수 있어요.');
+                setPopupOpen(true);
+                setPopupType('info');
+                router.push('/mealPromise')
+            } else {
+                alert(message);
+            }
+        }));
     }
 
     return (
@@ -71,12 +161,37 @@ const MakeGroupProfile = () => {
                     `}
                 </style>
                 <Typography sx={{fontSize: 14, color: '#3C3C3C', mb: '8px'}}>그룹명</Typography>
-                <TextField sx={{mb: '18px'}} variant='outlined' fullWidth placeholder='그룹명을 입력해주세요 (필수)' value={groupName} onChange={(event) => setGroupName(event.target.value)}/>
-
+                <TextField 
+                    disabled={!isNicknameEditable}
+                    InputProps={{ style: { height: 48, padding: '0 6px', backgroundColor: groupName === generatedName ? '#FBFBFB' : '#fff', color: '#3C3C3C'},
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            { !isNicknameEditable &&
+                                <Button onClick={handleEditBtnClick} style={{color: '#BABABA', fontSize: 16, fontWeight: 700, padding: 0, textTransform: 'none'}}>
+                                    수정
+                                </Button>
+                            }
+                        </InputAdornment>
+                    ), }}
+                    sx={{mb: isDuplicateCheckVisible ? '8px' : '18px', color: 'red'}} variant='outlined' fullWidth placeholder='그룹명을 입력해주세요 (필수)' 
+                    value={groupName} 
+                    onChange={(event) => setGroupName(event.target.value)}/>
+                    {isDuplicateCheckVisible && (
+                        <div style={{display: 'flex', flexDirection: 'row',  marginBottom: '18px', alignItems: 'center', gap: 6}}>
+                            <Button onClick={handleDupicateCheck} style={{height: 28, backgroundColor: '#F2F2F2', color: '#3C3C3C', border: '1px solid #BABABA', borderRadius: 100, fontSize: '13px', padding: '7px 10px'}}>
+                                중복확인
+                            </Button>
+                            {
+                                showGuideText && isValidNickname ? 
+                                    <Typography sx={{fontSize: 14, color: '#FFAC0B', fontWeight: 600}}>{guideText}</Typography>
+                                : <Typography sx={{fontSize: 14, color: '#F47806', fontWeight: 600}}>{guideText}</Typography>
+                            }
+                        </div>
+                    )}
                 <Typography sx={{fontSize: 14, color: '#3C3C3C', mb: '8px'}}>성별</Typography>
                 <Grid container sx={{mb: '18px'}}>
-                    <Button value="남성" onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '8px 0 0 8px', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '남성' ? '#FFFCE4' : '#fff'}}>남</Button>
-                    <Button value="여성" onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '0 8px 8px 0', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '여성' ? '#FFFCE4' : '#fff'}}>여</Button>
+                    <Button value="남성" disabled onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '8px 0 0 8px', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '남성' ? '#FBFBFB' : '#fff'}}>남</Button>
+                    <Button value="여성" disabled onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '0 8px 8px 0', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '여성' ? '#FBFBFB' : '#fff'}}>여</Button>
                 </Grid>
 
                 <Typography sx={{fontSize: 14, color: '#3C3C3C', mb: '8px'}}>그룹 한줄 소개</Typography>
@@ -88,7 +203,7 @@ const MakeGroupProfile = () => {
                 {friends && friends.map((friend, index) => (
                     <MemberInfoInput
                         key={index}
-                        friendName={friend.name}
+                        label={friend.label}
                         studentId={friend.studentId}
                         major={friend.major}
                         introduction={friend.introduction}
@@ -99,7 +214,7 @@ const MakeGroupProfile = () => {
                 <Divider orientation="horizontal" sx={{ border: '5px solid #F2F2F2', margin: '25px -24px' }} />
                 
                 {/* 일정 */}
-                <CalendarContainer />
+                <CalendarContainer dates={selectedDates} onDateChange={handleDateChange} editable={true} />
 
                 {/* 등록하기 버튼 */}
                 <Button onClick={handleSubmit} fullWidth sx={{backgroundColor: isValid ? '#FFCE00' : '#E2E2E2', color: '#fff', fontSize: 16, fontWeight: 700, borderRadius: '8px', height: 56, m: '60px 0 10px', '&:hover': { backgroundColor: isValid ? '#FFCE00' : '#E2E2E2'}, '&:active': { backgroundColor: isValid ? '#FFCE00' : '#E2E2E2' }}}>

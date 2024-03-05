@@ -17,17 +17,22 @@ const majorList = [
     '인문과학계열', '사회과학계열', '자연과학계열', '공학계열'
 ];
 
-const MajorInput = ({ value, onChange }) => {
+const MajorInput = ({ value, onChange, editable = true }) => {
+  const isValidInitialValue = majorList.includes(value);
+  const initialValue = isValidInitialValue ? value : null;
+
   return (
     <Autocomplete
-      value={value}
+      value={initialValue}
+      readOnly={!editable}
       sx={{
         '& .MuiOutlinedInput-notchedOutline': {
           border: 'none'
         },
         '& input': {
           fontSize: '16px',
-          padding: '0'
+          padding: '0',
+          color: editable ? '#3C3C3C' : '#9E9E9E',
         },
         height: '56px',
         border: '1px solid #E2E2E2',
@@ -36,7 +41,8 @@ const MajorInput = ({ value, onChange }) => {
         appearance: 'none',
         marginLeft: '8px',
         fontSize: '16px',
-        padding: '0'
+        padding: '0',
+        backgroundColor: editable ? 'white' : '#FBFBFB',
       }}
       onChange={(e, newValue) => onChange(newValue)}
       options={majorList.sort()}

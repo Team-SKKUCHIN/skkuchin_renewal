@@ -2,7 +2,6 @@ import { LOGOUT_SUCCESS } from '../actions/auth/types';
 import {
     LOAD_GROUP_REQUEST_SUCCESS,
     LOAD_GROUP_REQUEST_FAIL,
-
 } from '../actions/groupChatRequest/types';
 
 const initialState = {
