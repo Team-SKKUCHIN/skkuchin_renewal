@@ -96,6 +96,7 @@ export const reply_group_request = (requestId, status, callback) => async dispat
         });
         
         const apiRes = await res.json();
+        await dispatch(load_group_requests());
 
         if (res.status === 200) {
             if (callback) callback([true, apiRes.message]);

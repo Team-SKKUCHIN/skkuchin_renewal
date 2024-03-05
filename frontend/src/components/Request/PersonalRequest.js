@@ -35,7 +35,7 @@ export const PersonalRequest = ({ request }) => {
                     {Object.values(request.keywords)
                         .flat()
                         .slice(0, 2)
-                        .map((keyword) => <KeywordComponent keyword={keyword} />
+                        .map((keyword) => <KeywordComponent key={keyword} keyword={keyword} />
                     )}
                 </div>
                 <p style={{ margin: '10px 0 0', color: '#3C3C3C', fontWeight: 700 }}>

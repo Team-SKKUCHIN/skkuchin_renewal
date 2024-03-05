@@ -2,7 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogActions, Button, IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-const Popup = ({ open, handleClose, type, message, description, onConfirm, onInfoConfirm}) => {
+const Popup = ({ open, handleClose, type, message, description, confirmText=null, onConfirm }) => {
     const handleQuestionConfirm = () => {
         onConfirm();
         handleClose();
@@ -56,6 +56,16 @@ const Popup = ({ open, handleClose, type, message, description, onConfirm, onInf
                     </Button>
                     <Button disableElevation fullWidth onClick={handleQuestionConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
                         등록하기
+                    </Button>
+                </div>
+                )}
+                {type === 'request' && (
+                <div style={{display: 'flex', width: '100%', flexDirection: 'row', gap: '8px'}}>
+                    <Button disableElevation fullWidth onClick={handleClose} sx={{ backgroundColor: '#F2F2F2', color: '#BABABA', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                        아니요
+                    </Button>
+                    <Button disableElevation fullWidth onClick={handleQuestionConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                        {confirmText}
                     </Button>
                 </div>
                 )}

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import skkuchin.service.domain.Chat.GroupChatRequest;
 import skkuchin.service.domain.Chat.GroupProfile;
 import skkuchin.service.domain.Chat.ResponseType;
@@ -46,6 +47,7 @@ public class GroupChatRequestDto {
 
     @Getter
     @AllArgsConstructor
+    @RequiredArgsConstructor
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class ReplyRequest {
         @NotNull
@@ -62,10 +64,14 @@ public class GroupChatRequestDto {
 
         private Gender gender;
 
-        public ProfileResponse(GroupProfile groupProfile) {
+        @JsonProperty
+        private boolean isMine;
+
+        public ProfileResponse(GroupProfile groupProfile, boolean isMine) {
             this.id = groupProfile.getId();
             this.groupName = groupProfile.getGroupName();
             this.gender = groupProfile.getFriend1().getGender();
+            this.isMine = isMine;
         }
     }
 
@@ -108,7 +114,7 @@ public class GroupChatRequestDto {
                 ProfileResponse receiverProfile) {
             super(groupChatRequest, senderProfile, receiverProfile);
             this.confirmedAt = groupChatRequest.getConfirmedAt();
-            this.link = groupChatRequest.getLink();
+            this.link = groupChatRequest.getStatus() == ResponseType.ACCEPT ? groupChatRequest.getLink() : null;
         }
     }
 

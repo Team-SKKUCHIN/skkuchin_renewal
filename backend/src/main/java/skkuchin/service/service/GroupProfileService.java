@@ -81,7 +81,8 @@ public class GroupProfileService {
     public void createGroupProfile(GroupProfileDto.PostRequest dto, AppUser user) {
         List<Sms> smsList = smsRepo.findByUser(user);
 
-        if (groupProfileRepo.findMyGroupProfiles(user.getId()).size() == 5) {
+        if (groupProfileRepo.findMyGroupProfiles(user.getId()).stream()
+                .filter(profile -> profile.getStatus() == ProfileStatus.ACTIVE).count() == 5) {
             throw new CustomRuntimeException("그룹 프로필은 5개 이하로만 생성 가능합니다");
         }
         if (!user.getNickname().startsWith("test") && (smsList.isEmpty() || !smsList.get(0).isVerified())) {
