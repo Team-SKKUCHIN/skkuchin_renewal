@@ -4,31 +4,10 @@ import styled from '@emotion/styled';
 import { CssBaseline, ThemeProvider, Typography, Button } from '@mui/material';
 import Header from '../components/MealPromise/Header';
 import { useRouter } from 'next/router';
+import { useSelector, useDispatch } from 'react-redux';
 import MyGroupProfileCard from '../components/MealPromise/MyGroupProfileCard';
-
-const dummyGroup= [
-    {
-        id: 1,
-        groupName: '나의 그룹1',
-        gender: '여',
-        mbti: 'GROUP',
-        introduction: '첫번째 그룹 한줄 소개입니다',
-    },
-    {
-        id: 2,
-        groupName: '나의 그룹2',
-        gender: '남',
-        mbti: 'GROUP',
-        introduction: '두번째 그룹 한줄 소개입니다',
-    },
-    {
-        id: 3,
-        groupName: '나의 그룹3',
-        gender: '여',
-        mbti: 'GROUP',
-        introduction: '마지막 한줄 소개입니다',
-    },
-]
+import { get_my_group_profile } from '../actions/groupProfile/groupProfile';
+import { Loading } from '../components/Loading';
 
 const LayoutContainer = styled.div`
   ::-webkit-scrollbar {
@@ -43,20 +22,32 @@ const LayoutContainer = styled.div`
 
 const selectMyGroupProfile = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
 
-    const [selectedProfile, setSelectedProfile] = useState(dummyGroup[0]);
+    const myGroups = useSelector(state => state.groupProfile.myGroupProfiles);
+
+    const [selectedProfile, setSelectedProfile] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const handleSubmit = () => {
         console.log("확인 버튼 클릭");
         router.push({
             pathname: '/enrollOpenChat',
-            query: { type: 'group' },
+            query: { type: 'group'},
         });
+        localStorage.setItem('myProfileId', selectedProfile.id);
     }
 
     useEffect(() => {
-        console.log(selectedProfile.id);
-    }, [selectedProfile]);
+        if(myGroups === null) dispatch(get_my_group_profile());
+    }, []);
+
+    useEffect(() => {
+        setLoading(false);
+        if(myGroups && myGroups.length > 0) {
+            setSelectedProfile(myGroups[0]);
+        }
+    },[myGroups]);
 
     return (
         <LayoutContainer>
@@ -70,19 +61,22 @@ const selectMyGroupProfile = () => {
                         나의 그룹을 선택해주세요.
                     </Typography>
                 </div>
-
-                <div style={{overflowX: 'auto', flexWrap: 'nowrap', display: 'flex', flexDirection: 'row', gap: 20, padding: '0 24px'}}>
-                    {dummyGroup.map((group, index) => (
-                        <MyGroupProfileCard
-                            key={index}
-                            group={group}
-                            selected={selectedProfile.id == group.id}
-                            onClick={() => setSelectedProfile(group)}
-                        />
-                    ))}
-                </div>
+                {
+                    !loading && myGroups &&
+                    <div style={{overflowX: myGroups.length > 1 ? 'auto' : 'hidden', flexWrap: 'nowrap', display: 'flex', flexDirection: 'row', gap: 8, padding: '0 24px', justifyContent: myGroups.length === 1 ? 'center' : 'flex-start'}}>
+                        {myGroups.map((group, index) => (
+                            <MyGroupProfileCard
+                                key={index}
+                                group={group}
+                                selected={selectedProfile && (selectedProfile.id == group.id)}
+                                onClick={() => setSelectedProfile(group)}
+                            />
+                        ))}
+                    </div>
+                }
                 <Button
                     onClick={handleSubmit}
+                    disabled={selectedProfile === null}
                     color="primary"
                     variant="contained"
                     disableElevation
@@ -90,6 +84,8 @@ const selectMyGroupProfile = () => {
                 >
                     다음
                 </Button>
+
+                { loading && <Loading />}
 
             </ThemeProvider>
         </LayoutContainer>

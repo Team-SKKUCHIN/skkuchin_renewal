@@ -2,7 +2,7 @@ import { API_URL } from '../../config/index';
 import { getToken, request_refresh } from '../auth/auth';
 import { 
     LOAD_PERSONAL_REQUEST_SUCCESS,
-    LOAD_PERSONAL_REQUEST_FAIL
+    LOAD_PERSONAL_REQUEST_FAIL,
 } 
 from './types';
 
@@ -63,7 +63,8 @@ export const send_personal_request = (link, receiverId, callback) => async dispa
         });
         
         const apiRes = await res.json();
-
+        console.log(res.status, apiRes.message);
+        
         if (res.status === 201) {
             if (callback) callback([true, apiRes.message]);
         }

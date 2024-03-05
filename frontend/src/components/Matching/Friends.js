@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button, Card, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Typography, Grid, Divider } from '@mui/material';
 import { displayMBTI } from './MBTIList';
 import { load_candidate } from '../../actions/candidate/candidate'
-import { load_request_id, request_chat } from '../../actions/chat/chatRoom';
+
 import noCharacter from '../../image/mbti/profile/noCharacter.png'
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -52,7 +52,8 @@ const Friends = () => {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    const user = useSelector(state => state.matchingUser.matchingUser);
+    const user = useSelector(state => state.auth.user);
+    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
     const candidate = useSelector(state => state.candidate.candidate);
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
@@ -61,14 +62,8 @@ const Friends = () => {
     const [selectedPersonId, setSelectedPersonId] = useState(null);
     
     useEffect(() => {
-        if (isAuthenticated) {
-            dispatch(load_request_id(([result, message]) => {
-                if (result) {
-                    dispatch(load_candidate());
-                }
-            }))
-        }
-    }, [isAuthenticated]);
+        if(candidate === null) dispatch(load_candidate());
+    }, []);
 
     // const [open, setOpen] = useState(false);
 
@@ -101,10 +96,29 @@ const Friends = () => {
         }
     }
 
-    const handleFriendClick = (friendId) => {
-        router.push(`/showFriendProfile?id=${friendId}`);
+    const handleFriendClick = (friend) => {
+        localStorage.setItem('candidateId', friend.id);
+        localStorage.setItem('selectedFriend', JSON.stringify(friend));
+        router.push(`/showFriendProfile`);
     };
 
+    const handleRequestBtnClick = (id) => {
+        if (!isAuthenticated) 
+            return alert('로그인이 필요한 서비스입니다.');
+        if (!matchingUser) 
+            return alert('1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.');
+        if (matchingUser && !matchingUser.matching) 
+            return alert('1:1 밥약을 신청하기 위해선 개인 프로필을 공개로 변경해주세요');
+        if (user && user.phone_number === null) 
+            return alert("밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.");
+    
+        localStorage.setItem('candidateId', id);
+        router.push({
+            pathname: '/enrollOpenChat',
+            query: { type: 'friend'},
+        });
+    };
+    
     return (
         <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0'}}>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
@@ -134,13 +148,16 @@ const Friends = () => {
                         <Grid item sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
                             {person.mbti}
                         </Grid>
-                        {(person.keywords) != null ?
-                            ((person.keywords).slice(0, 2).map((interest, index)=> (
-                                <Grid item key={index} sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
-                                    {interest}
-                                </Grid>
-                            )))
-                        : null}
+                        {
+                            (person.keywords) != null &&
+                            <>
+                                {(Object.values(person.keywords).flat().slice(0, 2).map((keyword, index) => (
+                                    <Grid item key={index} sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
+                                        {keyword}
+                                    </Grid>
+                                )))}
+                            </>
+                        }
                     </Grid >
                     <Typography sx={{ fontSize: '14px', height: '40px', lineHeight: '20px', fontWeight: 400, color: '#3C3C3C', textAlign: 'center', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
                         {'"'+person.introduction+'"'}
@@ -150,7 +167,7 @@ const Friends = () => {
                             disableElevation
                             disableTouchRipple
                             key="profile-button"
-                            onClick={() => handleFriendClick(person.id)}
+                            onClick={() => handleFriendClick(person)}
                             sx={{
                                 color: '#777777',
                                 fontSize: '14px',
@@ -189,7 +206,7 @@ const Friends = () => {
                                 disableElevation
                                 disableTouchRipple
                                 key="apply-button"
-                                onClick={() => router.push('/enrollOpenChat', { type: 'friend'})}
+                                onClick={()=> handleRequestBtnClick(person.id)}
                                 sx={{
                                     color: '#FFAC0B',
                                     fontSize: '14px',
@@ -263,14 +280,14 @@ const Friends = () => {
                             <Grid item sx={{width: '169px', textAlign: 'center', pb: '8px'}}>
                                 <Typography sx={{ fontSize:'13px', fontWeight: '500', whiteSpace: 'pre-wrap'}}>
                                     {
-                                        user?.matching === false ?
+                                        matchingUser?.matching === false ?
                                         '성대 학우와 채팅을 나누시려면\n\n[마이페이지]에서\n매칭 ON/OFF 버튼을 켜주세요 👀' 
                                         : '성대 학우와 채팅을 나누시려면 매칭 프로필을 등록해주세요 👀'
                                     }
                                 </Typography>
                             </Grid>
                             {
-                                user?.matching === false ? null
+                                matchingUser?.matching === false ? null
                                 :
                                 <Button onClick={()=>handleSettingOpen()}  sx={{backgroundColor: '#FFCE00', borderRadius: '30px', color: '#fff', fontSize: '12px', fontWeight: '700', textAlign: 'center', p: '8.5px 11.5px', m : '5px 0px'}}>
                                     프로필 등록하기

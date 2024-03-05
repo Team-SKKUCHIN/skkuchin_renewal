@@ -1,27 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Dialog, DialogTitle,DialogContent, DialogActions, Button, IconButton, Typography } from '@mui/material';
+import React from 'react';
+import { Dialog, DialogContent, DialogActions, Button, IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useRouter } from 'next/router';
 
-const Popup = ({ open, handleClose, type, message, description, onConfirm }) => {
-    const router = useRouter();
-    const [infoBtnClicked, setInfoBtnClicked] = useState(false);
-
+const Popup = ({ open, handleClose, type, message, description, onConfirm, onInfoConfirm}) => {
     const handleQuestionConfirm = () => {
-        handleClose();
         onConfirm();
-    }
-
-    const handleInfoConfirm = () => {
         handleClose();
-        setInfoBtnClicked(true);
     }
-
-    useEffect(() => {
-        if(infoBtnClicked) {
-            router.push('/mealPromise');
-        }
-    }, [infoBtnClicked]);
 
     return (
         <Dialog open={open} onClose={handleClose}>
@@ -55,7 +40,7 @@ const Popup = ({ open, handleClose, type, message, description, onConfirm }) => 
             </DialogContent>
             <DialogActions sx={{p: '16px 0 0'}}>
                 {type === 'info' && (
-                    <Button disableElevation fullWidth onClick={handleInfoConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                    <Button disableElevation fullWidth onClick={onInfoConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
                         확인
                     </Button>
                 )}

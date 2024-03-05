@@ -2,16 +2,32 @@ import React from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 import { displayMBTI } from '../Matching/MBTIList';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 
 const FriendProfile = ({ candidate }) => {
     const router = useRouter();
+
+    const user = useSelector(state => state.auth.user);
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
+
     const handleSubmit = () => {
-        console.log("밥약 신청하기 버튼 클릭");
+        if (!isAuthenticated) 
+            return alert('로그인이 필요한 서비스입니다.');
+        if (!matchingUser) 
+            return alert('1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.');
+        if (matchingUser && !matchingUser.matching) 
+            return alert('1:1 밥약을 신청하기 위해선 개인 프로필을 공개로 변경해주세요');
+        if (user && user.phone_number === null) 
+            return alert("밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.");
+
+        localStorage.setItem('candidateId', candidate.id);
         router.push({
             pathname: '/enrollOpenChat',
-            query: { type: 'friend' },
+            query: { type: 'friend'},
         });
     }
+
     return (
         <div>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', paddingTop: '50%'}}>
@@ -39,13 +55,16 @@ const FriendProfile = ({ candidate }) => {
                         <Grid item sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
                             {candidate.mbti}
                         </Grid>
-                        {(candidate.keywords) != null ?
-                            ((candidate.keywords).slice(0, 2).map((interest, index) => (
-                                <Grid item key={index} sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
-                                    {interest}
-                                </Grid>
-                            )))
-                            : null}
+                        {
+                            (candidate.keywords) != null &&
+                                <>
+                                    {(Object.values(candidate.keywords).flat().slice(0, 2).map((keyword, index) => (
+                                        <Grid item key={index} sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
+                                            {keyword}
+                                        </Grid>
+                                    )))}
+                                </>
+                        }
                     </Grid >
                     <Typography sx={{ fontSize: '13px', height: '36px', lineHeight: '18px', fontWeight: 600, color: '#3C3C3C', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2}}>
                         {'"' + candidate.introduction + '"'}
