@@ -3,7 +3,7 @@ import { Dialog, DialogTitle,DialogContent, DialogActions, Button, IconButton, T
 import CloseIcon from '@mui/icons-material/Close';
 import { useRouter } from 'next/router';
 
-const Popup = ({ open, handleClose, type, message, description, onConfirm }) => {
+const Popup = ({ open, handleClose, type, message, description, confirmText=null, onConfirm }) => {
     const router = useRouter();
     const [infoBtnClicked, setInfoBtnClicked] = useState(false);
 
@@ -71,6 +71,16 @@ const Popup = ({ open, handleClose, type, message, description, onConfirm }) => 
                     </Button>
                     <Button disableElevation fullWidth onClick={handleQuestionConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
                         등록하기
+                    </Button>
+                </div>
+                )}
+                {type === 'request' && (
+                <div style={{display: 'flex', width: '100%', flexDirection: 'row', gap: '8px'}}>
+                    <Button disableElevation fullWidth onClick={handleClose} sx={{ backgroundColor: '#F2F2F2', color: '#BABABA', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                        아니요
+                    </Button>
+                    <Button disableElevation fullWidth onClick={handleQuestionConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                        {confirmText}
                     </Button>
                 </div>
                 )}

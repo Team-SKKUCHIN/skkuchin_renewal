@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import skkuchin.service.domain.Chat.PersonalChatRequest;
 import skkuchin.service.domain.Chat.ResponseType;
 import skkuchin.service.domain.Map.Campus;
@@ -50,6 +51,7 @@ public class PersonalChatRequestDto {
 
     @Getter
     @AllArgsConstructor
+    @RequiredArgsConstructor
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class ReplyRequest {
         @NotNull
@@ -121,7 +123,7 @@ public class PersonalChatRequestDto {
         public ConfirmedResponse(PersonalChatRequest personalChatRequest, AppUser user, List<UserKeyword> keywords) {
             super(personalChatRequest, user, keywords);
             this.confirmedAt = personalChatRequest.getConfirmedAt();
-            this.link = personalChatRequest.getLink();
+            this.link = personalChatRequest.getStatus() == ResponseType.ACCEPT ? personalChatRequest.getLink() : null;
         }
     }
 

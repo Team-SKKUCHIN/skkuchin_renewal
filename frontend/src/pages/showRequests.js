@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import theme from '../theme/theme';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -10,6 +10,7 @@ import { PersonalRequest } from '../components/Request/PersonalRequest';
 import { useDispatch, useSelector } from 'react-redux';
 import { load_group_requests } from '../actions/groupChatRequest/groupChatRequest';
 import { load_personal_requests } from '../actions/personalChatRequest/personalChatRequest';
+import { CustomButton } from '../components/Request/CustomButton';
 
 const showRequests = () => {
     const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const showRequests = () => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const groupChatRequests = useSelector(state => state.groupChatRequest.requests);
     const personalChatRequests = useSelector(state => state.personalChatRequest.requests);
+
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedFilter, setSelectedFilter] = useState('전체');
     const filterOptions = ['전체', '여럿이서 먹어요', '둘이 먹어요'];
@@ -71,15 +73,17 @@ const showRequests = () => {
                 <Filter
                     filterOptions={filterOptions}
                     selectedFilter={selectedFilter}
-                    number={5}
+                    number={allRequests[selectedIndex].length}
                     onFilterSelect={(filter) => setSelectedFilter(filter)}
                 />
                 {allRequests[selectedIndex].map((request, index) => (
-                    request.gender ?
-                    <PersonalRequest key={index} request={request} />
-                    : <GroupRequest key={index} request={request} />
+                    <div key={index}>
+                        {request.gender ?
+                        <PersonalRequest request={request} />
+                        : <GroupRequest request={request} />}
+                        <CustomButton selectedIndex={selectedIndex} request={request} />
+                    </div>
                 ))}
-                
             </div>
         </ThemeProvider>
     )

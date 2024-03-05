@@ -41,12 +41,12 @@ public class GroupChatRequestService {
 
         List<GroupChatRequestDto.BaseResponse> receiveRequests = groupChatRequests.stream()
                 .filter(request -> request.getStatus() == ResponseType.HOLD
-                        && request.getReceiver().getFriend1().getId().equals(userId))
+                        && request.getReceiver().getFriend1().getId() == userId)
                 .map((request) -> {
                     GroupChatRequestDto.ProfileResponse senderProfile = new GroupChatRequestDto.ProfileResponse(
-                            request.getSender());
+                            request.getSender(), false);
                     GroupChatRequestDto.ProfileResponse receiverProfile = new GroupChatRequestDto.ProfileResponse(
-                            request.getReceiver());
+                            request.getReceiver(), true);
                     return new GroupChatRequestDto.BaseResponse(request, senderProfile, receiverProfile);
                 })
                 .sorted(Comparator.comparing(GroupChatRequestDto.BaseResponse::getCreatedAt).reversed())
@@ -54,12 +54,12 @@ public class GroupChatRequestService {
 
         List<GroupChatRequestDto.BaseResponse> sendRequests = groupChatRequests.stream()
                 .filter(request -> request.getStatus() == ResponseType.HOLD
-                        && request.getSender().getFriend1().getId().equals(userId))
+                        && request.getSender().getFriend1().getId() == userId)
                 .map((request) -> {
                     GroupChatRequestDto.ProfileResponse senderProfile = new GroupChatRequestDto.ProfileResponse(
-                            request.getSender());
+                            request.getSender(), true);
                     GroupChatRequestDto.ProfileResponse receiverProfile = new GroupChatRequestDto.ProfileResponse(
-                            request.getReceiver());
+                            request.getReceiver(), false);
                     return new GroupChatRequestDto.BaseResponse(request, senderProfile, receiverProfile);
                 })
                 .sorted(Comparator.comparing(GroupChatRequestDto.BaseResponse::getCreatedAt).reversed())
@@ -69,9 +69,9 @@ public class GroupChatRequestService {
                 .filter(request -> request.getStatus() != ResponseType.HOLD)
                 .map((request) -> {
                     GroupChatRequestDto.ProfileResponse senderProfile = new GroupChatRequestDto.ProfileResponse(
-                            request.getSender());
+                            request.getSender(), request.getSender().getFriend1().getId() == userId);
                     GroupChatRequestDto.ProfileResponse receiverProfile = new GroupChatRequestDto.ProfileResponse(
-                            request.getReceiver());
+                            request.getReceiver(), request.getReceiver().getFriend1().getId() == userId);
                     return new GroupChatRequestDto.ConfirmedResponse(request, senderProfile, receiverProfile);
                 })
                 .sorted(Comparator.comparing(GroupChatRequestDto.ConfirmedResponse::getConfirmedAt).reversed())

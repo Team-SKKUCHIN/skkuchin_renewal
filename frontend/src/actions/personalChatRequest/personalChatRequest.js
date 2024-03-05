@@ -93,6 +93,7 @@ export const reply_personal_request = (requestId, status, callback) => async dis
         });
         
         const apiRes = await res.json();
+        await dispatch(load_personal_requests());
 
         if (res.status === 200) {
             if (callback) callback([true, apiRes.message]);

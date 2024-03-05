@@ -27,7 +27,7 @@ const RequestComponent = ({ profile }) => {
                 <button style={{ color: 'rgb(158, 158, 158)', textDecorationLine: 'underline',
                     fontSize: '12px', fontWeight: 700, backgroundColor: 'transparent', 'border': 'none'
                 }}>
-                    상대 프로필 보기
+                    {profile.is_mine ? '우리' : '상대'} 프로필 보기
                 </button>
             </div>
         </div>
