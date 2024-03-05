@@ -12,14 +12,17 @@ export default function SignUpEmailNotice(props) {
   const handleBtnClick = () => {
     props.handleNextStep();
   }
+  const handlePrevStep = () => {
+    props.handlePrevStep();
+  }
 
   return (
     <ThemeProvider theme={theme}>
         {/* <CssBaseline /> */}
           <Container style={{padding:'0px', alignItems: 'center', marginTop: '45px'}}>
                           <Grid container>
-                              <Grid item style={{margin:'0px 0px 0px 24px', visibility:'none'}}>
-                                  {/* <Image src={back} width={11} height={18} name='back' onClick={handlePrevStep} layout='fixed' /> */}
+                              <Grid item style={{margin:'4px 0px 0px 24px', visibility:'none'}}>
+                                  {/* <Image src={back} width={8} height={16} name='back' onClick={handlePrevStep} layout='fixed' /> */}
                                   <div style={{width: '11px', height: '18px'}}></div>
                               </Grid>
                               <Grid item style={{marginLeft:'35%'}}>

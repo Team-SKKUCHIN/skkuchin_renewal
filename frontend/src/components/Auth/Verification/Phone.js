@@ -243,7 +243,7 @@ const VerificationPhone = (props) => {
                 variant="standard"
                 placeholder=""
                 value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
+                onChange={(e) => {setVerificationCode(e.target.value); setIsValid(null)}}
                 style={{
                     height: '57px',
                     border: '1px solid #E2E2E2',
@@ -256,8 +256,24 @@ const VerificationPhone = (props) => {
                     width: '72%'
                 }}
             />
+            {verificationCode.length === 6 ? 
             <Button 
                 onClick={handleVerifyBtn}
+                style={{
+                    height: '56px',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    marginLeft: '4px',
+                    color: '#fff',
+                    backgroundColor: '#FFCE00',
+                    width: '28%',
+                    marginLeft: '8px'
+                }}>
+                인증하기
+            </Button> :
+            <Button 
                 style={{
                     height: '56px',
                     border: '1px solid #E2E2E2',
@@ -270,7 +286,7 @@ const VerificationPhone = (props) => {
                     marginLeft: '8px'
                 }}>
                 인증하기
-            </Button>
+            </Button>}
             </div>
             {
               isValid == null ? <div></div>
