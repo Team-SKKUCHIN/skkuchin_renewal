@@ -58,7 +58,7 @@ const showAllTwoLists = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             {/* header */}
-            <Header title="둘이 먹어요" onBackClick={handleBackClick} icon={!selectedCandidate}/>
+            <Header title="둘이 먹어요" onBackClick={handleBackClick} />
 
             {/* 필터링 */}
             {
