@@ -33,6 +33,7 @@ jobs:
 
       - name: Copy prod files
         run: |
+          cp backend/prod/application.yml backend/src/main/resources/
           cp backend/prod/ServiceApplication.java backend/src/main/java/skkuchin/service/
 
       - name: Build backend
