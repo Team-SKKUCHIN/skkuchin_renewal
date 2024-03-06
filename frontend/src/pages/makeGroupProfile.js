@@ -13,7 +13,9 @@ import dayjs from 'dayjs';
 const MakeGroupProfile = () => {
     const router = useRouter();
     const dispatch = useDispatch();
+
     const user = useSelector(state => state.auth.user);
+    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
 
     const [generatedName, setGeneratedName] = useState(''); 
     const [groupName, setGroupName] = useState('');
@@ -42,7 +44,6 @@ const MakeGroupProfile = () => {
     }
 
     const handleDateChange = (newDate) => {
-        console.log('날짜 변경! newDate', newDate);
         setSelectedDates(newDate);
         setIsDateEdited(true);
     };
@@ -62,6 +63,13 @@ const MakeGroupProfile = () => {
     useEffect(() => {
         getRandomNickname();
     }, []);
+
+    const handleGroupNameInput = (event) => {
+        const value = event.target.value;
+        if(value.length <= 12) {
+            setGroupName(value);
+        }
+    };
 
     useEffect(() => {
         if(generatedName === '') return;
@@ -175,7 +183,7 @@ const MakeGroupProfile = () => {
                     ), }}
                     sx={{mb: isDuplicateCheckVisible ? '8px' : '18px', color: 'red'}} variant='outlined' fullWidth placeholder='그룹명을 입력해주세요 (필수)' 
                     value={groupName} 
-                    onChange={(event) => setGroupName(event.target.value)}/>
+                    onChange={handleGroupNameInput}/>
                     {isDuplicateCheckVisible && (
                         <div style={{display: 'flex', flexDirection: 'row',  marginBottom: '18px', alignItems: 'center', gap: 6}}>
                             <Button onClick={handleDupicateCheck} style={{height: 28, backgroundColor: '#F2F2F2', color: '#3C3C3C', border: '1px solid #BABABA', borderRadius: 100, fontSize: '13px', padding: '7px 10px'}}>
@@ -190,8 +198,8 @@ const MakeGroupProfile = () => {
                     )}
                 <Typography sx={{fontSize: 14, color: '#3C3C3C', mb: '8px'}}>성별</Typography>
                 <Grid container sx={{mb: '18px'}}>
-                    <Button value="남성" disabled onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '8px 0 0 8px', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '남성' ? '#FBFBFB' : '#fff'}}>남</Button>
-                    <Button value="여성" disabled onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '0 8px 8px 0', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '여성' ? '#FBFBFB' : '#fff'}}>여</Button>
+                    <Button value="남성" disabled={matchingUser === null ? false : true} onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '8px 0 0 8px', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '남성' ? '#FBFBFB' : '#fff'}}>남</Button>
+                    <Button value="여성" disabled={matchingUser === null ? false : true} onClick={handleGenderClick} style={{width: '50%', border: '1px solid #E2E2E2', borderRadius: '0 8px 8px 0', height: '48px', color: '#3C3C3C', fontSize: '16px', backgroundColor: gender == '여성' ? '#FBFBFB' : '#fff'}}>여</Button>
                 </Grid>
 
                 <Typography sx={{fontSize: 14, color: '#3C3C3C', mb: '8px'}}>그룹 한줄 소개</Typography>
@@ -228,6 +236,7 @@ const MakeGroupProfile = () => {
                     message={popupMessage}
                     description={popupDescription}
                     onConfirm={handleQuestionConfirm}
+                    onInfoConfirm={() => router.push('/mealPromise')}
                 />
             </div>
         </ThemeProvider>
