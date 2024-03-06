@@ -20,7 +20,7 @@ const GroupProfile = ({isMyProfile, mode, group, handleEditProfileClick}) => {
                 router.push('/selectMyGroupProfile')
                 localStorage.setItem('candidateId', group.id);
             } else {
-                setPopupMessage('그룹 밥약을 신청하기 위해선 그룹 프로필 작성이 필요해요.');
+                setPopupMessage('그룹 밥약을 신청하기 위해선\n그룹 프로필 작성이 필요해요.');
                 setPopupBtnText('그룹 프로필 등록하기');
                 setPopupOpen(true);
             }

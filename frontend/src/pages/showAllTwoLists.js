@@ -16,6 +16,7 @@ const showAllTwoLists = () => {
     const router = useRouter();
 
     const user = useSelector(state => state.auth.user);
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const candidate = useSelector(state => state.candidate.candidate);
 
     const [selectedFilter, setSelectedFilter] = useState('전체');
@@ -45,13 +46,17 @@ const showAllTwoLists = () => {
     }
 
     const handleAddBtnClick = () => {
-        if(user && user.phone_number !== null) {
-            router.push('/makeGroupProfile');
-        } else {
-            setPopupBtnText('휴대폰 본인인증 하기');
-            setPopupMessage('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+        if(!isAuthenticated) {
+            setPopupMessage('그룹 프로필을 등록하기 위해서는\n로그인이 필요해요.');
+            setPopupBtnText('로그인하러 가기');
             setPopupOpen(true);
-        }
+        } else if (user && user.phone_number === null) {
+              setPopupBtnText('휴대폰 본인인증 하기');
+              setPopupMessage('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+              setPopupOpen(true);
+        } else {
+              router.push('/makeGroupProfile');
+        } 
     }
 
     return (
@@ -116,7 +121,9 @@ const showAllTwoLists = () => {
                 btnText={popupBtnText}
                 onConfirm={() => {
                     setPopupOpen(false);
-                    if (popupBtnText === '휴대폰 본인인증 하기') {
+                    if (popupBtnText === '로그인하러 가기') {
+                        router.push('/login');
+                    } else if (popupBtnText === '휴대폰 본인인증 하기') {
                         router.push('/verification');
                     }
                 }}
