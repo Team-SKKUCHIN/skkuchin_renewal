@@ -8,7 +8,6 @@ import { useToggle } from '../components/Recommend/useToggle';
 import styled from '@emotion/styled';
 import SlideContainer from '../components/Recommend/SlideContainer';
 import { useDispatch, useSelector } from 'react-redux';
-import { load_places } from '../actions/place/place';
 import { useLoadingLottie } from '../components/Recommend/useLoadingLottie';
 import AlertMessage from '../components/Alert';
 import Popup from '../components/Recommend/Popup';
@@ -84,7 +83,6 @@ const Recommend = () => {
 
     useEffect(() => {
         dispatch(makeTraffic('오늘_뭐_먹지_진입수'));
-        dispatch(load_places());
         setIsRunning(true);
         const timeId = setTimeout(() => {
             setIsRunning(false);
