@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogActions, Button, TextField, Typography } from '@mui/material';
 
-const Popup = ({ open, handleClose, type, message, question, description, onQuestionConfirm, onReasonConfirm }) => {
+const Popup = ({ open, handleClose, type, message, question, description, onQuestionConfirm, onReasonConfirm, onErrorConfirm }) => {
     const [deleteReason, setDeleteReason] = useState('');
 
     const handleReasonConfirm = () => {
         onReasonConfirm(deleteReason);
         handleClose();
+    }
+
+    const handleErrorConfirm = () => {
+        handleClose();
+        onErrorConfirm();
     }
 
     return (
@@ -42,8 +47,8 @@ const Popup = ({ open, handleClose, type, message, question, description, onQues
                             </Typography>
                         </DialogContent>
                         <DialogActions sx={{p: '16px 0 0'}}>
-                            {type === 'check' && (
-                                <Button disableElevation fullWidth sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                            {type === 'error' && (
+                                <Button disableElevation fullWidth onClick={handleErrorConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
                                     확인
                                 </Button>
                             )}

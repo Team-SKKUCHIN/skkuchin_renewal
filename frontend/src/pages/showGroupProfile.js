@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Popup from '../components/MyPage/Popup';
 import { delete_group_profile, clear_candidate_profile, load_candidate_profile } from '../actions/groupProfile/groupProfile';
 import { Loading } from '../components/Loading';
+import { load_group_requests } from '../actions/groupChatRequest/groupChatRequest';
 
 const showGroupProfile = () => {
     const router = useRouter();
@@ -15,11 +16,20 @@ const showGroupProfile = () => {
     const id = router.query.id;
     const mode = router.query.mode;
 
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const group = useSelector(state => state.groupProfile.candidateGroup);
     const myGroupProfiles = useSelector((state) => state.groupProfile.myGroupProfiles);
+    const groupChatRequests = useSelector(state => state.groupChatRequest.requests);
+    const personalChatRequests = useSelector(state => state.personalChatRequest.requests);
 
     const [isMyProfile, setIsMyProfile] = useState(false);
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            dispatch(load_group_requests());
+        }
+    }, [isAuthenticated])
 
     useEffect(() => {
         dispatch(clear_candidate_profile());
@@ -48,16 +58,26 @@ const showGroupProfile = () => {
     const [popupMessage, setPopupMessage] = useState('');
     const [popupQuestion, setPopupQuestion] = useState('');
     const [popupDescription, setPopupDescription] = useState('');
-
-    const [reason, setReason] = useState('');
         
     // 팝업
     const handleIconClick = () => {
         if(mode === 'edit') {
-            setPopupType('question');
-            setPopupMessage(`그룹 프로필을 삭제하면` + '\n' + `더이상 그룹 밥약 신청을 받지 못해요.`)
-            setPopupQuestion(`정말로 삭제하시겠어요?`);
-            setPopupOpen(true);
+            if(groupChatRequests?.receive_requests?.length > 0 && groupChatRequests?.receive_requests?.some(request => request.receiver_profile.id == id)) {
+                setPopupType('error');
+                setPopupMessage('현재 받은 신청이 있어요');
+                setPopupDescription('<신청현황>탭에서\n신청을 거절 혹은 수락 후 삭제해주세요.');
+                setPopupOpen(true);
+            } else {
+                setPopupType('question');
+                const hasSendRequests = groupChatRequests?.send_requests?.some(request => request.sender_profile.id == id);
+                // console.log('hasSendRequests', hasSendRequests, id);
+                const popupMessage = hasSendRequests
+                    ? '그룹 프로필을 삭제하면\n밥약 신청내역도 함께 삭제돼요.'
+                    : '그룹 프로필을 삭제하면\n더이상 그룹 밥약 신청을 받지 못해요.';
+                setPopupMessage(popupMessage);
+                setPopupQuestion(`정말로 삭제하시겠어요?`);
+                setPopupOpen(true);
+            }
         }
     }
 
@@ -77,9 +97,7 @@ const showGroupProfile = () => {
     }
 
     const handleReasonConfirm = (reason) => {
-        console.log('삭제 이유', reason);
         dispatch(delete_group_profile(id, reason, ([result, message]) => {
-            console.log('그룹 프로필 삭제 결과', result, message);
             if(result) {
                 console.log('그룹 프로필 삭제 성공 : ', reason);
                 router.push('/myGroupProfileLists');
@@ -116,6 +134,7 @@ const showGroupProfile = () => {
                 handleClose={handleClose}
                 onQuestionConfirm={handleQuestionConfirm}
                 onReasonConfirm={handleReasonConfirm} 
+                onErrorConfirm={() => router.push('/showRequests')}
             />
             
         </ThemeProvider>

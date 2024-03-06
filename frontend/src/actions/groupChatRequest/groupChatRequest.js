@@ -20,7 +20,6 @@ export const load_group_requests = (callback) => async dispatch => {
         });
         
         const apiRes = await res.json();
-
         if (res.status === 200) {
             await dispatch({
                 type: LOAD_GROUP_REQUEST_SUCCESS,
