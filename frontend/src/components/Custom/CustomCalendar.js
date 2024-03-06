@@ -34,9 +34,13 @@ const CustomCalendar = ({ dates, onDateChange, editable }) => {
     return true;
   };
 
-  const selectedDatesText = dates.length === 0
-    ? '날짜를 선택해주세요'
-    : `${formatDate(dates[0])} - ${formatDate(dates[1])}`;
+  const selectedDatesText = editable ?
+    (
+      dates.length === 0
+      ? '선호 기간을 선택해주세요'
+      : `${formatDate(dates[0])} - ${formatDate(dates[1])}`
+    )
+    : ('-');
 
     return (
     <ThemeProvider theme={theme}>

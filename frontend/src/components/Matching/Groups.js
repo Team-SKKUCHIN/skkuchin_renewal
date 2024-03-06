@@ -1,16 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react"; 
-import { Button, Card, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Typography, Grid, Divider } from '@mui/material';
+import { Button, Card, Typography, Grid} from '@mui/material';
 import { displayMBTI } from './MBTIList';
-import { load_candidate } from '../../actions/candidate/candidate'
-import { load_request_id, request_chat } from '../../actions/chat/chatRoom';
 import noCharacter from '../../image/mbti/profile/noCharacter.png'
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import CustomPopup from "../SkkuChat/CustomPopup";
-import CustomPopupNoBtn from "../SkkuChat/CustomPopupNoBtn";
 import GoLogin from "../GoLogin";
 import { load_all_group_profile } from "../../actions/groupProfile/groupProfile";
+import ErrorPopup from "../Custom/ErrorPopup";
 
 const dummyProfiles = [
     {
@@ -48,9 +45,9 @@ const Groups = () => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [isLogin, setIsLogin] = useState(false);
 
-    // 그룹 프로필 등록 여부, 추후 변경 필요
-    const [selectedGroupId, setSelectedGroupId] = useState(null);
-    const [isGroupProfileEnrolled, setIsGroupProfileEnrolled] = useState(true);
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupBtnText, setPopupBtnText] = useState('');
 
     useEffect(() => {
         dispatch(load_all_group_profile());
@@ -73,11 +70,14 @@ const Groups = () => {
                 router.push('/selectMyGroupProfile')
             }
             else {
-                alert("그룹 밥약을 신청하기 위해선 그룹 프로필 작성이 필요해요.");
+                setPopupMessage('그룹 밥약을 신청하기 위해선\n그룹 프로필 작성이 필요해요.');
+                setPopupBtnText('그룹 프로필 등록하기');
+                setPopupOpen(true);
             }
         } else {
-            alert("로그인이 필요한 서비스입니다.");
-            // router.push('/login');
+            setPopupMessage('밥약 신청을 위해서는 로그인이 필요해요.');
+            setPopupBtnText('로그인하러 가기');
+            setPopupOpen(true);
         }
     }
 
@@ -88,8 +88,8 @@ const Groups = () => {
     return (
         <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0'}}>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
-            { isGroupProfileEnrolled ? 
-                groupProfiles && groupProfiles.map((group, index) => (
+            { groupProfiles && groupProfiles.length !== 0 ?
+                groupProfiles.map((group, index) => (
                         <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '10px'}}>
                             <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                                 {displayMBTI('GROUP', 90, 90)}
@@ -172,6 +172,21 @@ const Groups = () => {
                 ))}
             </>
             }
+
+            <ErrorPopup
+                open={popupOpen}
+                handleClose={() => setPopupOpen(false)}
+                message={popupMessage}
+                btnText={popupBtnText}
+                onConfirm={() => {
+                    setPopupOpen(false);
+                    if (popupBtnText === '그룹 프로필 등록하기') {
+                        router.push('/makeGroupProfile');
+                    } else if (popupBtnText === '로그인하러 가기') {
+                        router.push('/login');
+                    }
+                }}
+            />
     </Grid>
     )
 }

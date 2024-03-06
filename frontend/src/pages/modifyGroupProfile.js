@@ -23,11 +23,13 @@ const ModifyGroupProfile = () => {
         group_introduction: '',
     });
 
-    const [selectedDates, setSelectedDates] = useState([
-        new Date(selectedGroup?.meeting_start_date || new Date()),
-        new Date(selectedGroup?.meeting_end_date || new Date())
-    ]);
+    // const [selectedDates, setSelectedDates] = useState([
+    //     new Date(selectedGroup?.meeting_start_date || new Date()),
+    //     new Date(selectedGroup?.meeting_end_date || new Date())
+    // ]);
 
+    const [selectedDates, setSelectedDates] = useState(selectedGroup?.meeting_start_date ? [new Date(selectedGroup.meeting_start_date), new Date(selectedGroup.meeting_end_date)] : []);
+    
     const friends = [
         { label: '친구1', introduction: selectedGroup?.friend1_introduction || '', studentId : selectedGroup?.friend1_student_id || '', major: selectedGroup?.friend1_major || '' },    
         { label: '친구2', introduction: selectedGroup?.friend2_introduction || '', studentId : selectedGroup?.friend2_student_id || '', major: selectedGroup?.friend2_major || '' },

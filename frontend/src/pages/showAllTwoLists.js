@@ -9,17 +9,22 @@ import Filter from '../components/MealPromise/Filter';
 import FriendItem from '../components/MealPromise/FriendItem';
 import FriendProfile from '../components/MealPromise/FriendProfile';
 import AddIcon from '@mui/icons-material/Add';
+import ErrorPopup from '../components/Custom/ErrorPopup';
 
 const showAllTwoLists = () => {
     const dispatch = useDispatch();
     const router = useRouter();
 
     const user = useSelector(state => state.auth.user);
-    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const candidate = useSelector(state => state.candidate.candidate);
 
     const [selectedFilter, setSelectedFilter] = useState('전체');
     const [selectedCandidate, setSelectedCandidate] = useState(null);
+
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupBtnText, setPopupBtnText] = useState('');
 
     const filterOptions = ['전체', '명륜', '율전'];
 
@@ -41,19 +46,24 @@ const showAllTwoLists = () => {
     }
 
     const handleAddBtnClick = () => {
-        if(user && user.phone_number !== null) {
-            router.push('/makeGroupProfile');
+        if(!isAuthenticated) {
+            setPopupMessage('그룹 프로필을 등록하기 위해서는\n로그인이 필요해요.');
+            setPopupBtnText('로그인하러 가기');
+            setPopupOpen(true);
+        } else if (user && user.phone_number === null) {
+              setPopupBtnText('휴대폰 본인인증 하기');
+              setPopupMessage('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+              setPopupOpen(true);
         } else {
-            alert('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
-            router.push('/verification');
-        }
+              router.push('/makeGroupProfile');
+        } 
     }
 
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             {/* header */}
-            <Header title="둘이 먹어요" onBackClick={handleBackClick} icon={!selectedCandidate}/>
+            <Header title="둘이 먹어요" onBackClick={handleBackClick} />
 
             {/* 필터링 */}
             {
@@ -104,6 +114,20 @@ const showAllTwoLists = () => {
                     </div>
                 )
             }
+            <ErrorPopup
+                open={popupOpen}
+                handleClose={() => setPopupOpen(false)}
+                message={popupMessage}
+                btnText={popupBtnText}
+                onConfirm={() => {
+                    setPopupOpen(false);
+                    if (popupBtnText === '로그인하러 가기') {
+                        router.push('/login');
+                    } else if (popupBtnText === '휴대폰 본인인증 하기') {
+                        router.push('/verification');
+                    }
+                }}
+            />
         </ThemeProvider>
     )
 }

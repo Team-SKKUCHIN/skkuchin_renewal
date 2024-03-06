@@ -1,4 +1,3 @@
-// ShowAllHeader.js
 import React from 'react';
 import { Typography, Button } from '@mui/material';
 import Image from 'next/image';
