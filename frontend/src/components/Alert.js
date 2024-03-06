@@ -1,6 +1,7 @@
 import { CssBaseline, ThemeProvider, Alert } from '@mui/material';
 import theme from '../theme/theme';
 import { useState, useEffect } from 'react';
+import styled from '@emotion/styled';
 
 export default function AlertMessage({ alertOpen, setAlertOpen, alertMessage }){
     const [open, setOpen] = useState(alertOpen);
@@ -14,7 +15,7 @@ export default function AlertMessage({ alertOpen, setAlertOpen, alertMessage }){
         const timer = setTimeout(() => {
           setOpen(false);
           setAlertOpen(false);
-        }, 1800);
+        }, 1000);
     
         return () => clearTimeout(timer);
         }
@@ -23,8 +24,8 @@ export default function AlertMessage({ alertOpen, setAlertOpen, alertMessage }){
     return(
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <div style={{ position: 'relative', zIndex:'6' }}>
             {open && (
+              <PopupContainer>
                 <div
                   style={{
                     position: 'fixed',
@@ -32,23 +33,37 @@ export default function AlertMessage({ alertOpen, setAlertOpen, alertMessage }){
                     top: screen.availHeight / 2,
                     transform: 'translate(-50%, -50%)',
                     zIndex: '6',
-                    textAlign:'center'
                   }}
                 >
-                  <Alert style={{width: `${alertMessage.length * 20}px`, color:'black', backgroundColor:'white', borderRadius:'10px', boxShadow: '0px 3px 5px rgba(0,0,0,0.3)' }} icon={false}>
+                  <Alert style={{width: `${alertMessage.length * 20}px`, color:'black', backgroundColor:'white', borderRadius:'10px', justifyContent: 'center' }} icon={false}>
                       <div style={{
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
-                          height: "100%"
+                          height: "100%",
                       }}>
-                          <div style={{textAlign: 'center', padding:'5px', whiteSpace: 'nowrap'}}>{alertMessage}</div>
+                          <div style={{padding:'5px', whiteSpace: 'nowrap', fontSize: '16px', fontWeight: 700, lineHeight: '18px' }}>{alertMessage}</div>
                       </div> 
                   </Alert>
-              </div>
+                </div>
+              </PopupContainer>
             )}
-            </div>
-            
+            {/* </div> */}
+
         </ThemeProvider>
     )
 }
+
+const PopupContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 11;
+    background-color: rgba(0, 0, 0, 0.25);
+`;

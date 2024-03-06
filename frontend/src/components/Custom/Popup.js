@@ -39,11 +39,11 @@ const Popup = ({ open, handleClose, type, message, description, confirmText=null
                 </Typography>
             </DialogContent>
             <DialogActions sx={{p: '16px 0 0'}}>
-                {type === 'info' && (
+                {/* {type === 'info' && (
                     <Button disableElevation fullWidth onClick={onInfoConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
                         확인
                     </Button>
-                )}
+                )} */}
                 {type === 'error' && (
                     <Button disableElevation fullWidth onClick={handleClose} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
                         확인
@@ -64,7 +64,7 @@ const Popup = ({ open, handleClose, type, message, description, confirmText=null
                     <Button disableElevation fullWidth onClick={handleClose} sx={{ backgroundColor: '#F2F2F2', color: '#BABABA', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
                         아니요
                     </Button>
-                    <Button disableElevation fullWidth onClick={handleQuestionConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                    <Button disableElevation fullWidth onClick={onConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
                         {confirmText}
                     </Button>
                 </div>
