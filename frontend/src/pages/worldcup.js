@@ -7,7 +7,6 @@ import { useToggle } from '../components/Recommend/useToggle';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { load_places } from '../actions/place/place';
 import { useWorldcup } from '../components/Worldcup/useWorldcup';
 import { enroll_worldcup, load_nonuser_worldcups, load_user_worldcups } from '../actions/worldcup/worldcup';
 import { convertName } from '../utils/wordConvertor';
@@ -657,10 +656,6 @@ const WorldCup = () => {
     const [phase, setPhase] = useState('ready');
     const [profileOpen, setProfileOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        dispatch(load_places());
-    }, [])
 
     useEffect(() => {
         if (phase === 'ready') {
