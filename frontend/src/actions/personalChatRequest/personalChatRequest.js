@@ -63,7 +63,6 @@ export const send_personal_request = (link, receiverId, callback) => async dispa
         });
         
         const apiRes = await res.json();
-        console.log(res.status, apiRes.message);
         
         if (res.status === 201) {
             if (callback) callback([true, apiRes.message]);

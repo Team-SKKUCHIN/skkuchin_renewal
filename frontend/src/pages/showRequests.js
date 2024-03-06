@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import theme from '../theme/theme';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -11,6 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { load_group_requests } from '../actions/groupChatRequest/groupChatRequest';
 import { load_personal_requests } from '../actions/personalChatRequest/personalChatRequest';
 import { CustomButton } from '../components/Request/CustomButton';
+import { KakaoLink } from '../components/Request/KakaoLink';
+import Image from 'next/image';
+import { noInfoCharacter } from '../image/request';
 
 const showRequests = () => {
     const dispatch = useDispatch();
@@ -19,9 +22,16 @@ const showRequests = () => {
     const groupChatRequests = useSelector(state => state.groupChatRequest.requests);
     const personalChatRequests = useSelector(state => state.personalChatRequest.requests);
 
+    const senderName = useRef('');
+    const link = useRef('');
+    const [linkOn, setLinkOn] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedFilter, setSelectedFilter] = useState('전체');
     const filterOptions = ['전체', '여럿이서 먹어요', '둘이 먹어요'];
+
+    const noInfoMessage = useMemo(() => {
+        return ['아직 받은 신청이 없어요', '아직 보낸 신청이 없어요', '아직 확정 내역이 없어요'];
+    }, [])
 
     const receiveRequests = useMemo(() => {
         const groupRequests = selectedFilter === '둘이 먹어요' ? [] : (groupChatRequests?.receive_requests || []);
@@ -69,22 +79,37 @@ const showRequests = () => {
             <CssBaseline />
             <Header title="신청 현황" handleBack={() => router.push('/')} />
             <Menu selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
-            <div style={{ margin: '24px'}}>
+            <div style={{ margin: '145px 24px 24px'}}>
                 <Filter
                     filterOptions={filterOptions}
                     selectedFilter={selectedFilter}
                     number={allRequests[selectedIndex].length}
                     onFilterSelect={(filter) => setSelectedFilter(filter)}
                 />
+                {allRequests[selectedIndex].length === 0 && (
+                    <div style={{ width: '100%', marginTop: '40%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <Image src={noInfoCharacter} width={104} height={87} layout='fixed' />
+                        <p style={{ textAlign: 'center', margin: '15px 0', color: '#BABABA', fontSize: '16px', fontWeight: 700, lineHeight: '18px' }}>
+                            {noInfoMessage[selectedIndex]}
+                        </p>
+                    </div>
+                )}
                 {allRequests[selectedIndex].map((request, index) => (
                     <div key={index}>
                         {request.gender ?
                         <PersonalRequest request={request} />
                         : <GroupRequest request={request} />}
-                        <CustomButton selectedIndex={selectedIndex} request={request} />
+                        <CustomButton
+                            selectedIndex={selectedIndex}
+                            request={request}
+                            senderName={senderName}
+                            link={link}
+                            setLinkOn={setLinkOn}
+                        />
                     </div>
                 ))}
             </div>
+            {linkOn && <KakaoLink senderName={senderName} link={link} setLinkOn={setLinkOn} />}
         </ThemeProvider>
     )
 }

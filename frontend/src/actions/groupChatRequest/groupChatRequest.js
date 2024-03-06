@@ -51,8 +51,6 @@ export const send_group_request = (link, senderId, receiverId, callback) => asyn
         receiver_id: receiverId,
     });
 
-    console.log('body', body);
-
     try {
         const res = await fetch(`${API_URL}/api/group-chat-request`,{
             method: 'POST',
@@ -65,7 +63,6 @@ export const send_group_request = (link, senderId, receiverId, callback) => asyn
         });
         
         const apiRes = await res.json();
-        console.log(res.status, apiRes.message);
         if (res.status === 201) {
             if (callback) callback([true, apiRes.message]);
         }

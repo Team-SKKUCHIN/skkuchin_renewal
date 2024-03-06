@@ -3,12 +3,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { reply_personal_request } from '../../actions/personalChatRequest/personalChatRequest';
 import Popup from '../Custom/Popup';
 import { reply_group_request } from '../../actions/groupChatRequest/groupChatRequest';
+import { convertName } from '../../utils/wordConvertor';
 
-const OneButton = ({ text, isDisabled, style }) => { console.log(style); return (
+const OneButton = ({ request, senderName, link, setLinkOn, text, isDisabled, style }) => (
     <div style={{ width: '100%', marginBottom: '30px' }}>
         <button
             disabled={isDisabled}
-            onClick={() => console.log("show link")}
+            onClick={() => {
+                senderName.current = request.gender ? request.nickname : request.sender_profile.group_name;
+                link.current = request.link ?? null;
+                setLinkOn(true);
+            }}
             style={{ width: '100%', height: '50px', border: style?.border ?? 'none',
                 borderRadius: '10px', backgroundColor: style?.backgroundColor ?? '#FFF', fontSize: '16px',
                 color: style?.color ?? '#FFF', fontWeight: 800, lineHeight: '18px'
@@ -16,7 +21,7 @@ const OneButton = ({ text, isDisabled, style }) => { console.log(style); return 
             {text}
         </button>
     </div>
-)};
+);
 
 const TwoButton = ({ onReply }) => (
     <div style={{ display: 'flex', width: '100%', marginBottom: '30px' }}>
@@ -40,11 +45,11 @@ const TwoButton = ({ onReply }) => (
 );
 
 
-export const CustomButton = ({ selectedIndex, request }) => {
+export const CustomButton = ({ selectedIndex, request, senderName, link, setLinkOn }) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
     const [popupOpen, setPopupOpen] = useState(false);
-    const popupType = useRef('question');
+    const [popupType, setPopupType] = useState('question');
     const popupMessage = useRef('');
     const popupDescription = useRef('');
     const statusType = useRef('');
@@ -86,15 +91,15 @@ export const CustomButton = ({ selectedIndex, request }) => {
         statusType.current = status;
         popupMessage.current = status === 'ACCEPT' ? '밥약 신청을 수락하시겠어요?' : '정말 밥약 신청을 거절하시겠어요?\n한번 거절한 밥약은 되돌릴 수 없어요.';
         btnText.current = status === 'ACCEPT' ? '수락' : '거절';
-        popupType.current = 'request';
+        popupDescription.current = '';
+        setPopupType('request');
         setPopupOpen(true);
-    }, [request])
+    }, [])
 
     const handleQuestionConfirm = useCallback(() => {
         let name = '';
         if (request.gender) {
             name = request.nickname;
-            console.log(statusType.current)
             dispatch(reply_personal_request(request.request_id, statusType.current));
         } else {
             name = request.sender_profile.group_name;
@@ -102,14 +107,13 @@ export const CustomButton = ({ selectedIndex, request }) => {
         }
 
         if (statusType.current === 'ACCEPT') {
-            // TODO: 와/과 util 만들기
-            popupMessage.current = `[${name}]와/과의 밥약이 성사되었어요!`;
+            popupMessage.current = `[${name}]${convertName(name, 'andOr')}의 밥약이 성사되었어요!`;
             popupDescription.current = '지금 바로 [확정 내역]에서\n상대의 오픈 채팅 링크를 확인하고 입장해주세요.';
         } else {
             popupMessage.current = '밥약 신청을 거절했습니다.\n다음에 더 좋은 기회로 만나요!';
             popupDescription.current = '';
         }
-        popupType.current = 'error';
+        setPopupType('error');
         setPopupOpen(true);
     }, [request]);
 
@@ -117,11 +121,21 @@ export const CustomButton = ({ selectedIndex, request }) => {
         <>
             {selectedIndex === 0 ?
                 <TwoButton onReply={handleReply} />
-                : <OneButton text={statusTextDict.text[request.status]} isDisabled={request.status !== 'ACCEPT'} style={statusTextDict.style[request.status]} />}
+                :
+                <OneButton
+                    request={request}
+                    senderName={senderName}
+                    link={link}
+                    setLinkOn={setLinkOn}
+                    text={statusTextDict.text[request.status]}
+                    isDisabled={request.status !== 'ACCEPT' || !isMine}
+                    style={statusTextDict.style[request.status]}
+                />
+            }
             <Popup
                 open={popupOpen}
                 handleClose={() => setPopupOpen(false)}
-                type={popupType.current}
+                type={popupType}
                 message={popupMessage.current}
                 description={popupDescription.current}
                 confirmText={btnText.current}
