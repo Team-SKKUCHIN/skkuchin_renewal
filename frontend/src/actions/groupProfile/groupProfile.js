@@ -81,7 +81,6 @@ export const get_my_group_profile = () => async dispatch => {
         });
 
         const apiRes = await res.json();
-        console.log('내 그룹 프로필 조회 요청 완료 :', apiRes.data);
 
         if (res.status === 200) {
             dispatch({
