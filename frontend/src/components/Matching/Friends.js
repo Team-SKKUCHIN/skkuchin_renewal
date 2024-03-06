@@ -1,15 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react"; 
-import { Button, Card, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Typography, Grid, Divider } from '@mui/material';
+import { Button, Card, Typography, Grid } from '@mui/material';
 import { displayMBTI } from './MBTIList';
 import { load_candidate } from '../../actions/candidate/candidate'
-
 import noCharacter from '../../image/mbti/profile/noCharacter.png'
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import CustomPopup from "../SkkuChat/CustomPopup";
-import CustomPopupNoBtn from "../SkkuChat/CustomPopupNoBtn";
 import GoLogin from "../GoLogin";
+import ErrorPopup from "../Custom/ErrorPopup";
 
 const dummyProfiles = [
     {
@@ -58,32 +56,14 @@ const Friends = () => {
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [isLogin, setIsLogin] = useState(false);
-
-    const [selectedPersonId, setSelectedPersonId] = useState(null);
     
     useEffect(() => {
         if(candidate === null) dispatch(load_candidate());
     }, []);
 
-    // const [open, setOpen] = useState(false);
-
-    // const [isPopupMessageOpen, setIsPopupMessageOpen] = useState(false);
-    // const [popupMessage, setPopupMessage] = useState('');
-
-    // const handleOpen = (id) => {
-    //     setOpen(true);
-    //     setSelectedPersonId(id);
-    // }
-    // const handleClose = () => {
-    //     setOpen(false);
-    // }
-    // const handleSubmit = (id) => {
-    //     setOpen(false);
-    //     dispatch(request_chat(id));
-
-    //     setPopupMessage('신청이 완료되었습니다!');
-    //     setIsPopupMessageOpen(true);
-    // }
+    const [open, setOpen] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupBtnText, setPopupBtnText] = useState('');
     
     const handleSettingOpen = () => {
         if (isAuthenticated) {
@@ -103,20 +83,30 @@ const Friends = () => {
     };
 
     const handleRequestBtnClick = (id) => {
-        if (!isAuthenticated) 
-            return alert('로그인이 필요한 서비스입니다.');
-        if (!matchingUser) 
-            return alert('1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.');
-        if (matchingUser && !matchingUser.matching) 
-            return alert('1:1 밥약을 신청하기 위해선 개인 프로필을 공개로 변경해주세요');
-        if (user && user.phone_number === null) 
-            return alert("밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.");
-    
-        localStorage.setItem('candidateId', id);
-        router.push({
-            pathname: '/enrollOpenChat',
-            query: { type: 'friend'},
-        });
+        if (!isAuthenticated) {
+            setPopupMessage('로그인이 필요한 서비스입니다.');
+            setPopupBtnText('로그인하러 가기');
+            setOpen(true);
+        } else if (!matchingUser) {
+            setPopupMessage('1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.');
+            setPopupBtnText('개인 프로필 등록하기');
+            setOpen(true);
+        } else if (matchingUser && !matchingUser.matching) {
+            setPopupMessage('1:1 밥약을 신청하기 위해선 개인 프로필을 공개로 변경해주세요');
+            setPopupBtnText('개인 프로필 공개하기');
+            setOpen(true);
+        } else if (user && user.phone_number === null) {
+            setPopupMessage('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+            setPopupBtnText('휴대폰 본인인증 하기');
+            setOpen(true);
+        } 
+        else {
+            localStorage.setItem('candidateId', id);
+            router.push({
+                pathname: '/enrollOpenChat',
+                query: { type: 'friend'},
+            });
+        }
     };
     
     return (
@@ -219,25 +209,6 @@ const Friends = () => {
                             </Button>
                         )}
                     </Grid>
-
-                    {/* 팝업 없이 바로 연결 */}
-                    {/* <CustomPopup
-                        open={open}
-                        onClose={handleClose}
-                        content={`밥약 신청을 하시겠어요?`}
-                        leftButtonLabel="아니요"
-                        rightButtonLabel="신청"
-                        onLeftButtonClick={handleClose}
-                        onRightButtonClick={() => {
-                            handleSubmit(selectedPersonId);
-                        }}
-                    />
-
-                    <CustomPopupNoBtn
-                        open={isPopupMessageOpen}
-                        onClose={() => setIsPopupMessageOpen(false)}
-                        content={popupMessage}
-                    /> */}
                 </Grid>
             </Card> 
             )) 
@@ -298,6 +269,24 @@ const Friends = () => {
                 ))}
             </>
             }
+            <ErrorPopup
+                open={open}
+                handleClose={() => setOpen(false)}
+                message={popupMessage}
+                btnText={popupBtnText}
+                onConfirm={() => {
+                    setOpen(false);
+                    if (popupBtnText === '로그인하러 가기') {
+                        router.push('/login');
+                    } else if (popupBtnText === '개인 프로필 공개하기') {
+                        router.push('/myPage');
+                    } else if (popupBtnText === '개인 프로필 등록하기') {
+                        router.push('/makeProfile');
+                    } else if (popupBtnText === '휴대폰 본인인증 하기') {
+                        router.push('/verification');
+                    }
+                }}
+            />
     </Grid>
     )
 }

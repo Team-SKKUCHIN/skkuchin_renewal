@@ -11,6 +11,7 @@ import Groups from "../components/Matching/Groups";
 import Friends from "../components/Matching/Friends";
 import { load_all_group_profile, get_my_group_profile } from "../actions/groupProfile/groupProfile";
 import { load_matching_info } from "../actions/matchingUser/matchingUser";
+import ErrorPopup from "../components/Custom/ErrorPopup";
 
 const LayoutContainer = styled.div`
   ::-webkit-scrollbar {
@@ -33,6 +34,10 @@ const MealPromisePage = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [isScrollingDown, setIsScrollingDown] = useState(false);
+
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const [popupBtnText, setPopupBtnText] = useState('');
 
   const banners = [
     {
@@ -72,8 +77,9 @@ const MealPromisePage = () => {
     if(user && user.phone_number !== null) {
         router.push('/makeGroupProfile');
     } else {
-        alert('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
-        router.push('/verification');
+        setPopupBtnText('휴대폰 본인인증 하기');
+        setPopupMessage('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+        setPopupOpen(true);
     }
   }
 
@@ -166,6 +172,19 @@ const MealPromisePage = () => {
             </Button>
           )}
         </div>
+        <ErrorPopup
+          open={popupOpen}
+          handleClose={() => setPopupOpen(false)}
+          message={popupMessage}
+          btnText={popupBtnText}
+          onConfirm={() => {
+            setPopupOpen(false);
+            if (popupBtnText === '휴대폰 본인인증 하기') {
+              router.push('/verification');
+            }
+          }}
+        />
+
       </ThemeProvider>
     </LayoutContainer>
   );

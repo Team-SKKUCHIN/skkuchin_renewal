@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 import { displayMBTI } from '../Matching/MBTIList';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import ErrorPopup from '../Custom/ErrorPopup';
 
 const FriendProfile = ({ candidate }) => {
     const router = useRouter();
@@ -11,21 +12,38 @@ const FriendProfile = ({ candidate }) => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const matchingUser = useSelector(state => state.matchingUser.matchingUser);
 
-    const handleSubmit = () => {
-        if (!isAuthenticated) 
-            return alert('로그인이 필요한 서비스입니다.');
-        if (!matchingUser) 
-            return alert('1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.');
-        if (matchingUser && !matchingUser.matching) 
-            return alert('1:1 밥약을 신청하기 위해선 개인 프로필을 공개로 변경해주세요');
-        if (user && user.phone_number === null) 
-            return alert("밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.");
+    const [open, setOpen] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupBtnText, setPopupBtnText] = useState('');
 
-        localStorage.setItem('candidateId', candidate.id);
-        router.push({
-            pathname: '/enrollOpenChat',
-            query: { type: 'friend'},
-        });
+    const handleSubmit = () => {
+        if (!isAuthenticated) {
+            setPopupBtnText('로그인하러 가기');
+            setPopupMessage('밥약 신청을 위해서는 로그인이 필요해요.');
+            setOpen(true);
+        }
+        else if (!matchingUser)  {
+            setPopupBtnText('개인 프로필 등록하기');
+            setPopupMessage('1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.');
+            setOpen(true);
+        }
+        else if (matchingUser && !matchingUser.matching) {
+            setPopupBtnText('개인 프로필 공개하기');
+            setPopupMessage('1:1 밥약을 신청하기 위해선 개인 프로필을 공개로 변경해주세요');
+            setOpen(true);
+        } 
+        else if (user && user.phone_number === null) {
+            setPopupBtnText('휴대폰 본인인증 하기');
+            setPopupMessage('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+            setOpen(true);
+        }
+        else {
+            localStorage.setItem('candidateId', candidate.id);
+            router.push({
+                pathname: '/enrollOpenChat',
+                query: { type: 'friend'},
+            });
+        }
     }
 
     return (
@@ -81,6 +99,25 @@ const FriendProfile = ({ candidate }) => {
             >
                 밥약 신청하기
             </Button>
+
+            <ErrorPopup
+                open={open}
+                handleClose={() => setOpen(false)}
+                message={popupMessage}
+                btnText={popupBtnText}
+                onConfirm={() => {
+                    setOpen(false);
+                    if (popupBtnText === '로그인하러 가기') {
+                        router.push('/login');
+                    } else if (popupBtnText === '개인 프로필 공개하기') {
+                        router.push('/myPage');
+                    } else if (popupBtnText === '개인 프로필 등록하기') {
+                        router.push('/makeProfile');
+                    } else if (popupBtnText === '휴대폰 본인인증 하기') {
+                        router.push('/verification');
+                    }
+                }}
+            />    
         </div>
     );
 }

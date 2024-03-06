@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import AddIcon from '@mui/icons-material/Add';
 import { load_all_group_profile } from '../actions/groupProfile/groupProfile';
 import { useSelector, useDispatch } from 'react-redux';
+import ErrorPopup from '../components/Custom/ErrorPopup';
 
 const ShowAllGroupLists = () => {
     const router = useRouter();
@@ -22,6 +23,10 @@ const ShowAllGroupLists = () => {
             dispatch(load_all_group_profile());
         }
     }, []);
+
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupBtnText, setPopupBtnText] = useState('');
 
     const [selectedFilter, setSelectedFilter] = useState('전체');
     const filterOptions = ['전체', '여성', '남성'];
@@ -43,8 +48,9 @@ const ShowAllGroupLists = () => {
         if(user && user.phone_number !== null) {
             router.push('/makeGroupProfile');
         } else {
-            alert('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
-            router.push('/verification');
+            setPopupBtnText('휴대폰 본인인증 하기');
+            setPopupMessage('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
+            setPopupOpen(true);
         }
     }
 
@@ -89,6 +95,19 @@ const ShowAllGroupLists = () => {
                 <AddIcon fontSize="medium" />
                 </IconButton>
             </div>
+
+            <ErrorPopup
+                open={popupOpen}
+                onClose={() => setPopupOpen(false)}
+                message={popupMessage}
+                confirmText={popupBtnText}
+                onInfoConfirm={() => {
+                    setPopupOpen(false);
+                    if (popupBtnText === '휴대폰 본인인증 하기') {
+                        router.push('/phoneAuth');
+                    }
+                }}
+            />
         </ThemeProvider>
     );
 };

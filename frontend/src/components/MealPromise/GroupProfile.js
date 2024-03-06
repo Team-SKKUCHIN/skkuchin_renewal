@@ -3,11 +3,16 @@ import { List, ListItem, ListItemText, Typography, Button, Divider } from '@mui/
 import { displayMBTI } from "../Matching/MBTIList";
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
+import ErrorPopup from '../Custom/ErrorPopup';
 
 const GroupProfile = ({isMyProfile, mode, group, handleEditProfileClick}) => {
     const router = useRouter();
     const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupBtnText, setPopupBtnText] = useState('');
 
     const handleSubmit = () => {
         if (isAuthenticated) {
@@ -15,12 +20,14 @@ const GroupProfile = ({isMyProfile, mode, group, handleEditProfileClick}) => {
                 router.push('/selectMyGroupProfile')
                 localStorage.setItem('candidateId', group.id);
             } else {
-                alert("그룹 밥약을 신청하기 위해선 그룹 프로필 작성이 필요해요.");
-                router.push('/mealPromise');
+                setPopupMessage('그룹 밥약을 신청하기 위해선 그룹 프로필 작성이 필요해요.');
+                setPopupBtnText('그룹 프로필 등록하기');
+                setPopupOpen(true);
             }
         } else {
-            alert("로그인이 필요한 서비스입니다.");
-            // router.push('/login');
+            setPopupBtnText('로그인하러 가기');
+            setPopupMessage('밥약 신청을 위해서는 로그인이 필요해요.');
+            setPopupOpen(true);
         }
     }
 
@@ -95,6 +102,20 @@ const GroupProfile = ({isMyProfile, mode, group, handleEditProfileClick}) => {
                     프로필 수정하기
                 </Button>
             }
+            <ErrorPopup
+                open={popupOpen}
+                handleClose={() => setPopupOpen(false)}
+                message={popupMessage}
+                btnText={popupBtnText}
+                onConfirm={() => {
+                    setPopupOpen(false);
+                    if (popupBtnText === '로그인하러 가기') {
+                        router.push('/login');
+                    } else if (popupBtnText === '그룹 프로필 등록하기') {
+                        router.push('/makeGroupProfile');
+                    }
+                }}
+            />
         </>
     )
 }
