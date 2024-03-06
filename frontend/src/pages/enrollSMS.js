@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { CssBaseline, Box, ThemeProvider, Dialog,DialogTitle,DialogActions,DialogContent,DialogContentText, Button, TextField, Typography, Link, FormControl, InputLabel, Select, Container, Grid, Autocomplete } from '@mui/material';
 import theme from '../theme/theme';
 import back from '../image/close.png';
-import { enroll_phone } from '../actions/pushToken/pushToken';
 
 const enrollSMS = () => {
     const dispatch = useDispatch();
