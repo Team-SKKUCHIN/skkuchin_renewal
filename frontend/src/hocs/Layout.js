@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Head from "next/head";
 import { load_user, update_last_accessed_time } from '../actions/auth/auth';
+import { load_places } from '../actions/place/place';
 
 const Layout = ({title, content, children}) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(load_places());
         dispatch(load_user())
         .then(() => {
             dispatch(update_last_accessed_time(true));
