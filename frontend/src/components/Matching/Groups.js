@@ -56,12 +56,10 @@ const Groups = () => {
     const handleSettingOpen = () => {
         if (isAuthenticated) {
             router.push({
-                pathname: '/makeProfile',
+                pathname: '/makeGroupProfile',
                 query: { src : '스꾸챗프로필설정', }
             });
-        } else {
-            setIsLogin(true);
-        }
+        } 
     }
     const handleRequestBtnClick = (id) => {
         if(isAuthenticated) {

@@ -112,7 +112,7 @@ const FriendProfile = ({ candidate }) => {
                     } else if (popupBtnText === '개인 프로필 공개하기') {
                         router.push('/myPage');
                     } else if (popupBtnText === '개인 프로필 등록하기') {
-                        router.push('/makeProfile');
+                        router.push('/changeProfile');
                     } else if (popupBtnText === '휴대폰 본인인증 하기') {
                         router.push('/verification');
                     }

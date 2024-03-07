@@ -68,12 +68,10 @@ const Friends = () => {
     const handleSettingOpen = () => {
         if (isAuthenticated) {
             router.push({
-                pathname: '/makeProfile',
+                pathname: '/changeProfile',
                 query: { src : '스꾸챗프로필설정', }
             });
-        } else {
-            setIsLogin(true);
-        }
+        } 
     }
 
     const handleFriendClick = (friend) => {
@@ -281,7 +279,7 @@ const Friends = () => {
                     } else if (popupBtnText === '개인 프로필 공개하기') {
                         router.push('/myPage');
                     } else if (popupBtnText === '개인 프로필 등록하기') {
-                        router.push('/makeProfile');
+                        router.push('/changeProfile');
                     } else if (popupBtnText === '휴대폰 본인인증 하기') {
                         router.push('/verification');
                     }
