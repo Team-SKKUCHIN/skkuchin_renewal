@@ -24,6 +24,15 @@ import {
     SEARCH_PLACES_KEYWORD_FAIL
 } from './types'
 import { getCoordinate } from '../../utils/getCoordinate';
+import { places } from '../../assets/json/place';
+
+
+export const load_places_from_json = () => dispatch => {
+    dispatch({
+        type: LOAD_PLACES_SUCCESS,
+        payload: places,
+    })
+}
 
 export const load_places = (callback) => async dispatch => {
     
@@ -61,8 +70,6 @@ export const load_places = (callback) => async dispatch => {
         })
         
         if (callback) callback([false, error]);
-        
-        
     }
 }
 
