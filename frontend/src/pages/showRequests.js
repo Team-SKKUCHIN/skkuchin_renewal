@@ -14,6 +14,7 @@ import { CustomButton } from '../components/Request/CustomButton';
 import { KakaoLink } from '../components/Request/KakaoLink';
 import Image from 'next/image';
 import { noInfoCharacter } from '../image/request';
+import { DetailGroupProfile } from '../components/Request/DetailGroupProfile';
 
 const showRequests = () => {
     const dispatch = useDispatch();
@@ -24,7 +25,10 @@ const showRequests = () => {
 
     const senderName = useRef('');
     const link = useRef('');
+    const groupId = useRef(null);
+    const isMine = useRef(null);
     const [linkOn, setLinkOn] = useState(false);
+    const [groupOn, setGroupOn] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedFilter, setSelectedFilter] = useState('전체');
     const filterOptions = ['전체', '여럿이서 먹어요', '둘이 먹어요'];
@@ -98,7 +102,12 @@ const showRequests = () => {
                     <div key={index}>
                         {request.gender ?
                         <PersonalRequest request={request} />
-                        : <GroupRequest request={request} />}
+                        : <GroupRequest
+                            request={request}
+                            id={groupId}
+                            isMine={isMine}
+                            setGroupOn={setGroupOn}/>
+                        }
                         <CustomButton
                             selectedIndex={selectedIndex}
                             request={request}
@@ -109,6 +118,7 @@ const showRequests = () => {
                     </div>
                 ))}
             </div>
+            {groupOn && <DetailGroupProfile id={groupId} isMine={isMine} setGroupOn={setGroupOn} /> }
             {linkOn && <KakaoLink senderName={senderName} link={link} setLinkOn={setLinkOn} />}
         </ThemeProvider>
     )
