@@ -5,6 +5,8 @@ import {
     ADD_MATCHING_INFO_FAIL,
     LOAD_MATCHING_INFO_SUCCESS,
     LOAD_MATCHING_INFO_FAIL,
+    LOAD_MY_MATCHING_INFO_SUCCESS,
+    LOAD_MY_MATCHING_INFO_FAIL,
     CHANGE_MATCHING_STATUS_SUCCESS,
     CHANGE_MATCHING_STATUS_FAIL,
     CHANGE_MATCHING_INFO_SUCCESS,
@@ -130,7 +132,7 @@ export const load_matching_info = (callback) => async dispatch => {
 
         if(res.status === 200){
             dispatch({
-                type: LOAD_MATCHING_INFO_SUCCESS,
+                type: LOAD_MY_MATCHING_INFO_SUCCESS,
                 payload: apiRes.data
             })
             
@@ -139,7 +141,7 @@ export const load_matching_info = (callback) => async dispatch => {
             
         }else {
             dispatch({
-                type: LOAD_MATCHING_INFO_FAIL
+                type: LOAD_MY_MATCHING_INFO_FAIL
             })
             
             if (callback) callback([false, apiRes.message]);
@@ -150,7 +152,7 @@ export const load_matching_info = (callback) => async dispatch => {
     } catch (error) {
         console.log(error);
         dispatch({
-            type: LOAD_MATCHING_INFO_FAIL
+            type: LOAD_MY_MATCHING_INFO_FAIL
         })
         
         if (callback) callback([false, error]);

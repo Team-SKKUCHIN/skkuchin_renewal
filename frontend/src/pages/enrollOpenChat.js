@@ -14,7 +14,6 @@ const enrollOpenChat = () => {
     const dispatch = useDispatch();
 
     const { type } = router.query;
-    console.log('type', type);
     
     const [senderId, setSenderId] = useState(localStorage.getItem('myProfileId') || '');
     const [receiverId, setReceiverId] = useState(localStorage.getItem('candidateId') || '');
@@ -29,7 +28,6 @@ const enrollOpenChat = () => {
     const [popupDescription, setPopupDescription] = useState('');
 
     const handleSubmit = () => {
-        console.log("확인 버튼 클릭");
         if(openChatLink !== '') {
             setPopupMessage(`밥약을 신청하시겠어요?\n(신청 후 취소는 불가해요)`);
             setPopupType('question');

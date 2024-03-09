@@ -13,7 +13,7 @@ import Popup from '../components/Custom/Popup';
 const makeProfile = () => { 
     const dispatch = useDispatch();
     const router = useRouter();
-    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
+    const matchingUser = useSelector(state => state.matchingUser.myMatchingInfo);
     const user = useSelector(state => state.auth.user);
     const keywordNum = useRef(0);
 
@@ -306,12 +306,9 @@ const makeProfile = () => {
         }
         dispatch(change_matching_info(data, ([result, message]) => {
                 if (result) {
-                    // setDialogOpen(true);
-                    // setTimeout(() => {
-                    //     router.push('/myPage');
-                    // }, 1000); 
                     setPopupMessage('변경 내용을 저장하였습니다.');
                     setPopupOpen(true);
+                    setPopupType('success');
                 } else {
                     setAlertOpen(true);
                     setAlertMessage(message);

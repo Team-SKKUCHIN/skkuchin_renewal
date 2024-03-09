@@ -29,7 +29,7 @@ const MealPromisePage = () => {
 
   const user = useSelector(state => state.auth.user);
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-  const matchingUser = useSelector(state => state.matchingUser.matchingUser);
+  const matchingUser = useSelector(state => state.matchingUser.myMatchingInfo);
   const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
 
   const [activeStep, setActiveStep] = useState(0);

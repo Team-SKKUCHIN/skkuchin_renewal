@@ -6,7 +6,6 @@ import theme from '../theme/theme';
 import Header from "../components/MealPromise/Header";
 import Filter from '../components/MealPromise/Filter';
 import FriendItem from '../components/MealPromise/FriendItem';
-import FriendProfile from '../components/MealPromise/FriendProfile';
 import ErrorPopup from '../components/Custom/ErrorPopup';
 
 const showAllTwoLists = () => {
@@ -14,9 +13,7 @@ const showAllTwoLists = () => {
 
     const user = useSelector(state => state.auth.user);
     const candidate = useSelector(state => state.candidate.candidate);
-
     const [selectedFilter, setSelectedFilter] = useState('전체');
-    const [selectedCandidate, setSelectedCandidate] = useState(null);
     const [displayCount, setDisplayCount] = useState(20); 
 
     const [popupOpen, setPopupOpen] = useState(false);
@@ -27,15 +24,11 @@ const showAllTwoLists = () => {
 
     const filteredProfiles =
         selectedFilter === '전체'
-        ? candidate.filter((candidate) => candidate.id !== user.id)
-        : candidate.filter((candidate) => candidate.campus === selectedFilter && candidate.id !== user.id);
+        ? candidate && candidate.filter((candidate) => candidate.id !== user.id)
+        : candidate && candidate.filter((candidate) => candidate.campus === selectedFilter && candidate.id !== user.id);
 
     const handleBackClick = () => {
-        if(selectedCandidate) {
-            setSelectedCandidate(null);
-        } else {
-            router.push('/mealPromise');
-        }
+        router.push('/mealPromise');
     }
 
     const handleLoadMore = () => {
@@ -47,49 +40,48 @@ const showAllTwoLists = () => {
         setDisplayCount(20);
     }
 
+    const handleFriendClick = (candidate) => () => {
+        localStorage.setItem('candidateId', candidate.id);
+        localStorage.setItem('selectedFriend', JSON.stringify(candidate));
+        router.push(`/showFriendProfile`);
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             {/* header */}
-            <Header title="둘이 먹어요" onBackClick={handleBackClick} />
+            <Header title={"둘이 먹어요"} onBackClick={handleBackClick} />
 
             {/* 필터링 */}
-            {
-                selectedCandidate == null && (
-                    <Filter
-                        filterOptions={filterOptions}
-                        selectedFilter={selectedFilter}
-                        onFilterSelect={handleFilterChange}
-                    />
-                )
-            }
+            <Filter
+                filterOptions={filterOptions}
+                selectedFilter={selectedFilter}
+                onFilterSelect={handleFilterChange}
+            />
 
-            {selectedCandidate ? (
-                <FriendProfile candidate={selectedCandidate} />
-                ) : (
-                <div style={{ overflow: 'scroll', marginTop: '109px'}}>
-                    {
-                        filteredProfiles && filteredProfiles.length !== 0 ? (
-                            filteredProfiles.slice(0, displayCount).map((candidate, index) => (
-                                <div key={index} onClick={() => setSelectedCandidate(candidate)}>
-                                    <FriendItem candidate={candidate} />
-                                    <Divider sx={{margin: '0 24px'}} />
-                                </div>
-                            ))
-                        ) : (
-                            <Typography>필터링 조건에 부합하는 학우가 없습니다.</Typography>
-                        )
-                    }
-                    {filteredProfiles && ( displayCount < filteredProfiles.length ) && (
-                        <div style={{display: 'flex', justifyContent: 'center', width: '100%', padding: '12px'}}>
-                            <Button disableElevation onClick={handleLoadMore}  sx={{color: '#9E9E9E', fontWeight: 600, fontSize: '18px', textDecorationLine: 'underline'}}>
-                                더보기
-                            </Button>
-                        </div>
-                    )}
-                </div>
-            )}
-            
+           
+            <div style={{ overflow: 'scroll', marginTop: '109px'}}>
+                {
+                    filteredProfiles && filteredProfiles.length !== 0 ? (
+                        filteredProfiles.slice(0, displayCount).map((candidate, index) => (
+                            <div key={index} onClick={handleFriendClick(candidate)}>
+                                <FriendItem candidate={candidate} />
+                                <Divider sx={{margin: '0 24px'}} />
+                            </div>
+                        ))
+                    ) : (
+                        <Typography>필터링 조건에 부합하는 학우가 없습니다.</Typography>
+                    )
+                }
+                {filteredProfiles && ( displayCount < filteredProfiles.length ) && (
+                    <div style={{display: 'flex', justifyContent: 'center', width: '100%', padding: '12px'}}>
+                        <Button disableElevation onClick={handleLoadMore}  sx={{color: '#9E9E9E', fontWeight: 600, fontSize: '18px', textDecorationLine: 'underline'}}>
+                            더보기
+                        </Button>
+                    </div>
+                )}
+            </div>
+                        
             <ErrorPopup
                 open={popupOpen}
                 handleClose={() => setPopupOpen(false)}

@@ -16,7 +16,7 @@ const myPage = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const user = useSelector(state => state.auth.user);
-    const userMatchInfo = useSelector(state => state.matchingUser.matchingUser);
+    const userMatchInfo = useSelector(state => state.matchingUser.myMatchingInfo);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 
     const [MatchChecked, setMatchChecked] = useState(false);

@@ -13,7 +13,7 @@ const Friends = () => {
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user);
-    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
+    const matchingUser = useSelector(state => state.matchingUser.myMatchingInfo);
     const candidate = useSelector(state => state.candidate.candidate);
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);

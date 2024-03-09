@@ -4,6 +4,8 @@ import {
     ADD_MATCHING_INFO_FAIL,
     LOAD_MATCHING_INFO_SUCCESS,
     LOAD_MATCHING_INFO_FAIL,
+    LOAD_MY_MATCHING_INFO_SUCCESS,
+    LOAD_MY_MATCHING_INFO_FAIL,
     CHANGE_MATCHING_STATUS_SUCCESS,
     CHANGE_MATCHING_STATUS_FAIL,
     CHANGE_MATCHING_INFO_SUCCESS,
@@ -13,6 +15,7 @@ import {
 } from '../actions/matchingUser/types';
 
 const initialState = {
+    myMatchingInfo: null,
     matchingUser: null
 };
 
@@ -37,6 +40,16 @@ const matchingUserReducer = (state = initialState, action) => {
             return {
                 ...state,
                 matchingUser: null
+            }
+        case LOAD_MY_MATCHING_INFO_SUCCESS:
+            return {
+                ...state,
+                myMatchingInfo: payload
+            }
+        case LOAD_MY_MATCHING_INFO_FAIL:
+            return {
+                ...state,
+                myMatchingInfo: null
             }
         case CHANGE_MATCHING_STATUS_SUCCESS:
             return {

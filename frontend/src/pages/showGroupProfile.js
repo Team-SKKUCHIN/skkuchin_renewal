@@ -37,7 +37,6 @@ const showGroupProfile = () => {
         if(id) {
             dispatch(load_candidate_profile(id, ([result, message]) => {
                 if (result) {
-                    console.log("그룹 프로필 불러오기 성공");
                     setLoading(false);
                 } else {
                     console.log("그룹 프로필 불러오기 오류" + message);
@@ -98,10 +97,8 @@ const showGroupProfile = () => {
     const handleReasonConfirm = (reason) => {
         dispatch(delete_group_profile(id, reason, ([result, message]) => {
             if(result) {
-                console.log('그룹 프로필 삭제 성공 : ', reason);
                 router.push('/myGroupProfileLists');
             } else {
-                console.log('그룹 프로필 삭제 실패 : ', message);
                 handleClose();
                 setPopupMessage('다시 시도해주세요.');
                 setPopupType('info');

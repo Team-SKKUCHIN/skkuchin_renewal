@@ -27,7 +27,7 @@ const MatchPage = () => {
     const router = useRouter();
 
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
+    const matchingUser = useSelector(state => state.matchingUser.myMatchingInfo);
     const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
 
     useEffect(() => {

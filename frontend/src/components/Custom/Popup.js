@@ -54,6 +54,12 @@ const Popup = ({ open, handleClose, type, message, description, confirmText=null
                         확인
                     </Button>
                 )}
+                {
+                    type === 'success' && (
+                    <Button disableElevation fullWidth onClick={handleClose} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                        확인
+                    </Button>
+                )}
                 {type === 'question' && (
                 <div style={{display: 'flex', width: '100%', flexDirection: 'row', gap: '8px'}}>
                     <Button disableElevation fullWidth onClick={handleClose} sx={{ backgroundColor: '#F2F2F2', color: '#BABABA', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>

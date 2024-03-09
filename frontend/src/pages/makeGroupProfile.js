@@ -82,7 +82,6 @@ const MakeGroupProfile = () => {
     const handleDupicateCheck = async () => {
        const isValid = await check_group_name_duplicate(groupName);
        setIsValidNickname(isValid);
-       console.log(groupName, isValid);
     };
 
     useEffect(() => {
