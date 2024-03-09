@@ -2,7 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogActions, Button, IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-const ErrorPopup = ({ open, handleClose, message, btnText, onConfirm }) => {
+const ErrorPopup = ({ open, handleClose, message, btnText, type, onConfirm }) => {
     return (
         <Dialog open={open} onClose={handleClose}>
             <div style={{ padding: '12px 16px 16px', textAlign: 'center', minWidth: 300}}>
@@ -23,9 +23,16 @@ const ErrorPopup = ({ open, handleClose, message, btnText, onConfirm }) => {
                 </Typography>
             </DialogContent>
             <DialogActions sx={{p: '16px 0 0'}}>
-                <Button disableElevation fullWidth onClick={onConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
-                    {btnText}
-                </Button>
+                {
+                    type === 'success' ?
+                    <Button disableElevation fullWidth onClick={handleClose} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                        {btnText}
+                    </Button>
+                    :
+                    <Button disableElevation fullWidth onClick={onConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                        {btnText}
+                    </Button>
+                }
             </DialogActions>
         </div>
         </Dialog>

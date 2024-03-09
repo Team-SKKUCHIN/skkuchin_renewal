@@ -1,13 +1,13 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { ThemeProvider, CssBaseline, IconButton, Typography } from '@mui/material';
+import { ThemeProvider, CssBaseline, IconButton, Typography, Button } from '@mui/material';
 import theme from '../theme/theme';
 import GroupItem from '../components/MealPromise/GroupItem';
 import Header from '../components/MealPromise/Header';
 import Filter from '../components/MealPromise/Filter';
 import { useRouter } from 'next/router';
 import AddIcon from '@mui/icons-material/Add';
-import { load_all_group_profile } from '../actions/groupProfile/groupProfile';
+import { load_all_group_profile, get_my_group_profile } from '../actions/groupProfile/groupProfile';
 import { useSelector, useDispatch } from 'react-redux';
 import ErrorPopup from '../components/Custom/ErrorPopup';
 
@@ -17,13 +17,15 @@ const ShowAllGroupLists = () => {
 
     const user = useSelector(state => state.auth.user);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
     const groups = useSelector(state => state.groupProfile.allGroupProfiles);
 
     useEffect(() => {
-        if(groups === null) { 
-            dispatch(load_all_group_profile());
-        }
-    }, []);
+        if(groups === null) dispatch(load_all_group_profile());
+        if (myGroupProfiles === null) dispatch(get_my_group_profile());
+    }, [isAuthenticated]);
+
+    const [displayCount, setDisplayCount] = useState(20);
 
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
@@ -31,7 +33,7 @@ const ShowAllGroupLists = () => {
 
     const [selectedFilter, setSelectedFilter] = useState('전체');
     const filterOptions = ['전체', '여성', '남성'];
-
+    
     const filteredProfiles =
         selectedFilter === '전체'
         ? groups
@@ -59,29 +61,48 @@ const ShowAllGroupLists = () => {
         } 
     }
 
+    const handleLoadMore = () => {
+        setDisplayCount(prevCount => prevCount + 20);
+    }
+
+    const handleFilterChange = (filter) => {
+        setSelectedFilter(filter);
+        setDisplayCount(20);
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             {/* header */}
-            <Header title="여럿이서 먹어요" onBackClick={handleBackClick} />
+            <Header title="여럿이서 먹어요" onBackClick={handleBackClick}/>
 
             {/* 필터 */}
             <Filter
                 filterOptions={filterOptions}
                 selectedFilter={selectedFilter}
-                onFilterSelect={(filter) => setSelectedFilter(filter)}
+                onFilterSelect={handleFilterChange}
             />
 
             {/* 목록 */}
             <div style={{ overflow: 'scroll', padding: '12px 24px' }}>
                 {filteredProfiles && filteredProfiles.length !== 0 ? (
-                    filteredProfiles.map((group, index) => (
-                        <div style={{ marginBottom: '12px' }} key={index} onClick={() => handleGroupClick(group.id)}>
-                            <GroupItem group={group} />
-                        </div>
-                    ))
+                    filteredProfiles
+                        .filter((group) => !myGroupProfiles.some((myGroup) => myGroup.id == group.id))
+                        .slice(0, displayCount)
+                        .map((group, index) => (
+                            <div style={{ marginBottom: '12px' }} key={index} onClick={() => handleGroupClick(group.id)}>
+                                <GroupItem group={group} />
+                            </div>
+                        ))
                 ) : (
                     <Typography>필터링 조건에 부합하는 그룹이 없습니다.</Typography>
+                )}
+                {filteredProfiles && (displayCount < filteredProfiles.length) && (
+                    <div style={{ display: 'flex', justifyContent: 'center', width: '100%', padding: '12px' }}>
+                        <Button onClick={handleLoadMore} sx={{ color: '#9E9E9E', fontWeight: 600, fontSize: '18px', textDecorationLine: 'underline' }}>
+                            더보기
+                        </Button>
+                    </div>
                 )}
             </div>
 

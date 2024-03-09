@@ -19,6 +19,7 @@ const GroupProfile = ({isMyProfile, mode, group, handleEditProfileClick}) => {
             if (myGroupProfiles && myGroupProfiles.length > 0) {
                 router.push('/selectMyGroupProfile')
                 localStorage.setItem('candidateId', group.id);
+                localStorage.setItem('candidateName', group.group_name);
             } else {
                 setPopupMessage('그룹 밥약을 신청하기 위해선\n그룹 프로필 작성이 필요해요.');
                 setPopupBtnText('그룹 프로필 등록하기');
@@ -33,7 +34,7 @@ const GroupProfile = ({isMyProfile, mode, group, handleEditProfileClick}) => {
 
     return (
         <>
-            <div style={{padding: '19px 0 16px', textAlign: 'center'}}>
+            <div style={{padding: '19px 0 16px', textAlign: 'center', marginTop: '63px'}}>
                 {displayMBTI('GROUP', 120, 120)}
                 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <Typography sx={{fontSize: '18px', fontWeight: '700', mr: '5px'}}>{group !== null && group.group_name}</Typography>

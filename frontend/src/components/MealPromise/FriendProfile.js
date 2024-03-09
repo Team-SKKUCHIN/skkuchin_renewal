@@ -39,6 +39,7 @@ const FriendProfile = ({ candidate }) => {
         }
         else {
             localStorage.setItem('candidateId', candidate.id);
+            localStorage.setItem('candidateName', candidate.nickname);
             router.push({
                 pathname: '/enrollOpenChat',
                 query: { type: 'friend'},

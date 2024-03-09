@@ -43,8 +43,9 @@ const enrollOpenChat = () => {
                     setPopupOpen(true);
                     setPopupType('info');
                 } else {
-                    console.log('밥약 신청 실패');
-                    console.log(message);
+                    setPopupType('error');
+                    setPopupMessage(message);
+                    setPopupOpen(true);
                 }
             }));
         } else if(type === 'friend'){
@@ -55,8 +56,9 @@ const enrollOpenChat = () => {
                     setPopupOpen(true);
                     setPopupType('info');
                 } else {
-                    console.log('밥약 신청 실패');
-                    console.log(message);
+                    setPopupType('error');
+                    setPopupMessage(message);
+                    setPopupOpen(true);
                 }
             }));
         }
@@ -71,9 +73,9 @@ const enrollOpenChat = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Header title="" icon='close'/>
-            <div style={{padding: '0 24px', fontSize: '16px', flex: 1}}>
+            <div style={{padding: '63px 24px 0', fontSize: '16px', flex: 1}}>
                 <Typography sx={{ fontWeight: 'bold', m: '50px 0', p: '25px 0', textAlign: 'center' }}>
-                    [상대]에게 전달할<br />
+                    [{localStorage.getItem('candidateName')}]에게 전달할<br />
                     <span style={{ backgroundColor: '#FFCE00', padding: '0 3px', display: 'inline-block', lineHeight: '0.65em' }}>카카오톡 {type === 'friend' ? '개인' : '그룹'} 오픈 채팅방 링크</span>를 입력해주세요.
                 </Typography>
                 <Typography sx={{fontSize: '14px', color: '3C3C3C'}}>

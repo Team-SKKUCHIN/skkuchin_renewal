@@ -8,19 +8,18 @@ import Header from "../components/MealPromise/Header";
 import Filter from '../components/MealPromise/Filter';
 import FriendItem from '../components/MealPromise/FriendItem';
 import FriendProfile from '../components/MealPromise/FriendProfile';
-import AddIcon from '@mui/icons-material/Add';
 import ErrorPopup from '../components/Custom/ErrorPopup';
 
 const showAllTwoLists = () => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const user = useSelector(state => state.auth.user);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const candidate = useSelector(state => state.candidate.candidate);
 
     const [selectedFilter, setSelectedFilter] = useState('전체');
     const [selectedCandidate, setSelectedCandidate] = useState(null);
+    const [displayCount, setDisplayCount] = useState(20); 
 
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
@@ -29,8 +28,8 @@ const showAllTwoLists = () => {
     const filterOptions = ['전체', '명륜', '율전'];
 
     useEffect(() => {
-        dispatch(load_candidate());
-    }, []);
+        if(candidate === null) dispatch(load_candidate());
+    }, [isAuthenticated]);
 
     const filteredProfiles =
         selectedFilter === '전체'
@@ -45,18 +44,13 @@ const showAllTwoLists = () => {
         }
     }
 
-    const handleAddBtnClick = () => {
-        if(!isAuthenticated) {
-            setPopupMessage('그룹 프로필을 등록하기 위해서는\n로그인이 필요해요.');
-            setPopupBtnText('로그인하러 가기');
-            setPopupOpen(true);
-        } else if (user && user.phone_number === null) {
-              setPopupBtnText('휴대폰 본인인증 하기');
-              setPopupMessage('밥약 서비스 이용을 위해선 휴대폰 본인인증이 필요해요. 안전한 서비스 이용을 위해 인증해주세요.');
-              setPopupOpen(true);
-        } else {
-              router.push('/makeGroupProfile');
-        } 
+    const handleLoadMore = () => {
+        setDisplayCount(prevCount => prevCount + 20);
+    }
+
+    const handleFilterChange = (filter) => {
+        setSelectedFilter(filter);
+        setDisplayCount(20);
     }
 
     return (
@@ -71,7 +65,7 @@ const showAllTwoLists = () => {
                     <Filter
                         filterOptions={filterOptions}
                         selectedFilter={selectedFilter}
-                        onFilterSelect={(filter) => setSelectedFilter(filter)}
+                        onFilterSelect={handleFilterChange}
                     />
                 )
             }
@@ -81,39 +75,27 @@ const showAllTwoLists = () => {
                 ) : (
                 <div style={{ overflow: 'scroll' }}>
                     {
-                    filteredProfiles && filteredProfiles.length !== 0 ? (
-                        filteredProfiles.map((candidate, index) => (
-                            <div key={index} onClick={() => setSelectedCandidate(candidate)}>
-                                <FriendItem candidate={candidate} />
-                                <Divider sx={{margin: '0 24px'}} />
-                            </div>
-                        ))
-                    ) : (
-                        <Typography>필터링 조건에 부합하는 학우가 없습니다.</Typography>
-                    )
-                }
+                        filteredProfiles && filteredProfiles.length !== 0 ? (
+                            filteredProfiles.slice(0, displayCount).map((candidate, index) => (
+                                <div key={index} onClick={() => setSelectedCandidate(candidate)}>
+                                    <FriendItem candidate={candidate} />
+                                    <Divider sx={{margin: '0 24px'}} />
+                                </div>
+                            ))
+                        ) : (
+                            <Typography>필터링 조건에 부합하는 학우가 없습니다.</Typography>
+                        )
+                    }
+                    {filteredProfiles && ( displayCount < filteredProfiles.length ) && (
+                        <div style={{display: 'flex', justifyContent: 'center', width: '100%', padding: '12px'}}>
+                            <Button disableElevation onClick={handleLoadMore}  sx={{color: '#9E9E9E', fontWeight: 600, fontSize: '18px', textDecorationLine: 'underline'}}>
+                                더보기
+                            </Button>
+                        </div>
+                    )}
                 </div>
             )}
             
-            {
-                selectedCandidate == null && (
-                    <div style={{ position: 'fixed', right: '24px', bottom: '24px'}}>
-                        <IconButton
-                        style={{
-                            backgroundColor: "#FFCE00",
-                            color: '#fff',
-                            borderRadius: '25px',
-                            boxShadow: 'none',
-                            height: '52px',
-                            width: '52px'
-                        }}
-                        onClick={handleAddBtnClick}
-                        >
-                        <AddIcon fontSize="medium" />
-                        </IconButton>
-                    </div>
-                )
-            }
             <ErrorPopup
                 open={popupOpen}
                 handleClose={() => setPopupOpen(false)}

@@ -88,10 +88,14 @@ const MealPromisePage = () => {
   }
 
   useEffect(() => {
+    console.log(user)
+  }, [user]);
+
+  useEffect(() => {
     if(allGroupProfiles === null) dispatch(load_all_group_profile());
     if(isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
     if(isAuthenticated && matchingUser === null) dispatch(load_matching_info());
-  }, []);
+  }, [user, isAuthenticated]);
 
   return (
     <LayoutContainer>

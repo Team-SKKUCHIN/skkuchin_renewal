@@ -106,7 +106,6 @@ export const add_group_profile = (profileData, callback) => async dispatch => {
 
     const body = JSON.stringify(profileData);
 
-    console.log('그룹 프로필 등록 요청!: ', body);
     try {
         const res = await fetch(`${API_URL}/api/group-profile`,{
             method: 'POST',
@@ -119,20 +118,18 @@ export const add_group_profile = (profileData, callback) => async dispatch => {
         });
 
         const apiRes = await res.json();
-        console.log('그룹 프로필 등록 요청 완료: ', apiRes);
 
         if(res.status === 201){
             dispatch({
                 type: ADD_GROUP_PROFILE_SUCCESS,
             })
             dispatch(get_my_group_profile());
-            dispatch(load_all_group_profile(true));
+            dispatch(load_all_group_profile());
             if(callback) callback([true, apiRes.message]);
         } else {
             dispatch({
                 type: ADD_GROUP_PROFILE_FAIL
             })
-
             if(callback) callback([false, apiRes.message]);
         }
 
@@ -142,6 +139,7 @@ export const add_group_profile = (profileData, callback) => async dispatch => {
         dispatch({
             type: ADD_GROUP_PROFILE_FAIL
         })
+        if(callback) callback([false, error]);
     }
 }
 
@@ -167,6 +165,7 @@ export const load_candidate_profile = (id, callback) => async dispatch => {
             dispatch({
                 type: LOAD_CANDIDATE_PROFILE_FAIL
             });
+            if(callback) callback([false, apiRes.message]);
         }
     }
 
@@ -180,57 +179,28 @@ export const load_candidate_profile = (id, callback) => async dispatch => {
 
 export const load_all_group_profile = () => async (dispatch) => {
     try {
-        try {
-            await dispatch(request_refresh());
-            const access = await dispatch(getToken('access'));
-            
-            const headers = {
+        const res = await fetch(`${API_URL}/api/group-profile`, {
+            method: 'GET',
+            headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-            };
-
-            if (access) headers['Authorization'] = `Bearer ${access}`;
-
-            const res = await fetch(`${API_URL}/api/group-profile`, {
-                method: 'GET',
-                headers: headers
-            });
-
-            const apiRes = await res.json();
-
-            if (res.status === 200) {
-                dispatch({
-                    type: LOAD_ALL_GROUP_PROFILE_SUCCESS,
-                    payload: apiRes.data
-                });
-            } else {
-                dispatch({
-                    type: LOAD_ALL_GROUP_PROFILE_FAIL
-                });
             }
-        } catch (tokenError) {
-            const res = await fetch(`${API_URL}/api/group-profile`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
+        });
+
+        const apiRes = await res.json();
+
+        if(res.status === 200) {
+            dispatch({
+                type: LOAD_ALL_GROUP_PROFILE_SUCCESS,
+                payload: apiRes.data
             });
-
-            const apiRes = await res.json();
-
-            if (res.status === 200) {
-                dispatch({
-                    type: LOAD_ALL_GROUP_PROFILE_SUCCESS,
-                    payload: apiRes.data
-                });
-            } else {
-                dispatch({
-                    type: LOAD_ALL_GROUP_PROFILE_FAIL
-                });
-            }
+        } else {
+            dispatch({
+                type: LOAD_ALL_GROUP_PROFILE_FAIL
+            });
         }
     } catch (error) {
+        console.log(error);
         dispatch({
             type: LOAD_ALL_GROUP_PROFILE_FAIL
         });
@@ -241,7 +211,6 @@ export const load_all_group_profile = () => async (dispatch) => {
 export const update_group_profile = (profileId, updatedData, callback) => async dispatch => {
     await dispatch(request_refresh());
     const access = dispatch(getToken('access'));
-    console.log(access)
 
     const body = JSON.stringify(updatedData);
     try {
@@ -256,7 +225,6 @@ export const update_group_profile = (profileId, updatedData, callback) => async 
         });
 
         const apiRes = await res.json();
-        console.log(`그룹 프로필(${profileId}) 수정 요청 완료 :`, apiRes);
 
         if (res.status === 200) {
             dispatch({
@@ -268,12 +236,14 @@ export const update_group_profile = (profileId, updatedData, callback) => async 
             dispatch({
                 type: CHANGE_GROUP_PROFILE_FAIL
             });
+            if (callback) callback([false, apiRes.message]);
         }
     } catch (error) {
         console.log(error);
         dispatch({
             type: CHANGE_GROUP_PROFILE_FAIL
         });
+        if (callback) callback([false, error]);
     }
 }
 
@@ -294,7 +264,6 @@ export const delete_group_profile = (profileId, reason, callback) => async dispa
         });
         
         const apiRes = await res.json();
-        console.log(res.status, apiRes);
         if (res.status === 200) {
             dispatch({
                 type: DELETE_GROUP_PROFILE_SUCCESS,
@@ -308,10 +277,10 @@ export const delete_group_profile = (profileId, reason, callback) => async dispa
             if (callback) callback([false, apiRes.message]);
         }
     } catch (error) {
-        console.log(error);
         dispatch({
             type: DELETE_GROUP_PROFILE_FAIL
         });
+        if (callback) callback([false, error]);
     }
 }
 
