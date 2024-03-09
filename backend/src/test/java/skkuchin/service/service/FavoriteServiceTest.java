@@ -25,8 +25,6 @@ import static org.mockito.Mockito.*;
 
 public class FavoriteServiceTest extends MockTest {
 
-
-
     @InjectMocks
     private FavoriteService favoriteService;
 
@@ -38,8 +36,6 @@ public class FavoriteServiceTest extends MockTest {
 
     private Place place;
     private AppUser user;
-
-
 
     @Before
     public void setUp() {
@@ -55,104 +51,94 @@ public class FavoriteServiceTest extends MockTest {
                 .build();
 
     }
+
     @Test
     public void get_My_Detail_성공() {
-        //given
+        // given
 
-        Favorite favorite = new Favorite(1L,place,user);
-
+        Favorite favorite = new Favorite(1L, place, user);
 
         given(favoriteRepo.findByUser(user)).willReturn(List.of(favorite));
-        //when
+        // when
         List<Favorite> favorite1 = favoriteRepo.findByUser(user);
 
-
-        //then
+        // then
         assertThat(favorite1.size()).isEqualTo(1);
         assertThat(favorite1.get(0).getPlace().getName()).isEqualTo("기꾸스시");
 
     }
 
-
-
     @Test
-    public void add_favorite(){
+    public void add_favorite() {
 
-        //given
+        // given
 
         FavoriteDto.PostRequest dto = new FavoriteDto.PostRequest(1L);
 
         given(placeRepo.findById(1L)).willReturn(Optional.ofNullable(place));
 
-        //when
-        favoriteService.write(user,dto);
+        // when
+        favoriteService.write(user, dto);
         Optional<Favorite> favorite = favoriteRepo.findById(1L);
-        //then
+        // then
         verify(favoriteRepo, times(1)).save(any());
 
-
     }
-    @Test
-    public void add_favorite_없는_장소_추가_오류(){
 
-        //given
+    @Test
+    public void add_favorite_없는_장소_추가_오류() {
+
+        // given
 
         FavoriteDto.PostRequest dto = new FavoriteDto.PostRequest(5L);
 
         given(placeRepo.findById(1L)).willReturn(Optional.ofNullable(place));
 
-        //when
+        // when
 
-
-        //then
-        assertThrows(NoSuchElementException.class, () -> favoriteService.write(user,dto));
-
+        // then
+        assertThrows(NoSuchElementException.class, () -> favoriteService.write(user, dto));
 
     }
+
     @Test
-    public void delete_favorite(){
-        Favorite favorite = new Favorite(1L,place,user);
+    public void delete_favorite() {
+        Favorite favorite = new Favorite(1L, place, user);
         given(placeRepo.findById(1L)).willReturn(Optional.ofNullable(place));
 
         favoriteRepo.delete(favorite);
 
         verify(favoriteRepo, times(1)).delete(favorite);
 
-
     }
 
     @Test
-    public void 남의_즐겨찾기_delete_favorite_오류(){
-        //given
-        Favorite favorite = new Favorite(1L,place,user);
+    public void 남의_즐겨찾기_delete_favorite_오류() {
+        // given
+        Favorite favorite = new Favorite(1L, place, user);
         given(favoriteRepo.findById(1L)).willReturn(Optional.ofNullable(favorite));
 
-        //then
-        assertThrows(IllegalArgumentException.class, () -> favoriteService.delete(1L,2L));
-
+        // then
+        assertThrows(IllegalArgumentException.class, () -> favoriteService.delete(1L, 2L));
 
     }
-
 
     @Test
     public void 중복_추가_오류() {
-        //given
+        // given
 
-        Favorite favorite = new Favorite(1L,place,user);
-        Favorite favorite1 = new Favorite(2L,place,user);
+        Favorite favorite = new Favorite(1L, place, user);
+        Favorite favorite1 = new Favorite(2L, place, user);
         given(placeRepo.findById(1L)).willReturn(Optional.ofNullable(place));
 
-        //when
+        // when
 
         when(favoriteRepo.save(favorite)).thenReturn(favorite);
         when(favoriteRepo.save(favorite1)).thenReturn(favorite1);
 
-        //then
+        // then
         assertThat(favoriteRepo.findByUser(user).size() == 1);
 
-
-
     }
-
 
 }
