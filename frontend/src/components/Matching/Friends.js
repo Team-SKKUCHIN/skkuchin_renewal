@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import GoLogin from "../GoLogin";
 import ErrorPopup from "../Custom/ErrorPopup";
+import { change_status_info } from "../../actions/matchingUser/matchingUser";
 
 const dummyProfiles = [
     {
@@ -58,12 +59,13 @@ const Friends = () => {
     const [isLogin, setIsLogin] = useState(false);
     
     useEffect(() => {
-        if(candidate === null) dispatch(load_candidate());
-    }, []);
+        if(candidate === null) dispatch(load_candidate(isAuthenticated));
+    }, [isAuthenticated]);
 
     const [open, setOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
     const [popupBtnText, setPopupBtnText] = useState('');
+    const [popupType, setPopupType] = useState('');
     
     const handleSettingOpen = () => {
         if (isAuthenticated) {
@@ -80,7 +82,7 @@ const Friends = () => {
         router.push(`/showFriendProfile`);
     };
 
-    const handleRequestBtnClick = (id) => {
+    const handleRequestBtnClick = (id, nickname) => {
         if (!isAuthenticated) {
             setPopupMessage('밥약 신청을 위해서는 로그인이 필요해요.');
             setPopupBtnText('로그인하러 가기');
@@ -100,18 +102,30 @@ const Friends = () => {
         } 
         else {
             localStorage.setItem('candidateId', id);
+            localStorage.setItem('candidateName', nickname);
             router.push({
                 pathname: '/enrollOpenChat',
                 query: { type: 'friend'},
             });
         }
     };
+
+    const handleChangeStatus = () => {
+        dispatch(change_status_info(true, ([result, message]) => {
+            if(result) {
+                setPopupMessage('개인 프로필이 공개로 변경되었어요! 이제 1:1 밥약을 신청해보세요.');
+                setPopupBtnText('확인');
+                setPopupType('success');
+                setOpen(true);
+            }
+        }));
+    }
     
     return (
         <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0'}}>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
             { candidate ? 
-            candidate.map((person, index) => (
+            candidate.slice(0,5).map((person, index) => (
             <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '21px'}}>
                 <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                     {displayMBTI(person.mbti, 90, 90)}
@@ -194,7 +208,7 @@ const Friends = () => {
                                 disableElevation
                                 disableTouchRipple
                                 key="apply-button"
-                                onClick={()=> handleRequestBtnClick(person.id)}
+                                onClick={()=> handleRequestBtnClick(person.id, person.nickname)}
                                 sx={{
                                     color: '#FFAC0B',
                                     fontSize: '14px',
@@ -272,12 +286,14 @@ const Friends = () => {
                 handleClose={() => setOpen(false)}
                 message={popupMessage}
                 btnText={popupBtnText}
+                type={popupType}
                 onConfirm={() => {
                     setOpen(false);
                     if (popupBtnText === '로그인하러 가기') {
                         router.push('/login');
                     } else if (popupBtnText === '개인 프로필 공개하기') {
-                        router.push('/myPage');
+                        setOpen(false);
+                        handleChangeStatus();
                     } else if (popupBtnText === '개인 프로필 등록하기') {
                         router.push('/changeProfile');
                     } else if (popupBtnText === '휴대폰 본인인증 하기') {

@@ -14,6 +14,11 @@ const Popup = ({ open, handleClose, type, message, question, description, onQues
         onErrorConfirm();
     }
 
+    const handleReasonClose = () => {
+        handleClose();
+        setDeleteReason('');
+    }
+
     return (
         <>
             {type !== '' && (
@@ -64,7 +69,7 @@ const Popup = ({ open, handleClose, type, message, question, description, onQues
                             )}
                             {type === 'reason' && (
                                 <div style={{display: 'flex', width: '100%', flexDirection: 'row', gap: '8px'}}>
-                                    <Button disableElevation fullWidth onClick={handleClose} sx={{ backgroundColor: '#F2F2F2', color: '#BABABA', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                                    <Button disableElevation fullWidth onClick={handleReasonClose} sx={{ backgroundColor: '#F2F2F2', color: '#BABABA', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
                                         취소
                                     </Button>
                                     <Button disableElevation fullWidth onClick={handleReasonConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>

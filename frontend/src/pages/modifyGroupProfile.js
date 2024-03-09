@@ -80,7 +80,7 @@ const ModifyGroupProfile = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Header title="그룹 프로필 수정" icon="save" handleIconClick={handleIconBtnClick}/>
-            <div style={{ margin: '24px' }}>
+            <div style={{ margin: '83px 24px 24px' }}>
                 <style>
                     {`
                         .MuiOutlinedInput-notchedOutline {

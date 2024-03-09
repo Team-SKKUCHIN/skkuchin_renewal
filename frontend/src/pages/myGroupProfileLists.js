@@ -34,7 +34,7 @@ const myGroupProfileLists = () => {
             <CssBaseline />
             <Header title="나의 그룹 프로필" onBackClick={() => router.push('/myPage')}/>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '15px 24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '15px 24px', marginTop: '63px' }}>
                 <Typography style={{ color: '#3C3C3C', fontSize: '16px', fontWeight: 700 }}>
                     그룹 목록 <span style={{color: '#FFCE00'}}>{myGroups && myGroups.length}</span>/5
                 </Typography>

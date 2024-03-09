@@ -35,6 +35,7 @@ const Filter = ({ filterOptions, selectedFilter, onFilterSelect }) => {
           color: selectedFilter !== '전체' ? '#FFAC0B' : 'inherit',
           backgroundColor: selectedFilter !== '전체' ? '#FFFCE4' : '#FFFFFF',
           borderColor: selectedFilter !== '전체' ? '#FFCE00' : '#E2E2E2',
+          marginTop: '68px'
         }}
       >
         <Typography>{selectedFilter}</Typography>

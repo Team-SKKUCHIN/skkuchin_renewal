@@ -55,9 +55,9 @@ const selectMyGroupProfile = () => {
                 <CssBaseline />
                 <Header title="" icon='close'/>
 
-                <div style={{padding: '0 24px', fontSize: '16px', flex: 1}}>
+                <div style={{padding: '63px 24px 0', fontSize: '16px', flex: 1}}>
                     <Typography sx={{fontWeight: 'bold', m: '50px 0', p: '25px 0', textAlign: 'center'}}>
-                        [상대 그룹명]에게 밥약을 신청할<br />
+                        [{localStorage.getItem('candidateName')}]에게 밥약을 신청할<br />
                         나의 그룹을 선택해주세요.
                     </Typography>
                 </div>

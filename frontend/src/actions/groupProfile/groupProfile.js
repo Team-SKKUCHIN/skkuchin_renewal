@@ -178,59 +178,40 @@ export const load_candidate_profile = (id, callback) => async dispatch => {
     }
 }
 
-export const load_all_group_profile = () => async (dispatch) => {
+export const load_all_group_profile = (isAuthenticated) => async (dispatch) => {
     try {
-        try {
-            await dispatch(request_refresh());
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        };
+        
+        if (isAuthenticated) {
             const access = await dispatch(getToken('access'));
-            
-            const headers = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            };
+            headers['Authorization'] = `Bearer ${access}`;
+        }
 
-            if (access) headers['Authorization'] = `Bearer ${access}`;
+        console.log('그룹 프로필 전체 조회 요청, 로그인 여부: ', isAuthenticated);
+        console.log('헤더: ', headers);
 
-            const res = await fetch(`${API_URL}/api/group-profile`, {
-                method: 'GET',
-                headers: headers
+        const res = await fetch(`${API_URL}/api/group-profile`, {
+            method: 'GET',
+            headers: headers
+        });
+
+        const apiRes = await res.json();
+
+        if(res.status === 200) {
+            dispatch({
+                type: LOAD_ALL_GROUP_PROFILE_SUCCESS,
+                payload: apiRes.data
             });
-
-            const apiRes = await res.json();
-
-            if (res.status === 200) {
-                dispatch({
-                    type: LOAD_ALL_GROUP_PROFILE_SUCCESS,
-                    payload: apiRes.data
-                });
-            } else {
-                dispatch({
-                    type: LOAD_ALL_GROUP_PROFILE_FAIL
-                });
-            }
-        } catch (tokenError) {
-            const res = await fetch(`${API_URL}/api/group-profile`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
+        } else {
+            dispatch({
+                type: LOAD_ALL_GROUP_PROFILE_FAIL
             });
-
-            const apiRes = await res.json();
-
-            if (res.status === 200) {
-                dispatch({
-                    type: LOAD_ALL_GROUP_PROFILE_SUCCESS,
-                    payload: apiRes.data
-                });
-            } else {
-                dispatch({
-                    type: LOAD_ALL_GROUP_PROFILE_FAIL
-                });
-            }
         }
     } catch (error) {
+        console.log(error);
         dispatch({
             type: LOAD_ALL_GROUP_PROFILE_FAIL
         });

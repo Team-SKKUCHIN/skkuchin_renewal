@@ -6,7 +6,7 @@ import noCharacter from '../../image/mbti/profile/noCharacter.png'
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import GoLogin from "../GoLogin";
-import { load_all_group_profile } from "../../actions/groupProfile/groupProfile";
+import { load_all_group_profile, get_my_group_profile } from "../../actions/groupProfile/groupProfile";
 import ErrorPopup from "../Custom/ErrorPopup";
 
 const dummyProfiles = [
@@ -50,8 +50,9 @@ const Groups = () => {
     const [popupBtnText, setPopupBtnText] = useState('');
 
     useEffect(() => {
-        dispatch(load_all_group_profile());
-    }, []);
+        if(groupProfiles === null) dispatch(load_all_group_profile(isAuthenticated));
+        if (myGroupProfiles === null) dispatch(get_my_group_profile());
+    }, [isAuthenticated]);
     
     const handleSettingOpen = () => {
         if (isAuthenticated) {
@@ -61,10 +62,11 @@ const Groups = () => {
             });
         } 
     }
-    const handleRequestBtnClick = (id) => {
+    const handleRequestBtnClick = (id, name) => {
         if(isAuthenticated) {
             if (myGroupProfiles && myGroupProfiles.length > 0) {
                 localStorage.setItem('candidateId', id);
+                localStorage.setItem('candidateName', name);
                 router.push('/selectMyGroupProfile')
             }
             else {
@@ -83,11 +85,13 @@ const Groups = () => {
         router.push(`/showGroupProfile?id=${id}`);
     }
 
+    const filteredProfiles = myGroupProfiles ? groupProfiles && groupProfiles.filter((group) => !myGroupProfiles.some((myGroup) => myGroup.id == group.id)) : groupProfiles;
+    
     return (
         <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0'}}>
             {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
-            { groupProfiles && groupProfiles.length !== 0 ?
-                groupProfiles.map((group, index) => (
+            { filteredProfiles && filteredProfiles.length !== 0 ?
+                filteredProfiles.slice(0,5).map((group, index) => (
                         <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '10px'}}>
                             <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
                                 {displayMBTI('GROUP', 90, 90)}
@@ -125,7 +129,7 @@ const Groups = () => {
                                                 disableElevation
                                                 disableTouchRipple
                                                 key="apply-button"
-                                                onClick={() => handleRequestBtnClick(group.id)}
+                                                onClick={() => handleRequestBtnClick(group.id, group.group_name)}
                                                 sx={{ color: '#FFAC0B', fontSize: '14px', fontWeight: 700, textAlign: 'center', pl: '15px' }}
                                             >
                                                 밥약 걸기
@@ -138,7 +142,7 @@ const Groups = () => {
 
             :
             <>
-                { groupProfiles && groupProfiles.length === 0 &&
+                { filteredProfiles && filteredProfiles.length === 0 &&
                     dummyProfiles.map((group, index) => (
                     <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '21px'}}>
                         <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
