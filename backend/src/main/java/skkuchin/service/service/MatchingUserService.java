@@ -38,7 +38,8 @@ public class MatchingUserService {
     public List<MatchingUserDto.Response> getUserProfileListAsUser(Long userId) {
         return userRepo.findAll()
                 .stream()
-                .filter(user -> user.getMatching() != null && user.getMatching() == true && user.getId().equals(userId))
+                .filter(user -> user.getMatching() != null && user.getMatching() == true
+                        && !user.getId().equals(userId))
                 .map(user -> {
                     List<UserKeyword> keywords = userKeywordRepo.findByUser(user);
                     return new MatchingUserDto.Response(user, keywords);

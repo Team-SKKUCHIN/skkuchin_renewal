@@ -116,7 +116,7 @@ public class GroupChatRequestService {
         GroupChatRequest request = groupChatRequestRepo.findById(requestId)
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 그룹채팅 요청입니다"));
 
-        if (request.getReceiver().getFriend1().getId() != userId) {
+        if (!request.getReceiver().getFriend1().getId().equals(userId)) {
             throw new CustomRuntimeException("비정상적인 접근입니다");
         }
         request.setConfirmedAt(LocalDateTime.now());
