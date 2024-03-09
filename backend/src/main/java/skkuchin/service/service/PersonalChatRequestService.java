@@ -52,7 +52,7 @@ public class PersonalChatRequestService {
             List<UserKeyword> receiverKeywords = userKeywordRepo.findByUser(request.getReceiver());
 
             if (request.getStatus() == ResponseType.HOLD) {
-                if (request.getReceiver().getId() == userId) {
+                if (request.getReceiver().getId().equals(userId)) {
                     receiveRequests.add(
                             new PersonalChatRequestDto.BaseResponse(request, request.getSender(), senderKeywords));
                 } else {
@@ -61,7 +61,7 @@ public class PersonalChatRequestService {
                 }
             } else {
                 PersonalChatRequestDto.ConfirmedResponse confirmedResponse;
-                if (request.getReceiver().getId() == userId) {
+                if (request.getReceiver().getId().equals(userId)) {
                     confirmedResponse = new PersonalChatRequestDto.ConfirmedResponse(request, request.getSender(),
                             receiverKeywords);
                 } else {
@@ -95,7 +95,7 @@ public class PersonalChatRequestService {
         if (!receiver.getMatching() || !sender.getMatching()) {
             throw new CustomRuntimeException("매칭 활성화 버튼이 꺼져있습니다");
         }
-        if (receiver.getId() == userId) {
+        if (receiver.getId().equals(userId)) {
             throw new CustomRuntimeException("비정상적인 접근입니다");
         }
         if (!LINK_PATTERN.matcher(dto.getLink()).matches()) {

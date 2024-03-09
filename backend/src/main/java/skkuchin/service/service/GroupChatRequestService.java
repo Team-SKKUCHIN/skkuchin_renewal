@@ -41,7 +41,7 @@ public class GroupChatRequestService {
 
         List<GroupChatRequestDto.BaseResponse> receiveRequests = groupChatRequests.stream()
                 .filter(request -> request.getStatus() == ResponseType.HOLD
-                        && request.getReceiver().getFriend1().getId() == userId)
+                        && request.getReceiver().getFriend1().getId().equals(userId))
                 .map((request) -> {
                     GroupChatRequestDto.ProfileResponse senderProfile = new GroupChatRequestDto.ProfileResponse(
                             request.getSender(), false);
@@ -54,7 +54,7 @@ public class GroupChatRequestService {
 
         List<GroupChatRequestDto.BaseResponse> sendRequests = groupChatRequests.stream()
                 .filter(request -> request.getStatus() == ResponseType.HOLD
-                        && request.getSender().getFriend1().getId() == userId)
+                        && request.getSender().getFriend1().getId().equals(userId))
                 .map((request) -> {
                     GroupChatRequestDto.ProfileResponse senderProfile = new GroupChatRequestDto.ProfileResponse(
                             request.getSender(), true);
@@ -69,9 +69,9 @@ public class GroupChatRequestService {
                 .filter(request -> request.getStatus() != ResponseType.HOLD)
                 .map((request) -> {
                     GroupChatRequestDto.ProfileResponse senderProfile = new GroupChatRequestDto.ProfileResponse(
-                            request.getSender(), request.getSender().getFriend1().getId() == userId);
+                            request.getSender(), request.getSender().getFriend1().getId().equals(userId));
                     GroupChatRequestDto.ProfileResponse receiverProfile = new GroupChatRequestDto.ProfileResponse(
-                            request.getReceiver(), request.getReceiver().getFriend1().getId() == userId);
+                            request.getReceiver(), request.getReceiver().getFriend1().getId().equals(userId));
                     return new GroupChatRequestDto.ConfirmedResponse(request, senderProfile, receiverProfile);
                 })
                 .sorted(Comparator.comparing(GroupChatRequestDto.ConfirmedResponse::getConfirmedAt).reversed())
@@ -92,7 +92,7 @@ public class GroupChatRequestService {
         if (receiver.getStatus() == ProfileStatus.INACTIVE || sender.getStatus() == ProfileStatus.INACTIVE) {
             throw new CustomRuntimeException("비활성화된 프로필입니다");
         }
-        if (sender.getFriend1().getId() != userId || receiver.getFriend1().getId() == userId) {
+        if (!sender.getFriend1().getId().equals(userId) || receiver.getFriend1().getId().equals(userId)) {
             throw new CustomRuntimeException("비정상적인 접근입니다");
         }
         if (!LINK_PATTERN.matcher(dto.getLink()).matches()) {
