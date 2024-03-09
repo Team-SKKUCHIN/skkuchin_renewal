@@ -174,6 +174,7 @@ export const load_candidate_profile = (id, callback) => async dispatch => {
         dispatch({
             type: LOAD_CANDIDATE_PROFILE_FAIL
         });
+        if(callback) callback([false, error]);
     }
 }
 
