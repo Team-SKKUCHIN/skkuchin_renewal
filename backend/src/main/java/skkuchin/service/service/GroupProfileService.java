@@ -137,7 +137,7 @@ public class GroupProfileService {
 
         boolean isRemain = groupChatRequests
                 .stream()
-                .anyMatch(request -> request.getReceiver().getFriend1().getId() == userId
+                .anyMatch(request -> request.getReceiver().getFriend1().getId().equals(userId)
                         && request.getStatus() == ResponseType.HOLD);
         if (isRemain) {
             throw new CustomRuntimeException("보류 중인 신청 내역이 존재합니다");
@@ -145,7 +145,7 @@ public class GroupProfileService {
 
         groupChatRequests
                 .stream()
-                .filter(request -> request.getSender().getFriend1().getId() == userId
+                .filter(request -> request.getSender().getFriend1().getId().equals(userId)
                         && request.getStatus() == ResponseType.HOLD)
                 .forEach(request -> {
                     groupChatRequestRepo.delete(request);
