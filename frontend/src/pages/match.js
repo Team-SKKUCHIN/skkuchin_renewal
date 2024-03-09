@@ -36,6 +36,9 @@ const MatchPage = () => {
     useEffect(() => {
         if(allGroupProfiles === null) dispatch(load_all_group_profile());
         if(candidateProfiles === null) dispatch(load_candidate());
+    }, []);
+
+    useEffect(() => {
         if(isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
         if(isAuthenticated && matchingUser === null) dispatch(load_matching_info());
     }, [isAuthenticated]);

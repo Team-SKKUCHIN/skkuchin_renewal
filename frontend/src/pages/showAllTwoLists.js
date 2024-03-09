@@ -14,7 +14,7 @@ const showAllTwoLists = () => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const user = useSelector(state => state.auth.user);
     const candidate = useSelector(state => state.candidate.candidate);
 
     const [selectedFilter, setSelectedFilter] = useState('전체');
@@ -29,12 +29,12 @@ const showAllTwoLists = () => {
 
     useEffect(() => {
         if(candidate === null) dispatch(load_candidate());
-    }, [isAuthenticated]);
+    }, []);
 
     const filteredProfiles =
         selectedFilter === '전체'
-        ? candidate
-        : candidate.filter((candidate) => candidate.campus === selectedFilter);
+        ? candidate.filter((candidate) => candidate.id !== user.id)
+        : candidate.filter((candidate) => candidate.campus === selectedFilter && candidate.id !== user.id);
 
     const handleBackClick = () => {
         if(selectedCandidate) {

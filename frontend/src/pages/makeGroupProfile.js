@@ -157,7 +157,7 @@ const MakeGroupProfile = () => {
         <ThemeProvider theme={theme}>
         <CssBaseline />
             <Header title="그룹 프로필 등록" />
-            <div style={{margin: '24px'}}>
+            <div style={{ margin: '83px 24px 24px' }}>
                 <style>
                     {`
                         .MuiOutlinedInput-notchedOutline {

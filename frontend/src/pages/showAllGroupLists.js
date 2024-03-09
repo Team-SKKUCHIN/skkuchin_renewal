@@ -23,7 +23,7 @@ const ShowAllGroupLists = () => {
     useEffect(() => {
         if(groups === null) dispatch(load_all_group_profile());
         if (myGroupProfiles === null) dispatch(get_my_group_profile());
-    }, [isAuthenticated]);
+    }, []);
 
     const [displayCount, setDisplayCount] = useState(20);
 

@@ -107,11 +107,16 @@ const CalendarDesign = style.div`
           text-decoration : none;
         }
       }
+      .react-calendar__month-view__days__day:not(.react-calendar__tile--active):not(.react-calendar__tile--now):not(.react-calendar__tile:disabled):not(.react-calendar__month-view__days__day--weekend) {
+        abbr {
+         color: #3C3C3C;
+        }
+       }
       .react-calendar__tile react-calendar__month-view__days__day react-calendar__month-view__days__day--weekend,
        .react-calendar__month-view__weekdays > div:nth-child(7),
         .react-calendar__month-view__weekdays > div:nth-child(1) {
           abbr {
-            color: #FC9712;
+            color: #FC9712 !important;
           }
         }
       .react-calendar__tile {
@@ -139,7 +144,6 @@ const CalendarDesign = style.div`
         color: white !important;
         font-weight: bold !important;
        }
-
        .react-calendar__tile--rangeEnd {
         border-radius: 0 25px 25px 0;
        }
