@@ -11,6 +11,7 @@ import Groups from "../components/Matching/Groups";
 import Friends from "../components/Matching/Friends";
 import { load_all_group_profile, get_my_group_profile } from "../actions/groupProfile/groupProfile";
 import { load_matching_info } from "../actions/matchingUser/matchingUser";
+import { load_candidate } from "../actions/candidate/candidate";
 import ErrorPopup from "../components/Custom/ErrorPopup";
 
 const LayoutContainer = styled.div`
@@ -88,6 +89,7 @@ const MealPromisePage = () => {
 
   useEffect(() => {
     dispatch(load_all_group_profile());
+    dispatch(load_candidate());
   }, []);
 
   useEffect(() => {

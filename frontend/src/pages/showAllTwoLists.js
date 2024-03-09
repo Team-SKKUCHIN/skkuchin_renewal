@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
-import { ThemeProvider, CssBaseline, Button, IconButton, Typography, Divider } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { ThemeProvider, CssBaseline, Button, Typography, Divider } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { load_candidate } from '../actions/candidate/candidate';
 import theme from '../theme/theme';
 import Header from "../components/MealPromise/Header";
 import Filter from '../components/MealPromise/Filter';
@@ -11,7 +10,6 @@ import FriendProfile from '../components/MealPromise/FriendProfile';
 import ErrorPopup from '../components/Custom/ErrorPopup';
 
 const showAllTwoLists = () => {
-    const dispatch = useDispatch();
     const router = useRouter();
 
     const user = useSelector(state => state.auth.user);
@@ -26,10 +24,6 @@ const showAllTwoLists = () => {
     const [popupBtnText, setPopupBtnText] = useState('');
 
     const filterOptions = ['전체', '명륜', '율전'];
-
-    useEffect(() => {
-        if(candidate === null) dispatch(load_candidate());
-    }, []);
 
     const filteredProfiles =
         selectedFilter === '전체'

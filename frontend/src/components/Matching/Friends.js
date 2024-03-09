@@ -61,7 +61,7 @@ const Friends = () => {
     const handleChangeStatus = () => {
         dispatch(change_status_info(true, ([result, message]) => {
             if(result) {
-                setPopupMessage('개인 프로필이 공개로 변경되었어요! 이제 1:1 밥약을 신청해보세요.');
+                setPopupMessage('개인 프로필이 공개로 변경되었어요!\n이제 1:1 밥약을 신청해보세요.');
                 setPopupBtnText('확인');
                 setPopupType('success');
                 setOpen(true);

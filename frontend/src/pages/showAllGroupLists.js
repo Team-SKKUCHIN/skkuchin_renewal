@@ -7,23 +7,16 @@ import Header from '../components/MealPromise/Header';
 import Filter from '../components/MealPromise/Filter';
 import { useRouter } from 'next/router';
 import AddIcon from '@mui/icons-material/Add';
-import { load_all_group_profile, get_my_group_profile } from '../actions/groupProfile/groupProfile';
 import { useSelector, useDispatch } from 'react-redux';
 import ErrorPopup from '../components/Custom/ErrorPopup';
 
 const ShowAllGroupLists = () => {
     const router = useRouter();
-    const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
     const groups = useSelector(state => state.groupProfile.allGroupProfiles);
-
-    useEffect(() => {
-        if(groups === null) dispatch(load_all_group_profile());
-        if (myGroupProfiles === null) dispatch(get_my_group_profile());
-    }, []);
 
     const [displayCount, setDisplayCount] = useState(20);
 

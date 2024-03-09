@@ -2,7 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogActions, Button, IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-const Popup = ({ open, handleClose, type, message, description, confirmText=null, onConfirm, onInfoConfirm }) => {
+const Popup = ({ open, handleClose, type, message, description, confirmText=null, onConfirm, onInfoConfirm, onErrorConfirm }) => {
     const handleQuestionConfirm = () => {
         onConfirm();
         handleClose();
@@ -50,7 +50,7 @@ const Popup = ({ open, handleClose, type, message, description, confirmText=null
                     </Button>
                 )} 
                 {type === 'error' && (
-                    <Button disableElevation fullWidth onClick={handleClose} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                    <Button disableElevation fullWidth onClick={onErrorConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
                         확인
                     </Button>
                 )}

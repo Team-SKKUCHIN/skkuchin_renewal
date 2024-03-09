@@ -53,6 +53,8 @@ const MakeGroupProfile = () => {
     const [isValidNickname, setIsValidNickname] = useState(null);
     const [guideText, setGuideText] = useState('');
     const [showGuideText, setShowGuideText] = useState(false);
+
+    const [completed, setCompleted] = useState(false);
     
     const getRandomNickname = async () => {
         const randomNickname = await dispatch(get_random_nickname());
@@ -97,7 +99,6 @@ const MakeGroupProfile = () => {
     }, [isValidNickname]);
 
     const handleEditBtnClick = () => {
-        console.log('edit btn clicked', isNicknameEditable);
         setIsNicknameEditable(!isNicknameEditable);
         setGuideText('');
         setShowGuideText(false);
@@ -146,11 +147,19 @@ const MakeGroupProfile = () => {
                 setPopupDescription('한줄 소개 수정은 마이페이지에서 할 수 있어요.');
                 setPopupOpen(true);
                 setPopupType('info');
-                router.push('/mealPromise')
             } else {
-                alert(message);
+                setPopupMessage(message);
+                setPopupType('error');
+                setPopupOpen(true);
             }
         }));
+    }
+
+    const handleErrorConfirm = () => {
+        if(popupMessage === '그룹 프로필은 5개 이하로만 생성 가능합니다') {
+            router.push('/mealPromise');
+        }
+        setPopupOpen(false);
     }
 
     return (
@@ -237,6 +246,7 @@ const MakeGroupProfile = () => {
                     description={popupDescription}
                     onConfirm={handleQuestionConfirm}
                     onInfoConfirm={() => router.push('/mealPromise')}
+                    onErrorConfirm={handleErrorConfirm}
                 />
             </div>
         </ThemeProvider>
