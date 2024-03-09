@@ -25,30 +25,31 @@ public class MatchingUserService {
     @Transactional
     public List<MatchingUserDto.Response> getUserProfileListAsNonUser() {
         return userRepo.findAll()
-            .stream()
-            .filter(user -> user.getMatching() != null && user.getMatching() == true)
-            .map(user -> {
-                List<UserKeyword> keywords = userKeywordRepo.findByUser(user);
-                return new MatchingUserDto.Response(user, keywords);
-            })
-            .collect(Collectors.toList());
+                .stream()
+                .filter(user -> user.getMatching() != null && user.getMatching() == true)
+                .map(user -> {
+                    List<UserKeyword> keywords = userKeywordRepo.findByUser(user);
+                    return new MatchingUserDto.Response(user, keywords);
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public List<MatchingUserDto.Response> getUserProfileListAsUser(Long userId) {
         return userRepo.findAll()
-            .stream()
-            .filter(user -> user.getMatching() != null && user.getMatching() == true && user.getId() != userId)
-            .map(user -> {
-                List<UserKeyword> keywords = userKeywordRepo.findByUser(user);
-                return new MatchingUserDto.Response(user, keywords);
-            })
-            .collect(Collectors.toList());   
+                .stream()
+                .filter(user -> user.getMatching() != null && user.getMatching() == true && user.getId().equals(userId))
+                .map(user -> {
+                    List<UserKeyword> keywords = userKeywordRepo.findByUser(user);
+                    return new MatchingUserDto.Response(user, keywords);
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public void addInfo(Long userId, MatchingUserDto.Request dto) {
-        AppUser existingUser = userRepo.findById(userId).orElseThrow(() -> new CustomValidationApiException("존재하지 않는 유저입니다"));
+        AppUser existingUser = userRepo.findById(userId)
+                .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 유저입니다"));
         existingUser.setGender(dto.getGender());
         existingUser.setIntroduction(dto.getIntroduction());
         existingUser.setMbti(dto.getMbti());
@@ -128,8 +129,7 @@ public class MatchingUserService {
         }
         // 기존의 키워드 리스트에 없는 새로운 키워드는 추가
         for (int i = 0; i < dto.getKeywords().size(); i++) {
-            if (!existingKeywords.stream().map(object ->
-                    object.getKeyword().getName()).collect(Collectors.toList())
+            if (!existingKeywords.stream().map(object -> object.getKeyword().getName()).collect(Collectors.toList())
                     .contains(dto.getKeywords().get(i))) {
                 Keyword keyword = keywordRepo.findByName(dto.getKeywords().get(i));
                 userKeywordRepo.save(dto.toUserKeywordEntity(user, keyword));
