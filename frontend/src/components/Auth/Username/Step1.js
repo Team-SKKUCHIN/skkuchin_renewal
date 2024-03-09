@@ -39,7 +39,7 @@ export default function Step1(props) {
     }
 
     const backClick = () => {
-        router.push('/resetPassword');
+        router.push('/login');
     }
 
     const handleDialogOpen = (e) => {

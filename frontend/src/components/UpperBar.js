@@ -32,8 +32,8 @@ const UpperBar = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Container disableGutters={true} maxWidth="xs" style={{height:"90px", margin:"0", padding:"0"}} overflow="hidden">
-        <div style={{ zIndex:'99', position: "fixed", top: 0, width: "100%", background: "white", alignContent:"center", paddingBottom:'9px',borderBottom: '1.5px solid rgba(234, 234, 234, 1)', maxWidth:'420px'}}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding:"15px 15px 0px 15px"}}>
+        <div style={{ zIndex:'99', position: "fixed", top: 0, width: "100%", background: "white", alignContent:"center", borderBottom: '1.5px solid rgba(234, 234, 234, 1)', maxWidth:'420px'}}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding:"20px 24px 0px 24px"}}>
                 <Link href="/">
                     <Image src={mainLogo} width={85} height={19} />
                 </Link>
@@ -46,19 +46,21 @@ const UpperBar = () => {
                     </div>
                 </div>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", maxWidth:"420px", padding:"15px 15px 0px 15px"}}>
+            <div style={{ display: "flex", justifyContent: "space-between", maxWidth:"420px", padding:"15px 24px 0px 24px"}}>
             <Link href="/">
                 <a
                     style={{
-                        fontSize: "11px",
+                        fontSize: "14px",
                         fontWeight: 700,
                         textDecoration: "none",
-                        color: selected === "홈" ? "#FFCE00" : "#505050",
+                        color: selected === "홈" ? "#3C3C3C" : "#BABABA",
                         borderBottom: selected === "홈" ? "2px solid #FFCE00" : "none",
+                        paddingBottom: '8px',
+                        width: '20px'
                 }}
                 onClick={() => setSelected("홈")}
                 >
-                <span style={{padding:"0 0 2px 0"}}>
+                <span style={{padding:"0 0 2px 3px"}}>
                     홈
                 </span>
                 </a>
@@ -66,15 +68,17 @@ const UpperBar = () => {
             <Link href="/mealPromise">
                 <a
                     style={{
-                        fontSize: "11px",
+                        fontSize: "14px",
                         fontWeight: 700,
-                        color: selected === "밥약" ? "#FFCE00" : "#505050",
+                        color: selected === "밥약" ? "#3C3C3C" : "#BABABA",
                         textDecoration: "none",
-                        borderBottom: selected === "밥약" ? "2px solid #FFCE00" : "none"
+                        borderBottom: selected === "밥약" ? "2px solid #FFCE00" : "none",
+                        paddingBottom: '8px',
+                        width: '30px'
                 }}
                 onClick={() => setSelected("밥약")}
                 >
-                <span style={{padding:"0 0 2px 0"}}>
+                <span style={{padding:"0 0 2px 2px"}}>
                     밥약
                 </span>
                 </a>
@@ -83,11 +87,12 @@ const UpperBar = () => {
                 <a
                     style={{
                         display: "flex",
-                        fontSize: "11px",
+                        fontSize: "14px",
                         fontWeight: 700,
-                        color: selected === "신청 현황" ? "#FFCE00" : "#505050",
+                        color: selected === "신청 현황" ? "#3C3C3C" : "#BABABA",
                         textDecoration: "none",
-                        borderBottom: selected === "신청 현황" ? "2px solid #FFCE00" : "none"
+                        borderBottom: selected === "신청 현황" ? "2px solid #FFCE00" : "none",
+                        paddingBottom: '8px'
                 }}
                 onClick={() => setSelected("신청 현황")}
                 >
@@ -110,11 +115,12 @@ const UpperBar = () => {
                 <Link href="/myPage">
                     <a
                         style={{
-                            fontSize: "11px",
+                            fontSize: "14px",
                             fontWeight: 700,
-                            color: selected === "마이페이지" ? "#FFCE00" : "#505050",
+                            color: selected === "마이페이지" ? "#3C3C3C" : "#BABABA",
                             textDecoration: "none",
-                            borderBottom: selected === "마이페이지" ? "2px solid #FFCE00" : "none"
+                            borderBottom: selected === "마이페이지" ? "2px solid #FFCE00" : "none",
+                            paddingBottom: '8px'
                     }}
                     onClick={() => setSelected("마이페이지")}
                     >
@@ -127,9 +133,9 @@ const UpperBar = () => {
                 <Link href="/login">
                     <a
                         style={{
-                            fontSize: "11px",
+                            fontSize: "14px",
                             fontWeight: 700,
-                            color: "#505050",
+                            color: "#BABABA",
                             textDecoration: "none",
                             borderBottom: "none"
                         }}
