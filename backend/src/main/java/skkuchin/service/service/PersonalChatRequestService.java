@@ -119,7 +119,7 @@ public class PersonalChatRequestService {
         PersonalChatRequest request = personalChatRequestRepo.findById(requestId)
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 개인 채팅 요청입니다"));
 
-        if (request.getReceiver().getId() != userId) {
+        if (!request.getReceiver().getId().equals(userId)) {
             throw new CustomRuntimeException("비정상적인 접근입니다");
         }
         request.setConfirmedAt(LocalDateTime.now());

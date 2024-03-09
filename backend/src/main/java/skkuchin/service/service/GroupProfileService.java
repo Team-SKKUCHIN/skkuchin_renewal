@@ -100,7 +100,7 @@ public class GroupProfileService {
         GroupProfile existingGroupProfile = groupProfileRepo.findById(groupProfileId)
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 그룹 프로필입니다"));
 
-        if (existingGroupProfile.getFriend1().getId() != userId) {
+        if (!existingGroupProfile.getFriend1().getId().equals(userId)) {
             throw new CustomRuntimeException("비정상적인 접근입니다");
         }
         existingGroupProfile.setModifiedAt(LocalDateTime.now());
@@ -128,7 +128,7 @@ public class GroupProfileService {
         GroupProfile existingGroupProfile = groupProfileRepo.findById(groupProfileId)
                 .orElseThrow(() -> new CustomValidationApiException("존재하지 않는 그룹 프로필입니다"));
 
-        if (existingGroupProfile.getFriend1().getId() != userId) {
+        if (!existingGroupProfile.getFriend1().getId().equals(userId)) {
             throw new CustomRuntimeException("비정상적인 접근입니다");
         }
 
