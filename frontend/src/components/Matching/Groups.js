@@ -4,31 +4,21 @@ import { Button, Card, Typography, Grid} from '@mui/material';
 import { displayMBTI } from './MBTIList';
 import { useRouter } from 'next/router';
 import GoLogin from "../GoLogin";
-import { load_all_group_profile, get_my_group_profile } from "../../actions/groupProfile/groupProfile";
 import ErrorPopup from "../Custom/ErrorPopup";
 import { Loading } from "../Loading";
 
 const Groups = () => {
     const router = useRouter();
-    const dispatch = useDispatch();
 
-    const user = useSelector(state => state.matchingUser.matchingUser);
     const groupProfiles = useSelector(state => state.groupProfile.allGroupProfiles);
     const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [isLogin, setIsLogin] = useState(false);
-    const [loading, setLoading] = useState(true);
 
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
     const [popupBtnText, setPopupBtnText] = useState('');
-
-    useEffect(() => {
-        if(groupProfiles === null) dispatch(load_all_group_profile());
-        if (myGroupProfiles === null) dispatch(get_my_group_profile());
-        setLoading(false);
-    }, []);
 
     const handleRequestBtnClick = (id, name) => {
         if(isAuthenticated) {

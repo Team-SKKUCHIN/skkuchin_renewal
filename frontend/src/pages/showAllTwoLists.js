@@ -73,7 +73,7 @@ const showAllTwoLists = () => {
             {selectedCandidate ? (
                 <FriendProfile candidate={selectedCandidate} />
                 ) : (
-                <div style={{ overflow: 'scroll' }}>
+                <div style={{ overflow: 'scroll', marginTop: '109px'}}>
                     {
                         filteredProfiles && filteredProfiles.length !== 0 ? (
                             filteredProfiles.slice(0, displayCount).map((candidate, index) => (

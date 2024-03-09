@@ -48,8 +48,8 @@ const FriendProfile = ({ candidate }) => {
     }
 
     return (
-        <div>
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', paddingTop: '50%'}}>
+        <div style={{marginTop: '63px'}}>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', paddingTop: '45%'}}>
                 {displayMBTI(candidate.mbti, 120, 120)}
                 <div>
                     <Grid item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', m: '10px 0 7px' }}>

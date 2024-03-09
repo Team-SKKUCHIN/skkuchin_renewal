@@ -84,7 +84,7 @@ const ShowAllGroupLists = () => {
             />
 
             {/* 목록 */}
-            <div style={{ overflow: 'scroll', padding: '12px 24px' }}>
+            <div style={{ overflow: 'scroll', padding: '12px 24px', marginTop: '109px' }}>
                 {filteredProfiles && filteredProfiles.length !== 0 ? (
                     filteredProfiles
                         .filter((group) => !myGroupProfiles.some((myGroup) => myGroup.id == group.id))

@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react"; 
 import { Button, Card, Typography, Grid } from '@mui/material';
 import { displayMBTI } from './MBTIList';
-import { load_candidate } from '../../actions/candidate/candidate'
 import { useRouter } from 'next/router';
 import GoLogin from "../GoLogin";
 import ErrorPopup from "../Custom/ErrorPopup";
@@ -19,12 +18,6 @@ const Friends = () => {
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [isLogin, setIsLogin] = useState(false);
-    const [loading, setLoading] = useState(true);
-    
-    useEffect(() => {
-        if(candidate === null) dispatch(load_candidate());
-        setLoading(false);
-    }, []);
 
     const [open, setOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
