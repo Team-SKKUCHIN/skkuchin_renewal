@@ -50,7 +50,7 @@ const Groups = () => {
     const [popupBtnText, setPopupBtnText] = useState('');
 
     useEffect(() => {
-        if(groupProfiles === null) dispatch(load_all_group_profile(isAuthenticated));
+        if(groupProfiles === null) dispatch(load_all_group_profile());
         if (myGroupProfiles === null) dispatch(get_my_group_profile());
     }, [isAuthenticated]);
     
@@ -62,6 +62,7 @@ const Groups = () => {
             });
         } 
     }
+    
     const handleRequestBtnClick = (id, name) => {
         if(isAuthenticated) {
             if (myGroupProfiles && myGroupProfiles.length > 0) {

@@ -70,7 +70,6 @@ const showGroupProfile = () => {
             } else {
                 setPopupType('question');
                 const hasSendRequests = groupChatRequests?.send_requests?.some(request => request.sender_profile.id == id);
-                // console.log('hasSendRequests', hasSendRequests, id);
                 const popupMessage = hasSendRequests
                     ? '그룹 프로필을 삭제하면\n밥약 신청내역도 함께 삭제돼요.'
                     : '그룹 프로필을 삭제하면\n더이상 그룹 밥약 신청을 받지 못해요.';
@@ -112,7 +111,6 @@ const showGroupProfile = () => {
     }
 
     const handleEditBtnClick = () => {
-        console.log('그룹 프로필 수정 클릭');
         router.push(`/modifyGroupProfile?id=${id}`);
     }
 

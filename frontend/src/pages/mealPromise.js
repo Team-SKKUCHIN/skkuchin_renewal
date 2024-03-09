@@ -92,10 +92,7 @@ const MealPromisePage = () => {
   }, [user]);
 
   useEffect(() => {
-    if(allGroupProfiles === null) {
-      console.log("그룹 프로필 불러오기", isAuthenticated, user);
-      dispatch(load_all_group_profile(isAuthenticated));
-    }
+    if(allGroupProfiles === null) dispatch(load_all_group_profile());
     if(isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
     if(isAuthenticated && matchingUser === null) dispatch(load_matching_info());
   }, [user, isAuthenticated]);

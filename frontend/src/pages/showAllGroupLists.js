@@ -21,7 +21,7 @@ const ShowAllGroupLists = () => {
     const groups = useSelector(state => state.groupProfile.allGroupProfiles);
 
     useEffect(() => {
-        if(groups === null) dispatch(load_all_group_profile(isAuthenticated));
+        if(groups === null) dispatch(load_all_group_profile());
         if (myGroupProfiles === null) dispatch(get_my_group_profile());
     }, [isAuthenticated]);
 

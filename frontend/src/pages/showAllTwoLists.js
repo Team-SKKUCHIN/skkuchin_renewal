@@ -28,7 +28,7 @@ const showAllTwoLists = () => {
     const filterOptions = ['전체', '명륜', '율전'];
 
     useEffect(() => {
-        if(candidate === null) dispatch(load_candidate(isAuthenticated));
+        if(candidate === null) dispatch(load_candidate());
     }, [isAuthenticated]);
 
     const filteredProfiles =

@@ -23,11 +23,6 @@ const ModifyGroupProfile = () => {
         group_introduction: '',
     });
 
-    // const [selectedDates, setSelectedDates] = useState([
-    //     new Date(selectedGroup?.meeting_start_date || new Date()),
-    //     new Date(selectedGroup?.meeting_end_date || new Date())
-    // ]);
-
     const [selectedDates, setSelectedDates] = useState(selectedGroup?.meeting_start_date ? [new Date(selectedGroup.meeting_start_date), new Date(selectedGroup.meeting_end_date)] : []);
     
     const friends = [
@@ -72,7 +67,6 @@ const ModifyGroupProfile = () => {
     };
 
     const handleIconBtnClick = () => {
-        console.log('Save button clicked!');
         handleSubmit();
     }
 

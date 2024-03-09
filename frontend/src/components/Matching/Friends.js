@@ -59,7 +59,7 @@ const Friends = () => {
     const [isLogin, setIsLogin] = useState(false);
     
     useEffect(() => {
-        if(candidate === null) dispatch(load_candidate(isAuthenticated));
+        if(candidate === null) dispatch(load_candidate());
     }, [isAuthenticated]);
 
     const [open, setOpen] = useState(false);
