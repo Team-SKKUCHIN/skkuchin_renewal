@@ -4,7 +4,30 @@ import { Button, Card, Typography, Grid} from '@mui/material';
 import { displayMBTI } from './MBTIList';
 import { useRouter } from 'next/router';
 import ErrorPopup from "../Custom/ErrorPopup";
-import { Loading } from "../Loading";
+
+const dummyProfiles = [
+    {
+        group_name: '명륜에이스모임',
+        gender: '남',
+        mbti: 'GROUP',
+        group_introduction:
+            '성대 학우들과의 밥약 서비스를 이용하시려면 로그인해주세요 👀',
+    },
+    {
+        group_name: '방탄성대단',
+        gender: '남',
+        mbti: 'GROUP',
+        group_introduction:
+            '성대 학우들과의 밥약 서비스를 이용하시려면 로그인해주세요 👀',
+    },
+    {
+        group_name: '명륜핑크',
+        gender: '여',
+        mbti: 'GROUP',
+        group_introduction:
+            '성대 학우들과의 밥약 서비스를 이용하시려면 로그인해주세요 👀',
+    },
+];
 
 const Groups = () => {
     const router = useRouter();
@@ -103,7 +126,43 @@ const Groups = () => {
 
             :
             <>
-                <Loading />
+                {
+                    dummyProfiles.map((group, index) => (
+                        <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '10px'}}>
+                            <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
+                                {displayMBTI('GROUP', 90, 90)}
+                                <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
+                                    <Typography sx={{fontSize: '20px', fontWeight: '700', mr: '5px'}}>{group !== null && group.group_name}</Typography>
+                                    <Typography sx={{p: '3px 7px', borderRadius: '10px', fontWeight: 'bold', fontSize: '12px', backgroundColor: (group.gender).charAt(0) === '여' ? '#FFF4F9' : '#E8F9FF', color: (group.gender).charAt(0) === '여' ? '#FAA4C3' : '#83B6F2'}}>
+                                        {(group.gender).charAt(0)}
+                                    </Typography>
+                                </Grid>
+                                <Typography sx={{ fontSize: '14px', height: '40px', lineHeight: '20px', fontWeight: 400, color: '#3C3C3C', m: '20px 0 30px', textAlign: 'center', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
+                                    {'"'+ group.group_introduction +'"'}
+                                </Typography>
+                                <Grid item sx={{ display: 'flex',  alignItems: 'center', width: '100%', justifyContent: 'center' }}>
+                                    <Button
+                                        disableElevation
+                                        disableTouchRipple
+                                        key="profile-button"
+                                        sx={{ color: '#777777', fontSize: '14px', fontWeight: 700, textAlign: 'center', pr: '15px'}}
+                                    >
+                                        그룹 프로필
+                                    </Button>
+                                    <div style={{ width: '2px', height: '12px', backgroundColor: '#E2E2E2', borderRadius: '10px'}} />
+                                    <Button
+                                        disableElevation
+                                        disableTouchRipple
+                                        key="apply-button"
+                                        sx={{ color: '#FFAC0B', fontSize: '14px', fontWeight: 700, textAlign: 'center', pl: '15px' }}
+                                    >
+                                        밥약 걸기
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Card> 
+                    ))
+                }
             </>
             }
 
