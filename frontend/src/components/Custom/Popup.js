@@ -54,6 +54,11 @@ const Popup = ({ open, handleClose, type, message, description, confirmText=null
                         확인
                     </Button>
                 )}
+                {type === 'phoneError' && (
+                    <Button disableElevation fullWidth onClick={handleClose} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
+                        확인
+                    </Button>
+                )}
                 {
                     type === 'check' && (
                     <Button disableElevation fullWidth onClick={handleClose} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
