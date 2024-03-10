@@ -36,8 +36,7 @@ public class GroupProfileController {
 
     @GetMapping("")
     public ResponseEntity<?> getGroupProfileList() {
-        List<GroupProfileDto.SummaryResponse> groupProfiles;
-        groupProfiles = groupProfileService.getGroupProfileList();
+        List<GroupProfileDto.SummaryResponse> groupProfiles = groupProfileService.getGroupProfileList();
         return new ResponseEntity<>(new CMRespDto<>(1, "전체 그룹 프로필 조회 완료", groupProfiles), HttpStatus.OK);
     }
 
