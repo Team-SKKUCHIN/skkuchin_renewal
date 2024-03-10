@@ -1,6 +1,5 @@
 import Cookies from 'js-cookie'
 import { API_URL } from '../../config';
-import { load_favorite } from '../favorite/favorite';
 import {
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
@@ -126,7 +125,6 @@ export const load_user = (callback) => async dispatch => {
                 type: LOAD_USER_SUCCESS,
                 payload: apiRes.data
             });
-            dispatch(load_favorite());
             if (callback) callback([true, apiRes.message]);
         } else {
             await dispatch({

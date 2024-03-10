@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { CssBaseline, ThemeProvider, Divider } from '@mui/material';
 import UpperBar from '../components/UpperBar';
 import theme from '../theme/theme';
-import MatchPage from './match';
+import MatchPage from '../components/MealPromise/MatchPage';
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import mainCharacter from '../image/login_enheng.png';
