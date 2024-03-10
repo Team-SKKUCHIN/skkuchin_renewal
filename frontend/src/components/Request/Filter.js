@@ -19,7 +19,7 @@ export const Filter = ({ filterOptions, selectedFilter, number, onFilterSelect }
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'right', marginBottom: '15px' }}>
+    <div style={{ position: 'fixed', right: 24, top: 140, display: 'flex', justifyContent: 'right', marginBottom: '15px', zIndex: 9 }}>
       <Grid
         onClick={handleClick}
         sx={{

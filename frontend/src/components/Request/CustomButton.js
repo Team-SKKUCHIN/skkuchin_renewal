@@ -4,6 +4,7 @@ import { reply_personal_request } from '../../actions/personalChatRequest/person
 import Popup from '../Custom/Popup';
 import { reply_group_request } from '../../actions/groupChatRequest/groupChatRequest';
 import { convertName } from '../../utils/wordConvertor';
+import { Loading } from '../Loading';
 
 const OneButton = ({ request, senderName, link, setLinkOn, text, isDisabled, style }) => (
     <div style={{ width: '100%', marginBottom: '30px' }}>
@@ -48,6 +49,7 @@ const TwoButton = ({ onReply }) => (
 export const CustomButton = ({ selectedIndex, request, senderName, link, setLinkOn }) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
+    const [isLoading, setIsLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupType, setPopupType] = useState('question');
     const popupMessage = useRef('');
@@ -97,13 +99,18 @@ export const CustomButton = ({ selectedIndex, request, senderName, link, setLink
     }, [])
 
     const handleQuestionConfirm = useCallback(() => {
+        setIsLoading(true);
         let name = '';
         if (request.gender) {
             name = request.nickname;
-            dispatch(reply_personal_request(request.request_id, statusType.current));
+            dispatch(reply_personal_request(request.request_id, statusType.current, ([result, message]) => {
+                setIsLoading(false);
+            }));
         } else {
             name = request.sender_profile.group_name;
-            dispatch(reply_group_request(request.request_id, statusType.current));
+            dispatch(reply_group_request(request.request_id, statusType.current, ([result, message]) => {
+                setIsLoading(false);
+            }));
         }
 
         if (statusType.current === 'ACCEPT') {
@@ -120,6 +127,7 @@ export const CustomButton = ({ selectedIndex, request, senderName, link, setLink
 
     return (
         <>
+            {isLoading && <Loading />}
             {selectedIndex === 0 ?
                 <TwoButton onReply={handleReply} />
                 :

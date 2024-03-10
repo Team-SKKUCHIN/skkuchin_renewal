@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import theme from '../theme/theme';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -15,6 +15,7 @@ import { KakaoLink } from '../components/Request/KakaoLink';
 import Image from 'next/image';
 import { noInfoCharacter } from '../image/request';
 import { DetailGroupProfile } from '../components/Request/DetailGroupProfile';
+import { DetailPersonalProfile } from '../components/Request/DetailPersonalProfile';
 
 const showRequests = () => {
     const dispatch = useDispatch();
@@ -27,8 +28,10 @@ const showRequests = () => {
     const link = useRef('');
     const groupId = useRef(null);
     const isMine = useRef(null);
+    const personalId = useRef(null);
     const [linkOn, setLinkOn] = useState(false);
     const [groupOn, setGroupOn] = useState(false);
+    const [personalOn, setPersonalOn] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedFilter, setSelectedFilter] = useState('전체');
     const filterOptions = ['전체', '여럿이서 먹어요', '둘이 먹어요'];
@@ -83,13 +86,13 @@ const showRequests = () => {
             <CssBaseline />
             <Header title="신청 현황" handleBack={() => router.push('/')} />
             <Menu selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
-            <div style={{ margin: '145px 24px 24px'}}>
-                <Filter
-                    filterOptions={filterOptions}
-                    selectedFilter={selectedFilter}
-                    number={allRequests[selectedIndex].length}
-                    onFilterSelect={(filter) => setSelectedFilter(filter)}
-                />
+            <Filter
+                filterOptions={filterOptions}
+                selectedFilter={selectedFilter}
+                number={allRequests[selectedIndex].length}
+                onFilterSelect={(filter) => setSelectedFilter(filter)}
+            />
+            <div style={{ margin: '196px 24px 24px'}}>
                 {allRequests[selectedIndex].length === 0 && (
                     <div style={{ width: '100%', marginTop: '40%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Image src={noInfoCharacter} width={104} height={87} layout='fixed' />
@@ -101,7 +104,11 @@ const showRequests = () => {
                 {allRequests[selectedIndex].map((request, index) => (
                     <div key={index}>
                         {request.gender ?
-                        <PersonalRequest request={request} />
+                        <PersonalRequest
+                            request={request}
+                            id={personalId}
+                            setPersonalOn={setPersonalOn}
+                            />
                         : <GroupRequest
                             request={request}
                             id={groupId}
@@ -119,6 +126,7 @@ const showRequests = () => {
                 ))}
             </div>
             {groupOn && <DetailGroupProfile id={groupId} isMine={isMine} setGroupOn={setGroupOn} /> }
+            {personalOn && <DetailPersonalProfile id={personalId} setPersonalOn={setPersonalOn} /> }
             {linkOn && <KakaoLink senderName={senderName} link={link} setLinkOn={setLinkOn} />}
         </ThemeProvider>
     )

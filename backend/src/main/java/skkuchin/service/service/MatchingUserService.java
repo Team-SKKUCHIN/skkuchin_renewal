@@ -12,6 +12,8 @@ import skkuchin.service.repo.UserKeywordRepo;
 import skkuchin.service.repo.UserRepo;
 
 import javax.transaction.Transactional;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +26,7 @@ public class MatchingUserService {
 
     @Transactional
     public List<MatchingUserDto.Response> getUserProfileList() {
-        return userRepo.findAll()
+        List<MatchingUserDto.Response> userProfileList = userRepo.findAll()
                 .stream()
                 .filter(user -> user.getMatching() != null && user.getMatching())
                 .map(user -> {
@@ -32,6 +34,9 @@ public class MatchingUserService {
                     return new MatchingUserDto.Response(user, keywords);
                 })
                 .collect(Collectors.toList());
+
+        Collections.shuffle(userProfileList);
+        return userProfileList;
     }
 
     @Transactional

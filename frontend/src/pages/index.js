@@ -127,7 +127,6 @@ const Home = () => {
 
     useEffect(() => {
         dispatch(load_all_group_profile());
-        // dispatch(load_candidate());
     }, []);
 
     useEffect(() => {

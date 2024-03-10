@@ -90,10 +90,10 @@ public class PersonalChatRequestService {
         List<Sms> receiverSmsList = smsRepo.findByUser(receiver);
 
         if (receiver.getMatching() == null || sender.getMatching() == null) {
-            throw new CustomRuntimeException("매칭 프로필이 등록되지 않았습니다");
+            throw new CustomRuntimeException("개인 프로필이 등록되지 않았습니다");
         }
         if (!receiver.getMatching() || !sender.getMatching()) {
-            throw new CustomRuntimeException("매칭 활성화 버튼이 꺼져있습니다");
+            throw new CustomRuntimeException("개인 프로필 공개 버튼이 꺼져있습니다");
         }
         if (receiver.getId().equals(userId)) {
             throw new CustomRuntimeException("비정상적인 접근입니다");

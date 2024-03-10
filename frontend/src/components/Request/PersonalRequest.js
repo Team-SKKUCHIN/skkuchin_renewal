@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { mbtiDict } from "../../image/mbti/profile";
+import { useSelector } from 'react-redux';
+import { useCallback } from 'react';
 
 const KeywordComponent = ({keyword}) => (
     <div style={{ padding: '4px 12px 4px 12px', borderRadius: '24px',
@@ -9,11 +11,20 @@ const KeywordComponent = ({keyword}) => (
     </div>
 )
 
-export const PersonalRequest = ({ request }) => {
+export const PersonalRequest = ({ request, id, setPersonalOn }) => {
+    const user = useSelector(state => state.auth.user);
+
+    const onClick = useCallback(() => {
+        id.current = user.id === request.sender_id ? request.receiver_id : request.sender_id;
+        setPersonalOn(true);
+    }, [request])
+
     return (
-        <div style={{ fontSize: '12px', lineHeight: '14px', width: '100%',
-            padding: '15px 12px 15px 12px', display: 'flex', border: '1px solid rgb(226, 226, 226)',
-            borderRadius: '18px', marginBottom: '15px'
+        <div
+            onClick={onClick}
+            style={{ fontSize: '12px', lineHeight: '14px', width: '100%',
+                padding: '15px 12px 15px 12px', display: 'flex', border: '1px solid rgb(226, 226, 226)',
+                borderRadius: '18px', marginBottom: '15px'
         }}>
             <Image src={mbtiDict[request.image]} width={90} height={93} layout='fixed' style={{ justifyContent: 'left' }} />
             <div style={{ marginLeft: '15px', display: 'flex', flexDirection: 'column' }}>

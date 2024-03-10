@@ -37,15 +37,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	// websocket & rabbitmq
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.springframework.boot:spring-boot-starter-amqp'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty', version: '2.4.6'
+	// implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	// implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	// implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty', version: '2.4.6'
 
-	if (osdetector.arch.equals("aarch_64")) {
-		implementation("io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64")
-	} else if (osdetector.arch.equals("x86_64")) {
-		implementation("io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-x86_64")
-	}
+	// if (osdetector.arch.equals("aarch_64")) {
+	// 	implementation("io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64")
+	// } else if (osdetector.arch.equals("x86_64")) {
+	// 	implementation("io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-x86_64")
+	// }
 
 	// spring email
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.3'
@@ -79,10 +79,10 @@ dependencies {
 	implementation "io.springfox:springfox-swagger-ui:3.0.0"
 
 	// Debezium Engine
-	implementation 'io.debezium:debezium-connector-mysql:1.4.2.Final'
-	implementation 'io.debezium:debezium-api:1.4.2.Final'
-	implementation 'io.debezium:debezium-embedded:1.4.2.Final'
-	implementation 'org.apache.commons:commons-lang3:3.13.0'
+	// implementation 'io.debezium:debezium-connector-mysql:1.4.2.Final'
+	// implementation 'io.debezium:debezium-api:1.4.2.Final'
+	// implementation 'io.debezium:debezium-embedded:1.4.2.Final'
+	// implementation 'org.apache.commons:commons-lang3:3.13.0'
 
 	// web push
 	implementation 'nl.martijndwars:web-push:5.1.1'

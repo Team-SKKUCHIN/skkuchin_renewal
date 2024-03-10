@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { change_status_info } from '../../actions/candidate/candidate';
 import ErrorPopup from '../Custom/ErrorPopup';
-import Loading from '../Loading';
+import { Loading } from '../Loading';
 
 const interestCategories = {
     음식: ['한식', '일식', '중식', '양식', '남미음식', '분식', '아시아음식', '카페'],
@@ -14,7 +14,7 @@ const interestCategories = {
     학술: ['학회', '동아리', '교환학생', '봉사', '재테크', '빅데이터', '금융', '문학', '토론', '시사', '어학', 'CPA', '피트', '로스쿨', '행시'],
 };
 
-const FriendProfile = ({candidate}) => {
+const FriendProfile = ({ candidate, isButtonOn=true }) => {
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -77,7 +77,6 @@ const FriendProfile = ({candidate}) => {
     });
 
     useEffect(() => {
-        console.log("CANDIDATE", candidate);
         if (candidate) {
             const interestsData = {};
             Object.keys(interestCategories).forEach(category => {
@@ -97,7 +96,7 @@ const FriendProfile = ({candidate}) => {
 
             setInterests(interestsData);
         }
-    }, []);
+    }, [candidate]);
 
     return (
         <div style={{marginTop: '63px', padding: '10px 24px 100px'}}>
@@ -189,16 +188,17 @@ const FriendProfile = ({candidate}) => {
                                 </div>
                             ))}
                         </div>
-
-                        <Button
-                            onClick={handleSubmit}
-                            color="primary"
-                            variant="contained"
-                            disableElevation
-                            sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
-                        >
-                            밥약 신청하기
-                        </Button>
+                        {isButtonOn && 
+                            <Button
+                                onClick={handleSubmit}
+                                color="primary"
+                                variant="contained"
+                                disableElevation
+                                sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
+                            >
+                                밥약 신청하기
+                            </Button>
+                        }
 
                         <ErrorPopup
                             open={open}

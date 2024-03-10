@@ -16,6 +16,7 @@ import skkuchin.service.domain.Chat.GroupChatRequest;
 import skkuchin.service.domain.Chat.GroupProfile;
 import skkuchin.service.domain.Chat.ProfileStatus;
 import skkuchin.service.domain.Chat.ResponseType;
+import skkuchin.service.domain.Matching.UserKeyword;
 import skkuchin.service.domain.User.AppUser;
 import skkuchin.service.domain.User.Major;
 import skkuchin.service.domain.User.Sms;
@@ -26,6 +27,7 @@ import skkuchin.service.exception.CustomValidationApiException;
 import skkuchin.service.repo.GroupChatRequestRepo;
 import skkuchin.service.repo.GroupProfileRepo;
 import skkuchin.service.repo.SmsRepo;
+import skkuchin.service.repo.UserKeywordRepo;
 import skkuchin.service.repo.UserRepo;
 import skkuchin.service.util.RandomDateGenerator;
 import skkuchin.service.util.RandomNameGenerator;
@@ -37,7 +39,7 @@ public class GroupProfileService {
     private final GroupChatRequestRepo groupChatRequestRepo;
     private final SmsRepo smsRepo;
     private final UserRepo userRepo;
-    private final MatchingUserService matchingUserService;
+    private final UserKeywordRepo userKeywordRepo;
     private final Random random = new Random();
 
     @Transactional
@@ -169,7 +171,14 @@ public class GroupProfileService {
 
     @Transactional
     public void saveGroupProfiles(int count) {
-        List<MatchingUserDto.Response> users = matchingUserService.getUserProfileList();
+        List<MatchingUserDto.Response> users = userRepo.findAll()
+                .stream()
+                .filter(user -> user.getMatching() != null && user.getMatching())
+                .map(user -> {
+                    List<UserKeyword> keywords = userKeywordRepo.findByUser(user);
+                    return new MatchingUserDto.Response(user, keywords);
+                })
+                .collect(Collectors.toList());
 
         for (int i = 0; i < count; i++) {
             MatchingUserDto.Response matchingUser = users.get(i);
