@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { useRouter } from "next/router";
 import { CssBaseline, ThemeProvider, Divider } from '@mui/material';
 import UpperBar from '../components/UpperBar';
 import theme from '../theme/theme';
@@ -6,6 +8,8 @@ import styled from '@emotion/styled';
 import Link from 'next/link';
 import mainCharacter from '../image/login_enheng.png';
 import Image from 'next/image';
+import close from '../image/close.png';
+import share from '../image/ios_share.png';
 
 const GameContent = () => {
     const games = [
@@ -93,6 +97,24 @@ const GameContent = () => {
 };
 
 const Home = () => {
+    const router = useRouter();
+    const [popup, setPopup] = useState(false);
+
+    const handleBtnClick = () => {
+        setPopup(false);
+        window.localStorage.setItem('first', true);
+    }
+
+    useEffect(() => {
+        const onboarding = window.localStorage.getItem('onboarding');
+        const first = window.localStorage.getItem('first');
+        if (!onboarding) {
+            router.push('/onboarding');
+        } 
+        if (!first) {
+            setPopup(true);
+        }
+    }, [])
     return (
         <HomeContainer>
             <ThemeProvider theme={theme}>
@@ -103,6 +125,20 @@ const Home = () => {
                     <Divider orientation="horizontal" sx={{ mt: "20px", border: '5px solid #F2F2F2' }} />
                     <MatchPage />
                 </div>
+                
+                {popup &&
+                <div style={{ position: 'fixed', bottom: '10%', left: '50%', width: '90%', transform: 'translate(-50%, 50%)', maxWidth: '420px', backgroundColor: 'rgba(0, 0, 0, 0.70)', marginBottom: '0 20px 100px 20px', borderRadius: '20px'}}>
+                    <div style={{display: 'flex', justifyContent: 'space-between', padding: '10px 10px 0 0', }}>
+                        <div></div>
+                        <Image onClick={handleBtnClick} src={close} width={20} height={20} style={{margin: '20px'}} />
+                    </div>
+                    <div style={{display: 'flex', flexDirection: 'column', marginBottom: '24px', marginTop: '4px', justifyContent: 'center', alignItems: 'center', color: '#fff', fontSize: '16px',}}>
+                    <div>아래에 있는 
+                        <span style={{padding: '10px 3px 0 7px', verticalAlign: 'middle'}}><Image src={share} width={15.6} height={19} /></span>
+                        를 눌러 <span>[홈 화면에 추가]</span>하시면,</div>
+                    <div>스꾸친 바로 가기를 홈 화면에 만들 수 있어요!</div>
+                    </div>
+                </div>}
             </ThemeProvider>
         </HomeContainer>
     );
