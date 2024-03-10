@@ -30,8 +30,7 @@ public class MatchingUserController {
 
     @GetMapping("")
     public ResponseEntity<?> getUserProfileList() {
-        List<MatchingUserDto.Response> userProfiles;
-        userProfiles = matchingUserService.getUserProfileList();
+        List<MatchingUserDto.Response> userProfiles = matchingUserService.getUserProfileList();
         return new ResponseEntity<>(new CMRespDto<>(1, "전체 개인 프로필 조회 완료", userProfiles), HttpStatus.OK);
     }
 

@@ -32,19 +32,19 @@ const UpperBar = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Container disableGutters={true} maxWidth="xs" style={{height:"90px", margin:"0", padding:"0"}} overflow="hidden">
-        <div style={{ zIndex:'99', position: "fixed", top: 0, width: "100%", background: "white", alignContent:"center", borderBottom: '1.5px solid rgba(234, 234, 234, 1)', maxWidth:'420px'}}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding:"20px 24px 0px 24px"}}>
-                <Link href="/">
-                    <Image src={mainLogo} width={85} height={19} />
-                </Link>
-            <div style={{flex: 1}} />
-                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <div style={{ zIndex:'99', position: "fixed", top: 0, width: "100%", background: "white", alignContent:"center", borderBottom: '1.5px solid rgba(234, 234, 234, 1)', maxWidth:'420px'}}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding:"20px 24px 0px 24px"}}>
+                    <Link href="/">
+                        <Image src={mainLogo} width={85} height={19} />
+                    </Link>
+                <div style={{flex: 1}} />
+                {/* <div style={{ display: "flex", justifyContent: "flex-end" }}>
                     <div>
                         <Link href="/notification">
                             <Image src={notiIcon} width={24} height={24}/>
                         </Link>
                     </div>
-                </div>
+                </div> */}
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", maxWidth:"420px", padding:"15px 24px 0px 24px"}}>
             <Link href="/">

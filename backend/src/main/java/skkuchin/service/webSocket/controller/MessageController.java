@@ -1,73 +1,86 @@
-package skkuchin.service.webSocket.controller;
+// package skkuchin.service.webSocket.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import skkuchin.service.dto.ChatMessageDto;
-import skkuchin.service.dto.ChatRoomDto;
-import skkuchin.service.dto.UserDto;
-import skkuchin.service.repo.SmsRepo;
-import skkuchin.service.domain.Chat.ChatRoom;
-import skkuchin.service.domain.Chat.ChatSession;
-import skkuchin.service.domain.User.AppUser;
-import skkuchin.service.domain.User.Sms;
-import skkuchin.service.service.ChatMessageService;
-import skkuchin.service.service.ChatRoomService;
-import skkuchin.service.service.ChatSessionService;
+// import lombok.RequiredArgsConstructor;
+// import lombok.extern.log4j.Log4j2;
+// import org.springframework.amqp.rabbit.core.RabbitTemplate;
+// import org.springframework.messaging.Message;
+// import org.springframework.messaging.handler.annotation.DestinationVariable;
+// import org.springframework.messaging.handler.annotation.MessageMapping;
+// import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+// import org.springframework.messaging.support.MessageHeaderAccessor;
+// import org.springframework.stereotype.Controller;
+// import org.springframework.transaction.annotation.Transactional;
+// import skkuchin.service.dto.ChatMessageDto;
+// import skkuchin.service.dto.ChatRoomDto;
+// import skkuchin.service.dto.UserDto;
+// import skkuchin.service.repo.SmsRepo;
+// import skkuchin.service.domain.Chat.ChatRoom;
+// import skkuchin.service.domain.Chat.ChatSession;
+// import skkuchin.service.domain.User.AppUser;
+// import skkuchin.service.domain.User.Sms;
+// import skkuchin.service.service.ChatMessageService;
+// import skkuchin.service.service.ChatRoomService;
+// import skkuchin.service.service.ChatSessionService;
 
-import java.util.List;
+// import java.util.List;
 
-@Controller
-@RequiredArgsConstructor
-@Log4j2
-public class MessageController {
+// @Controller
+// @RequiredArgsConstructor
+// @Log4j2
+// public class MessageController {
 
-    private final RabbitTemplate template;
-    private final ChatRoomService chatRoomService;
-    private final ChatMessageService chatMessageService;
-    private final ChatSessionService chatSessionService;
-    private final static String CHAT_EXCHANGE_NAME = "chat.exchange";
-    private final SmsRepo smsRepo;
+// private final RabbitTemplate template;
+// private final ChatRoomService chatRoomService;
+// private final ChatMessageService chatMessageService;
+// private final ChatSessionService chatSessionService;
+// private final static String CHAT_EXCHANGE_NAME = "chat.exchange";
+// private final SmsRepo smsRepo;
 
-    @Transactional
-    @MessageMapping("chat.chatMessage.{chatRoomId}")
-    public void getChatMessage(@DestinationVariable String chatRoomId, Message<?> message) {
-        ChatRoom chatRoom = chatRoomService.findChatRoom(chatRoomId);
-        StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-        String sessionId = accessor.getSessionId();
-        ChatSession chatSession = chatSessionService.findSession(sessionId);
-        String username = chatSession.getUsername();
+// @Transactional
+// @MessageMapping("chat.chatMessage.{chatRoomId}")
+// public void getChatMessage(@DestinationVariable String chatRoomId, Message<?>
+// message) {
+// ChatRoom chatRoom = chatRoomService.findChatRoom(chatRoomId);
+// StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message,
+// StompHeaderAccessor.class);
+// String sessionId = accessor.getSessionId();
+// ChatSession chatSession = chatSessionService.findSession(sessionId);
+// String username = chatSession.getUsername();
 
-        AppUser user1 = chatRoom.getUser1();
-        AppUser user2 = chatRoom.getUser2();
+// AppUser user1 = chatRoom.getUser1();
+// AppUser user2 = chatRoom.getUser2();
 
-        List<Sms> smsList1 = smsRepo.findByUser(user1);
-        List<Sms> smsList2 = smsRepo.findByUser(user1);
-        Sms sms1 = smsList1.isEmpty() || !smsList1.get(0).isVerified() ? null : smsList1.get(0);
-        Sms sms2 = smsList2.isEmpty() || !smsList2.get(0).isVerified() ? null : smsList2.get(0);
+// List<Sms> smsList1 = smsRepo.findByUser(user1);
+// List<Sms> smsList2 = smsRepo.findByUser(user1);
+// Sms sms1 = smsList1.isEmpty() || !smsList1.get(0).isVerified() ? null :
+// smsList1.get(0);
+// Sms sms2 = smsList2.isEmpty() || !smsList2.get(0).isVerified() ? null :
+// smsList2.get(0);
 
-        UserDto.Response user1Dto = new UserDto.Response(user1, sms1);
-        UserDto.Response user2Dto = new UserDto.Response(user2, sms2);
+// UserDto.Response user1Dto = new UserDto.Response(user1, sms1);
+// UserDto.Response user2Dto = new UserDto.Response(user2, sms2);
 
-        ChatRoomDto.settingResponse settingResponse = chatRoomService.getSettingResponse(chatRoom);
-        List<ChatMessageDto.Response> chatMessages = chatMessageService.getAllMessage(chatRoom);
+// ChatRoomDto.settingResponse settingResponse =
+// chatRoomService.getSettingResponse(chatRoom);
+// List<ChatMessageDto.Response> chatMessages =
+// chatMessageService.getAllMessage(chatRoom);
 
-        if (chatRoom.getUser1() != null && chatRoom.getUser1().getUsername().equals(username)) {
-            template.convertAndSend(CHAT_EXCHANGE_NAME, "setting." + chatRoomId + "user1", settingResponse);
-            template.convertAndSend(CHAT_EXCHANGE_NAME, "chat." + chatRoomId + "user1", chatMessages);
-            template.convertAndSend(CHAT_EXCHANGE_NAME, "user." + chatRoomId + "user1", user2Dto);
-        } else {
-            template.convertAndSend(CHAT_EXCHANGE_NAME, "setting." + chatRoomId + "user2", settingResponse);
-            template.convertAndSend(CHAT_EXCHANGE_NAME, "chat." + chatRoomId + "user2", chatMessages);
-            template.convertAndSend(CHAT_EXCHANGE_NAME, "user." + chatRoomId + "user2", user1Dto);
-        }
-    }
+// if (chatRoom.getUser1() != null &&
+// chatRoom.getUser1().getUsername().equals(username)) {
+// template.convertAndSend(CHAT_EXCHANGE_NAME, "setting." + chatRoomId +
+// "user1", settingResponse);
+// template.convertAndSend(CHAT_EXCHANGE_NAME, "chat." + chatRoomId + "user1",
+// chatMessages);
+// template.convertAndSend(CHAT_EXCHANGE_NAME, "user." + chatRoomId + "user1",
+// user2Dto);
+// } else {
+// template.convertAndSend(CHAT_EXCHANGE_NAME, "setting." + chatRoomId +
+// "user2", settingResponse);
+// template.convertAndSend(CHAT_EXCHANGE_NAME, "chat." + chatRoomId + "user2",
+// chatMessages);
+// template.convertAndSend(CHAT_EXCHANGE_NAME, "user." + chatRoomId + "user2",
+// user1Dto);
+// }
+// }
 
-}
+// }
