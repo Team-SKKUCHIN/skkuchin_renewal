@@ -148,7 +148,7 @@ const myPage = () => {
             <Container style={{display: 'grid', padding: '0 24px', marginTop: '25px'}}>
                 <Typography style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '24px', height: '20px'}}>고객 지원</Typography>
                 <div style={{height: '20px', marginBottom: '15px'}}><Typography onClick={() => window.open('http://pf.kakao.com/_KmNnG', '_blank')} style={{fontSize: '16px', fontWeight: '400',marginBottom: '5px', color: '#3C3C3C',}}>문의하기</Typography></div>
-                <div style={{height: '20px', marginBottom: '15px'}}><Typography style={{fontSize: '16px', fontWeight: '400',marginBottom: '5px', color: '#3C3C3C',}}>서비스 정보</Typography></div>
+                <div style={{height: '20px', marginBottom: '15px'}}><Typography onClick={() => router.push('/serviceInfo')} style={{fontSize: '16px', fontWeight: '400',marginBottom: '5px', color: '#3C3C3C',}}>서비스 정보</Typography></div>
             </Container>
 
             {/* 하단 */}
