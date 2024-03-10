@@ -10,6 +10,10 @@ import mainCharacter from '../image/login_enheng.png';
 import Image from 'next/image';
 import close from '../image/close.png';
 import share from '../image/ios_share.png';
+import { useSelector, useDispatch } from 'react-redux';
+import { load_all_group_profile, get_my_group_profile } from '../actions/groupProfile/groupProfile';
+import { load_candidate } from '../actions/candidate/candidate';
+import { load_matching_info } from '../actions/matchingUser/matchingUser';
 
 const GameContent = () => {
     const games = [
@@ -98,6 +102,8 @@ const GameContent = () => {
 
 const Home = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
+
     const [popup, setPopup] = useState(false);
 
     const handleBtnClick = () => {
@@ -115,6 +121,21 @@ const Home = () => {
             setPopup(true);
         }
     }, [])
+
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const matchingUser = useSelector(state => state.matchingUser.myMatchingInfo);
+    const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
+
+    useEffect(() => {
+        dispatch(load_all_group_profile());
+        dispatch(load_candidate());
+    }, []);
+
+    useEffect(() => {
+        if(isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
+        if(isAuthenticated && matchingUser === null) dispatch(load_matching_info());
+    }, [isAuthenticated]);
+
     return (
         <HomeContainer>
             <ThemeProvider theme={theme}>

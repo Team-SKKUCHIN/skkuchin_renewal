@@ -3,7 +3,7 @@ import { Grid, Typography, Button, TextField } from '@mui/material';
 import { displayMBTI } from '../Matching/MBTIList';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
-import { change_status_info } from '../../actions/matchingUser/matchingUser';
+import { change_status_info } from '../../actions/candidate/candidate';
 import ErrorPopup from '../Custom/ErrorPopup';
 import Loading from '../Loading';
 
@@ -14,14 +14,13 @@ const interestCategories = {
     학술: ['학회', '동아리', '교환학생', '봉사', '재테크', '빅데이터', '금융', '문학', '토론', '시사', '어학', 'CPA', '피트', '로스쿨', '행시'],
 };
 
-const FriendProfile = () => {
+const FriendProfile = ({candidate}) => {
     const router = useRouter();
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const myMatchingInfo = useSelector(state => state.matchingUser.myMatchingInfo);
-    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
+    const myMatchingInfo = useSelector(state => state.candidate.myMatchingInfo);
 
     const [open, setOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
@@ -50,8 +49,8 @@ const FriendProfile = () => {
             setOpen(true);
         }
         else {
-            localStorage.setItem('candidateId', matchingUser.id);
-            localStorage.setItem('candidateName', matchingUser.nickname);
+            localStorage.setItem('candidateId', candidate.id);
+            localStorage.setItem('candidateName', candidate.nickname);
             router.push({
                 pathname: '/enrollOpenChat',
                 query: { type: 'friend'},
@@ -78,7 +77,8 @@ const FriendProfile = () => {
     });
 
     useEffect(() => {
-        if (matchingUser) {
+        console.log("CANDIDATE", candidate);
+        if (candidate) {
             const interestsData = {};
             Object.keys(interestCategories).forEach(category => {
                 interestsData[category] = {};
@@ -87,8 +87,8 @@ const FriendProfile = () => {
                 });
             });
 
-            Object.keys(matchingUser.keywords).forEach(category => {
-                matchingUser.keywords[category].forEach(interest => {
+            Object.keys(candidate.keywords).forEach(category => {
+                candidate.keywords[category].forEach(interest => {
                     if (interestsData[category] && interestsData[category][interest] !== undefined) {
                         interestsData[category][interest] = true;
                     }
@@ -112,39 +112,39 @@ const FriendProfile = () => {
                     `}
             </style>
             {
-                matchingUser === null ? (
+                candidate === null ? (
                     <Loading />
                 ) : (
                     <>
                         <div style={{display: 'flex', flexDirection: 'row', gap : '15px'}}>
-                            {displayMBTI(matchingUser.mbti, 100, 100)}
+                            {displayMBTI(candidate.mbti, 100, 100)}
                             <div>
                                 <Grid item sx={{ display: 'flex', m: '10px 0 5px' }}>
                                     {/* 닉네임 및 캠퍼스 정보 */}
-                                    <Typography sx={{ fontSize: '18px', fontWeight: '700', mr: '5px' }}>{matchingUser !== null && matchingUser.nickname}</Typography>
-                                    {matchingUser !== null &&
-                                        matchingUser.campus === '명륜' ? (
-                                            <Typography sx={{ width: 'max-content', color: '#FFAC0B', backgroundColor: '#FFFCE4', fontSize: '12px', fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px' }}>{matchingUser.campus}</Typography>
+                                    <Typography sx={{ fontSize: '18px', fontWeight: '700', mr: '5px' }}>{candidate !== null && candidate.nickname}</Typography>
+                                    {candidate !== null &&
+                                        candidate.campus === '명륜' ? (
+                                            <Typography sx={{ width: 'max-content', color: '#FFAC0B', backgroundColor: '#FFFCE4', fontSize: '12px', fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px' }}>{candidate.campus}</Typography>
                                         ) : (
-                                            <Typography sx={{ color: '#58C85A', backgroundColor: '#DCF8DB', fontSize: '12px', fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px' }}>{matchingUser.campus}</Typography>
+                                            <Typography sx={{ color: '#58C85A', backgroundColor: '#DCF8DB', fontSize: '12px', fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px' }}>{candidate.campus}</Typography>
                                         )}
                                 </Grid>
                                 <Grid item sx={{ display: 'flex', fontSize: '12px', fontWeight: 500, color: '#777777' }}>
                                     <Grid item sx={{ fontSize: '12px' }}>
                                         {/* 전공, 학번, 성별 정보 */}
-                                        {matchingUser.major}&nbsp;/&nbsp;
-                                        {matchingUser.student_id}학번&nbsp;/&nbsp;
-                                        {(matchingUser.gender).charAt(0)}
+                                        {candidate.major}&nbsp;/&nbsp;
+                                        {candidate.student_id}학번&nbsp;/&nbsp;
+                                        {(candidate.gender).charAt(0)}
                                     </Grid>
                                 </Grid>
                                 <Grid item sx={{ display: 'flex', p: '3px 0 8px', gap: '4px' , m: '5px 0 28px'}}>
                                     <Grid item sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
-                                        {matchingUser.mbti}
+                                        {candidate.mbti}
                                     </Grid>
                                     {
-                                        (matchingUser.keywords) != null &&
+                                        (candidate.keywords) != null &&
                                             <>
-                                                {(Object.values(matchingUser.keywords).flat().slice(0, 2).map((keyword, index) => (
+                                                {(Object.values(candidate.keywords).flat().slice(0, 2).map((keyword, index) => (
                                                     <Grid item key={index} sx={{ color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px' }}>
                                                         {keyword}
                                                     </Grid>
@@ -160,7 +160,7 @@ const FriendProfile = () => {
                             label=""
                             multiline
                             rows={2}
-                            defaultValue={matchingUser.introduction}
+                            defaultValue={candidate.introduction}
                             fullWidth
                             contentEditable={false}
                             style={{margin: '8px 0 0'}}

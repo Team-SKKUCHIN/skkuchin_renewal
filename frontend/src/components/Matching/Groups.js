@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Button, Card, Typography, Grid} from '@mui/material';
 import { displayMBTI } from './MBTIList';
 import { useRouter } from 'next/router';
-import GoLogin from "../GoLogin";
 import ErrorPopup from "../Custom/ErrorPopup";
 import { Loading } from "../Loading";
 
@@ -14,7 +13,6 @@ const Groups = () => {
     const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
     const requestId = useSelector(state => state.chatRoom.requestId);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const [isLogin, setIsLogin] = useState(false);
 
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
@@ -40,14 +38,19 @@ const Groups = () => {
     }
 
     const handleGroupClick = (id) => {
-        router.push(`/showGroupProfile?id=${id}`);
+        if (isAuthenticated) {
+            router.push(`/showGroupProfile?id=${id}`);
+        } else {
+            setPopupMessage('상세 프로필을 보기 위해서는\n로그인이 필요해요.');
+            setPopupBtnText('로그인하러 가기');
+            setPopupOpen(true);
+        }
     }
 
     const filteredProfiles = myGroupProfiles ? groupProfiles && groupProfiles.filter((group) => !myGroupProfiles.some((myGroup) => myGroup.id == group.id)) : groupProfiles;
     
     return (
         <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0'}}>
-            {isLogin && <GoLogin open={isLogin} onClose={setIsLogin} /> }
             { filteredProfiles && filteredProfiles.length !== 0 ?
                 filteredProfiles.slice(0,5).map((group, index) => (
                         <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '10px'}}>

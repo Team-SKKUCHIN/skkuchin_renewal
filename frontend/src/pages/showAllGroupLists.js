@@ -30,10 +30,18 @@ const ShowAllGroupLists = () => {
     const filteredProfiles =
         selectedFilter === '전체'
         ? groups
-        : groups.filter((group) => group.gender == selectedFilter);
+        : user
+            ? groups.filter((group) => group.gender === selectedFilter && !myGroupProfiles.some((myGroup) => myGroup.id == group.id))
+            : groups.filter((group) => group.gender === selectedFilter);
 
     const handleGroupClick = (id) => {
-        router.push(`/showGroupProfile?id=${id}`);
+        if(isAuthenticated) {
+            router.push(`/showGroupProfile?id=${id}`);
+        } else {
+            setPopupMessage('상세 프로필을 보기 위해서는\n로그인이 필요해요.');
+            setPopupBtnText('로그인하러 가기');
+            setPopupOpen(true);
+        }
     }
 
     const handleBackClick = () => {
@@ -80,7 +88,6 @@ const ShowAllGroupLists = () => {
             <div style={{ overflow: 'scroll', padding: '12px 24px', marginTop: '109px' }}>
                 {filteredProfiles && filteredProfiles.length !== 0 ? (
                     filteredProfiles
-                        .filter((group) => !myGroupProfiles.some((myGroup) => myGroup.id == group.id))
                         .slice(0, displayCount)
                         .map((group, index) => (
                             <div style={{ marginBottom: '12px' }} key={index} onClick={() => handleGroupClick(group.id)}>
