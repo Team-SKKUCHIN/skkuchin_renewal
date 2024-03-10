@@ -68,7 +68,10 @@ export const send_personal_request = (link, receiverId, callback) => async dispa
             if (callback) callback([true, apiRes.message]);
         }
         else {
-            if (callback) callback([false, apiRes.message]);
+            if (res.status === 500) {
+                if (callback) callback([false, '이미 밥약 신청을 보낸 사용자입니다.']);
+            }
+            else if (callback) callback([false, apiRes.message]);
         }
     } catch (error) {
         if (callback) callback([false, error]);

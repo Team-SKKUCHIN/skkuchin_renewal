@@ -83,8 +83,6 @@ export default function EditProfileImage(props) {
         if(user == null){
             dispatch(load_user());
         }
-        console.log('currnet user info: ', user);
-        console.log('extracted user info: ', userData);
     }, []);
     
     const handleProfileClick = (event) => {

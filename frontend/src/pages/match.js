@@ -26,16 +26,16 @@ const MatchPage = () => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const user = useSelector(state => state.auth.user);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
-    const allGroupProfiles = useSelector(state => state.groupProfile.allGroupProfiles);
+    const matchingUser = useSelector(state => state.matchingUser.myMatchingInfo);
     const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
-    const candidateProfiles = useSelector(state => state.candidate.candidate);
 
     useEffect(() => {
-        if(allGroupProfiles === null) dispatch(load_all_group_profile());
-        if(candidateProfiles === null) dispatch(load_candidate());
+        dispatch(load_all_group_profile());
+        dispatch(load_candidate());
+    }, []);
+
+    useEffect(() => {
         if(isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
         if(isAuthenticated && matchingUser === null) dispatch(load_matching_info());
     }, [isAuthenticated]);

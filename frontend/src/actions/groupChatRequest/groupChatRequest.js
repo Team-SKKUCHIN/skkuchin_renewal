@@ -67,7 +67,10 @@ export const send_group_request = (link, senderId, receiverId, callback) => asyn
             if (callback) callback([true, apiRes.message]);
         }
         else {
-            if (callback) callback([false, apiRes.message]);
+            if (res.status === 500) {
+                if (callback) callback([false, '이미 밥약 신청을 보낸 그룹입니다.']);
+            }
+            else if (callback) callback([false, apiRes.message]);
         }
     } catch (error) {
         if (callback) callback([false, error]);

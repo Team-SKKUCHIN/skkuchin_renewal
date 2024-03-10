@@ -52,10 +52,8 @@ const ModifyGroupProfile = () => {
     };
 
     const handleSubmit = () => {
-        console.log('Updated Data:', updatedData);
         dispatch(update_group_profile(selectedGroup.id, updatedData, ([result, message]) => {
             if (result) {
-                console.log('그룹 프로필 수정 완료');
                 router.push({
                     pathname: `/showGroupProfile`,
                     query: { id: selectedGroup.id, mode: 'edit' },
