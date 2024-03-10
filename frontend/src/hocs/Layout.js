@@ -3,11 +3,13 @@ import { useDispatch } from "react-redux";
 import Head from "next/head";
 import { load_user, update_last_accessed_time } from '../actions/auth/auth';
 import { load_places_from_json } from '../actions/place/place';
+import { load_candidate } from "../actions/candidate/candidate";
 
 const Layout = ({title, content, children}) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(load_candidate());
         dispatch(load_places_from_json());
         dispatch(load_user())
         .then(() => {

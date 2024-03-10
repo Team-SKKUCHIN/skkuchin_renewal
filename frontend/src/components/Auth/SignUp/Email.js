@@ -45,7 +45,7 @@ const SignUpEmail = (props) => {
           props.handleNextStep();
         } else {
           setPopupMessage(message);
-          setPopupType('error');
+          setPopupType('check');
           setPopupOpen(true);
         }
       }));

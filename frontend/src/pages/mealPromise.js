@@ -11,7 +11,6 @@ import Groups from "../components/Matching/Groups";
 import Friends from "../components/Matching/Friends";
 import { load_all_group_profile, get_my_group_profile } from "../actions/groupProfile/groupProfile";
 import { load_matching_info } from "../actions/matchingUser/matchingUser";
-import { load_candidate } from "../actions/candidate/candidate";
 import ErrorPopup from "../components/Custom/ErrorPopup";
 
 const LayoutContainer = styled.div`
@@ -43,10 +42,12 @@ const MealPromisePage = () => {
     {
       title: "그룹 밥약은 이렇게 진행돼요",
       content: "눌러서 자세히 보기",
+      instagramLink: "https://www.instagram.com/p/C4UW_4uSLvV/?igsh=MXF0czlnMjUxYW8zZA=="
     },
     {
-      title: "두번째 배너 제목",
+      title: "1:1 밥약이 새로워졌어요",
       content: "눌러서 자세히 보기",
+      instagramLink: "https://www.instagram.com/p/C362QrzS5Ik/?igsh=MWw3dXFiOWd6d2g2"
     },
   ];
 
@@ -89,13 +90,20 @@ const MealPromisePage = () => {
 
   useEffect(() => {
     dispatch(load_all_group_profile());
-    dispatch(load_candidate());
+    // dispatch(load_candidate());
   }, []);
 
   useEffect(() => {
     if(isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
     if(isAuthenticated && matchingUser === null) dispatch(load_matching_info());
   }, [isAuthenticated]);
+
+  const handleBannerClick = (instagramLink) => {
+    console.log("banner clicked", instagramLink);
+    if (instagramLink) {
+      window.open(instagramLink, "_blank");
+    }
+  };
 
   return (
     <LayoutContainer>
@@ -108,6 +116,7 @@ const MealPromisePage = () => {
             banners={banners}
             activeStep={activeStep}
             handleStepChange={handleStepChange}
+            handleBannerClick={handleBannerClick}
           />
 
           {/* 그룹 밥약 */}

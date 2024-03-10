@@ -113,7 +113,8 @@ export const CustomButton = ({ selectedIndex, request, senderName, link, setLink
             popupMessage.current = '밥약 신청을 거절했습니다.\n다음에 더 좋은 기회로 만나요!';
             popupDescription.current = '';
         }
-        setPopupType('error');
+        // 팝업 닫기 수정
+        setPopupType('check');
         setPopupOpen(true);
     }, [request]);
 

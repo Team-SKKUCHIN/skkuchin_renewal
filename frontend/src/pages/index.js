@@ -12,7 +12,6 @@ import close from '../image/close.png';
 import share from '../image/ios_share.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { load_all_group_profile, get_my_group_profile } from '../actions/groupProfile/groupProfile';
-import { load_candidate } from '../actions/candidate/candidate';
 import { load_matching_info } from '../actions/matchingUser/matchingUser';
 
 const GameContent = () => {
@@ -128,7 +127,7 @@ const Home = () => {
 
     useEffect(() => {
         dispatch(load_all_group_profile());
-        dispatch(load_candidate());
+        // dispatch(load_candidate());
     }, []);
 
     useEffect(() => {

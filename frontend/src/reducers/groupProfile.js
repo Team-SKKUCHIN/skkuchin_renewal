@@ -13,6 +13,7 @@ import {
     DELETE_GROUP_PROFILE_FAIL,
     CLEAR_CANDIDATE_PROFILE,
 } from '../actions/groupProfile/types';
+import { LOGOUT_SUCCESS } from '../actions/auth/types';
 
 const initialState = {
     myGroupProfiles: null,
@@ -76,6 +77,8 @@ const groupProfileReducer = (state = initialState, action) => {
             return {
                 ...state
             }
+        case LOGOUT_SUCCESS:
+            return initialState;
         default:
             return state;
     };

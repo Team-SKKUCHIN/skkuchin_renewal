@@ -5,7 +5,6 @@ import theme from '../theme/theme';
 import Header from '../components/MealPromise/Header';
 import MemberInfoInput from '../components/MealPromise/MemberInfoInput';
 import CalendarContainer from '../components/MealPromise/CalendarContainer';
-import Popup from '../components/Custom/Popup';
 import { update_group_profile, load_candidate_profile } from '../actions/groupProfile/groupProfile';
 import { useRouter } from 'next/router';
 

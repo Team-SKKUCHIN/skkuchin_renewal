@@ -43,7 +43,7 @@ const SignUpPhone = (props) => {
         } else {
           console.log(message);
           setPopupMessage(message);
-          setPopupType('error');
+          setPopupType('phoneError');
           setPopupOpen(true);
         }
       })

@@ -33,7 +33,7 @@ const FriendProfile = ({ candidate }) => {
             setPopupMessage('밥약 신청을 위해서는 로그인이 필요해요.');
             setOpen(true);
         }
-        else if (!myMatchingInfo)  {
+        else if (myMatchingInfo === null)  {
             setPopupBtnText('개인 프로필 등록하기');
             setPopupMessage('1:1 밥약을 신청하기 위해선 개인 프로필 작성이 필요해요.');
             setOpen(true);
