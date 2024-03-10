@@ -5,12 +5,13 @@ import theme from '../theme/theme';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { Loading } from '../components/Loading';
 import { load_other_matching_info, clear_matching } from '../actions/matchingUser/matchingUser';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const showFriendProfile = () => {
     const dispatch = useDispatch();
 
     const [isLoading, setIsLoading] = useState(true);
+    const user = useSelector(state => state.auth.user);
     const [candidate, setCandidate] = useState(null);
 
     useEffect(() => {
@@ -19,7 +20,7 @@ const showFriendProfile = () => {
     }, []);
 
     useEffect(() => {
-        if(candidate) {
+        if(candidate && user) {
             clear_matching();
             dispatch(load_other_matching_info(candidate.id, ([result, message]) => {
                 if(result) {

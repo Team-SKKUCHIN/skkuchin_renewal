@@ -22,11 +22,18 @@ const showAllTwoLists = () => {
 
     const filterOptions = ['전체', '명륜', '율전'];
 
+    // const filteredProfiles =
+    //     selectedFilter === '전체'
+    //     ? candidate && candidate.filter((candidate) => candidate.id !== user.id)
+    //     : candidate && candidate.filter((candidate) => candidate.campus === selectedFilter && candidate.id !== user.id);
+
     const filteredProfiles =
         selectedFilter === '전체'
-        ? candidate && candidate.filter((candidate) => candidate.id !== user.id)
-        : candidate && candidate.filter((candidate) => candidate.campus === selectedFilter && candidate.id !== user.id);
-
+            ? candidate && candidate.filter((candidate) => candidate.id !== user?.id)
+            : user
+                ? candidate && candidate.filter((candidate) => candidate.campus === selectedFilter && candidate.id !== user.id)
+                : candidate && candidate.filter((candidate) => candidate.campus === selectedFilter);
+    
     const handleBackClick = () => {
         router.push('/mealPromise');
     }
