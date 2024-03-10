@@ -144,6 +144,7 @@ public class SmsService {
     @Transactional
     public void sendSms(String to, String text) {
         Message message = new Message();
+        message.setSubject("[스꾸친]");
         message.setFrom(from);
         message.setTo(to);
         message.setText(text);

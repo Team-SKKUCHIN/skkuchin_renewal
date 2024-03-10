@@ -10,8 +10,8 @@ services:
       - MYSQL_ROOT_PASSWORD=1234
     command:
       [
-        '--character-set-server=utf8mb4',
-        '--collation-server=utf8mb4_unicode_ci'
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
       ]
     ports:
       - 3306:3306
@@ -65,17 +65,17 @@ services:
     networks:
       - skkuchin-network
 
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    container_name: rabbitmq-container
-    ports:
-      - "5672:5672"
-      - "15670:15670"
-      - "15672:15672"
-      - "61613:61613"
-    command: sh -c "rabbitmq-plugins enable rabbitmq_web_stomp rabbitmq_web_stomp_examples && rabbitmq-server start"
-    networks:
-      - skkuchin-network
+  # rabbitmq:
+  #   image: rabbitmq:3-management-alpine
+  #   container_name: rabbitmq-container
+  #   ports:
+  #     - "5672:5672"
+  #     - "15670:15670"
+  #     - "15672:15672"
+  #     - "61613:61613"
+  #   command: sh -c "rabbitmq-plugins enable rabbitmq_web_stomp rabbitmq_web_stomp_examples && rabbitmq-server start"
+  #   networks:
+  #     - skkuchin-network
 
 networks:
   skkuchin-network:

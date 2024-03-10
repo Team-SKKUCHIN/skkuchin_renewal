@@ -1,11 +1,13 @@
 import {
     LOAD_CANDIDATE_SUCCESS,
-    LOAD_CANDIDATE_FAIL
+    LOAD_CANDIDATE_FAIL,
+    SAVE_PERSONAL_PROFILE_SUCCESS
 } from '../actions/candidate/types';
 import { LOGOUT_SUCCESS } from '../actions/auth/types';
 
 const initialState = {
-    candidate: null
+    candidate: null,
+    profile: null,
 };
 
 const candidateReducer = (state = initialState, action) => {
