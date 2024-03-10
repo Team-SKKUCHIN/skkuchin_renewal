@@ -91,7 +91,7 @@ const MealPromisePage = () => {
 
   useEffect(() => {
     dispatch(load_all_group_profile());
-    dispatch(load_candidate());
+    // dispatch(load_candidate());
   }, []);
 
   useEffect(() => {
