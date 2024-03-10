@@ -45,7 +45,7 @@ const VerificationPhone = (props) => {
             } else {
             console.log(message);
             setPopupMessage(message);
-            setPopupType('error');
+            setPopupType('check');
             setPopupOpen(true);
             }
         })

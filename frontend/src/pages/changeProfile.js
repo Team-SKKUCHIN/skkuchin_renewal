@@ -18,7 +18,7 @@ const makeProfile = () => {
     const keywordNum = useRef(0);
 
     const [popupOpen, setPopupOpen] = useState(false);
-    const [popupType, setPopupType] = useState('error');
+    const [popupType, setPopupType] = useState('check');
     const [popupMessage, setPopupMessage] = useState('');
     const [popupDescription, setPopupDescription] = useState('');
     const [selectedKeywords, setSelectedKeywords] = useState([]);
