@@ -17,6 +17,7 @@ import ClickProfile from './clickProfile';
 import { Header } from "../components/Header";
 import Popup from "../components/Recommend/Popup";
 import { Loading } from "../components/Loading";
+import { makeTraffic } from '../actions/traffic/traffic';
 
 const SubTitle = () => (
     <div style={{ margin: "42px 0 8px" }}>
@@ -240,6 +241,10 @@ const Finish = ({
         selectedPlace.current = place;
         setPlacePopup(true);
     }, []);
+
+    useEffect(() => {
+        dispatch(makeTraffic('음식점_월드컵_결과페이지_도달수'));
+    }, [])
 
     useEffect(() => {
         if (!start.current) {
@@ -656,6 +661,10 @@ const WorldCup = () => {
     const [phase, setPhase] = useState('ready');
     const [profileOpen, setProfileOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        dispatch(makeTraffic('음식점_월드컵_진입수'));
+    }, []);
 
     useEffect(() => {
         if (phase === 'ready') {

@@ -12,6 +12,7 @@ import Friends from "../components/Matching/Friends";
 import { load_all_group_profile, get_my_group_profile } from "../actions/groupProfile/groupProfile";
 import { load_matching_info } from "../actions/matchingUser/matchingUser";
 import ErrorPopup from "../components/Custom/ErrorPopup";
+import { makeTraffic } from '../actions/traffic/traffic';
 
 const LayoutContainer = styled.div`
   ::-webkit-scrollbar {
@@ -89,6 +90,7 @@ const MealPromisePage = () => {
   }
 
   useEffect(() => {
+    dispatch(makeTraffic('밥약_탭_진입수'));
     dispatch(load_all_group_profile());
   }, []);
 
@@ -98,6 +100,7 @@ const MealPromisePage = () => {
   }, [isAuthenticated]);
 
   const handleBannerClick = (instagramLink) => {
+    dispatch(makeTraffic('배너_클릭수'));
     console.log("banner clicked", instagramLink);
     if (instagramLink) {
       window.open(instagramLink, "_blank");
