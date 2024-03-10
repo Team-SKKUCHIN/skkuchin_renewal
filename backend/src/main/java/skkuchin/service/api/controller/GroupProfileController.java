@@ -35,13 +35,9 @@ public class GroupProfileController {
     private final GroupProfileService groupProfileService;
 
     @GetMapping("")
-    public ResponseEntity<?> getGroupProfileList(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<?> getGroupProfileList() {
         List<GroupProfileDto.SummaryResponse> groupProfiles;
-        if (principalDetails != null && principalDetails.getUser() != null) {
-            groupProfiles = groupProfileService.getGroupProfileListAsUser(principalDetails.getUser().getId());
-        } else {
-            groupProfiles = groupProfileService.getGroupProfileListAsNonUser();
-        }
+        groupProfiles = groupProfileService.getGroupProfileList();
         return new ResponseEntity<>(new CMRespDto<>(1, "전체 그룹 프로필 조회 완료", groupProfiles), HttpStatus.OK);
     }
 

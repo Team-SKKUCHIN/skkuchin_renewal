@@ -1,5 +1,4 @@
 import { API_URL } from '../../config';
-import { getToken, request_refresh } from '../auth/auth';
 import { 
     LOAD_CANDIDATE_SUCCESS,
     LOAD_CANDIDATE_FAIL
@@ -7,7 +6,7 @@ import {
 
 export const load_candidate = () => async dispatch => {
     try {
-        const res = await fetch(`${API_URL}/api/matching/profiles`, {
+        const res = await fetch(`${API_URL}/api/matching`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

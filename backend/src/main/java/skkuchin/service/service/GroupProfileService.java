@@ -41,18 +41,8 @@ public class GroupProfileService {
     private final Random random = new Random();
 
     @Transactional
-    public List<GroupProfileDto.SummaryResponse> getGroupProfileListAsNonUser() {
+    public List<GroupProfileDto.SummaryResponse> getGroupProfileList() {
         return groupProfileRepo.findAll()
-                .stream()
-                .filter(profile -> ProfileStatus.ACTIVE.equals(profile.getStatus()))
-                .sorted(Comparator.comparing(GroupProfile::getModifiedAt).reversed())
-                .map(profile -> new GroupProfileDto.SummaryResponse(profile))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public List<GroupProfileDto.SummaryResponse> getGroupProfileListAsUser(Long userId) {
-        return groupProfileRepo.findGroupProfilesExceptMine(userId)
                 .stream()
                 .filter(profile -> ProfileStatus.ACTIVE.equals(profile.getStatus()))
                 .sorted(Comparator.comparing(GroupProfile::getModifiedAt).reversed())
@@ -179,7 +169,7 @@ public class GroupProfileService {
 
     @Transactional
     public void saveGroupProfiles(int count) {
-        List<MatchingUserDto.Response> users = matchingUserService.getUserProfileListAsNonUser();
+        List<MatchingUserDto.Response> users = matchingUserService.getUserProfileList();
 
         for (int i = 0; i < count; i++) {
             MatchingUserDto.Response matchingUser = users.get(i);

@@ -3,13 +3,13 @@ import { Grid, Container, Typography, Button } from '@mui/material';
 import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import Friends from '../components/Matching/Friends';
-import OptionButton from '../components/Custom/OptionButton';
-import Groups from '../components/Matching/Groups';
+import Friends from '../Matching/Friends';
+import OptionButton from '../Custom/OptionButton';
+import Groups from '../Matching/Groups';
 import { useRouter } from 'next/router';
-import { load_all_group_profile, get_my_group_profile } from '../actions/groupProfile/groupProfile';
-import { load_candidate } from '../actions/candidate/candidate';
-import { load_matching_info } from '../actions/matchingUser/matchingUser';
+import { load_all_group_profile, get_my_group_profile } from '../../actions/groupProfile/groupProfile';
+import { load_candidate } from '../../actions/candidate/candidate';
+import { load_matching_info } from '../../actions/matchingUser/matchingUser';
 
 const MatchContainer = styled.div`
   /* 데스크톱에서 스크롤 바를 숨김 */

@@ -23,23 +23,10 @@ public class MatchingUserService {
     private final KeywordRepo keywordRepo;
 
     @Transactional
-    public List<MatchingUserDto.Response> getUserProfileListAsNonUser() {
+    public List<MatchingUserDto.Response> getUserProfileList() {
         return userRepo.findAll()
                 .stream()
                 .filter(user -> user.getMatching() != null && user.getMatching() == true)
-                .map(user -> {
-                    List<UserKeyword> keywords = userKeywordRepo.findByUser(user);
-                    return new MatchingUserDto.Response(user, keywords);
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public List<MatchingUserDto.Response> getUserProfileListAsUser(Long userId) {
-        return userRepo.findAll()
-                .stream()
-                .filter(user -> user.getMatching() != null && user.getMatching() == true
-                        && !user.getId().equals(userId))
                 .map(user -> {
                     List<UserKeyword> keywords = userKeywordRepo.findByUser(user);
                     return new MatchingUserDto.Response(user, keywords);

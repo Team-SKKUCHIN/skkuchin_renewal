@@ -28,20 +28,17 @@ import java.util.Objects;
 public class MatchingUserController {
     private final MatchingUserService matchingUserService;
 
-    @GetMapping("/profiles")
-    public ResponseEntity<?> getUserProfileList(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @GetMapping("")
+    public ResponseEntity<?> getUserProfileList() {
         List<MatchingUserDto.Response> userProfiles;
-        if (principalDetails != null && principalDetails.getUser() != null) {
-            userProfiles = matchingUserService.getUserProfileListAsUser(principalDetails.getUser().getId());
-        } else {
-            userProfiles = matchingUserService.getUserProfileListAsNonUser();
-        }
+        userProfiles = matchingUserService.getUserProfileList();
         return new ResponseEntity<>(new CMRespDto<>(1, "전체 개인 프로필 조회 완료", userProfiles), HttpStatus.OK);
     }
 
     @PostMapping("/user")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<?> addInfo(@Valid @RequestBody MatchingUserDto.Request dto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<?> addInfo(@Valid @RequestBody MatchingUserDto.Request dto, BindingResult bindingResult,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Map<String, String> errorMap = new HashMap<>();
         try {
             if (bindingResult.hasErrors()) {
@@ -62,7 +59,8 @@ public class MatchingUserController {
     }
 
     @PostMapping("/user/new/{username}")
-    public ResponseEntity<?> addNewInfo(@PathVariable String username, @Valid @RequestBody MatchingUserDto.Request dto, BindingResult bindingResult) {
+    public ResponseEntity<?> addNewInfo(@PathVariable String username, @Valid @RequestBody MatchingUserDto.Request dto,
+            BindingResult bindingResult) {
         Map<String, String> errorMap = new HashMap<>();
         try {
             if (bindingResult.hasErrors()) {
@@ -105,7 +103,8 @@ public class MatchingUserController {
 
     @PutMapping("/user/status")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<?> updateMatchingStatus(@Valid @RequestBody MatchingUserDto.StatusRequest dto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<?> updateMatchingStatus(@Valid @RequestBody MatchingUserDto.StatusRequest dto,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         AppUser user = principalDetails.getUser();
         matchingUserService.updateMatchingStatus(user.getId(), dto);
         return new ResponseEntity<>(new CMRespDto<>(1, "참여중 여부 수정 완료", null), HttpStatus.OK);
@@ -113,14 +112,16 @@ public class MatchingUserController {
 
     @PutMapping("/user/status/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateUserMatchingStatus(@PathVariable Long userId, @Valid @RequestBody MatchingUserDto.StatusRequest dto) {
+    public ResponseEntity<?> updateUserMatchingStatus(@PathVariable Long userId,
+            @Valid @RequestBody MatchingUserDto.StatusRequest dto) {
         matchingUserService.updateMatchingStatus(userId, dto);
         return new ResponseEntity<>(new CMRespDto<>(1, "다른 사용자 참여중 여부 수정 완료", null), HttpStatus.OK);
     }
 
     @PutMapping("/user")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<?> updateInfo(@Valid @RequestBody MatchingUserDto.Request dto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<?> updateInfo(@Valid @RequestBody MatchingUserDto.Request dto, BindingResult bindingResult,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Map<String, String> errorMap = new HashMap<>();
         try {
             if (bindingResult.hasErrors()) {
@@ -146,7 +147,8 @@ public class MatchingUserController {
 
     @PutMapping("/user/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateUserInfo(@PathVariable Long userId, @Valid @RequestBody MatchingUserDto.Request dto) {
+    public ResponseEntity<?> updateUserInfo(@PathVariable Long userId,
+            @Valid @RequestBody MatchingUserDto.Request dto) {
         matchingUserService.updateInfo(userId, dto);
         return new ResponseEntity<>(new CMRespDto<>(1, "다른 사용자 키워드 수정 완료", null), HttpStatus.OK);
     }
