@@ -33,7 +33,7 @@ const editNickname = () => {
     const [phone, setPhone] = useState("");
 
     const [popupOpen, setPopupOpen] = useState(false);
-    const [popupType, setPopupType] = useState('error');
+    const [popupType, setPopupType] = useState('check');
     const [popupMessage, setPopupMessage] = useState('');
 
     const majorList = [

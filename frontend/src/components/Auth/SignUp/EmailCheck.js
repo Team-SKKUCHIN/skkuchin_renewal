@@ -16,7 +16,7 @@ const SignUpEmailCheck = (props) => {
     const [remainHeight, setRemainHeight] = useState(window.innerHeight - 456 + "px");
 
     const [popupOpen, setPopupOpen] = useState(false);
-    const [popupType, setPopupType] = useState('error');
+    const [popupType, setPopupType] = useState('check');
     const [popupMessage, setPopupMessage] = useState('');
     const [popupDescription, setPopupDescription] = useState('');
     
