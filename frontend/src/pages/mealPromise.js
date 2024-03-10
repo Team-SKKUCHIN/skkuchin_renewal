@@ -43,10 +43,12 @@ const MealPromisePage = () => {
     {
       title: "그룹 밥약은 이렇게 진행돼요",
       content: "눌러서 자세히 보기",
+      instagramLink: "https://www.instagram.com/p/C4UW_4uSLvV/?igsh=MXF0czlnMjUxYW8zZA=="
     },
     {
-      title: "두번째 배너 제목",
+      title: "1:1 밥약이 새로워졌어요",
       content: "눌러서 자세히 보기",
+      instagramLink: "https://www.instagram.com/p/C362QrzS5Ik/?igsh=MWw3dXFiOWd6d2g2"
     },
   ];
 
@@ -97,6 +99,13 @@ const MealPromisePage = () => {
     if(isAuthenticated && matchingUser === null) dispatch(load_matching_info());
   }, [isAuthenticated]);
 
+  const handleBannerClick = (instagramLink) => {
+    console.log("banner clicked", instagramLink);
+    if (instagramLink) {
+      window.open(instagramLink, "_blank");
+    }
+  };
+
   return (
     <LayoutContainer>
       <ThemeProvider theme={theme}>
@@ -108,6 +117,7 @@ const MealPromisePage = () => {
             banners={banners}
             activeStep={activeStep}
             handleStepChange={handleStepChange}
+            handleBannerClick={handleBannerClick}
           />
 
           {/* 그룹 밥약 */}
