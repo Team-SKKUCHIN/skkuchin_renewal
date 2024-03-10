@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import { Grid, Container, Typography, Button } from '@mui/material';
 import styled from '@emotion/styled';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
 import Friends from '../Matching/Friends';
 import OptionButton from '../Custom/OptionButton';
 import Groups from '../Matching/Groups';
 import { useRouter } from 'next/router';
-import { load_all_group_profile, get_my_group_profile } from '../../actions/groupProfile/groupProfile';
-import { load_candidate } from '../../actions/candidate/candidate';
-import { load_matching_info } from '../../actions/matchingUser/matchingUser';
 
 const MatchContainer = styled.div`
   /* 데스크톱에서 스크롤 바를 숨김 */
@@ -23,22 +18,7 @@ const MatchContainer = styled.div`
 `;
 
 const MatchPage = () => {
-    const dispatch = useDispatch();
     const router = useRouter();
-
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const matchingUser = useSelector(state => state.matchingUser.myMatchingInfo);
-    const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
-
-    useEffect(() => {
-        dispatch(load_all_group_profile());
-        dispatch(load_candidate());
-    }, []);
-
-    useEffect(() => {
-        if(isAuthenticated && myGroupProfiles === null) dispatch(get_my_group_profile());
-        if(isAuthenticated && matchingUser === null) dispatch(load_matching_info());
-    }, [isAuthenticated]);
 
     const options = [
         { label: '여럿이서 먹어요', value: '여럿이서 먹어요' },
