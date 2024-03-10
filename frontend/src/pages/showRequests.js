@@ -86,13 +86,13 @@ const showRequests = () => {
             <CssBaseline />
             <Header title="신청 현황" handleBack={() => router.push('/')} />
             <Menu selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
-            <div style={{ margin: '145px 24px 24px'}}>
-                <Filter
-                    filterOptions={filterOptions}
-                    selectedFilter={selectedFilter}
-                    number={allRequests[selectedIndex].length}
-                    onFilterSelect={(filter) => setSelectedFilter(filter)}
-                />
+            <Filter
+                filterOptions={filterOptions}
+                selectedFilter={selectedFilter}
+                number={allRequests[selectedIndex].length}
+                onFilterSelect={(filter) => setSelectedFilter(filter)}
+            />
+            <div style={{ margin: '196px 24px 24px'}}>
                 {allRequests[selectedIndex].length === 0 && (
                     <div style={{ width: '100%', marginTop: '40%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Image src={noInfoCharacter} width={104} height={87} layout='fixed' />

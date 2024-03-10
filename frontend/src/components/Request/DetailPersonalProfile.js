@@ -18,7 +18,7 @@ export const DetailPersonalProfile = ({ id, setPersonalOn }) => {
         <PopupContainer>
             <PopupSubContainer>
                 <Header title="프로필 보기" onBackClick={() => setPersonalOn(false)} />
-                <FriendProfile candidate={candidate} />
+                <FriendProfile candidate={candidate} isButtonOn={false} />
             </PopupSubContainer>
         </PopupContainer>
     )
@@ -41,4 +41,5 @@ const PopupSubContainer = styled.div`
     width: 100%;
     max-width: 420px;
     background-color: #fff;
+    overflow-y: scroll;
 `;
