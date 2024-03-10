@@ -16,6 +16,7 @@ import Image from 'next/image';
 import { noInfoCharacter } from '../image/request';
 import { DetailGroupProfile } from '../components/Request/DetailGroupProfile';
 import { DetailPersonalProfile } from '../components/Request/DetailPersonalProfile';
+import { makeTraffic } from '../actions/traffic/traffic';
 
 const showRequests = () => {
     const dispatch = useDispatch();
@@ -76,6 +77,7 @@ const showRequests = () => {
 
     useEffect(() => {
         if (isAuthenticated) {
+            dispatch(makeTraffic('신청_현황_진입수'));
             dispatch(load_group_requests());
             dispatch(load_personal_requests());
         }

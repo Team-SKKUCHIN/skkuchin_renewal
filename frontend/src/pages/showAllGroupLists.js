@@ -9,8 +9,10 @@ import { useRouter } from 'next/router';
 import AddIcon from '@mui/icons-material/Add';
 import { useSelector, useDispatch } from 'react-redux';
 import ErrorPopup from '../components/Custom/ErrorPopup';
+import { makeTraffic } from '../actions/traffic/traffic';
 
 const ShowAllGroupLists = () => {
+    const dispatch = useDispatch();
     const router = useRouter();
 
     const user = useSelector(state => state.auth.user);
@@ -70,6 +72,10 @@ const ShowAllGroupLists = () => {
         setSelectedFilter(filter);
         setDisplayCount(20);
     }
+
+    useEffect(() => {
+        dispatch(makeTraffic('여럿이서_먹어요_진입수'));
+    }, [])
 
     return (
         <ThemeProvider theme={theme}>

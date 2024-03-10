@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ThemeProvider, CssBaseline, Button, Typography, Divider } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import theme from '../theme/theme';
 import Header from "../components/MealPromise/Header";
 import Filter from '../components/MealPromise/Filter';
 import FriendItem from '../components/MealPromise/FriendItem';
 import ErrorPopup from '../components/Custom/ErrorPopup';
+import { makeTraffic } from '../actions/traffic/traffic';
 
 const showAllTwoLists = () => {
+    const dispatch = useDispatch();
     const router = useRouter();
 
     const user = useSelector(state => state.auth.user);
@@ -52,6 +54,10 @@ const showAllTwoLists = () => {
         localStorage.setItem('selectedFriend', JSON.stringify(candidate));
         router.push(`/showFriendProfile`);
     }
+
+    useEffect(() => {
+        dispatch(makeTraffic('둘이_먹어요_진입수'));
+    }, [])
 
     return (
         <ThemeProvider theme={theme}>

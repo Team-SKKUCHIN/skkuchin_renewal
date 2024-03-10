@@ -13,6 +13,7 @@ import share from '../image/ios_share.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { load_all_group_profile, get_my_group_profile } from '../actions/groupProfile/groupProfile';
 import { load_matching_info } from '../actions/matchingUser/matchingUser';
+import { makeTraffic } from '../actions/traffic/traffic';
 
 const GameContent = () => {
     const games = [
@@ -126,6 +127,7 @@ const Home = () => {
     const myGroupProfiles = useSelector(state => state.groupProfile.myGroupProfiles);
 
     useEffect(() => {
+        dispatch(makeTraffic('홈_화면_진입수'));
         dispatch(load_all_group_profile());
     }, []);
 
