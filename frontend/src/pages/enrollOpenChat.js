@@ -27,6 +27,19 @@ const enrollOpenChat = () => {
     const [popupMessage, setPopupMessage] = useState('');
     const [popupDescription, setPopupDescription] = useState('');
 
+    const handleOpenChatLinkChange = (e) => {
+        const inputString = e.target.value;
+        const linkRegex = /https:\/\/open\.kakao\.com\/o\/[a-zA-Z0-9]+/;
+        const linkMatches = inputString.match(linkRegex);
+        
+        if (linkMatches) {
+            const extractedLink = linkMatches[0];
+            setOpenChatLink(extractedLink);
+        } else {
+            setOpenChatLink('');
+        }
+    };
+
     const handleSubmit = () => {
         if(openChatLink !== '') {
             setPopupMessage(`밥약을 신청하시겠어요?\n(신청 후 취소는 불가해요)`);
@@ -99,7 +112,7 @@ const enrollOpenChat = () => {
                     sx={{ p: '12px 17px', borderRadius: '8px','& input': { padding: '0' }, m: '8px 0 50px' }}
                     placeholder="링크를 붙여넣기 해주세요."
                     value={openChatLink}
-                    onChange={(e) => setOpenChatLink(e.target.value)}
+                    onChange={handleOpenChatLinkChange}
                 />
 
                 <div>
