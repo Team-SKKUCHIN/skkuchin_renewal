@@ -42,7 +42,7 @@ public class SecurityConfig {
                         "/api/group-chat-request/**",
                         "/api/personal-chat-request/**",
                         "/api/sms/**",
-                        "/ws/chat/**"
+                        // "/ws/chat/**"
         };
         private static final String[] PERMIT_SWAGGER_URL_ARRAY = {
                         "/v2/api-docs",

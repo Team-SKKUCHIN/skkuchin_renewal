@@ -1,8 +1,8 @@
-package skkuchin.service.config.chat;
+// package skkuchin.service.config.chat;
 
-public interface ResponseCode {
+// public interface ResponseCode {
 
-    int getCode();
+// int getCode();
 
-    String getMessage();
-}
+// String getMessage();
+// }
