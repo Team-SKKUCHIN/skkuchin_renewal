@@ -122,8 +122,8 @@ const enrollOpenChat = () => {
                     <Typography sx={{fontSize: '12px', color: '#777777', fontWeight: 'bold', mb: '20px'}}>• 
                         {
                             type == 'friend' ?
-                            <a href='#' style={{color: '#777777'}}>카카오톡 오픈 채팅방 링크 생성 가이드</a>
-                            : <a href='#' style={{color: '#777777'}}>카카오톡 그룹 오픈 채팅방 링크 생성 가이드</a>
+                            <a href='https://www.instagram.com/p/C4W6V-hyO7j/?igsh=bzVpanJnOWJwMHhs' target="_blank" rel="noopener noreferrer" style={{color: '#777777'}}>그룹밥약 채팅방 생성 가이드</a>
+                            : <a href='https://www.instagram.com/p/C4W6gIFSuOw/?igsh=MXZzd2xkc2J5OTVwaA==' target="_blank" rel="noopener noreferrer" style={{color: '#777777'}}>1:1 밥약 채팅방 링크 생성 가이드</a>
                         }
                     </Typography>
                 </div>
@@ -135,7 +135,7 @@ const enrollOpenChat = () => {
                 variant="contained"
                 disableElevation
                 disabled={openChatLink === ''}
-                sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
+                sx={{ '&:disabled': { color: '#fff' },color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
             >
                 확인
             </Button>

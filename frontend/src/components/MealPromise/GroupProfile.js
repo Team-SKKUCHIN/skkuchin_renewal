@@ -53,7 +53,7 @@ const GroupProfile = ({isMyProfile, mode, group, handleEditProfileClick}) => {
                 }
             </div>
 
-            <div style={{ margin: '0 24px', borderTop: '1px solid #E2E2E2', paddingTop: '9px' }}>
+            <div style={{ margin: '0 24px 100px', borderTop: '1px solid #E2E2E2', paddingTop: '9px' }}>
             <List>
                 {[1, 2, 3].map((friendIndex) => (
                 <ListItem key={friendIndex} disablePadding>

@@ -46,6 +46,7 @@ const MemberInfoInput = ({ label, studentId, major, introduction, mode, onUpdate
         }
         <Typography sx={{ color: '#3C3C3C', fontSize: 18, fontWeight: 700 }}>
           {label}
+          {!isRepresentative && <span style={{color: '#F47806'}}>*</span>}
         </Typography>
       </div>
 
@@ -54,7 +55,7 @@ const MemberInfoInput = ({ label, studentId, major, introduction, mode, onUpdate
         <FormControl variant="standard" style={{ width: '27%' }}>
           <Typography sx={{ fontSize: 14, color: '#3C3C3C', mb: '8px' }}>학번</Typography>
           <Grid container>
-            <StudentIdInput value={studentId} onChange={handleStudentIdChange} editable={isEditable && mode !== 'modify'}/>
+            <StudentIdInput value={studentId} onChange={handleStudentIdChange} editable={isEditable && ( mode !== 'modify') }/>
             <input
               readOnly
               value="학번"
@@ -69,7 +70,7 @@ const MemberInfoInput = ({ label, studentId, major, introduction, mode, onUpdate
                 borderRadius: '0 8px 8px 0',
                 width: '50%',
                 outline: 'none',
-                backgroundColor: isEditable ? 'white' : '#FBFBFB',
+                backgroundColor: isEditable && ( mode !== 'modify')  ? 'white' : '#FBFBFB',
               }}
             />
           </Grid>
@@ -87,9 +88,9 @@ const MemberInfoInput = ({ label, studentId, major, introduction, mode, onUpdate
         sx={{ mb: label === '친구3' ? '0px' : '50px' }}
         variant="outlined"
         fullWidth
-        placeholder="한줄 소개를 입력해주세요 (필수)"
+        placeholder="한줄 소개를 입력해주세요 (필수, 30자 이내)"
         value={mode === 'modify' ? updatedIntroduction : introduction}
-        // onChange={handleIntroductionChange}
+        inputProps={{ maxLength: 30 }}
         onChange={mode === 'modify' ? handleIntroductionChangeForModify : handleIntroductionChangeForNew}
       />
     </Grid>

@@ -10,6 +10,7 @@ import { register } from '../../../actions/auth/auth';
 import { add_new_matching_info } from '../../../actions/matchingUser/matchingUser';
 
 const SignUpMatchInfo = (props) => {
+    const router = useRouter();
     const dispatch = useDispatch();
     const [gender, setGender] = useState(null);
     const [mbtiChoose, setMbtiChoose] = useState({

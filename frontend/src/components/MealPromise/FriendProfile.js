@@ -161,7 +161,9 @@ const FriendProfile = ({ candidate, isButtonOn=true }) => {
                             rows={2}
                             defaultValue={candidate.introduction}
                             fullWidth
-                            contentEditable={false}
+                            InputProps={{
+                                readOnly: true,
+                            }}
                             style={{margin: '8px 0 0'}}
                         />
 

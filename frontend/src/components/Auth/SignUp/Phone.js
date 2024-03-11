@@ -181,7 +181,8 @@ const SignUpPhone = (props) => {
                   style={{
                       fontSize: '18px',
                       color: '#3C3C3C',
-                      padding: '16px 0px 16px 12px',
+                      //padding: '16px 0px 16px 12px',
+                      padding: '0 12px',
                       height: '56px',
                       border: '1px solid #E2E2E2',
                       borderRadius: '8px',
@@ -199,7 +200,8 @@ const SignUpPhone = (props) => {
                   style={{
                       fontSize: '18px',
                       color: '#3C3C3C',
-                      padding: '16px 0px 16px 12px',
+                      //padding: '16px 0px 16px 12px',
+                      padding: '0 12px',
                       height: '56px',
                       border: '1px solid #E2E2E2',
                       borderRadius: '8px',

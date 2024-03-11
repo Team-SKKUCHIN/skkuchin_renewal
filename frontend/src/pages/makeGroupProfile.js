@@ -15,7 +15,7 @@ const MakeGroupProfile = () => {
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user);
-    const matchingUser = useSelector(state => state.matchingUser.matchingUser);
+    const matchingUser = useSelector(state => state.matchingUser.myMatchingInfo);
 
     const [generatedName, setGeneratedName] = useState(''); 
     const [groupName, setGroupName] = useState('');
@@ -164,7 +164,7 @@ const MakeGroupProfile = () => {
     return (
         <ThemeProvider theme={theme}>
         <CssBaseline />
-            <Header title="그룹 프로필 등록" />
+            <Header title="그룹 프로필 등록" icon="close"/>
             <div style={{ margin: '83px 24px 24px' }}>
                 <style>
                     {`
@@ -211,7 +211,17 @@ const MakeGroupProfile = () => {
                 </Grid>
 
                 <Typography sx={{fontSize: 14, color: '#3C3C3C', mb: '8px'}}>그룹 한줄 소개</Typography>
-                <TextField multiline rows={2} variant='outlined' fullWidth placeholder='그룹 한줄 소개를 입력해주세요 (필수)' value={groupIntro} onChange={(event) => setGroupIntro(event.target.value)}/>
+                <TextField 
+                    inputProps={{ maxLength: 29 }} 
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end" style={{ alignSelf: 'flex-end' }}>
+                                <Typography variant="body2" color="textSecondary">
+                                    {groupIntro.length}/30
+                                </Typography>
+                            </InputAdornment>
+                        ),
+                    }} multiline rows={2} variant='outlined' fullWidth placeholder='그룹 한줄 소개를 입력해주세요 (필수)' value={groupIntro} onChange={(event) => setGroupIntro(event.target.value)}/>
 
                 <Divider orientation="horizontal" sx={{ border: '5px solid #F2F2F2', margin: '25px -24px' }} />
 
