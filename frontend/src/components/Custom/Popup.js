@@ -77,7 +77,7 @@ const Popup = ({ open, handleClose, type, message, description, confirmText=null
                         취소
                     </Button>
                     <Button disableElevation fullWidth onClick={handleQuestionConfirm} sx={{ backgroundColor: '#FFCE00', color: '#fff', fontSize: 16, fontWeight: 700, p: '9px', borderRadius: '10px'}}>
-                        등록하기
+                        { message === '밥약을 신청하시겠어요?\n(신청 후 취소는 불가해요)' ? '신청' : '등록하기'}
                     </Button>
                 </div>
                 )}
