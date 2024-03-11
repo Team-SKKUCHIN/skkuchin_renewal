@@ -73,7 +73,7 @@ const showAllTwoLists = () => {
             />
 
            
-            <div style={{ overflow: 'scroll', marginTop: '109px'}}>
+            <div style={{ overflow: 'scroll', padding: '12px 24px', marginTop: '109px'}}>
                 {
                     filteredProfiles && filteredProfiles.length !== 0 ? (
                         filteredProfiles.slice(0, displayCount).map((candidate, index) => (
