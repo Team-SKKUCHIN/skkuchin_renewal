@@ -42,6 +42,11 @@ public class SmsService {
         String verificationCode = generateVerificationCode();
         AppUser user = userRepo.findByUsername(dto.getUsername());
 
+        List<Sms> smsList = smsRepo.findByUser(user);
+        if (!smsList.isEmpty()) {
+            smsRepo.deleteAll(smsList);
+        }
+
         if (!PHONE_PATTERN.matcher(phoneNumber).matches()) {
             throw new CustomRuntimeException("전화번호가 올바르지 않습니다");
         }
