@@ -88,9 +88,9 @@ const MemberInfoInput = ({ label, studentId, major, introduction, mode, onUpdate
         sx={{ mb: label === '친구3' ? '0px' : '50px' }}
         variant="outlined"
         fullWidth
-        placeholder="한줄 소개를 입력해주세요 (필수)"
+        placeholder="한줄 소개를 입력해주세요 (필수, 30자 이내)"
         value={mode === 'modify' ? updatedIntroduction : introduction}
-        // onChange={handleIntroductionChange}
+        inputProps={{ maxLength: 30 }}
         onChange={mode === 'modify' ? handleIntroductionChangeForModify : handleIntroductionChangeForNew}
       />
     </Grid>
