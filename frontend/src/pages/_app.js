@@ -44,14 +44,14 @@ const App = ({ Component, pageProps }) => {
     }
   }, [router.events])
 
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined' && 'serviceWorker' in navigator && window.workbox !== undefined && isOnline) {
-  //     const wb = window.workbox
-  //     wb.active.then(worker => {
-  //       wb.messageSW({ action: 'CACHE_NEW_ROUTE' })
-  //     })
-  //   }
-  // }, [isOnline, router.route])
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator && window.workbox !== undefined && isOnline) {
+      const wb = window.workbox
+      wb.active.then(worker => {
+        wb.messageSW({ action: 'CACHE_NEW_ROUTE' })
+      })
+    }
+  }, [isOnline, router.route])
 
   return (
       <Provider store={store}>

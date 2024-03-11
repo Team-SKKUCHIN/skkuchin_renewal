@@ -14,8 +14,6 @@ public interface GroupChatRequestRepo extends JpaRepository<GroupChatRequest, Lo
 
     @Query("SELECT r FROM GroupChatRequest r " +
             "WHERE :userId IN (r.sender.friend1.id, r.receiver.friend1.id) " +
-            "AND r.status <> 'EXPIRED' " +
-            "AND NOT (r.sender.friend1.id = :userId AND r.sender.status = 'INACTIVE') " +
-            "AND NOT (r.receiver.friend1.id = :userId AND r.receiver.status = 'INACTIVE')")
+            "AND r.status <> 'EXPIRED'")
     List<GroupChatRequest> findValidGroupChatRequests(@Param("userId") Long userId);
 }
