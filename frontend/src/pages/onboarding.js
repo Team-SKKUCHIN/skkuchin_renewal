@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { CssBaseline, ThemeProvider,Container } from '@mui/material';
+import { CssBaseline, ThemeProvider, Button } from '@mui/material';
 import theme from '../theme/theme';
 import Image from 'next/image';
 import { autoPlay } from "react-swipeable-views-utils";
@@ -41,15 +41,6 @@ const splashData = [
         width:'232', 
         height:'179'
     },
-    {
-        id: 4, 
-        title: "", 
-        content: "", 
-        content2: "", 
-        src: splash2, 
-        width:'232', 
-        height:'179'
-    }
 ];
 const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 const AutoPlaySwipeableViews = autoPlay(VirtualizeSwipeableViews);
@@ -62,15 +53,16 @@ export default function Onboarding(){
         setSplashIndex(index);
     };
     const handleStartClick = () => {
-        router.push('/login')
+        window.localStorage.setItem('onboarding', true);
+        router.push('/')
     }
 
     useEffect(() => {
         console.log(splashIndex)
-        if (splashIndex === 3) {
+        /*if (splashIndex === 3) {
             window.localStorage.setItem('onboarding', true);
             router.push('/')
-        }
+        }*/
     }, [splashIndex])
 
     const height = window.innerHeight / 2 - 250;
@@ -132,6 +124,13 @@ export default function Onboarding(){
                     </div>)
                 ))}
                 </SwipeableViews>
+                {splashIndex === 2 && 
+                    <div style={{position: 'fixed', bottom: '0', display: 'grid', width: '100%', maxWidth: '420px', backgroundColor: '#fff', paddingTop: '30px', paddingBottom: '32px'}}>
+                        <Button variant="contained" onClick={handleStartClick} style={{margin: '0 24px', width: '88%', backgroundColor: "#FFCE00", color: '#fff', fontSize: '16px', fontWeight: '700',  borderRadius: '8px', height: '56px', boxShadow: 'none'}}>
+                            스꾸친 시작하기
+                        </Button> 
+                    </div>
+                }
                 </div>
             {/* </Container> */}
         </ThemeProvider>
