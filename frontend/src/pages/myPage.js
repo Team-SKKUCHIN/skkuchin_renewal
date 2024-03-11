@@ -83,13 +83,18 @@ const myPage = () => {
     },[userMatchInfo])
 
     const CustomSwitch = styled((props)=>(<Switch disableRipple {...props} onClick={handleMatching} checked={MatchChecked}/>))(({ theme }) => ({
+        width: 82,
+        height: 41,
+        display: 'flex',
+        justifyContent: 'flex-end',
         '& .MuiSwitch-thumb': {
           backgroundColor: 'white',
-          height: '12px',
-          width: '12px',
-          marginTop: '9px',
-          marginLeft: '5px',
-          marginRight: '3px'
+          height: '13px',
+          width: '13px',
+          marginTop: '8px',
+          marginLeft: '25px',
+          marginRight: '3px',
+          boxShadow: 'none'
         },
         '& .MuiSwitch-track': {
           backgroundColor: MatchChecked ? '#FFCE00' : 'gray',
@@ -138,7 +143,7 @@ const myPage = () => {
             {/* 밥약 프로필 */}
             <Container style={{display: 'grid', padding: '0 24px',}}>
                 <Typography style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '24px', height: '20px'}}>밥약 프로필</Typography>
-                <div onClick={handleMatching} style={{display:'flex', height: '20px', marginBottom: '15px'}}><Typography variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>개인 프로필 공개</Typography><CustomSwitch defaultChecked/></div>
+                <div onClick={handleMatching} style={{display:'flex', justifyContent: 'space-between', height: '20px', marginBottom: '15px'}}><Typography variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>개인 프로필 공개</Typography><CustomSwitch defaultChecked/></div>
                 <div onClick={() => router.push('/changeProfile')} style={{height: '20px', marginBottom: '15px'}}><Button variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>개인 프로필 수정</Button></div>
                 <div onClick={() => router.push('/myGroupProfileLists')} style={{height: '28px'}}><Button variant="text" style={{fontSize: '16px', fontWeight: '400', color: '#3C3C3C', padding: '0', justifySelf: 'start'}}>그룹 프로필 수정</Button></div>
             </Container>
