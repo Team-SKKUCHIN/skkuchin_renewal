@@ -96,7 +96,7 @@ const showRequests = () => {
             />
             <div style={{ margin: '196px 24px 24px'}}>
                 {allRequests[selectedIndex].length === 0 && (
-                    <div style={{ width: '100%', marginTop: '40%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ width: '100%', marginTop: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Image src={noInfoCharacter} width={104} height={87} layout='fixed' />
                         <p style={{ textAlign: 'center', margin: '15px 0', color: '#BABABA', fontSize: '16px', fontWeight: 700, lineHeight: '18px' }}>
                             {noInfoMessage[selectedIndex]}
