@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CssBaseline, ThemeProvider, Typography, Grid, TextField, Button, Divider } from '@mui/material';
+import { CssBaseline, ThemeProvider, Typography, Grid, TextField, Button, Divider, InputAdornment } from '@mui/material';
 import theme from '../theme/theme';
 import Header from '../components/MealPromise/Header';
 import MemberInfoInput from '../components/MealPromise/MemberInfoInput';
@@ -142,9 +142,19 @@ const ModifyGroupProfile = () => {
                     rows={2}
                     variant='outlined'
                     fullWidth
-                    placeholder='그룹 한줄 소개를 입력해주세요 (필수)'
+                    placeholder='그룹 한줄 소개를 입력해주세요 (필수, 30자 이내)'
                     value={updatedData.group_introduction}
                     onChange={(e) => handleInfoChange('group_introduction', e.target.value)}
+                    inputProps = {{ maxLength: 29 }}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end" style={{ alignSelf: 'flex-end' }}>
+                                <Typography variant="body2" color="textSecondary">
+                                    {updatedData.group_introduction.length}/30
+                                </Typography>
+                            </InputAdornment>
+                        ),
+                    }}
                 />
 
                 <Divider orientation="horizontal" sx={{ border: '5px solid #F2F2F2', margin: '25px -24px' }} />
