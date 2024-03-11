@@ -5,42 +5,7 @@ import { displayMBTI } from './MBTIList';
 import { useRouter } from 'next/router';
 import ErrorPopup from "../Custom/ErrorPopup";
 import { change_status_info } from "../../actions/matchingUser/matchingUser";
-
-const dummyProfiles = [
-    {
-        nickname: '바뱍',
-        campus: '명륜',
-        major: '경영학과',
-        student_id: '23학번',
-        gender: '남',
-        mbti: 'ENFP',
-        keywords: ['일식', '음악'],
-        introduction:
-            '성대 학우들과의 밥약 서비스를 이용하시려면 로그인해주세요 👀',
-    },
-    {
-        nickname: '김꾸친',
-        campus: '명륜',
-        major: '무용학과',
-        student_id: '20학번',
-        gender: '여',
-        mbti: 'ISFJ',
-        keywords: ['여행', '동아리'],
-        introduction:
-            '성대 학우들과의 밥약 서비스를 이용하시려면 로그인해주세요 👀',
-    },
-    {
-        nickname: '웅이',
-        campus: '율전',
-        major: '반도체시스템공학과',
-        student_id: '22학번',
-        gender: '남',
-        mbti: 'INTP',
-        keywords: ['연극/뮤지컬', '카페'],
-        introduction:
-            '성대 학우들과의 밥약 서비스를 이용하시려면 로그인해주세요 👀',
-    },
-];
+import AnimatedLoading from "../Custom/AnimatedLoading";
 
 const Friends = () => {
     const router = useRouter();
@@ -188,84 +153,10 @@ const Friends = () => {
                 </Grid>
             </Card> 
             )) 
-            :
-            <>
-                {
-                    dummyProfiles.map((person, index) => (
-                        <Card key={index} variant="outlined" sx={{height: 'max-content', width: '242px', borderRadius: '10px', border: '1px solid #E2E2E2', p: '28px 16px', flexShrink: 0, mr: '19px', mb: '21px'}}>
-                            <Grid container direction="column" sx={{justifyContent: 'center', alignItems: 'center'}}>
-                                {displayMBTI(person.mbti, 90, 90)}
-                                <Grid item sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', p: '20px 0px 8px'}}>
-                                    <Typography sx={{fontSize: '16px', fontWeight: '700', mr: '5px'}}>{person !== null && person.nickname}</Typography>
-                                    {
-                                        person !== null && 
-                                        person.campus == '명륜' ?
-                                        <Typography sx={{width: 'max-content',color: '#FFAC0B', backgroundColor: '#FFFCE4', fontSize: '12px', fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px'}}>{person.campus}</Typography>
-                                        : 
-                                        <Typography sx={{color: '#58C85A', backgroundColor: '#DCF8DB', fontSize: '12px',fontWeight: 700, p: '3.5px 5px 2.5px', borderRadius: '10px', mr: '5px'}}>{person.campus}</Typography>
-                                    }
-                                </Grid>
-                                <Grid item sx={{display: 'flex', fontSize: '12px', alignItems: 'center', fontWeight: 400, color: '#3C3C3C'}}>
-                                    <Grid item sx={{flexGrow: 1, fontSize: '12px'}}>
-                                        {person.major}&nbsp;/&nbsp; 
-                                        {person.student_id}학번&nbsp;/&nbsp; 
-                                        {(person.gender).charAt(0)}
-                                    </Grid>
-                                </Grid>
-                                <Grid item sx={{display: 'flex', p: '10px 0', m: '10px 0', gap: '4px'}}>
-                                    <Grid item sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
-                                        {person.mbti}
-                                    </Grid>
-                                    {
-                                        (person.keywords) != null &&
-                                        <>
-                                            {(Object.values(person.keywords).flat().slice(0, 2).map((keyword, index) => (
-                                                <Grid item key={index} sx={{color: '#777777', backgroundColor: '#F2F2F2', p: '3px 13px', fontSize: '12px', fontWeight: 400, borderRadius: '24px'}}>
-                                                    {keyword}
-                                                </Grid>
-                                            )))}
-                                        </>
-                                    }
-                                </Grid >
-                                <Typography sx={{ fontSize: '14px', height: '40px', lineHeight: '20px', fontWeight: 400, color: '#3C3C3C', textAlign: 'center', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
-                                    {'"'+person.introduction+'"'}
-                                </Typography>
-                                <Grid item sx={{ display: 'flex',  alignItems: 'center', width: '100%', justifyContent: 'center' }}>
-                                    <Button
-                                        disableElevation
-                                        disableTouchRipple
-                                        key="profile-button"
-                                        sx={{
-                                            color: '#777777',
-                                            fontSize: '14px',
-                                            fontWeight: 700,
-                                            textAlign: 'center',
-                                            pr: '15px',
-                                        }}
-                                    >
-                                        프로필 보기
-                                    </Button>
-                                    <div style={{ width: '2px', height: '12px', backgroundColor: '#E2E2E2', borderRadius: '10px' }}/>
-                                    <Button
-                                        disableElevation
-                                        disableTouchRipple
-                                        key="apply-button"
-                                        sx={{
-                                            color: '#FFAC0B',
-                                            fontSize: '14px',
-                                            fontWeight: 700,
-                                            textAlign: 'center',
-                                            pl: '15px',
-                                        }}
-                                    >
-                                        밥약 걸기
-                                    </Button>            
-                                </Grid>
-                            </Grid>
-                        </Card> 
-                    ))
-                }
-            </>
+            : 
+                <div style={{width: 'calc(100vw - 48px)', justifyContent: 'center'}}>
+                    <AnimatedLoading />
+                </div>
             }
             <ErrorPopup
                 open={open}
