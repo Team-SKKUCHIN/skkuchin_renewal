@@ -64,6 +64,7 @@ const SignUpNickname = (props) => {
             setNicknameMsg(message);
           }
         }
+        setLoading(false);
       })
     }
 
