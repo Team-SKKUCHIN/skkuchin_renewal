@@ -13,7 +13,7 @@ const ErrorPopup = ({ open, handleClose, message, btnText, type, onConfirm }) =>
                         aria-label="close"
                         sx={{p: 0}}
                     >
-                        <CloseIcon width={24} height={24}/>
+                        <CloseIcon sx={{color: '#9E9E9E'}} width={24} height={24}/>
                     </IconButton>
                 </div>
 

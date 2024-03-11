@@ -164,7 +164,7 @@ const MakeGroupProfile = () => {
     return (
         <ThemeProvider theme={theme}>
         <CssBaseline />
-            <Header title="그룹 프로필 등록" />
+            <Header title="그룹 프로필 등록" icon="close"/>
             <div style={{ margin: '83px 24px 24px' }}>
                 <style>
                     {`

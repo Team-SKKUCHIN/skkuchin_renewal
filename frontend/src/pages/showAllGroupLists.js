@@ -84,12 +84,11 @@ const ShowAllGroupLists = () => {
             <Header title="여럿이서 먹어요" onBackClick={handleBackClick}/>
 
             {/* 필터 */}
-            <Filter
+           <Filter
                 filterOptions={filterOptions}
                 selectedFilter={selectedFilter}
                 onFilterSelect={handleFilterChange}
             />
-
             {/* 목록 */}
             <div style={{ overflow: 'scroll', padding: '12px 24px', marginTop: '109px' }}>
                 {filteredProfiles && filteredProfiles.length !== 0 ? (

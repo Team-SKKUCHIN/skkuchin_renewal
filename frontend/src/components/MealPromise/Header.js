@@ -39,13 +39,15 @@ const Header = ({title, onBackClick, icon, handleIconClick, mode}) => {
                 <Typography sx={{ fontSize: 18, fontWeight: 600, color: '#3C3C3C', flex: 1, textAlign: 'center' }}>
                     {title}
                 </Typography>
-                <div style={{ width: (icon === 'delete') || (icon === 'save') ? 'auto' : 30, display: 'flex', justifyContent: 'flex-end' }}>
+                <div style={{ width: (icon === 'delete') || (icon === 'save') ? 'auto' : 18, display: 'flex', justifyContent: 'flex-end' }}>
                     {
-                        title === '그룹 프로필 등록' ? (
-                            <Image src={iconClose} onClick={()=> router.back()} layout="fixed" width={24} height={24} />
+                        title == '그룹 프로필 등록' ? (
+                            <div style={{ width: '16px', height: '16px' }}>
+                                <Image src={iconClose} onClick={() => router.back() }/>
+                            </div>
                         ) : 
                         icon === 'close' ?
-                        <Image src={iconClose} onClick={()=> router.push('/mealPromise')} layout="fixed" width={18} height={18} />
+                        <Image src={iconClose} onClick={()=> router.push('/mealPromise')}  sx={{width: '16px', height: '16px'}}/>
                         : icon === 'delete' ?
                         <Typography onClick={handleIconClick} style={{fontSize: 18, color: '#BABABA', fontWeight: 600, padding: 0}}>삭제</Typography>
                         : icon === 'save' ?
