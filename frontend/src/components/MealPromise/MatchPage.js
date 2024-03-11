@@ -55,7 +55,7 @@ const MatchPage = () => {
 
             <OptionButton options={options} selectedOption={selectedOption} handleButtonClick={handleButtonClick} />
 
-            <Container sx={{p: '0 24px', mt: '0', position:'relative'}}>
+            <Container sx={{p: '0', pl: '24px', mt: '0', position:'relative'}}>
                 <Grid container sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '0px'}}>
                     <Grid item >
                         {

@@ -190,17 +190,20 @@ const FriendProfile = ({ candidate, isButtonOn=true }) => {
                                 </div>
                             ))}
                         </div>
-                        {isButtonOn && 
-                            <Button
-                                onClick={handleSubmit}
-                                color="primary"
-                                variant="contained"
-                                disableElevation
-                                sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
-                            >
-                                밥약 신청하기
-                            </Button>
-                        }
+                        {isButtonOn && (
+                            <>
+                                <div style={{height: '100px', position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: '#fff'}}></div>
+                                <Button
+                                    onClick={handleSubmit}
+                                    color="primary"
+                                    variant="contained"
+                                    disableElevation
+                                    sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
+                                >
+                                    밥약 신청하기
+                                </Button>   
+                            </>
+                        )}
 
                         <ErrorPopup
                             open={open}

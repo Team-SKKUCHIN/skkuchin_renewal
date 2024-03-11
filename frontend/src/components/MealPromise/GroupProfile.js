@@ -86,8 +86,12 @@ const GroupProfile = ({isMyProfile, mode, group, handleEditProfileClick}) => {
                     color="primary"
                     variant="contained"
                     disableElevation
-                    sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
-                >
+                        sx={{
+                            color: '#fff',
+                            fontSize: 16,
+                            fontWeight: 800,
+                        }}
+                    >
                     밥약 신청하기
                 </Button>
             }
