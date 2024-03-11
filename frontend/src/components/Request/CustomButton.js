@@ -51,7 +51,7 @@ export const CustomButton = ({ selectedIndex, request, senderName, link, setLink
     const user = useSelector(state => state.auth.user);
     const [isLoading, setIsLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
-    const popupType = useRef('request');
+    const [popupType, setPopupType] = useState('request');
     const popupMessage = useRef('');
     const popupDescription = useRef('');
     const statusType = useRef('');
@@ -94,7 +94,7 @@ export const CustomButton = ({ selectedIndex, request, senderName, link, setLink
         popupMessage.current = status === 'ACCEPT' ? '밥약 신청을 수락하시겠어요?' : '정말 밥약 신청을 거절하시겠어요?\n한번 거절한 밥약은 되돌릴 수 없어요.';
         btnText.current = status === 'ACCEPT' ? '수락' : '거절';
         popupDescription.current = '';
-        popupType.current = 'request';
+        setPopupType('request');
         setPopupOpen(true);
     }, [])
 
@@ -120,7 +120,7 @@ export const CustomButton = ({ selectedIndex, request, senderName, link, setLink
             popupMessage.current = '밥약 신청을 거절했습니다.\n다음에 더 좋은 기회로 만나요!';
             popupDescription.current = '';
         }
-        popupType.current = 'check';
+        setPopupType('check');
         setPopupOpen(true);
     }, [request]);
 
@@ -143,7 +143,7 @@ export const CustomButton = ({ selectedIndex, request, senderName, link, setLink
             <Popup
                 open={popupOpen}
                 handleClose={() => setPopupOpen(false)}
-                type={popupType.current}
+                type={popupType}
                 message={popupMessage.current}
                 description={popupDescription.current}
                 confirmText={btnText.current}
