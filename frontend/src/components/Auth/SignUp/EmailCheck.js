@@ -48,8 +48,10 @@ const SignUpEmailCheck = (props) => {
         if (result) {
           props.handleNextStep();
         } else {
-          setDialogMsg(message);
-          setDialogOpen(true);
+          //setDialogMsg(message);
+          //setDialogOpen(true);
+          setPopupMessage(message);
+          setPopupOpen(true);
         }
       }));
     }
