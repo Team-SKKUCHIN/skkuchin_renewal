@@ -132,7 +132,7 @@ const MealPromisePage = () => {
                     전체보기
                 </Button>
             </div>
-            <Grid sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', m: '10px 0 0'}}>
+            <Grid sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0', m: '10px -24px 0 0'}}>
                 <Groups />
             </Grid>
           </div>
@@ -150,7 +150,7 @@ const MealPromisePage = () => {
                     전체보기
                 </Button>
             </div>
-            <Grid sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0px', mt: '10px'}}>
+            <Grid sx={{overflowX: 'auto', flexWrap: 'nowrap', p: '0', m: '10px -24px 0 0'}}>
                 <Friends />
             </Grid>
           </div>
