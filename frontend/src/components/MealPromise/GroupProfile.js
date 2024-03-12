@@ -80,32 +80,34 @@ const GroupProfile = ({isMyProfile, mode, group, handleEditProfileClick}) => {
             </List>
             </div>
             {
-                !isMyProfile &&
-                <Button
-                    onClick={handleSubmit}
-                    color="primary"
-                    variant="contained"
-                    disableElevation
-                        sx={{
-                            color: '#fff',
-                            fontSize: 16,
-                            fontWeight: 800,
-                        }}
-                    >
-                    밥약 신청하기
-                </Button>
+                !isMyProfile && 
+                <>
+                    <div style={{height: '100px', position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: '#fff'}}></div>
+                    <Button
+                        onClick={handleSubmit}
+                        color="primary"
+                        variant="contained"
+                        disableElevation
+                        sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
+                        >
+                        밥약 신청하기
+                    </Button>
+                </>
             }
             {
                 isMyProfile && mode === 'edit' &&
-                <Button
-                    onClick={handleEditProfileClick}
-                    color="primary"
-                    variant="contained"
-                    disableElevation
-                    sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
-                >
-                    프로필 수정하기
-                </Button>
+                <>
+                    <div style={{height: '100px', position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: '#fff'}}></div>
+                    <Button
+                        onClick={handleEditProfileClick}
+                        color="primary"
+                        variant="contained"
+                        disableElevation
+                        sx={{ color: '#fff', fontSize: 16, fontWeight: 800, position: 'fixed', bottom: 30, left: 24, right: 24, borderRadius: '12px', p: '16px'}}
+                    >
+                        프로필 수정하기
+                    </Button>
+                </>
             }
             <ErrorPopup
                 open={popupOpen}
