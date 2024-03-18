@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,9 @@ public class GroupChatRequestService {
     private final GroupProfileRepo groupProfileRepo;
     private final SmsRepo smsRepo;
     private final SmsService smsService;
+
+    @Value("${nurigo.phone.fixed}")
+    private String fixed;
 
     @Transactional
     public GroupChatRequestDto.Responses getGroupChatRequestList(Long userId) {
@@ -101,8 +105,14 @@ public class GroupChatRequestService {
         groupChatRequestRepo.save(dto.toEntity(sender, receiver));
 
         if (!receiverSmsList.isEmpty()) {
+            String phoneNumber;
+            if (receiver.getFriend1().getUsername().startsWith("test")) {
+                phoneNumber = fixed;
+            } else {
+                phoneNumber = receiverSmsList.get(0).getPhoneNumber();
+            }
             smsService.sendSms(
-                    receiverSmsList.get(0).getPhoneNumber(),
+                    phoneNumber,
                     String.format(
                             "%s 그룹 밥약을 신청했어요.\n신청 현황에서 확인 후 수락해주세요.\n\n" +
                                     "▶ 스꾸친 바로가기 : https://skkuchin.com/",
@@ -125,6 +135,13 @@ public class GroupChatRequestService {
 
         List<Sms> senderSmsList = smsRepo.findByUser(request.getSender().getFriend1());
         if (!senderSmsList.isEmpty()) {
+            String phoneNumber;
+            if (request.getSender().getFriend1().getUsername().startsWith("test")) {
+                phoneNumber = fixed;
+            } else {
+                phoneNumber = senderSmsList.get(0).getPhoneNumber();
+            }
+
             String message;
             if (status == ResponseType.ACCEPT) {
                 message = "%s 그룹 밥약을 수락했어요. 곧 오픈채팅 링크로 입장할 예정이에요. 3일 이내에 입장하지 않는다면 '스꾸친 카카오톡'으로 연락주세요.\n\n" +
@@ -137,7 +154,7 @@ public class GroupChatRequestService {
                 throw new CustomRuntimeException("비정상적인 접근입니다");
             }
             smsService.sendSms(
-                    senderSmsList.get(0).getPhoneNumber(),
+                    phoneNumber,
                     String.format(
                             message,
                             StringUtils.getPostWord(request.getReceiver().getGroupName(), "이", "가")));
