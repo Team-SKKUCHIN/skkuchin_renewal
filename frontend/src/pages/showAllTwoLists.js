@@ -71,9 +71,7 @@ const showAllTwoLists = () => {
                 selectedFilter={selectedFilter}
                 onFilterSelect={handleFilterChange}
             />
-
-           
-            <div style={{ overflow: 'scroll', padding: '12px 24px', marginTop: '109px'}}>
+            <div style={{ overflow: 'scroll', marginTop: '109px'}}>
                 {
                     filteredProfiles && filteredProfiles.length !== 0 ? (
                         filteredProfiles.slice(0, displayCount).map((candidate, index) => (
@@ -83,7 +81,7 @@ const showAllTwoLists = () => {
                             </div>
                         ))
                     ) : (
-                        <Typography>필터링 조건에 부합하는 학우가 없습니다.</Typography>
+                        <Typography sx={{padding: '12px 24px'}}>필터링 조건에 부합하는 학우가 없습니다.</Typography>
                     )
                 }
                 {filteredProfiles && ( displayCount < filteredProfiles.length ) && (
